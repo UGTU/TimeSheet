@@ -1,0 +1,16 @@
+﻿
+@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
+@{
+    ViewBag.Title = "Просмотр табеля";
+}
+@Html.Partial("Header", Model.FirstOrDefault().DocumentNumber)
+<div class="TimeSheeet" style="padding: 20px;">
+    @foreach (var timeSheet in Model)
+    {
+        @Html.Partial("TimeSheetPartialView", timeSheet)
+    }
+</div>
+
+
+
+

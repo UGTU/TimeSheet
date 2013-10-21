@@ -924,9 +924,16 @@
     <Content Include="Views\Main\TimeSheetEdit.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Main\TimeSheetList.cshtml" />
-    <Content Include="Views\Main\TimeSheetApproveStatus.cshtml" />
-    <Content Include="Views\Main\HeaderLoBoxContent.cshtml" />
-    <Content Include="Views\Main\TimeSheet2 - Копировать.cshtml" />
+    <Content Include="Views\Main\PartialView\TimeSheetApproveStatus.cshtml" />
+    <Content Include="Views\Main\PartialView\HeaderLoBoxContent.cshtml" />
+    <Content Include="Views\Main\TimeSheetShow.cshtml" />
+    <Content Include="Views\Main\TimeSheetPrint.cshtml" />
+    <Content Include="Views\Main\TimeSheetApproval.cshtml" />
+    <Content Include="Views\Main\PartialView\TimeSheetPaperPartialView.cshtml" />
+    <Content Include="Views\Main\PartialView\TimeSheetPartialView.cshtml" />
+    <Content Include="Views\Main\PartialView\TimeSheetEmployeePartialView.cshtml" />
+    <Content Include="Views\Main\PartialView\PaperFooter.cshtml" />
+    <Content Include="Views\Main\PartialView\ApproverListPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
