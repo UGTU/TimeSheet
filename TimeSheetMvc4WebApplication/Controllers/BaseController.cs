@@ -8,6 +8,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
 {
     public class BaseController : Controller
     {
+        protected static string ErrorPage = "~/Error";
+        
+        protected static string NotFoundPage = "~/NotFoundPage";
+        
         public readonly TimeSheetService Client = new TimeSheetService();
 
         [Authorize]
@@ -18,11 +22,21 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //return "kafedra@ugtu.net"; //получить логин пользователя
             //return "fmarakasov@ugtu.net"; //получить логин пользователя
             //return "tkazakova@ugtu.net"; //получить логин пользователя
-
             //return "tester1@ugtu.net"; //получить логин пользователя
             //return "ovisokolyan@ugtu.net"; //получить логин пользователя
-
             return System.Web.HttpContext.Current.User.Identity.Name;
+        }
+
+        public RedirectResult RedirectToNotFoundPage
+        {
+            get { return Redirect(NotFoundPage); }
+        }
+
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            base.OnException(filterContext);
+            filterContext.Result = Redirect(ErrorPage);
         }
 
 

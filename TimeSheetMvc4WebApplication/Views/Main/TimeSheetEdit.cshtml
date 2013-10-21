@@ -119,7 +119,7 @@
         $('#employeeList').css('max-height', maxHeight);
     }
 
-    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { id = Model })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a TARGET=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetApproval", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");

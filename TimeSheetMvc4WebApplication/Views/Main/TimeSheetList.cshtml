@@ -39,17 +39,17 @@
                         <div class="@string.Format("col-sm-6 col-md-{0}", span)">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 style="margin: 0;">@Html.Partial("TimeSheetApproveStatus", item.ApproveStep)  @item.DateBegin.ToString("MMMM") @*(@item.EmployeesCount)*@ </h3>
+                                    <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item.ApproveStep)  @item.DateBegin.ToString("MMMM") @*(@item.EmployeesCount)*@ </h3>
                                 </div>
                                 <div class="panel-body" style="padding: 0px ">
                                     <div class="centered" style="background-color: #f5f5f5">
                                         @*@if (item.ApproveStep == 0)
                                         {*@
-                                            <a style="padding: 5px 20px;" class="btn btn-link btn-sm @(item.ApproveStep!=0?"disabled":"")" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("TimeSheetEdit", "Main", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span></a>
+                                            <a style="padding: 5px 20px;" class="btn btn-link btn-sm @(item.ApproveStep!=0?"disabled":"")" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("TimeSheetEdit", "Main", new { id = item.IdTimeSheet })"><span class="glyphicon glyphicon-edit"></span></a>
                                         @*}*@
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" href="@Url.Action("TimeSheetPdf", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApproval", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-retweet"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" href="@Url.Action("TimeSheetPdf", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-print"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApproval", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span></a>
                                     </div>
                                     <div class="panel-body" style="padding-bottom: 5px ">
                                         <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>

@@ -1,15 +1,22 @@
-﻿
-@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
+﻿@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
 @{
     ViewBag.Title = "Просмотр табеля";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
-@Html.Partial("Header", Model.FirstOrDefault().DocumentNumber)
-<div class="TimeSheeet" style="padding: 20px;">
+
+<div @*class="TimeSheeet" style="padding: 20px;"*@>
     @foreach (var timeSheet in Model)
     {
-        @Html.Partial("TimeSheetPartialView", timeSheet)
+        @Html.Partial("PartialView\\TimeSheetPartialView", timeSheet)
     }
 </div>
+
+<script>
+    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { id = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\"><a TARGET=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetApproval", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
+</script>
 
 
 

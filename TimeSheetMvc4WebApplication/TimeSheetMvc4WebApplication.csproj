@@ -154,6 +154,7 @@
     <Compile Include="ClassesDTO\ClassesDTO.cs" />
     <Compile Include="ClassesDTO\DtoClassConstructor.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Global.asax.cs">
@@ -898,7 +899,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\TimeSheetApproval.cshtml" />
     <Content Include="Views\Home\TimeSheetEmployeePartialView.cshtml" />
-    <Content Include="Views\Home\TimeSheetHeader.cshtml" />
+    <Content Include="Views\Main\PartialView\TimeSheetHeader.cshtml" />
     <Content Include="Views\Home\TimeSheetPaperPartialView.cshtml" />
     <Content Include="Views\Home\TimeSheetPrint.cshtml" />
     <Content Include="Views\Home\TimeSheetShow.cshtml" />
@@ -934,9 +935,11 @@
     <Content Include="Views\Main\PartialView\TimeSheetEmployeePartialView.cshtml" />
     <Content Include="Views\Main\PartialView\PaperFooter.cshtml" />
     <Content Include="Views\Main\PartialView\ApproverListPartialView.cshtml" />
+    <Content Include="Views\Shared\NotFoundPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Error\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

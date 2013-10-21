@@ -9,16 +9,29 @@ namespace TimeSheetMvc4WebApplication
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            //routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
+            //=======================================================
+
+            routes.MapRoute(
+                null,
+                url: "Error",
+                defaults: new { controller = "Error", action = "Error", id = UrlParameter.Optional },
+                namespaces: new[] { "LessonProject.Areas.Default.Controllers" }
+            );
+
+            routes.MapRoute(
+                null,
+                url: "NotFoundPage",
+                defaults: new { controller = "Error", action = "NotFoundPage", id = UrlParameter.Optional },
+                namespaces: new[] { "LessonProject.Areas.Default.Controllers" }
+            );
+
+            //=======================================================
 
             routes.MapRoute(
                 "ShortTimeSheetPdf",
                 "tabel/{idTimeSheet}",
-                new { controller = "Home", action = "TimeSheetPdf", id = UrlParameter.Optional }, constraints: new { idTimeSheet = @"\d+" }
+                new {controller = "Home", action = "TimeSheetPdf", id = UrlParameter.Optional},
+                constraints: new {idTimeSheet = @"\d+"}
                 );
 
             routes.MapRoute(
@@ -28,12 +41,11 @@ namespace TimeSheetMvc4WebApplication
                 constraints: new {idTimeSheet = @"\d+"}
                 );
 
-
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                defaults: new {controller = "Main", action = "Index", id = UrlParameter.Optional}
+                );
         }
     }
 }
