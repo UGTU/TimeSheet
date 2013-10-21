@@ -1,0 +1,108 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "TimeSheet";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+
+<div class="row" id="progress" style="margin-top: 20%;">
+    <div class="col-md-offset-3 col-md-6">
+        <div class="progress progress-striped active">
+            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row hidden" ng-app ng-controller="TimeSheetRecords">
+    <div class="col-md-4">
+        <div id="employeeList" class="list-group" style=" overflow: auto; border: 1px solid #dddddd">
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="empl in employees" ng-click="setCurrentEmployeeRecords(empl)" ng-class="empl.css">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    {{empl.FactStaffEmployee.Surname}} {{empl.FactStaffEmployee.Name}} {{empl.FactStaffEmployee.Patronymic}}
+                </h4>
+                <p class="list-group-item-text">{{empl.FactStaffEmployee.StaffRate}} ст. {{empl.FactStaffEmployee.Post.PostSmallName}}</p>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>День недели</th>
+                    <th>Статус</th>
+                    <th>Часы</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="record in currentEmployee.Records| orderBy:Date">
+                    <td style="padding: 2px; ">{{record.Date}}</td>
+                    <td style="padding: 2px;">{{record.DayAweek}}</td>
+                    <td style="padding: 0px 5px; width: 70px;">
+                        <select class="form-control input-sm" ng-model="record.DayStays" style="padding: 0;height: 25px;" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList"></select>
+                    </td>
+                    <td style="padding: 0px 0px 0 5px;; width: 70px;">
+                        <input class="form-control input-sm" ng-model="record.JobTimeCount" type="text" style="padding: 0px 5px; height: 25px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3">
+        Отладчик:<pre>{{currentEmployee.Records}}</pre>
+    </div>
+</div>
+
+<script>
+    $(window).load(function () {
+        employeeListResize();
+    });
+
+    $(window).resize(function () {
+        employeeListResize();
+    });
+
+    function employeeListResize() {
+        var maxHeight = $(window).height();
+        maxHeight = maxHeight - 90;
+        $('#employeeList').css('max-height', maxHeight);
+    }
+</script>
+
+<script>
+    function TimeSheetRecords($scope, $http) {
+        $http.get('@Html.Raw(@Url.Action("GetDayStatusList", "Main"))').success(function (data) {
+            $scope.dayStatList = data;
+
+            $http.get('@Html.Raw(@Url.Action("GetTimeSheetJson", "Main", new { idTimeSheet = @Model}))').success(function (data1) {
+                $scope.employees = data1.Employees;
+                angular.forEach($scope.employees, function (empl) {
+                    angular.forEach(empl.Records, function (rec) {
+                        angular.forEach($scope.dayStatList, function (ds) {
+                            if (ds.IdDayStatus == rec.DayStays.IdDayStatus) {
+                                rec.DayStays = ds;
+                            }
+                        });
+                    });
+                });
+                $scope.setCurrentEmployeeRecords($scope.employees[0]);
+                $('#progress').remove();
+                $('.row').removeClass('hidden');
+            });
+
+        });
+
+        $scope.setCurrentEmployeeRecords = function (employee) {
+            $scope.currentEmployee = employee;
+            angular.forEach($scope.employees, function (empl) {
+                empl.css = '';
+            });
+            employee.css = 'active';
+        };
+
+        $scope.getDayStatusName = function (dayStatus) {
+            return dayStatus.SmallDayStatusName;
+        };
+    }
+</script>

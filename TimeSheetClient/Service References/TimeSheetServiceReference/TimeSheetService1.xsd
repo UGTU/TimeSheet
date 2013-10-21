@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/TimeSheetMvc4WebApplication.ClassesDTO" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TimeSheetMvc4WebApplication.ClassesDTO" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:6868/TimeSheetService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="DtoApprover">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DtoEmployee">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DtoApproverDepartments" nillable="true" type="tns:ArrayOfDtoApproverDepartment" />
+          <xs:element minOccurs="0" name="IsAdministrator" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DtoApprover" nillable="true" type="tns:DtoApprover" />
+  <xs:complexType name="DtoEmployee">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EmployeeLogin" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdEmployee" type="xs:int" />
+      <xs:element minOccurs="0" name="ItabN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Patronymic" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SexBit" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoEmployee" nillable="true" type="tns:DtoEmployee" />
+  <xs:complexType name="ArrayOfDtoApproverDepartment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoApproverDepartment" nillable="true" type="tns:DtoApproverDepartment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoApproverDepartment" nillable="true" type="tns:ArrayOfDtoApproverDepartment" />
+  <xs:complexType name="DtoApproverDepartment">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DtoDepartment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ApproveNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="ApproveTypeName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IdApprover" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DtoApproverDepartment" nillable="true" type="tns:DtoApproverDepartment" />
+  <xs:complexType name="DtoDepartment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DepartmentFullName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DepartmentSmallName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdDepartment" type="xs:int" />
+      <xs:element minOccurs="0" name="IdManagerDepartment" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoDepartment" nillable="true" type="tns:DtoDepartment" />
+  <xs:complexType name="ArrayOfDtoDepartment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoDepartment" nillable="true" type="tns:DtoDepartment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoDepartment" nillable="true" type="tns:ArrayOfDtoDepartment" />
+  <xs:complexType name="ArrayOfDtoEmployee">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoEmployee" nillable="true" type="tns:DtoEmployee" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoEmployee" nillable="true" type="tns:ArrayOfDtoEmployee" />
+  <xs:complexType name="ArrayOfDtoFactStaffEmployee">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoFactStaffEmployee" nillable="true" type="tns:DtoFactStaffEmployee" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoFactStaffEmployee" nillable="true" type="tns:ArrayOfDtoFactStaffEmployee" />
+  <xs:complexType name="DtoFactStaffEmployee">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DtoEmployee">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IdFactStaff" type="xs:int" />
+          <xs:element minOccurs="0" name="IdFactStaffHistiry" type="xs:int" />
+          <xs:element minOccurs="0" name="IsCheked" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Post" nillable="true" type="tns:DtoPost" />
+          <xs:element minOccurs="0" name="StaffRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="WorkShedule" nillable="true" type="tns:DtoWorkShedule" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DtoFactStaffEmployee" nillable="true" type="tns:DtoFactStaffEmployee" />
+  <xs:complexType name="DtoPost">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Category" nillable="true" type="tns:DtoCategory" />
+      <xs:element minOccurs="0" name="IdPost" type="xs:int" />
+      <xs:element minOccurs="0" name="IsMenager" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PostFullName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostSmallName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoPost" nillable="true" type="tns:DtoPost" />
+  <xs:complexType name="DtoCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CategoryFullName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CategorySmallName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdCategory" type="xs:int" />
+      <xs:element minOccurs="0" name="IsPPS" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OrderBy" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoCategory" nillable="true" type="tns:DtoCategory" />
+  <xs:complexType name="DtoWorkShedule">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IdWorkShedule" type="xs:int" />
+      <xs:element minOccurs="0" name="WorkSheduleName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoWorkShedule" nillable="true" type="tns:DtoWorkShedule" />
+  <xs:complexType name="DtoTimeSheet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Approvers" nillable="true" type="tns:ArrayOfDtoTimeSheetApprover" />
+      <xs:element minOccurs="0" name="DateBegin" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateComposition" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateEnd" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Department" nillable="true" type="tns:DtoDepartment" />
+      <xs:element minOccurs="0" name="Employees" nillable="true" type="tns:ArrayOfDtoTimeSheetEmployee" />
+      <xs:element minOccurs="0" name="IdTimeSheet" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoTimeSheet" nillable="true" type="tns:DtoTimeSheet" />
+  <xs:complexType name="ArrayOfDtoTimeSheetApprover">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoTimeSheetApprover" nillable="true" type="tns:DtoTimeSheetApprover" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoTimeSheetApprover" nillable="true" type="tns:ArrayOfDtoTimeSheetApprover" />
+  <xs:complexType name="DtoTimeSheetApprover">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DtoFactStaffEmployee">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AppoverNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="ApproverDate" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DtoTimeSheetApprover" nillable="true" type="tns:DtoTimeSheetApprover" />
+  <xs:complexType name="ArrayOfDtoTimeSheetEmployee">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoTimeSheetEmployee" nillable="true" type="tns:DtoTimeSheetEmployee" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoTimeSheetEmployee" nillable="true" type="tns:ArrayOfDtoTimeSheetEmployee" />
+  <xs:complexType name="DtoTimeSheetEmployee">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FactStaffEmployee" nillable="true" type="tns:DtoFactStaffEmployee" />
+      <xs:element minOccurs="0" name="IdTimeSheet" type="xs:int" />
+      <xs:element minOccurs="0" name="IsChecked" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Records" nillable="true" type="tns:ArrayOfDtoTimeSheetRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoTimeSheetEmployee" nillable="true" type="tns:DtoTimeSheetEmployee" />
+  <xs:complexType name="ArrayOfDtoTimeSheetRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoTimeSheetRecord" nillable="true" type="tns:DtoTimeSheetRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoTimeSheetRecord" nillable="true" type="tns:ArrayOfDtoTimeSheetRecord" />
+  <xs:complexType name="DtoTimeSheetRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DayAweek" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DayStays" nillable="true" type="tns:DtoDayStatus" />
+      <xs:element minOccurs="0" name="IdTimeSheetRecord" type="ser:guid" />
+      <xs:element minOccurs="0" name="IsChecked" type="xs:boolean" />
+      <xs:element minOccurs="0" name="JobTimeCount" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoTimeSheetRecord" nillable="true" type="tns:DtoTimeSheetRecord" />
+  <xs:complexType name="DtoDayStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FullDayStatusName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdDayStatus" type="xs:int" />
+      <xs:element minOccurs="0" name="SmallDayStatusName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoDayStatus" nillable="true" type="tns:DtoDayStatus" />
+  <xs:complexType name="ArrayOfDtoTimeSheet">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoTimeSheet" nillable="true" type="tns:DtoTimeSheet" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoTimeSheet" nillable="true" type="tns:ArrayOfDtoTimeSheet" />
+  <xs:complexType name="ArrayOfDtoDayStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoDayStatus" nillable="true" type="tns:DtoDayStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoDayStatus" nillable="true" type="tns:ArrayOfDtoDayStatus" />
+  <xs:complexType name="ArrayOfDtoTimeSheetApproveHistiry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoTimeSheetApproveHistiry" nillable="true" type="tns:DtoTimeSheetApproveHistiry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoTimeSheetApproveHistiry" nillable="true" type="tns:ArrayOfDtoTimeSheetApproveHistiry" />
+  <xs:complexType name="DtoTimeSheetApproveHistiry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AppoverComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AppoverDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="AppoverName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AppoverStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AppoverVisa" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoTimeSheetApproveHistiry" nillable="true" type="tns:DtoTimeSheetApproveHistiry" />
+  <xs:complexType name="DtoMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Result" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoMessage" nillable="true" type="tns:DtoMessage" />
+  <xs:complexType name="ArrayOfDtoWorkShedule">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoWorkShedule" nillable="true" type="tns:DtoWorkShedule" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoWorkShedule" nillable="true" type="tns:ArrayOfDtoWorkShedule" />
+  <xs:complexType name="ArrayOfDtoExceptionDay">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DtoExceptionDay" nillable="true" type="tns:DtoExceptionDay" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDtoExceptionDay" nillable="true" type="tns:ArrayOfDtoExceptionDay" />
+  <xs:complexType name="DtoExceptionDay">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DayAweek" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DayStatus" nillable="true" type="tns:DtoDayStatus" />
+      <xs:element minOccurs="0" name="GNS" type="xs:float" />
+      <xs:element minOccurs="0" name="GPS" type="xs:float" />
+      <xs:element minOccurs="0" name="IdExceptionDay" type="xs:int" />
+      <xs:element minOccurs="0" name="MNS" type="xs:float" />
+      <xs:element minOccurs="0" name="MPS" type="xs:float" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WorkShedule" nillable="true" type="tns:DtoWorkShedule" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DtoExceptionDay" nillable="true" type="tns:DtoExceptionDay" />
+</xs:schema>

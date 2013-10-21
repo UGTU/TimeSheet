@@ -1,0 +1,18 @@
+﻿@model TimeSheetMvc4WebApplication.Models.PaperModel
+@*<br/> *@
+<hr style="color: grey"/>         
+@*<p>Табель № @Model.TimeSheetNum Лист @Model.PaperNum из @Model.PaperOf Ссылка на документ: @Html.Raw(@Url.Action("TimeSheetPdf", "Home", new { idTimeSheet = Model.TimeSheetNum }, Request.Url.Scheme)) </p>*@
+@*<small>*@
+    <table border="0" style="width: 100%; color: grey">
+
+        <tr>
+            <td style="width: 20%">Документ № @Model.TimeSheetNum</td>
+            <td style="width: 60%; text-align: center">Ссылка на документ: @Html.Raw(@Url.Action("TimeSheetPdf", "Home", new { idTimeSheet = Model.TimeSheetNum }, Request.Url.Scheme))</td>
+            <td style="width: 20%; text-align: right">Лист @Model.PaperNum из @Model.PaperOf</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">Сформировано через информационную систему табельного учёта рабочего времени (@Html.Raw(@Url.Action("Index", "Home", null, Request.Url.Scheme)))</td>
+
+        </tr>
+    </table>
+@*</small>*@

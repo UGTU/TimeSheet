@@ -1,0 +1,392 @@
+﻿@using TimeSheetMvc4WebApplication.ClassesDTO
+@model IEnumerable<TimeSheetMvc4WebApplication.ClassesDTO.DtoTimeSheet>
+@{
+    ViewBag.Title = @ViewBag.Department.DepartmentSmallName;
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+    var years = Model.GroupBy(g => g.DateBegin.Year);
+    var approver = ViewBag.approver as DtoApprover;
+}
+<div ng-app ng-controller="TimeSheetCreate">
+    <div class="row">
+        <div class="col-sm-6 col-md-9">
+            <h2>@ViewBag.Department.DepartmentFullName</h2>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <a type="button" class="btn btn-default" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
+                <span class="glyphicon glyphicon-plus-sign"></span> Сформировать табель
+            </a>
+        </div>
+    </div>
+    @foreach (var year in years.OrderByDescending(o => o.Key))
+    {
+        <div class="row">
+            <div class="col-sm-6 col-md-12">
+                <h3>Табеля за @year.Key год</h3>
+            </div>
+        </div>
+        <hr style="border-top: 2px solid #eeeeee;" />
+        {
+            var tss = year.OrderByDescending(o => o.DateBegin);
+            const int itemsInRow = 4;
+            var rowColl = Math.Ceiling((double)tss.Count() / (double)itemsInRow);
+            for (int i = 0; i < rowColl; i++)
+            {
+                var rowItems = tss.Skip(i * itemsInRow).Take(itemsInRow);
+                var span = Math.Floor(12 / (double)itemsInRow);
+                <div class="row">
+                    @foreach (var item in rowItems)
+                    {
+                        <div class="@string.Format("col-sm-6 col-md-{0}", span)">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 style="margin: 0;">@Html.Partial("TimeSheetApproveStatus", item.ApproveStep)  @item.DateBegin.ToString("MMMM") @*(@item.EmployeesCount)*@ </h3>
+                                </div>
+                                <div class="panel-body" style="padding: 0px ">
+                                    <div class="centered" style="background-color: #f5f5f5">
+                                        @*@if (item.ApproveStep == 0)
+                                        {*@
+                                            <a style="padding: 5px 20px;" class="btn btn-link btn-sm @(item.ApproveStep!=0?"disabled":"")" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("TimeSheet2", "Main", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span></a>
+                                        @*}*@
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" href="@Url.Action("TimeSheetPdf", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApproval", "Home", new {IdTimeSheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-retweet"></span></a>
+                                    </div>
+                                    <div class="panel-body" style="padding-bottom: 5px ">
+                                        <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>
+                                        <p>Человек в табеле: @item.EmployeesCount</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+    <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheets", "Main", new { id = ViewBag.Department.IdDepartment, showAll = true })">Показать все табеля подразделения</a></p>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 650px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Формирование табеля</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="centered">
+                        <ul class="list-inline">
+                            <li style="padding: 0"><button type="button" class="btn btn-default btn-sm" style="width: 115px;" ng-click="decCurrentDate(currentMounth)"><span class="glyphicon glyphicon-chevron-left"></span> {{dateFormat(previousMounth)}}</button></li>
+                            <li style="padding: 0">
+                                <div style="width: 340px;">
+                                    <h4>Сформировать табель на {{dateFormat(currentMounth)}}</h4>
+                                </div>
+                            </li>
+                            <li style="padding: 0"><button type="button" class="btn btn-default btn-sm" style="width: 115px;" ng-click="incCurrentDate(currentMounth)">{{dateFormat(nextMounth)}} <span class="glyphicon glyphicon-chevron-right"></span></button></li>
+                        </ul>
+                    </div>
+                    <table class="table @*table-condensed*@ table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">#</th>
+                                <th style="width: 280px;">Сотрудник</th>
+                                <th style="width: 220px;">Должность</th>
+                                <th style="">Ставка</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="height: 400px; overflow-y: auto; border-bottom: 2px solid #dddddd;">
+                        <table class="table @*table-condensed*@ table-bordered" style="margin-bottom: 0;">
+                            <tbody>
+                                <tr ng-repeat="employee in employees" style="max-height: 10px;">
+                                    <td style="width: 30px; padding: 0px; " align="center"><input type="checkbox" ng-model="employee.IsCheked"></td>
+                                    <td style="width: 280px; padding: 0px 5px;">{{employeeName(employee)}}</td>
+                                    <td style="width: 220px; padding: 0px 5px;">{{employee.Post.PostSmallName}}</td>
+                                    <td style="padding: 0px 5px;">{{employee.StaffRate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h5 class="pull-right">Выбрано человек: {{selectedEmployeesCount()}}</h5>
+                    @*<pre>{{employees}}</pre>*@
+                </div>
+                <div class="modal-footer">
+                    <div id="buttons">
+                        <div class="pull-left">
+                            <button type="button" class="btn btn-default" ng-click="selectAllemployees()">Выбрать всех</button>
+                            <button type="button" class="btn btn-default" ng-click="clearAllemployees()">Отчистить список</button>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" ng-click="createTimeSheet()">Сформировать</button>
+                    </div>
+
+                    <div id="progress" class="progress progress-striped active hidden">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                            <span class="sr-only">45% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.btn').tooltip('hide');
+</script>
+
+<style>
+    .btnWidth {
+        width: 48px;
+    }
+
+    .centered {
+        /*float: none;*/
+        margin: 0 auto;
+        text-align: center;
+    }
+</style>
+
+<script>
+    function TimeSheetCreate($scope, $http) {
+        $scope.initDates = function () {
+            $scope.currentMounth = new Date();
+            $scope.updateDates();
+        };
+
+        $scope.updateDates = function () {
+            $scope.nextMounth = new Date(new Date($scope.currentMounth).setMonth($scope.currentMounth.getMonth() + 1));
+            $scope.previousMounth = new Date(new Date($scope.currentMounth).setMonth($scope.currentMounth.getMonth() - 1));
+        };
+
+
+        $scope.initTimeSheetCreate = function () {
+            $scope.initDates();
+            $scope.employeesRefresh();
+
+
+        };
+
+        $scope.employeesRefresh = function () {
+            $scope.employees = null;
+            var link = '@Html.Raw(@Url.Action("GetEmployeesForTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
+            link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
+            $http.get(link).success(function (data) {
+                $scope.employees = data;
+                $scope.selectAllemployees();
+            });
+        };
+
+        $scope.incCurrentDate = function () {
+            $scope.currentMounth = new Date(new Date($scope.currentMounth).setMonth($scope.currentMounth.getMonth() + 1));
+            $scope.updateDates();
+            $scope.employeesRefresh();
+        };
+
+        $scope.decCurrentDate = function () {
+            $scope.currentMounth = new Date(new Date($scope.currentMounth).setMonth($scope.currentMounth.getMonth() - 1));
+            $scope.updateDates();
+            $scope.employeesRefresh();
+        };
+
+        $scope.dateFormat = function (date) {
+            var d = new Date();
+            if (d.getYear() == date.getYear())
+                return date.toString('MMMM');
+            return date.toString('MMMM yyyy');
+        };
+
+        $scope.employeeName = function (employee) {
+            return employee.Surname + " " + employee.Name + " " + employee.Patronymic;
+        };
+
+        $scope.selectAllemployees = function () {
+            angular.forEach($scope.employees, function (employee) {
+                employee.IsCheked = true;
+            });
+        };
+
+        $scope.clearAllemployees = function () {
+            angular.forEach($scope.employees, function (employee) {
+                employee.IsCheked = false;
+            });
+        };
+
+        $scope.selectedEmployeesCount = function () {
+            var count = 0;
+            angular.forEach($scope.employees, function (employee) {
+                if (employee.IsCheked) count++;
+            });
+            return count;
+        };
+
+
+        $scope.createTimeSheet = function () {
+            $('#buttons').addClass("hidden");
+            $('#progress').removeClass("hidden");
+            var selectedEmployees = [];
+            angular.forEach($scope.employees, function (employee) {
+                if (employee.IsCheked) selectedEmployees.push(employee);
+            });
+            var link = '@Html.Raw(@Url.Action("CreateTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
+            link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
+            $http.post(link, selectedEmployees).success(
+                    function (result) {
+                        if (result.Result) {
+                            console.log('timeSheet create succes');
+                            $('#myModal').modal('hide');
+                            location.reload();
+                        } else {
+                            alert(result.Message);
+                        }
+                        $('#progress').addClass("hidden");
+                        $('#buttons').removeClass("hidden");
+                    }
+                );
+        };
+
+        //======================    Инициализация контроллера   =============================================
+
+        $scope.currentMounth = new Date();
+        $scope.initDates();
+
+
+        @*$http.get('@Html.Raw(@Url.Action("GetTimeSheetModelJson", "Main", new { idTimeSheet = 557 }))').success(function (data) {
+            $scope.dayStatList = data.DayStatusList;
+            $scope.selectedDayStatList = $scope.dayStatList[0];
+            $scope.selectedDayJobTimeCount = 0;
+            $scope.employees = data.TimeSheet.Employees;
+            angular.forEach($scope.employees, function (empl) {
+                angular.forEach(empl.Records, function (rec) {
+                    angular.forEach($scope.dayStatList, function (ds) {
+                        if (ds.IdDayStatus == rec.IdDayStatus) {
+                            rec.DayStays = ds;
+                        }
+                    });
+                });
+            });
+
+            $scope.setCurrentEmployeeRecords($scope.employees[0]);
+            //$scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+            $('#progress').remove();
+            $('.row').removeClass('hidden');
+        });*@
+
+        @*$scope.saveChanges = function () {
+            if ($scope.currentEmployee == null) return;
+            var changes = [];
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                angular.forEach($scope.employeesRecordsStandard, function (recordStandard) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                        changes.push(record);
+                        console.log('######################################################################');
+                        console.log(record.JobTimeCount + ' ' + record.DayStays.IdDayStatus);
+                        console.log(recordStandard.JobTimeCount + ' ' + recordStandard.DayStays.IdDayStatus);
+                        console.log('######################################################################');
+                    }
+                });
+            });
+            if (changes.length > 0) {
+                console.log('save ' + changes.length + ' records');
+                angular.forEach(changes, function (ch) {
+                    ch.IdDayStatus = ch.DayStays.IdDayStatus;
+                    //ch.DayStays = null;
+                });
+                //отправить данные на сервер
+                $http.post('@Url.Action("UpdateTimeSheetRecotds")', changes).success(
+                    function (result) {
+                        //do stuff with response
+                        if (result.Result) {
+                            console.log('save records succes');
+                            $scope.setCurrentEmployeeRecords($scope.currentEmployee);
+                            //$scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+
+                        } else {
+                            alert(result.Message);
+                        }
+                    }
+                );
+            }
+        };
+
+        $scope.isSaveDisabled = function () {
+            if ($scope.currentEmployee == null) return false;
+            var changes = [];
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                angular.forEach($scope.employeesRecordsStandard, function (recordStandard) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                        changes.push(record);
+                    }
+                });
+            });
+            if (changes.length > 0) {
+                //console.log('save ' + changes.length + ' records');
+                return false;
+            }
+            return true;
+        };
+
+        $scope.setCurrentEmployeeRecords = function (employee) {
+            //$scope.saveChanges();
+            $scope.currentEmployee = employee;
+            angular.forEach($scope.employees, function (empl) {
+                empl.css = '';
+            });
+            employee.css = 'active';
+            $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+        };
+
+        $scope.getDayStatusName = function (dayStatus) {
+            return dayStatus.SmallDayStatusName;
+        };
+
+        $scope.updateRecords = function () {
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                if (record.IsCheked) {
+                    console.log('update record');
+                    record.DayStays = $scope.selectedDayStatList;
+                    record.JobTimeCount = $scope.selectedDayJobTimeCount;
+                    record.IsCheked = false;
+                }
+            });
+        };
+
+        $scope.isUpdateDisabled = function () {
+            if ($scope.currentEmployee == null) return true;
+            var result = true;
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                if (record.IsCheked) {
+                    console.log('update enable');
+                    result = false;
+                }
+            });
+            return result;
+        };
+
+        $scope.inputJobTimeCountValidate = function (jobTimeCount) {
+            var r = parseFloat(jobTimeCount);
+            if (isNaN(r) | r > 24) {
+                return 'has-error';
+            }
+            if (r > 8) return 'has-warning';
+            return '';
+        };
+
+        $scope.RecorsState = function (record) {
+            //var r = parseFloat(jobTimeCount);
+            //if (isNaN(r) | r > 24) {
+            //    return 'has-error';
+            //}
+            //if (r > 8) return 'has-warning';
+            //console.log('sss');
+            //return 'success';
+            if (record.DayAweek == 'суббота') return 'weekEnd';
+            if (record.DayAweek == 'воскресенье') return 'weekEnd';
+            //return 'active';
+            return '';
+        }*@;
+    }
+</script>
+
+
+
+

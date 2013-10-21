@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TimeSheetMvc4WebApplication.TimeSheetService" CodeBehind="TimeSheetService.svc.cs" %>

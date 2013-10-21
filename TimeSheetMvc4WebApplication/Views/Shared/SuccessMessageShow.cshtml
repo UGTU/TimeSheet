@@ -1,0 +1,26 @@
+﻿@using TimeSheetMvc4WebApplication
+@model TimeSheetMvc4WebApplication.Models.MessageModel
+@{
+    //var client = new TimeSheetService();
+    //var login = System.Web.HttpContext.Current.User.Identity.Name;
+    //var approver = client.GetCurrentApproverByLogin(login);
+    //var idTimeSheet = (int)ViewBag.IdTimeSheet;
+    var idTimeSheet = ViewBag.IdTimeSheet != null ? (int)ViewBag.IdTimeSheet : 0;
+}
+
+@Html.Partial("Header", idTimeSheet)
+
+<div class="container">
+    <div class="alert alert-success" style="margin-top: 70px;">
+        @if (idTimeSheet == 0)
+        {
+            <script>
+                $("#Approval").remove();
+                $("#Show").remove();
+                $("#Print").remove();
+            </script>
+        }
+        <h4>@Model.MessageTitile</h4>
+        <p>@Model.Message</p>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="cb44c286-d633-4925-95ee-4cfa52345f4b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:6868/TimeSheetService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TimeSheetService3.xsd" MetadataType="Schema" ID="6c5f1e08-e0f4-4d71-b25d-d93a37136d38" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?xsd=xsd3" />
+    <MetadataFile FileName="TimeSheetService.wsdl" MetadataType="Wsdl" ID="ac84f31c-1978-4c3b-ac14-6d28b6026433" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?wsdl" />
+    <MetadataFile FileName="TimeSheetService.xsd" MetadataType="Schema" ID="52b3eaea-d6c5-4120-8296-c0852903bf68" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?xsd=xsd0" />
+    <MetadataFile FileName="TimeSheetService1.xsd" MetadataType="Schema" ID="b9485b2c-9a10-4000-bb0e-c7172bd5606a" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TimeSheetService2.xsd" MetadataType="Schema" ID="c7784308-efed-41df-82ab-607144f25489" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TimeSheetService1.wsdl" MetadataType="Wsdl" ID="e8ce04d6-261e-4255-8c52-2c473ddb6717" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="TimeSheetService.disco" MetadataType="Disco" ID="69bfba81-a837-43d1-80c9-3394f1eb24b8" SourceId="1" SourceUrl="http://localhost:6868/TimeSheetService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

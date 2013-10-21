@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="/Imports">
+      <xsd:import schemaLocation="http://localhost:48456/TimeSheetService.svc?xsd=xsd0" />
+      <xsd:import schemaLocation="http://localhost:48456/TimeSheetService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:48456/TimeSheetService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TimeSheetService_GetWindowsUsername_InputMessage">
+    <wsdl:part name="parameters" element="GetWindowsUsername" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetWindowsUsername_OutputMessage">
+    <wsdl:part name="parameters" element="GetWindowsUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetCurrentApprover_InputMessage">
+    <wsdl:part name="parameters" element="GetCurrentApprover" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetCurrentApprover_OutputMessage">
+    <wsdl:part name="parameters" element="GetCurrentApproverResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentsList_InputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentsList" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentsList_OutputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentsListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentEmployees_InputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentEmployees" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentEmployees_OutputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentEmployeesResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentApprover_InputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentApprover" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDepartmentApprover_OutputMessage">
+    <wsdl:part name="parameters" element="GetDepartmentApproverResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_AddEmployeeLogin_InputMessage">
+    <wsdl:part name="parameters" element="AddEmployeeLogin" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_AddEmployeeLogin_OutputMessage">
+    <wsdl:part name="parameters" element="AddEmployeeLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_AddApproverForDepartment_InputMessage">
+    <wsdl:part name="parameters" element="AddApproverForDepartment" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_AddApproverForDepartment_OutputMessage">
+    <wsdl:part name="parameters" element="AddApproverForDepartmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheet_InputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheet" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheet_OutputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetList_InputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetList" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetList_OutputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDayStatusList_InputMessage">
+    <wsdl:part name="parameters" element="GetDayStatusList" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetDayStatusList_OutputMessage">
+    <wsdl:part name="parameters" element="GetDayStatusListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_EditTimeSheetRecords_InputMessage">
+    <wsdl:part name="parameters" element="EditTimeSheetRecords" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_EditTimeSheetRecords_OutputMessage">
+    <wsdl:part name="parameters" element="EditTimeSheetRecordsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CreateTimeSheet1_InputMessage">
+    <wsdl:part name="parameters" element="CreateTimeSheet1" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CreateTimeSheet1_OutputMessage">
+    <wsdl:part name="parameters" element="CreateTimeSheet1Response" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CreateTimeSheet_InputMessage">
+    <wsdl:part name="parameters" element="CreateTimeSheet" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CreateTimeSheet_OutputMessage">
+    <wsdl:part name="parameters" element="CreateTimeSheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetApproveHistory_InputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetApproveHistory" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetApproveHistory_OutputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetApproveHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CanTimeSheeEdit_InputMessage">
+    <wsdl:part name="parameters" element="CanTimeSheeEdit" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CanTimeSheeEdit_OutputMessage">
+    <wsdl:part name="parameters" element="CanTimeSheeEditResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_TimeSheetApproval_InputMessage">
+    <wsdl:part name="parameters" element="TimeSheetApproval" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_TimeSheetApproval_OutputMessage">
+    <wsdl:part name="parameters" element="TimeSheetApprovalResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetApproverForTimeSheet_InputMessage">
+    <wsdl:part name="parameters" element="GetApproverForTimeSheet" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetApproverForTimeSheet_OutputMessage">
+    <wsdl:part name="parameters" element="GetApproverForTimeSheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_SendMail_InputMessage">
+    <wsdl:part name="parameters" element="SendMail" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_SendMail_OutputMessage">
+    <wsdl:part name="parameters" element="SendMailResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CanApprove_InputMessage">
+    <wsdl:part name="parameters" element="CanApprove" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_CanApprove_OutputMessage">
+    <wsdl:part name="parameters" element="CanApproveResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetApproveStep_InputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetApproveStep" />
+  </wsdl:message>
+  <wsdl:message name="TimeSheetService_GetTimeSheetApproveStep_OutputMessage">
+    <wsdl:part name="parameters" element="GetTimeSheetApproveStepResponse" />
+  </wsdl:message>
+  <wsdl:portType name="TimeSheetService">
+    <wsdl:operation name="GetWindowsUsername">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetWindowsUsername" message="TimeSheetService_GetWindowsUsername_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetWindowsUsernameResponse" message="TimeSheetService_GetWindowsUsername_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentApprover">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetCurrentApprover" message="TimeSheetService_GetCurrentApprover_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetCurrentApproverResponse" message="TimeSheetService_GetCurrentApprover_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepartmentsList">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetDepartmentsList" message="TimeSheetService_GetDepartmentsList_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetDepartmentsListResponse" message="TimeSheetService_GetDepartmentsList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepartmentEmployees">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetDepartmentEmployees" message="TimeSheetService_GetDepartmentEmployees_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetDepartmentEmployeesResponse" message="TimeSheetService_GetDepartmentEmployees_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepartmentApprover">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetDepartmentApprover" message="TimeSheetService_GetDepartmentApprover_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetDepartmentApproverResponse" message="TimeSheetService_GetDepartmentApprover_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddEmployeeLogin">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/AddEmployeeLogin" message="TimeSheetService_AddEmployeeLogin_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/AddEmployeeLoginResponse" message="TimeSheetService_AddEmployeeLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddApproverForDepartment">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/AddApproverForDepartment" message="TimeSheetService_AddApproverForDepartment_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/AddApproverForDepartmentResponse" message="TimeSheetService_AddApproverForDepartment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeSheet">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetTimeSheet" message="TimeSheetService_GetTimeSheet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetTimeSheetResponse" message="TimeSheetService_GetTimeSheet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeSheetList">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetTimeSheetList" message="TimeSheetService_GetTimeSheetList_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetTimeSheetListResponse" message="TimeSheetService_GetTimeSheetList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDayStatusList">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetDayStatusList" message="TimeSheetService_GetDayStatusList_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetDayStatusListResponse" message="TimeSheetService_GetDayStatusList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EditTimeSheetRecords">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/EditTimeSheetRecords" message="TimeSheetService_EditTimeSheetRecords_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/EditTimeSheetRecordsResponse" message="TimeSheetService_EditTimeSheetRecords_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateTimeSheet1">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/CreateTimeSheet1" message="TimeSheetService_CreateTimeSheet1_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/CreateTimeSheet1Response" message="TimeSheetService_CreateTimeSheet1_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateTimeSheet">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/CreateTimeSheet" message="TimeSheetService_CreateTimeSheet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/CreateTimeSheetResponse" message="TimeSheetService_CreateTimeSheet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeSheetApproveHistory">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetTimeSheetApproveHistory" message="TimeSheetService_GetTimeSheetApproveHistory_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetTimeSheetApproveHistoryResponse" message="TimeSheetService_GetTimeSheetApproveHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CanTimeSheeEdit">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/CanTimeSheeEdit" message="TimeSheetService_CanTimeSheeEdit_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/CanTimeSheeEditResponse" message="TimeSheetService_CanTimeSheeEdit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimeSheetApproval">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/TimeSheetApproval" message="TimeSheetService_TimeSheetApproval_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/TimeSheetApprovalResponse" message="TimeSheetService_TimeSheetApproval_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetApproverForTimeSheet">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetApproverForTimeSheet" message="TimeSheetService_GetApproverForTimeSheet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetApproverForTimeSheetResponse" message="TimeSheetService_GetApproverForTimeSheet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMail">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/SendMail" message="TimeSheetService_SendMail_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/SendMailResponse" message="TimeSheetService_SendMail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CanApprove">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/CanApprove" message="TimeSheetService_CanApprove_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/CanApproveResponse" message="TimeSheetService_CanApprove_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTimeSheetApproveStep">
+      <wsdl:input wsaw:Action="urn:TimeSheetService/GetTimeSheetApproveStep" message="TimeSheetService_GetTimeSheetApproveStep_InputMessage" />
+      <wsdl:output wsaw:Action="urn:TimeSheetService/GetTimeSheetApproveStepResponse" message="TimeSheetService_GetTimeSheetApproveStep_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

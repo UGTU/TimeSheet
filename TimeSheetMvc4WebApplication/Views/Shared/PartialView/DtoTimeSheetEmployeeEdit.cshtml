@@ -1,0 +1,59 @@
+﻿@using System.Collections.Specialized
+@using TimeSheetPortableClassLibrary.SubjectArea
+
+@model TimeSheetAspNetMvc.Models.Home.DtoTimeSheetEmployeeEditModel
+
+<div >
+    <div>
+        <h4>
+            @string.Format("{0} {1} {2}", Model.Employee.FactStaffEmployee.Surname, Model.Employee.FactStaffEmployee.Name, Model.Employee.FactStaffEmployee.Patronymic)
+            <small style="color: #474646">@string.Format("{0}, ставка: {1}", Model.Employee.FactStaffEmployee.Post.PostSmallName, (double)Model.Employee.FactStaffEmployee.StaffRate)</small>
+        </h4>
+    </div>
+
+
+    <table border="1px" style="width: 100%; text-align: center">
+        <tr style="background-color: aliceblue">
+            @for (int i = 1; i <= 15; i++)
+            {
+                <td class="timeSheetCell">@i</td>
+            }
+            <td class="timeSheetCell">X</td>
+        </tr>
+        <tr>
+            @for (int i = 1; i <= 15; i++)
+            {
+                @*<td class="timeSheetCell">@Model.Records.First(w => w.TimeSheetNumber == i).DayStays.SmallDayStatusName</td>*@
+                <td class="timeSheetCell">@Html.DropDownListFor(d=>d.Employee.Records.First(w => w.TimeSheetNumber == i).DayStays,new SelectList(Model.DayStatuses),new {@class="timeSheetEditCell"})</td>
+            }
+            <td class="timeSheetCell">X</td>
+        </tr>
+        <tr>
+            @for (int i = 1; i <= 15; i++)
+            {
+                @*<td class="timeSheetCell">@Model.Employee.Records.First(w => w.TimeSheetNumber == i).JobTimeCount</td>*@
+                <td class="timeSheetCell">@Html.TextBoxFor(e=>e.Employee.Records.First(w => w.TimeSheetNumber == i).JobTimeCount, new {@class="timeSheetEditCell"})</td>
+            }
+            <td class="timeSheetCell">X</td>
+        </tr>
+        <tr style="background-color: aliceblue">
+            @for (int i = 16; i <= 31; i++)
+            {
+                <td class="timeSheetCell">@i</td>
+            }
+        </tr>
+        <tr>
+            @for (int i = 16; i <= 31; i++)
+            {
+                @*<td class="timeSheetCell">@Model.Employee.Records.First(w => w.TimeSheetNumber == i).DayStays.SmallDayStatusName</td>*@
+                <td class="timeSheetCell">@Html.DropDownListFor(d=>d.Employee.Records.First(w => w.TimeSheetNumber == i).DayStays,new SelectList(Model.DayStatuses),new {@class="timeSheetEditCell"})</td>
+            }
+        </tr>
+        <tr>
+            @for (int i = 16; i <= 31; i++)
+            {
+                <td class="timeSheetCell">@Model.Employee.Records.First(w => w.TimeSheetNumber == i).JobTimeCount</td>
+            }
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,18 @@
+﻿@model TimeSheetMvc4WebApplication.ClassesDTO.DtoApprover
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+
+
+@*<h2>Index</h2>*@
+@if (Model.DtoApproverDepartments != null && Model.DtoApproverDepartments.Any())
+{
+    Html.RenderPartial("PartialView/DtoApproverDepartmentListPartial", Model.DtoApproverDepartments);
+}
+else
+{
+    <div class="alert alert-error">
+        <p>За вами не закреплено ни одного структурного подразделения.</p>
+    </div>
+}

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:48456/TimeSheetService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" />
+  <xs:element name="GetWindowsUsername">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWindowsUsernameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetWindowsUsernameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCurrentApprover">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCurrentApproverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetCurrentApproverResult" nillable="true" type="q1:DtoApprover" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentsList">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentsListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetDepartmentsListResult" nillable="true" type="q2:ArrayOfDtoDepartment" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentEmployees">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentEmployeesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetDepartmentEmployeesResult" nillable="true" type="q3:ArrayOfDtoEmployee" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentApprover">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+        <xs:element minOccurs="0" name="approveNumber" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDepartmentApproverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetDepartmentApproverResult" nillable="true" type="q4:DtoApprover" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddEmployeeLogin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idEmployee" type="xs:int" />
+        <xs:element minOccurs="0" name="login" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddEmployeeLoginResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddApproverForDepartment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idEmployee" type="xs:int" />
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+        <xs:element minOccurs="0" name="approveNumber" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddApproverForDepartmentResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetTimeSheetResult" nillable="true" type="q5:DtoTimeSheet" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetTimeSheetListResult" nillable="true" type="q6:ArrayOfDtoTimeSheet" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDayStatusList">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDayStatusListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetDayStatusListResult" nillable="true" type="q7:ArrayOfDtoDayStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EditTimeSheetRecords">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="recordsForEdit" nillable="true" type="q8:ArrayOfDtoTimeSheetRecord" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EditTimeSheetRecordsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EditTimeSheetRecordsResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateTimeSheet1">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+        <xs:element minOccurs="0" name="dateBeginPeriod" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="dateEndPeriod" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateTimeSheet1Response">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateTimeSheet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idDepartment" type="xs:int" />
+        <xs:element minOccurs="0" name="dateBeginPeriod" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="dateEndPeriod" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateTimeSheetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="CreateTimeSheetResult" nillable="true" type="q9:DtoMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetApproveHistory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetApproveHistoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetTimeSheetApproveHistoryResult" nillable="true" type="q10:ArrayOfDtoTimeSheetApproveHistiry" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanTimeSheeEdit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idRecord" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanTimeSheeEditResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CanTimeSheeEditResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeSheetApproval">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+        <xs:element minOccurs="0" name="idApprover" type="xs:int" />
+        <xs:element minOccurs="0" name="result" type="xs:boolean" />
+        <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeSheetApprovalResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TimeSheetApprovalResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetApproverForTimeSheet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+        <xs:element minOccurs="0" name="approverNum" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetApproverForTimeSheetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="GetApproverForTimeSheetResult" nillable="true" type="q11:DtoApprover" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/TimeSheetMvcWebApplication.ClassesDTO" minOccurs="0" name="approver" nillable="true" type="q12:DtoApprover" />
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+        <xs:element minOccurs="0" name="approveResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isApproveFinished" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SendMailResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanApprove">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanApproveResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CanApproveResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetApproveStep">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTimeSheet" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSheetApproveStepResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTimeSheetApproveStepResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

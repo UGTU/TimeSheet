@@ -1,0 +1,17 @@
+﻿<Deployment xmlns="http://schemas.microsoft.com/client/2007/deployment" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" EntryPointAssembly="TimeSheetClient" EntryPointType="TimeSheetClient.App" RuntimeVersion="5.0.61118.0">
+  <Deployment.Parts>
+    <AssemblyPart x:Name="TimeSheetClient" Source="TimeSheetClient.dll" />
+  </Deployment.Parts>
+  <Deployment.ExternalParts>
+    <ExtensionPart Source="System.ComponentModel.DataAnnotations.zip" />
+    <ExtensionPart Source="System.Windows.Controls.Data.zip" />
+    <ExtensionPart Source="System.Windows.Controls.Data.Input.zip" />
+    <ExtensionPart Source="System.Windows.Controls.zip" />
+    <ExtensionPart Source="System.Windows.Controls.Input.zip" />
+    <ExtensionPart Source="System.Windows.Data.zip" />
+    <ExtensionPart Source="System.Xml.Linq.zip" />
+    <ExtensionPart Source="System.Xml.Serialization.zip" />
+    <ExtensionPart Source="System.Xml.Utils.zip" />
+    <ExtensionPart Source="System.Xml.XPath.zip" />
+  </Deployment.ExternalParts>
+</Deployment>
