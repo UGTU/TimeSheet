@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -69,7 +70,7 @@ namespace TimeSheetClient
                                                        _currentEmployee.FactStaffEmployee.Patronymic,
                                                        (double)_currentEmployee.FactStaffEmployee.StaffRate,
                                                        _currentEmployee.FactStaffEmployee.Post.PostSmallName);
-            recordsDataGrid.ItemsSource = _currentEmployee.Records;
+            recordsDataGrid.ItemsSource = _currentEmployee.Records.OrderBy(o=>o.Date);
 
             _client.CanTimeSheeEditAsync(employee.Records[0].IdTimeSheetRecord);
             if(canCorrect)
