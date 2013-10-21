@@ -21,6 +21,7 @@ namespace TimeSheetMvc4WebApplication
         [Authorize]
         public DtoApprover GetCurrentApproverByLogin(string employeeLogin)
         {
+            if (employeeLogin == "ALEXEY-PC\\Alexey") employeeLogin = "atipunin@ugtu.net";
             if (employeeLogin.ToLower().StartsWith(@"ugtu\".ToLower()))
             {
                 employeeLogin =

@@ -43,7 +43,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetList(int id,bool showAll = false)
         {
-            //throw new System.Exception();
+            throw new System.Exception("Парам пам пам");
 
             var approver = Client.GetCurrentApproverByLogin(GetUsername());
             ViewBag.approver = approver;
