@@ -64,7 +64,12 @@ namespace TimeSheetClient
 
         public void Initialize(DtoTimeSheetEmployee employee, bool canCorrect)
         {
-            _currentEmployee = employee;
+            _currentEmployee = employee ;
+            //_currentEmployee.Records=new ObservableCollection<DtoTimeSheetRecord>();
+            //foreach (var record in employee.Records.OrderBy(o => o.Date))
+            //{
+            //    _currentEmployee.Records.Add(record);
+            //}
             EmployeeNameTextBlock.Text = string.Format("{0} {1} {2}     Ставка: {3} {4}", _currentEmployee.FactStaffEmployee.Surname,
                                                        _currentEmployee.FactStaffEmployee.Name,
                                                        _currentEmployee.FactStaffEmployee.Patronymic,
@@ -139,7 +144,7 @@ namespace TimeSheetClient
                         recordsForEdit.Add(selectedRecord);
                     }
                     recordsDataGrid.ItemsSource = null;
-                    recordsDataGrid.ItemsSource = _currentEmployee.Records;
+                    recordsDataGrid.ItemsSource = _currentEmployee.Records.OrderBy(o => o.Date);
                     _client.EditTimeSheetRecordsAsync(recordsForEdit);
                 }
             }
@@ -177,7 +182,7 @@ namespace TimeSheetClient
                     }
                 }
                 recordsDataGrid.ItemsSource = null;
-                recordsDataGrid.ItemsSource = _currentEmployee.Records;
+                recordsDataGrid.ItemsSource = _currentEmployee.Records.OrderBy(o => o.Date);
                 _client.EditTimeSheetRecordsAsync(recordsForEdit);
             }
         }
