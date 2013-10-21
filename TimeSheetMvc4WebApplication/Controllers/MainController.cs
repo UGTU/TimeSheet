@@ -27,8 +27,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult Index()
         {
-            //throw new System.Exception();
-
             var approver = Client.GetCurrentApproverByLogin(GetUsername());
             if (!approver.DtoApproverDepartments.Any()) return View("DangerMessageShow",new MessageModel
             {
@@ -43,8 +41,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetList(int id,bool showAll = false)
         {
-            throw new System.Exception("Парам пам пам");
-
             var approver = Client.GetCurrentApproverByLogin(GetUsername());
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
