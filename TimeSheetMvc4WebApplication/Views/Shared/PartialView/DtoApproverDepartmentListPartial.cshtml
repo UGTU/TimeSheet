@@ -17,7 +17,7 @@
                     <h3>@item.DepartmentSmallName</h3>
                     <p style="height: 40px;">@item.DepartmentFullName</p>
                     <p style="color: darkgray">@item.ApproveTypeName</p>
-                    <p><a class="btn btn-default btn-sm" href="@Url.Action("TimeSheets", "Main", new { id = item.IdDepartment })">Перейти к табелям <span class="glyphicon glyphicon-th"></span></a></p>
+                    <p><a class="btn btn-default btn-sm" href="@Url.Action("TimeSheetList", "Main", new { id = item.IdDepartment })">Перейти к табелям <span class="glyphicon glyphicon-th"></span></a></p>
                 </div>
             }
         </div>

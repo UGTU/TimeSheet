@@ -106,11 +106,10 @@
 </div>
 
 <script>
-    $(window).load(function () {
+    $(window).load(function() {
         employeeListResize();
     });
-
-    $(window).resize(function () {
+    $(window).resize(function() {
         employeeListResize();
     });
 
@@ -120,7 +119,7 @@
         $('#employeeList').css('max-height', maxHeight);
     }
 
-    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheet2", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetShow", "Home", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a TARGET=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Home", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetApproval", "Home", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");

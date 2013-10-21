@@ -29,11 +29,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
             });
 
             if (approver.DtoApproverDepartments.Count() > 1) return View(approver);
-            return RedirectToAction("TimeSheets",new {id= approver.DtoApproverDepartments.First().IdDepartment});
+            return RedirectToAction("TimeSheetList",new {id= approver.DtoApproverDepartments.First().IdDepartment});
         }
 
 
-        public ActionResult TimeSheets(int id,bool showAll = false)
+        public ActionResult TimeSheetList(int id,bool showAll = false)
         {
             var approver = Client.GetCurrentApproverByLogin(GetUsername());
             ViewBag.approver = approver;
@@ -42,10 +42,17 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View(timeSheetList);
         }
 
-        public ActionResult TimeSheet2(int id)
+        public ActionResult TimeSheetEdit(int id)
         {
             return View(id);
         }
+
+
+
+
+
+
+
 
         //======================    Json    ====================================
 

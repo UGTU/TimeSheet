@@ -921,9 +921,9 @@
     <Content Include="Views\Shared\PartialView\DtoApproverDepartmentListPartial.cshtml" />
     <Content Include="Views\Shared\PartialView\DtoTimeSheetEmployeeEdit.cshtml" />
     <Content Include="Views\Shared\PartialView\DtoTimeSheetEmployeeEdit1.cshtml" />
-    <Content Include="Views\Main\TimeSheet2.cshtml" />
+    <Content Include="Views\Main\TimeSheetEdit.cshtml" />
     <Content Include="Scripts\version.json" />
-    <Content Include="Views\Main\TimeSheets.cshtml" />
+    <Content Include="Views\Main\TimeSheetList.cshtml" />
     <Content Include="Views\Main\TimeSheetApproveStatus.cshtml" />
     <Content Include="Views\Main\HeaderLoBoxContent.cshtml" />
     <Content Include="Views\Main\TimeSheet2 - Копировать.cshtml" />
