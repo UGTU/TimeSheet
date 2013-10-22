@@ -153,6 +153,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ClassesDTO\ClassesDTO.cs" />
     <Compile Include="ClassesDTO\DtoClassConstructor.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -189,6 +190,7 @@
     <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Images\Gradient.JPG" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo1.png" />
     <Content Include="Content\Images\logoT.jpg" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -936,10 +938,15 @@
     <Content Include="Views\Main\PartialView\PaperFooter.cshtml" />
     <Content Include="Views\Main\PartialView\ApproverListPartialView.cshtml" />
     <Content Include="Views\Shared\NotFoundPage.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ExceptionDay.cshtml" />
+    <Content Include="Views\Admin\DepartmentManagment.cshtml" />
+    <Content Include="Views\Shared\TimeSheetLayout - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Error\" />
+    <Folder Include="Source\ExceptionLoger\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

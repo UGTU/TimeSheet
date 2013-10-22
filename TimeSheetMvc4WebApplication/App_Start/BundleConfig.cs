@@ -38,9 +38,12 @@ namespace TimeSheetMvc4WebApplication
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/bootstrap/bootstrap-theme.css",
-                        "~/Content/bootstrap/bootstrap.css"));
+                        "~/Content/themes/base/jquery.ui.progressbar.css"
+                        ));
+
+            BundleTable.Bundles.Add(new ScriptBundle("~/Content/datejs").Include("~/Scripts/datejs/date.js", "~/Scripts/datejs/ru-RU.js"));
+            BundleTable.Bundles.Add(new ScriptBundle("~/Content/angularjs").Include("~/Scripts/angular.js"));
+            BundleTable.Bundles.Add(new StyleBundle("~/Content/timeSheet").Include("~/Content/themes/TimeSheetCSS.css", "~/Content/themes/TimeSheetApprovalCSS.css"));
         }
     }
 }

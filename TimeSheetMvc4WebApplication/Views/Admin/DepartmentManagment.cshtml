@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Структурные подразделения";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+
+<h2>DepartmentManagment</h2>
+
+
+<script>
+    $('#HeaderLiBox').append("<li id=\"Show\" ><a href=\"@Url.Action("ExceptionDay", "Admin" , new { id=Model })\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");
+    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("DepartmentManagment", "Admin" , new { idtimesheet=Model })\"><span class=\"glyphicon glyphicon-briefcase\"></span> Структурные подразделения</a></li>");
+</script>

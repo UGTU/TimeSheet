@@ -22,18 +22,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
         private const int LastPaperEmployeeCount = 5;
         private const int PaperEmployeeCount = 8;
 
-        //
-        // GET: /Main/
-
         public ActionResult Index()
         {
-            var approver = Client.GetCurrentApproverByLogin(GetUsername());
-            if (!approver.DtoApproverDepartments.Any()) return View("DangerMessageShow",new MessageModel
-            {
-                MessageTitile = "Отсутствует доступ.",
-                Message="У вас отсутствует доступ к ИС \"Табель\", обратитесь к администратору."  
-            });
-
+            var approver = GetCurrentApprover(); //Client.GetCurrentApproverByLogin(GetUsername());
+            if (!approver.DtoApproverDepartments.Any())
+                throw new HttpException(401, "Попытка несанкционированного доступа");
             if (approver.DtoApproverDepartments.Count() > 1) return View(approver);
             return RedirectToAction("TimeSheetList",new {id= approver.DtoApproverDepartments.First().IdDepartment});
         }
@@ -41,10 +34,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetList(int id,bool showAll = false)
         {
-            var approver = Client.GetCurrentApproverByLogin(GetUsername());
+            var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetEmptyTimeSheetList(id,showAll?int.MinValue:12);//.OrderByDescending(o => o.DateBegin).Take(12);
+            var timeSheetList = Client.GetEmptyTimeSheetList(id,showAll?int.MinValue:12);
             return View(timeSheetList);
         }
 
@@ -57,70 +50,37 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
-            try
-            {
-                var timeSheet = Client.GetTimeSheet(idTimeSheet);
-                var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                                                                             LastPaperEmployeeCount,
-                                                                             PaperEmployeeCount, false);
-                return View(timeSheetModel);
-            }
-            catch (System.Exception)
-            {
-                var message = new MessageModel
-                {
-                    //CSS = "ErrorMessage",
-                    Message = "Табель не обнаружен."
-                };
-                return View("WarningMessageShow", message);
-            }
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            if (timeSheet == null)
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                LastPaperEmployeeCount,
+                PaperEmployeeCount, false);
+            return View(timeSheetModel);
         }
 
         [AllowAnonymous]
         public ActionResult TimeSheetPrint(int idTimeSheet)
         {
-            try
-            {
-                var timeSheet = Client.GetTimeSheet(idTimeSheet);
-                var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                                                                             LastPaperEmployeeCount, PaperEmployeeCount,
-                                                                             true);
-                return View(timeSheetModel);
-            }
-            catch (System.Exception)
-            {
-                var message = new MessageModel
-                {
-                    //CSS = "ErrorMessage",
-                    Message = "Табель не обнаружен."
-                };
-                return View("WarningMessageShow", message);
-            }
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            if (timeSheet == null)
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                LastPaperEmployeeCount, PaperEmployeeCount,
+                true);
+            return View(timeSheetModel);
         }
 
         [AllowAnonymous]
         public ActionResult TimeSheetPdf(int idTimeSheet)
         {
-            try
-            {
-                var timeSheet = Client.GetTimeSheet(idTimeSheet);
-                var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                                                                             LastPaperEmployeeCount, PaperEmployeeCount,
-                                                                             true);
-                return new ViewAsPdf("TimeSheetPrint", timeSheetModel)
-                {
-                    PageOrientation = Orientation.Landscape
-
-                };
-            }
-            catch (System.Exception)
-            {
-                var message = new MessageModel
-                {
-                    Message = "Табель не обнаружен."
-                };
-                return View("WarningMessageShow", message);
-            }
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            if (timeSheet == null)
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                LastPaperEmployeeCount, PaperEmployeeCount,
+                true);
+            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) {PageOrientation = Orientation.Landscape};
         }
 
         //======================    Согласование табеля     ====================
@@ -128,24 +88,18 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpGet]
         public ActionResult TimeSheetApproval(int idTimeSheet)
         {
+            //todo:Полный рефакториг метода
+            //todo:При переходе к согласованию табеля отображать историю согласования, если табель согласован то отображать информацио о успешном согласовании табеля
             var timeSheet = Client.GetTimeSheet(idTimeSheet);
             MessageModel message;
             if (timeSheet == null)
-            {
-                message = new MessageModel
-                {
-                    MessageTitile = "Согласование табеля недоступно.",
-                    Message = "Запрашиваемый для согласования табель не обнаружен, обратитесь к администратору."
-                };
-                //ViewBag.IdTimeSheet = idTimeSheet;
-                return View("DangerMessageShow", message);
-            }
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
             ViewBag.IdTimeSheet = idTimeSheet;
             if (Client.CanApprove(idTimeSheet, GetUsername()))
             {
                 ViewBag.TimeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                     LastPaperEmployeeCount, PaperEmployeeCount, false);
-                var approver = Client.GetCurrentApproverByLogin(GetUsername());
+                var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
                 var timeSheetAprovalModel = new TimeSheetAprovalModel
                 {
                     IdTimeSheet = timeSheet.IdTimeSheet,
@@ -233,6 +187,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public JsonResult GetTimeSheetModelJson(int idTimeSheet)
         {
+            //todo:Вынести мерер в отдельный сметод или класс
             var cult = System.Globalization.CultureInfo.GetCultureInfo("ru-Ru");
             var timeSheet = Client.GetTimeSheet(idTimeSheet);
             if (timeSheet == null) throw new System.Exception();

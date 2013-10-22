@@ -1,0 +1,33 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="../../Content/Images/logo.png" />
+    @*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" />*@
+    <link href="@Url.Content("~/Content/themes/TimeSheetCSS.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/TimeSheetApprovalCSS.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")" type="text/javascript"></script>
+    <link href="~/Content/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/bootstrap-theme.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/datejs/date.js"></script>
+    <script src="~/Scripts/datejs/ru-RU.js"></script>
+        @*@Styles.Render("~/Content/css")*@
+        @*@Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")*@
+</head>
+
+<body class="body">
+    @{ Html.RenderPartial("TimeSheetHeader"); }
+    <div class="container">
+        @RenderBody()
+    </div>
+
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -23,5 +23,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
+        public ActionResult AccessDenied()
+        {
+            Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return View();
+        }
+
     }
 }
