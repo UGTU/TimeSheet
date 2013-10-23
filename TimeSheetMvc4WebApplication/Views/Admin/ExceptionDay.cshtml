@@ -3,8 +3,140 @@
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
-<h2>ExceptionDay</h2>
 
+
+<div class="row">
+    <div class="col-sm-6 col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-sm-6 col-md-3 pull-right" style="padding-right: 0">
+        <a type="button" class="btn btn-default pull-right" style="margin-top: 20px;"  data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
+            <span class="glyphicon glyphicon-plus-sign"></span> Сформировать табель
+        </a>
+    </div>
+</div>
+
+
+
+
+<div class="row" ng-app ng-controller="ExceptionDay">
+    <div class="">
+        <ul id="myTab" class="nav nav-tabs">
+            <li ng-repeat="workSchedule in WorkScheduleList" ng-class="{active: workSchedule==CurrentWorkSchedule}" ng-click="SetCurrentWorkSchedule(workSchedule)">
+                <a href="" data-toggle="tab">{{GetWorkScheduleName(workSchedule)}}</a>
+            </li>
+            <li class="pull-right ">
+                <ul class="list-inline">
+                    <li>Год: </li>
+                    <li><select class="form-control input-sm" ng-model="CurrentYear" ng-options="year as GetYear(year) for year in Years"></select></li>
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+    <table class="table table-condensed @*table-bordered*@">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Название</th>
+                <th>День недели</th>
+                <th>Статус дня</th>
+                <th>МПС</th>
+                <th>МНС</th>
+                <th>ЖПС</th>
+                <th>ЖНС</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule.IdWorkShedule: CurrentWorkSchedule.IdWorkShedule ,Year:CurrentYear}" style="max-height: 10px;">
+                <td>{{day.Date.toString('dd MMMM yyyy')}}</td>
+                <td>{{day.Name}}</td>
+                <td>{{day.DayAweek}}</td>
+                <td>{{day.DayStatus.SmallDayStatusName}}</td>
+                <td>{{day.MPS}}</td>
+                <td>{{day.MNS}}</td>
+                <td>{{day.GPS}}</td>
+                <td>{{day.GNS}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <input id="dp3">
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Добавить выходной день или праздник</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Дата</p>
+                    <p>Название</p>
+                    <p>Статус дня</p>
+                    <p>МПС</p>
+                    <p>МНС</p>
+                    <p>ЖПС</p>
+                    <p>ЖНС</p>
+                    <p>Добавить предпразднечный день</p>
+
+                    
+                        @*<input id="dp3" >*@
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <div id="buttons">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" ng-click="createTimeSheet()">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $('#dp3').datepicker();
+
+
+    
+  
+    function ExceptionDay($scope, $http) {
+        $http.get('@Url.Action("GetExceptionDay")').success(function (data) {
+            $scope.WorkScheduleList = data.WorkScheduleList;
+            $scope.CurrentWorkSchedule = $scope.WorkScheduleList[0];
+            $scope.ExceptionDayList = data.ExceptionDayList;
+            $scope.Years = [];
+            angular.forEach($scope.ExceptionDayList, function (day) {
+                day.Date = new Date(parseInt(day.Date.substr(6)));
+                if ($scope.Years.indexOf(day.Date.getYear()) === -1) {
+                    $scope.Years.push(day.Date.getYear());
+                    console.log(day.Date.getYear());
+                }
+                day.Year = day.Date.getYear();
+            });
+            $scope.CurrentYear = $scope.Years[$scope.Years.length - 1];
+            $scope.Years = $scope.Years.reverse();
+        });
+
+        $scope.GetWorkScheduleName = function (workSchedule) {
+            return workSchedule.WorkSheduleName;
+        };
+
+        $scope.GetYear = function (year) {
+            return year + 1900;
+        };
+
+        $scope.SetCurrentWorkSchedule = function (workSchedule) {
+            $scope.CurrentWorkSchedule = workSchedule;
+        };
+    }
+</script>
 
 <script>
     $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("ExceptionDay", "Admin" , new { id=Model })\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");

@@ -18,8 +18,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult Index()
         {
             return RedirectToAction("ExceptionDay");
-            CheckIsAdmin();
-            return View();
+            //CheckIsAdmin();
+            //return View();
         }
 
         public ActionResult ExceptionDay()
@@ -40,6 +40,21 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if(!approver.IsAdministrator)
                 throw new HttpException(401, "Попытка несанкционированного доступа к админке");
         }
+
+        //=================================== Json  ==============================================
+
+        public JsonResult GetExceptionDay()
+        {
+            CheckIsAdmin();
+            var exceptionDay = new
+            {
+                WorkScheduleList = Client.GetWorkScheduleList(),
+                ExceptionDayList = Client.GetExeptionsDays(),
+                DayStatusList = Client.GetDayStatusList()
+            };
+            return Json(exceptionDay, JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }

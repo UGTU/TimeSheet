@@ -16,7 +16,7 @@ namespace TimeSheetMvc4WebApplication
     [ServiceContract(Namespace = "")]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TimeSheetService
-    {         
+    {
         [OperationContract]
         [Authorize]
         public DtoApprover GetCurrentApproverByLogin(string employeeLogin)
@@ -63,7 +63,8 @@ namespace TimeSheetMvc4WebApplication
         }
 
         [OperationContract]
-        public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, string employeeLogin, DateTime dateStart, DateTime dateEnd)
+        public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, string employeeLogin,
+            DateTime dateStart, DateTime dateEnd)
         {
             using (var db = new KadrDataContext())
             {
@@ -75,12 +76,14 @@ namespace TimeSheetMvc4WebApplication
                 loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.Employee);
                 loadOptions.LoadWith((OK_Otpusk oko) => oko.OK_Otpuskvid);
                 db.LoadOptions = loadOptions;
-                    var dtoApproverDepartment =
-                        GetCurrentApproverByLogin(employeeLogin)
-                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
+                var dtoApproverDepartment =
+                    GetCurrentApproverByLogin(employeeLogin)
+                        .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                 var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
                 return
-                    ts.GetAllEmployees().Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory)).ToArray();
+                    ts.GetAllEmployees()
+                        .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
+                        .ToArray();
             }
         }
 
@@ -176,7 +179,10 @@ namespace TimeSheetMvc4WebApplication
             {
                 using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
                 {
-                    var tsList = db.TimeSheet.Where(w => w.idDepartment == idDepartment).Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
+                    var tsList =
+                        db.TimeSheet.Where(w => w.idDepartment == idDepartment)
+                            .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true))
+                            .ToArray();
                     if (tsList.Any())
                         tsList[tsList.Length - 1] = DtoClassConstructor.DtoTimeSheet(db, tsList.Last().IdTimeSheet);
                     return tsList;
@@ -184,7 +190,7 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        public DtoTimeSheet[] GetEmptyTimeSheetList(int idDepartment,int koll = int.MinValue)
+        public DtoTimeSheet[] GetEmptyTimeSheetList(int idDepartment, int koll = int.MinValue)
         {
             using (var db = new KadrDataContext())
             {
@@ -195,8 +201,8 @@ namespace TimeSheetMvc4WebApplication
                             db.TimeSheet.Where(w => w.idDepartment == idDepartment)
                                 .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
                     return db.TimeSheet.Where(w => w.idDepartment == idDepartment)
-                            .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
-                            .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
+                        .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
+                        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
                 }
             }
         }
@@ -278,7 +284,7 @@ namespace TimeSheetMvc4WebApplication
             {
                 try
                 {
-                    var ts = new TimeSheetCraterNew(idTimeSheet,db);
+                    var ts = new TimeSheetCraterNew(idTimeSheet, db);
                     return ts.RemoveTimeSheet();
                 }
                 catch (System.Exception)
@@ -288,7 +294,7 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        private bool RemoveTimeSheetEmployee(int idTimeSheet,int idFactStuffHistory)
+        private bool RemoveTimeSheetEmployee(int idTimeSheet, int idFactStuffHistory)
         {
             using (var db = new KadrDataContext())
             {
@@ -410,6 +416,18 @@ namespace TimeSheetMvc4WebApplication
                         .ToArray();
             }
         }
+
+        public DtoExceptionDay[] GetExeptionsDays()
+        {
+            using (var db = new KadrDataContext())
+            {
+                return
+                    db.Exception.OrderBy(o => o.DateException)
+                        .Select(s => DtoClassConstructor.DtoExceptionDay(s))
+                        .ToArray();
+            }
+        }
+
 
         [OperationContract]
         public DtoMessage InsertExeptionsDay(DtoExceptionDay exceptionDay)
@@ -672,8 +690,8 @@ namespace TimeSheetMvc4WebApplication
             try
             {
                 //var r = System.Web.HttpContext.Current.Request.Url;
-                var url = "http:/"+System.Web.HttpContext.Current.Request.Url.Authority;
-                var timeSheet = "<a href=\""+url+"\">ИС \"Табель\"</a>";
+                var url = "http:/" + System.Web.HttpContext.Current.Request.Url.Authority;
+                var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
                 var timeSheetShow =
                     String.Format("<a href=\"" + url + "/Home/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
@@ -682,7 +700,7 @@ namespace TimeSheetMvc4WebApplication
                         idTimeSheet);
                 var timeSheetApproval =
                     String.Format(
-                        "<a href=\""+url+"/Home/TimeSheetApproval?idTimeSheet={0}\">ссылке</a>",
+                        "<a href=\"" + url + "/Home/TimeSheetApproval?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
                 var stringBuilder = new StringBuilder();
                 if (isApproveFinished)
@@ -700,7 +718,7 @@ namespace TimeSheetMvc4WebApplication
                     if (approveResult)
                     {
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name,approver.Patronymic);
+                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
                         stringBuilder.Append("Вам на согласование был направлен табель рабочего времени. ");
                         stringBuilder.AppendFormat(
@@ -711,13 +729,13 @@ namespace TimeSheetMvc4WebApplication
                     {
 
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name,approver.Patronymic);
+                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
                         stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
                     }
                 }
                 var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                                 "ИС Табель рабочего времени", stringBuilder.ToString());
+                    "ИС Табель рабочего времени", stringBuilder.ToString());
                 mm.IsBodyHtml = true;
                 var client = new SmtpClient("mail.ugtu.net");
                 client.Send(mm);
@@ -789,7 +807,8 @@ namespace TimeSheetMvc4WebApplication
 
 
         [OperationContract]
-        public DtoMessage CreateTimeSheetByName(int idDepartment, DateTime dateBeginPeriod, DateTime dateEndPeriod,string employeeLogin, DtoFactStaffEmployee[] employees)
+        public DtoMessage CreateTimeSheetByName(int idDepartment, DateTime dateBeginPeriod, DateTime dateEndPeriod,
+            string employeeLogin, DtoFactStaffEmployee[] employees)
         {
             using (var db = new KadrDataContext())
             using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
@@ -810,7 +829,7 @@ namespace TimeSheetMvc4WebApplication
                             .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                     var timeSheet = new TimeSheetCraterNew(idDepartment, dateBeginPeriod, dateEndPeriod,
                         dtoApproverDepartment, db);
-                    timeSheet.GenerateTimeSheet(employees.Where(w=>w.IsCheked).ToArray());
+                    timeSheet.GenerateTimeSheet(employees.Where(w => w.IsCheked).ToArray());
                     timeSheet.SubmitTimeSheet();
                     return new DtoMessage()
                     {
@@ -845,8 +864,5 @@ namespace TimeSheetMvc4WebApplication
                 };
             }
         }
-
-
-
     }
 }
