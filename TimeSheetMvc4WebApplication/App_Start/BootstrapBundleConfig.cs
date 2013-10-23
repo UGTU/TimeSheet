@@ -15,8 +15,8 @@ namespace TimeSheetMvc4WebApplication.App_Start
 			BundleTable.Bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
 			BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap/base").Include("~/Content/bootstrap/bootstrap.css"));
 			BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap/theme").Include("~/Content/bootstrap/bootstrap-theme.css"));
-            
-            BundleTable.Bundles.Add(new ScriptBundle("~/Content/bootstrap-datepicker").Include("~/Scripts/bootstrap-datepicker.js"));
+
+            BundleTable.Bundles.Add(new ScriptBundle("~/Scripts/bootstrap-datepicker").Include("~/Scripts/bootstrap-datepicker.js"));
             BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap-datepicker").Include("~/Content/bootstrap-datepicker.css"));
 		}
 	}
