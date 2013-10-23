@@ -28,7 +28,7 @@
             <li class="pull-right ">
                 <ul class="list-inline">
                     <li>Год: </li>
-                    <li><select class="form-control input-sm" ng-model="CurrentYear" ng-options="year as GetYear(year) for year in Years"></select></li>
+                    <li style="padding-right: 0;"><select class="form-control input-sm" ng-model="CurrentYear" ng-options="year as GetYear(year) for year in Years"></select></li>
                 </ul>
 
             </li>
@@ -60,7 +60,6 @@
             </tr>
         </tbody>
     </table>
-    <input id="dp3">
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -79,12 +78,7 @@
                     <p>ЖПС</p>
                     <p>ЖНС</p>
                     <p>Добавить предпразднечный день</p>
-
-                    
-                        @*<input id="dp3" >*@
-
-
-
+                    <input id="dp3">
                 </div>
                 <div class="modal-footer">
                     <div id="buttons">
@@ -100,12 +94,6 @@
 
 
 <script>
-
-    $('#dp3').datepicker();
-
-
-    
-  
     function ExceptionDay($scope, $http) {
         $http.get('@Url.Action("GetExceptionDay")').success(function (data) {
             $scope.WorkScheduleList = data.WorkScheduleList;
@@ -142,3 +130,13 @@
     $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("ExceptionDay", "Admin" , new { id=Model })\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");
     $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("DepartmentManagment", "Admin" , new { idtimesheet=Model })\"><span class=\"glyphicon glyphicon-briefcase\"></span> Структурные подразделения</a></li>");
 </script>
+
+<script>
+    $('#dp3').datepicker({ language: "ru-RU" });
+</script>
+
+<style>
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>
