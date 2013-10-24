@@ -1,4 +1,5 @@
-﻿@model int
+﻿@using TimeSheetMvc4WebApplication.Models
+@model int
 
 @{
     ViewBag.Title = "TimeSheet";
@@ -105,6 +106,15 @@
     </div>
 </div>
 
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show,HeaderLink.Pdf,HeaderLink.Approve },
+        CurrentLink = HeaderLink.Edit,
+        IdTimeSheet = Model
+    });
+}
+
 <script>
     $(window).load(function() {
         employeeListResize();
@@ -118,11 +128,6 @@
         maxHeight = maxHeight - 135;
         $('#employeeList').css('max-height', maxHeight);
     }
-
-    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { id = Model })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\"><a TARGET=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetApproval", "Main", new { idTimeSheet = Model })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
 </script>
 
 <script>

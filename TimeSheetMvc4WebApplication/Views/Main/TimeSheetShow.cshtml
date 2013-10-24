@@ -1,4 +1,5 @@
-﻿@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
+﻿@using TimeSheetMvc4WebApplication.Models
+@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
 @{
     ViewBag.Title = "Просмотр табеля";
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
@@ -11,13 +12,14 @@
     }
 </div>
 
-<script>
-    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new { id = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\"><a TARGET=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
-    $('#HeaderLiBox').append("<li id=\"Show\"><a href=\"@Url.Action("TimeSheetApproval", "Main", new { idTimeSheet = Model.First().DocumentNumber })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
-</script>
 
 
 
-
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
+        CurrentLink = HeaderLink.Show,
+        IdTimeSheet = Model.First().DocumentNumber
+    });
+}

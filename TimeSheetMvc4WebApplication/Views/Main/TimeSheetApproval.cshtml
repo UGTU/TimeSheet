@@ -66,6 +66,16 @@
         @Html.Partial("TimeSheetPartialView", timeSheet)
     }
 </div>
+
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
+        CurrentLink = HeaderLink.Approve,
+        IdTimeSheet = Model.IdTimeSheet
+    });
+}
+
 @*</div>*@
 
 

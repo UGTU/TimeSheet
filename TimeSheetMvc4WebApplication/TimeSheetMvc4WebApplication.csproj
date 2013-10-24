@@ -166,6 +166,7 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\TimeSheetViewModel.cs" />
     <Compile Include="Models\ModelConstructor.cs" />
     <Compile Include="Models\Models.cs" />
@@ -995,6 +996,7 @@
     <Content Include="Views\Admin\ExceptionDay.cshtml" />
     <Content Include="Views\Admin\DepartmentManagment.cshtml" />
     <Content Include="Views\Shared\TimeSheetLayout - Copy.cshtml" />
+    <Content Include="Views\Shared\HeaderLinks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
