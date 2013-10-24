@@ -51,6 +51,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
             }
         }
 
+
+        //todo:убраь все методы или совсем удалить контроллер, поправить все ссылки в хедере, написать хелпер
         [AllowAnonymous]
         public ActionResult TimeSheetPrint(int idTimeSheet)
         {

@@ -307,6 +307,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-datepicker.ru.js" />
     <Content Include="Scripts\datejs\date.js" />
     <Content Include="Scripts\datejs\ru-RU.js" />
     <Content Include="Scripts\docs\.htaccess" />

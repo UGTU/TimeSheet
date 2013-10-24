@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
+using TimeSheetMvc4WebApplication.ClassesDTO;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
     [Authorize]
     public class AdminController :  BaseController
     {
-        //todo:реализовать функцию добавления дней исключения
         //todo:реализовать функцию отображения и редактирования согласователей для структурных подразделений
         //todo:реализовать для всех методов этого контроллера проверку на членство пользователя в группе администраторов
         //
@@ -18,8 +15,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult Index()
         {
             return RedirectToAction("ExceptionDay");
-            //CheckIsAdmin();
-            //return View();
         }
 
         public ActionResult ExceptionDay()
@@ -50,9 +45,24 @@ namespace TimeSheetMvc4WebApplication.Controllers
             {
                 WorkScheduleList = Client.GetWorkScheduleList(),
                 ExceptionDayList = Client.GetExeptionsDays(),
-                DayStatusList = Client.GetDayStatusList()
+                DayStatusList = Client.GetDayStatusList(),
+                CurrentExceptionDay = new DtoExceptionDay()
             };
             return Json(exceptionDay, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddOrEditExceptoinDay(DtoExceptionDay exceptionDay)
+        {
+            var result= exceptionDay.IdExceptionDay != int.MinValue
+                ? Client.EditExeptionsDay(exceptionDay)
+                : Client.InsertExeptionsDay(exceptionDay);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Remove(DtoExceptionDay exceptionDay)
+        {
+            var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);  
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
 

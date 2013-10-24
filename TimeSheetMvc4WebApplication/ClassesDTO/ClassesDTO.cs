@@ -11,6 +11,13 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
     [DataContract]
     public class DtoExceptionDay
     {
+        public DtoExceptionDay()
+        {
+            IdExceptionDay = int.MinValue;
+            Date = DateTime.Now;
+            Name = "Новый праздник";
+        }
+
         [DataMember]
         public int IdExceptionDay { get; set; }
         [DataMember]
