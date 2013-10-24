@@ -5,17 +5,168 @@
 }
 
 <h2>DepartmentManagment</h2>
+<div class="row " ng-app ng-controller="Department">
+    <div class="col-md-4">
+        <div class="input-group input-group-sm" style="margin-bottom: 10px;">
+            <input type="text" ng-model="query" class="form-control ">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+        </div>
+
+        <div id="employeeList" class="list-group" style=" overflow: auto; border: 1px solid #dddddd">
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-class="empl.css">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    На уровень вверх
+                </h4>
+                @*<p class="list-group-item-text">{{empl.StaffRate}} ст. {{empl.Post.PostSmallName}}</p>*@
+            </a>
+
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in Departments| filter:query" @*ng-click="setCurrentEmployeeRecords(empl)"*@ @*ng-class="empl.css"*@>
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    @*{{empl.Surname}} {{empl.Name}} {{empl.Patronymic}}*@
+                    {{dep.DepartmentSmallName}}
+                </h4>
+                <p class="list-group-item-text">{{dep.DepartmentFullName}} </p>
+            </a>
+
+            @*<a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="empl in employees| filter:query" ng-click="setCurrentEmployeeRecords(empl)" ng-class="empl.css">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    {{empl.Surname}} {{empl.Name}} {{empl.Patronymic}}
+                </h4>
+                <p class="list-group-item-text">{{empl.StaffRate}} ст. {{empl.Post.PostSmallName}}</p>
+            </a>*@
+        </div>
+    </div>
+    <div class="col-md-8">
+        @*<h3 style="margin-top: 0; padding-left: 15px;">
+                {{currentEmployee.Surname}} {{currentEmployee.Name}} {{currentEmployee.Patronymic}}
+                <small>Ставка: {{currentEmployee.StaffRate}}, должность: {{currentEmployee.Post.PostSmallName}} </small>
+            </h3>*@
+        @*<div class="page-header">
+                <h3>{{currentEmployee.Surname}} {{currentEmployee.Name}} {{currentEmployee.Patronymic}}
+                <small>Ставка: {{currentEmployee.StaffRate}}, должность: {{currentEmployee.Post.PostSmallName}}</small></h3>
+            </div>*@
+
+        <div class="col-md-7">
+
+            <table class="table @*table-condensed*@ table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">#</th>
+                        <th>Дата</th>
+                        <th>День недели</th>
+                        <th>Статус</th>
+                        <th>Часы</th>
+                    </tr>
+                </thead>
+                @*<tbody>
+                        <tr ng-repeat="record in currentEmployee.Records| orderBy:Order" ng-class="RecorsState(record)" style="max-height: 10px;" >
+                            <td style="padding: 0px; " align="center"><input type="checkbox" ng-model="record.IsCheked"></td>
+                            <td style="padding: 0px 5px;">{{record.Date}}</td>
+                            <td style="padding: 0px;" align="center">{{record.DayAweek}}</td>
+                            <td style="padding: 0px 5px; width: 70px;" align="center">
+                                <select class="form-control input-sm" ng-model="record.DayStays" style="margin: 2px; padding: 0; height: 18px; width: 50px;" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isCanTimeSheetEditfunction()"></select>
+                            </td>
+                            <td style="padding: 0px 0px 0 5px; width: 75px;" align="center">
+                                <div class="form-group " ng-class="inputJobTimeCountValidate(record.JobTimeCount)" style="margin-bottom: 0;">
+                                    <input class="form-control input-sm" ng-model="record.JobTimeCount" type="number" style="margin: 2px; padding: 0px 5px; height: 18px; width: 55px;" ng-disabled="isCanTimeSheetEditfunction()">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>*@
+            </table>
+        </div>
+        @*<div class="col-md-5">
+
+                <p style="margin-bottom: 0px;margin-top: 10px;">
+                    <label class=" control-label">Статус дня:</label>
+                </p>
+                <p>
+                    <select class="form-control input-sm" ng-model="selectedDayStatList" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isUpdateDisabled()"></select>
+                </p>
+                <p style="margin-bottom: 0px;">
+                    <label class=" control-label">
+                        Часы:
+                    </label>
+                </p>
+                <p>
+                    <input class="form-control input-sm" type="text" ng-model="selectedDayJobTimeCount" ng-disabled="isUpdateDisabled()">
+                </p>
+
+                <p class="text-right">
+                    <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="updateRecords()" ng-disabled="isUpdateDisabled()">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Применить к выбранным записям
+                    </button>
+                </p>
+
+                <p class="text-right">
+                    <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="saveChanges()" ng-disabled="isSaveDisabled()">
+                        <span class="glyphicon glyphicon-floppy-saved"></span>
+                        Сохранить изменения
+                    </button>
+                </p>
+            </div>*@
+    </div>
+</div>
 
 
-@*<script>
-        $('#HeaderLiBox').append("<li id=\"Show\" ><a href=\"@Url.Action("ExceptionDay", "Admin" , new { id=Model })\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");
-        $('#HeaderLiBox').append("<li id=\"Show\" class=\"active\"><a href=\"@Url.Action("DepartmentManagment", "Admin" , new { idtimesheet=Model })\"><span class=\"glyphicon glyphicon-briefcase\"></span> Структурные подразделения</a></li>");
-    </script>*@
+
+<script>
+    function Department($scope, $http) {
+        $http.get('@Html.Raw(@Url.Action("GetDepartment", "Admin", new { idTimeSheet = @Model }))').success(function (data) {
+            $scope.Departments = data;
+            //$scope.selectedDayStatList = $scope.dayStatList[0];
+            //$scope.selectedDayJobTimeCount = 0;
+            //$scope.employees = data.TimeSheet.Employees;
+            //$scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
+            //angular.forEach($scope.employees, function (empl) {
+            //    angular.forEach(empl.Records, function (rec) {
+            //        angular.forEach($scope.dayStatList, function (ds) {
+            //            if (ds.IdDayStatus == rec.IdDayStatus) {
+            //                rec.DayStays = ds;
+            //            }
+            //        });
+            //    });
+            });
+    };
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $(window).load(function () {
+        employeeListResize();
+    });
+    $(window).resize(function () {
+        employeeListResize();
+    });
+
+    function employeeListResize() {
+        var maxHeight = $(window).height();
+        maxHeight = maxHeight - 235;
+        $('#employeeList').css('max-height', maxHeight);
+    }
+</script>
 
 @{
     Html.RenderPartial("HeaderLinks", new HeaderLinckModel
     {
-        Links = new HeaderLink[2] {HeaderLink.ExceptionDay, HeaderLink.Department},
+        Links = new HeaderLink[2] { HeaderLink.ExceptionDay, HeaderLink.Department },
         CurrentLink = HeaderLink.Department
     });
 }
+

@@ -65,6 +65,12 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetDepartment(DtoExceptionDay exceptionDay)
+        {
+            //var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);
+            return Json(Client.GetDepartmentsList(), JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }
