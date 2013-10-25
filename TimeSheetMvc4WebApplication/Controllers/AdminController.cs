@@ -73,14 +73,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public JsonResult GetApproverForDepartment(int id)
         {
+            //Client.ad
             //var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);
             var approverModel = new
             {
                 id = id,
-                approver1 = Client.GetDepartmentApprover(id,1),
-                approver2 = Client.GetDepartmentApprover(id, 1),
-                approver3 = Client.GetDepartmentApprover(id, 1),
-                employees=Client.GetDepartmentEmployees(id)
+                approver1 = Client.GetDepartmentApprover(id, 1),
+                approver2 = Client.GetDepartmentApprover(id, 2),
+                approver3 = Client.GetDepartmentApprover(id, 3),
+                employees = Client.GetDepartmentEmployees(id)
                 //WorkScheduleList = Client.GetWorkScheduleList(),
                 //ExceptionDayList = Client.GetExeptionsDays(),
                 //DayStatusList = Client.GetDayStatusList(),

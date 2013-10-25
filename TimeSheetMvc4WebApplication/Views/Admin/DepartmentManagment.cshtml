@@ -23,7 +23,7 @@
                 <p class="list-group-item-text"> На уровень вверх</p>
             </a>
             <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
-                <span class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)"><span class="glyphicon glyphicon-chevron-right"></span></span>
+                <span ng-hide="CanSetAsCurrentDepartment(dep.IdDepartment)" class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)"><span class="glyphicon glyphicon-chevron-right"></span></span>
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
                     {{dep.DepartmentSmallName}}
                 </h4>
@@ -37,30 +37,30 @@
         <h4>Табельщик</h4>
         <div class="row">
             <div class="col-lg-5">
-                <input type="text" class="form-control">
+                <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
             </div>
             <div class="col-lg-7">
-                <select class="form-control">...</select>
+                <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees"></select>
             </div>
         </div>
         
         <h4>Начальник отдела кадров</h4>
         <div class="row">
             <div class="col-lg-5">
-                <input type="text" class="form-control">
+                <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
             </div>
             <div class="col-lg-7">
-                <select class="form-control">...</select>
+                <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees"></select>
             </div>
         </div>
         
         <h4>Работник отдела кадров</h4>
         <div class="row">
             <div class="col-lg-5">
-                <input type="text" class="form-control">
+                <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
             </div>
             <div class="col-lg-7">
-                <select class="form-control">...</select>
+                <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees"></select>
             </div>
         </div>
         <br/>
@@ -93,7 +93,6 @@
                 }
             });
             $scope.CerrentDepartments = deps;
-            //$scope.SelectedDepartment = deps[0];
             $scope.SelectDepartment(deps[0]);
         };
 
@@ -125,7 +124,43 @@
             link = link.replace("replaceId", idDepartment);
             $http.get(link).success(function (data) {
                 $scope.d = data;
+                $scope.sdEmployees = data.employees;
+                $scope.sdApprover1 = $scope.InitApprover(data.approver1);
+                $scope.sdApprover2 = $scope.InitApprover(data.approver2);
+                //выбирать среди работников отдела кадров
+                $scope.sdApprover3 = $scope.InitApprover(data.approver3);
+                //$scope.sdApprover1 = data.approver1;
+                //$scope.sdApprover2 = data.approver2;
+                //$scope.sdApprover3 = data.approver3;
+                 
             });
+        };
+
+        $scope.InitApprover = function (approver) {
+            var empl;
+            angular.forEach($scope.sdEmployees, function (employee) {
+                if (approver.IdEmployee == employee.IdEmployee)
+                {
+                    empl = employee;
+                    return;
+                }
+            });
+            //console.log(app.Name);
+            return empl;
+        };
+
+        $scope.GetEmployeeName = function (employee) {
+            return employee.Surname + ' ' + employee.Name + ' ' + employee.Patronymic;
+        };
+
+        
+        $scope.CanSetAsCurrentDepartment = function (idDepartment) {
+            var result = true;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idDepartment)
+                    result = false;
+            });
+            return result;
         };
 
     };
@@ -155,7 +190,7 @@
 
     function employeeListResize() {
         var maxHeight = $(window).height();
-        maxHeight = maxHeight - 235;
+        maxHeight = maxHeight - 200;
         $('#employeeList').css('max-height', maxHeight);
     }
 </script>
