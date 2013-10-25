@@ -237,6 +237,7 @@
 .paperNum
 {
     page-break-after: always;
+    /*border: 1px solid red;*/
 }
 
 #idPoddpis

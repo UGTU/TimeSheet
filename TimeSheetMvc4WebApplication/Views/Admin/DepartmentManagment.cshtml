@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
-<h2>DepartmentManagment</h2>
+<h2>Структурные подразделения</h2>
 <div class="row " ng-app ng-controller="Department">
     <div class="col-md-4">
         <div class="input-group input-group-sm" style="margin-bottom: 10px;">
@@ -14,100 +14,57 @@
             </span>
         </div>
 
-        <div id="employeeList" class="list-group" style=" overflow: auto; border: 1px solid #dddddd">
-            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-class="empl.css">
+        <div id="employeeList" class="list-group" style=" overflow: auto; border: 1px solid #dddddd; min-height: 100px; border-radius: 5px;" >
+            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()"  ng-hide="BackHide()">
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
-                    На уровень вверх
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    {{CurrentDepartment.DepartmentSmallName}}
                 </h4>
-                @*<p class="list-group-item-text">{{empl.StaffRate}} ст. {{empl.Post.PostSmallName}}</p>*@
+                <p class="list-group-item-text"> На уровень вверх</p>
             </a>
-
-            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in Departments| filter:query" @*ng-click="setCurrentEmployeeRecords(empl)"*@ @*ng-class="empl.css"*@>
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
+                <span class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)"><span class="glyphicon glyphicon-chevron-right"></span></span>
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
-                    @*{{empl.Surname}} {{empl.Name}} {{empl.Patronymic}}*@
                     {{dep.DepartmentSmallName}}
                 </h4>
                 <p class="list-group-item-text">{{dep.DepartmentFullName}} </p>
             </a>
-
-            @*<a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="empl in employees| filter:query" ng-click="setCurrentEmployeeRecords(empl)" ng-class="empl.css">
-                <h4 class=" list-group-item-heading" style="font-size: 16px;">
-                    {{empl.Surname}} {{empl.Name}} {{empl.Patronymic}}
-                </h4>
-                <p class="list-group-item-text">{{empl.StaffRate}} ст. {{empl.Post.PostSmallName}}</p>
-            </a>*@
         </div>
     </div>
     <div class="col-md-8">
-        @*<h3 style="margin-top: 0; padding-left: 15px;">
-                {{currentEmployee.Surname}} {{currentEmployee.Name}} {{currentEmployee.Patronymic}}
-                <small>Ставка: {{currentEmployee.StaffRate}}, должность: {{currentEmployee.Post.PostSmallName}} </small>
-            </h3>*@
-        @*<div class="page-header">
-                <h3>{{currentEmployee.Surname}} {{currentEmployee.Name}} {{currentEmployee.Patronymic}}
-                <small>Ставка: {{currentEmployee.StaffRate}}, должность: {{currentEmployee.Post.PostSmallName}}</small></h3>
-            </div>*@
-
-        <div class="col-md-7">
-
-            <table class="table @*table-condensed*@ table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 30px;">#</th>
-                        <th>Дата</th>
-                        <th>День недели</th>
-                        <th>Статус</th>
-                        <th>Часы</th>
-                    </tr>
-                </thead>
-                @*<tbody>
-                        <tr ng-repeat="record in currentEmployee.Records| orderBy:Order" ng-class="RecorsState(record)" style="max-height: 10px;" >
-                            <td style="padding: 0px; " align="center"><input type="checkbox" ng-model="record.IsCheked"></td>
-                            <td style="padding: 0px 5px;">{{record.Date}}</td>
-                            <td style="padding: 0px;" align="center">{{record.DayAweek}}</td>
-                            <td style="padding: 0px 5px; width: 70px;" align="center">
-                                <select class="form-control input-sm" ng-model="record.DayStays" style="margin: 2px; padding: 0; height: 18px; width: 50px;" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isCanTimeSheetEditfunction()"></select>
-                            </td>
-                            <td style="padding: 0px 0px 0 5px; width: 75px;" align="center">
-                                <div class="form-group " ng-class="inputJobTimeCountValidate(record.JobTimeCount)" style="margin-bottom: 0;">
-                                    <input class="form-control input-sm" ng-model="record.JobTimeCount" type="number" style="margin: 2px; padding: 0px 5px; height: 18px; width: 55px;" ng-disabled="isCanTimeSheetEditfunction()">
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>*@
-            </table>
+        <h3 style="margin-top: 3px;">Согласователи для {{SelectedDepartment.DepartmentSmallName}}</h3>
+        <hr style="margin-top: 0;"/>
+        <h4>Табельщик</h4>
+        <div class="row">
+            <div class="col-lg-5">
+                <input type="text" class="form-control">
+            </div>
+            <div class="col-lg-7">
+                <select class="form-control">...</select>
+            </div>
         </div>
-        @*<div class="col-md-5">
-
-                <p style="margin-bottom: 0px;margin-top: 10px;">
-                    <label class=" control-label">Статус дня:</label>
-                </p>
-                <p>
-                    <select class="form-control input-sm" ng-model="selectedDayStatList" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isUpdateDisabled()"></select>
-                </p>
-                <p style="margin-bottom: 0px;">
-                    <label class=" control-label">
-                        Часы:
-                    </label>
-                </p>
-                <p>
-                    <input class="form-control input-sm" type="text" ng-model="selectedDayJobTimeCount" ng-disabled="isUpdateDisabled()">
-                </p>
-
-                <p class="text-right">
-                    <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="updateRecords()" ng-disabled="isUpdateDisabled()">
-                        <span class="glyphicon glyphicon-ok"></span>
-                        Применить к выбранным записям
-                    </button>
-                </p>
-
-                <p class="text-right">
-                    <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="saveChanges()" ng-disabled="isSaveDisabled()">
-                        <span class="glyphicon glyphicon-floppy-saved"></span>
-                        Сохранить изменения
-                    </button>
-                </p>
-            </div>*@
+        
+        <h4>Начальник отдела кадров</h4>
+        <div class="row">
+            <div class="col-lg-5">
+                <input type="text" class="form-control">
+            </div>
+            <div class="col-lg-7">
+                <select class="form-control">...</select>
+            </div>
+        </div>
+        
+        <h4>Работник отдела кадров</h4>
+        <div class="row">
+            <div class="col-lg-5">
+                <input type="text" class="form-control">
+            </div>
+            <div class="col-lg-7">
+                <select class="form-control">...</select>
+            </div>
+        </div>
+        <br/>
+        <pre>{{d}}</pre>
     </div>
 </div>
 
@@ -117,19 +74,60 @@
     function Department($scope, $http) {
         $http.get('@Html.Raw(@Url.Action("GetDepartment", "Admin", new { idTimeSheet = @Model }))').success(function (data) {
             $scope.Departments = data;
-            //$scope.selectedDayStatList = $scope.dayStatList[0];
-            //$scope.selectedDayJobTimeCount = 0;
-            //$scope.employees = data.TimeSheet.Employees;
-            //$scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
-            //angular.forEach($scope.employees, function (empl) {
-            //    angular.forEach(empl.Records, function (rec) {
-            //        angular.forEach($scope.dayStatList, function (ds) {
-            //            if (ds.IdDayStatus == rec.IdDayStatus) {
-            //                rec.DayStays = ds;
-            //            }
-            //        });
-            //    });
+            $scope.DepIdList = [];
+            $scope.SetCurrentDepartment(null);
+            $scope.CurrentDepartment = null;
+        });
+
+        $scope.SetCurrentDepartment = function (idMenagDepartnent) {
+            if ($scope.DepIdList.indexOf(idMenagDepartnent) === -1) {
+                $scope.DepIdList.push(idMenagDepartnent);
+            }
+            var deps = []; 
+            $scope.CurrentDepartment = null;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idMenagDepartnent)
+                    deps.push(dep);
+                if (dep.IdDepartment == idMenagDepartnent) {
+                    $scope.CurrentDepartment = dep;
+                }
             });
+            $scope.CerrentDepartments = deps;
+            //$scope.SelectedDepartment = deps[0];
+            $scope.SelectDepartment(deps[0]);
+        };
+
+        $scope.Back = function() {
+            $scope.DepIdList.splice($scope.DepIdList.length - 1, 1);
+            $scope.SetCurrentDepartment($scope.DepIdList[$scope.DepIdList.length - 1]);
+        };
+        
+        $scope.BackHide = function () {
+            return $scope.CurrentDepartment == null?true:false;
+        };
+        
+        $scope.SelectDepartment = function (department) {
+            $scope.ClearCss();
+            department.css = "active";
+            $scope.SelectedDepartment = department;
+            console.log(department.IdDepartment);
+            $scope.GetApprovers(department.IdDepartment);
+        };
+
+        $scope.ClearCss = function() {
+            angular.forEach($scope.Departments, function (dep) {
+                dep.css = "";
+            });
+        };
+
+        $scope.GetApprovers = function (idDepartment) {
+            var link = '@Html.Raw(@Url.Action("GetApproverForDepartment", "Admin", new { id = "replaceId" }))';
+            link = link.replace("replaceId", idDepartment);
+            $http.get(link).success(function (data) {
+                $scope.d = data;
+            });
+        };
+
     };
 </script>
 

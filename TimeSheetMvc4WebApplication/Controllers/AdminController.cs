@@ -71,6 +71,26 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(Client.GetDepartmentsList(), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetApproverForDepartment(int id)
+        {
+            //var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);
+            var approverModel = new
+            {
+                id = id,
+                approver1 = Client.GetDepartmentApprover(id,1),
+                approver2 = Client.GetDepartmentApprover(id, 1),
+                approver3 = Client.GetDepartmentApprover(id, 1),
+                employees=Client.GetDepartmentEmployees(id)
+                //WorkScheduleList = Client.GetWorkScheduleList(),
+                //ExceptionDayList = Client.GetExeptionsDays(),
+                //DayStatusList = Client.GetDayStatusList(),
+                //CurrentExceptionDay = new DtoExceptionDay()
+            };
+
+
+
+            return Json(approverModel, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
