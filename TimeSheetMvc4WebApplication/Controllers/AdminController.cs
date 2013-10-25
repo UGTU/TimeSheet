@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Web;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 
@@ -67,30 +68,31 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public JsonResult GetDepartment(DtoExceptionDay exceptionDay)
         {
-            //var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);
             return Json(Client.GetDepartmentsList(), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetApproverForDepartment(int id)
         {
-            //Client.ad
-            //var result = Client.DeleteExeptionsDay(exceptionDay.IdExceptionDay);
+            const int idKadrDepartment = 154;
             var approverModel = new
             {
-                id = id,
-                approver1 = Client.GetDepartmentApprover(id, 1),
-                approver2 = Client.GetDepartmentApprover(id, 2),
-                approver3 = Client.GetDepartmentApprover(id, 3),
-                employees = Client.GetDepartmentEmployees(id)
-                //WorkScheduleList = Client.GetWorkScheduleList(),
-                //ExceptionDayList = Client.GetExeptionsDays(),
-                //DayStatusList = Client.GetDayStatusList(),
-                //CurrentExceptionDay = new DtoExceptionDay()
+                Id = id,
+                Approver1 = Client.GetDepartmentApprover(id, 1),
+                Approver2 = Client.GetDepartmentApprover(id, 2),
+                Approver3 = Client.GetDepartmentApprover(id, 3),
+                DepartmetEmployees = Client.GetDepartmentEmployees(id),
+                KadrEmployees = Client.GetDepartmentEmployees(idKadrDepartment)
             };
-
-
-
             return Json(approverModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveApproverDepartment(int idDepartmen, int approveNumber, int idEmployee, string employeeLogin)
+        {
+            //todo:Сделать метод проверки и сохранять логин только если он обновлён
+            var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
+            var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+            var result = (approveSaveResult && employeeSaveResult) ? true : false;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
     }
