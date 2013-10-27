@@ -8,14 +8,14 @@
 <div class="row " ng-app ng-controller="Department">
     <div class="col-md-4">
         <div class="input-group input-group-sm" style="margin-bottom: 10px;">
-            <input type="text" ng-model="query" class="form-control ">
+            <input type="text" ng-model="query" class="form-control " ng-change="Search()">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-search"></span>
             </span>
         </div>
 
-        <div id="employeeList" class="list-group" style="overflow: auto; border: 1px solid #dddddd; min-height: 100px; -ms-border-radius: 5px; border-radius: 5px;" >
-            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()"  ng-hide="BackHide()">
+        <div id="employeeList" class="list-group" style="overflow: auto; border: 1px solid #dddddd; min-height: 100px; -ms-border-radius: 5px; border-radius: 5px;">
+            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()" ng-hide="BackHide()">
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                     {{CurrentDepartment.DepartmentSmallName}}
@@ -33,7 +33,7 @@
     </div>
     <div class="col-md-8" ng-hide="DepartmentApproveHide()">
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
-        <hr style="margin-top: 0;"/>
+        <hr style="margin-top: 0;" />
         <h4>Табельщик</h4>
         <div class="row">
             <div class="col-lg-5">
@@ -43,7 +43,7 @@
                 <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
             </div>
         </div>
-        
+
         <h4>Начальник отдела кадров</h4>
         <div class="row">
             <div class="col-lg-5">
@@ -53,7 +53,7 @@
                 <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
             </div>
         </div>
-        
+
         <h4>Работник отдела кадров</h4>
         <div class="row">
             <div class="col-lg-5">
@@ -90,7 +90,7 @@
             if ($scope.DepIdList.indexOf(idMenagDepartnent) === -1) {
                 $scope.DepIdList.push(idMenagDepartnent);
             }
-            var deps = []; 
+            var deps = [];
             $scope.CurrentDepartment = null;
             angular.forEach($scope.Departments, function (dep) {
                 if (dep.IdManagerDepartment == idMenagDepartnent)
@@ -103,15 +103,22 @@
             $scope.SelectDepartment(deps[0]);
         };
 
-        $scope.Back = function() {
+        $scope.Search = function () {
+            if ($scope.query != '') {
+                $scope.CerrentDepartments = $scope.Departments;
+            } else
+                $scope.SetCurrentDepartment(null);
+        };
+
+        $scope.Back = function () {
             $scope.DepIdList.splice($scope.DepIdList.length - 1, 1);
             $scope.SetCurrentDepartment($scope.DepIdList[$scope.DepIdList.length - 1]);
         };
-        
+
         $scope.BackHide = function () {
-            return $scope.CurrentDepartment == null?true:false;
+            return $scope.CurrentDepartment == null ? true : false;
         };
-        
+
         $scope.SelectDepartment = function (department) {
             $scope.ClearCss();
             department.css = "active";
@@ -120,7 +127,7 @@
             $scope.GetApprovers(department.IdDepartment);
         };
 
-        $scope.ClearCss = function() {
+        $scope.ClearCss = function () {
             angular.forEach($scope.Departments, function (dep) {
                 dep.css = "";
             });
@@ -140,7 +147,7 @@
             });
         };
 
-        $scope.ApproversClone = function() {
+        $scope.ApproversClone = function () {
             $scope.clApprover1 = angular.copy($scope.sdApprover1);
             $scope.clApprover2 = angular.copy($scope.sdApprover2);
             $scope.clApprover3 = angular.copy($scope.sdApprover3);
@@ -149,7 +156,7 @@
         $scope.IsApproversEquals = function (sdApprover, clApprover) {
             return angular.equals(sdApprover, clApprover);
         };
-        
+
         $scope.IsSaveDisable = function () {
             if (!$scope.IsApproversEquals($scope.sdApprover1, $scope.clApprover1))
                 return false;
@@ -165,17 +172,15 @@
             if (approver == null) return null;
             var empl;
             angular.forEach(employees, function (employee) {
-                if (approver.IdEmployee == employee.IdEmployee)
-                {
+                if (approver.IdEmployee == employee.IdEmployee) {
                     empl = employee;
                     return;
                 }
             });
-            //console.log(app.Name);
             return empl;
         };
 
-        $scope.DepartmentApproveHide = function() {
+        $scope.DepartmentApproveHide = function () {
             if ($scope.sdEmployees == null || $scope.sdEmployees.length == 0)
                 return true;
             return false;
@@ -185,7 +190,7 @@
             return employee.Surname + ' ' + employee.Name + ' ' + employee.Patronymic;
         };
 
-        
+
         $scope.CanSetAsCurrentDepartment = function (idDepartment) {
             var result = true;
             angular.forEach($scope.Departments, function (dep) {
@@ -194,27 +199,27 @@
             });
             return result;
         };
-        
-        $scope.SaveApprover = function (approver,appoveStep) {
+
+        $scope.SaveApprover = function (approver, clapprover, appoveStep) {
             var link = '@Html.Raw(@Url.Action("SaveApproverDepartment", "Admin", new { idDepartmen = "idDepartmenReplace", approveNumber = "approveNumberReplace", idEmployee = "idEmployeeReplace", employeeLogin = "employeeLoginReplace" }))';
             link = link.replace("idDepartmenReplace", $scope.SelectedDepartment.IdDepartment).replace("approveNumberReplace", appoveStep).replace("idEmployeeReplace", approver.IdEmployee).replace("employeeLoginReplace", approver.EmployeeLogin);
             console.log(link);
             $http.get(link).success(function (data) {
-                if (data) console.log('approve save success');
-                else alert('При сохранении возникли проблемы, изменения не сохранены');
-                $scope.SelectDepartment($scope.SelectedDepartment);
+                if (data) {
+                    console.log('approve save success');
+                }
+                else
+                    alert('При сохранении возникли проблемы, изменения не сохранены');
             });
         };
-        
+
         $scope.Save = function () {
             if (!$scope.IsApproversEquals($scope.sdApprover1, $scope.clApprover1))
-                $scope.SaveApprover($scope.sdApprover1, 1);
+                $scope.SaveApprover($scope.sdApprover1, $scope.clApprover1, 1);
             if (!$scope.IsApproversEquals($scope.sdApprover2, $scope.clApprover2))
-                $scope.SaveApprover($scope.sdApprover2, 2);
+                $scope.SaveApprover($scope.sdApprover2, $scope.clApprover2, 2);
             if (!$scope.IsApproversEquals($scope.sdApprover3, $scope.clApprover3))
-                $scope.SaveApprover($scope.sdApprover3, 3);
-
-            //$scope.SelectDepartment($scope.SelectedDepartment);
+                $scope.SaveApprover($scope.sdApprover3, $scope.clApprover3, 3);
         };
 
 
