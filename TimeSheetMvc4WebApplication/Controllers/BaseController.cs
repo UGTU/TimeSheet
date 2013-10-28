@@ -25,9 +25,9 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //return "kafedra@ugtu.net"; //получить логин пользователя
             //return "fmarakasov@ugtu.net"; //получить логин пользователя
             //return "tkazakova@ugtu.net"; //получить логин пользователя
-            //return "tester1@ugtu.net"; //получить логин пользователя
+            return "tester1@ugtu.net"; //получить логин пользователя
             //return "ovisokolyan@ugtu.net"; //получить логин пользователя
-            return System.Web.HttpContext.Current.User.Identity.Name;
+            //return System.Web.HttpContext.Current.User.Identity.Name;
         }
 
         public RedirectResult RedirectToNotFoundPage

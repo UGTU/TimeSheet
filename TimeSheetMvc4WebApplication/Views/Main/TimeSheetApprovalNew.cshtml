@@ -1,0 +1,162 @@
+﻿@using TimeSheetMvc4WebApplication.ClassesDTO
+@using TimeSheetMvc4WebApplication.Models
+@model TimeSheetAprovalModel
+@{
+    ViewBag.Title = "Согласование табеля";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+    var timeSheets = ViewBag.TimeSheet as TimeSheetModel[];
+    var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
+    int idTimeSheet = ViewBag.IdTimeSheet;
+}
+
+@*@if (approverHiatory != null && approverHiatory.Any())
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                        <span class="glyphicon glyphicon-list-alt"></span> История согласования
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Согласователь</th>
+                                <th>Статус</th>
+                                <th>Виза</th>
+                                <th>Коментарии</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var apppr in approverHiatory)
+                            {
+                                <tr>
+                                    <td>@apppr.AppoverDate.ToString("d MMMM yyyy")</td>
+                                    <td>@apppr.AppoverName</td>
+                                    <td>@apppr.AppoverStatus</td>
+                                    <td>@apppr.AppoverVisa</td>
+                                    <td>@apppr.AppoverComment</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }*@
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <span class="glyphicon glyphicon-retweet"></span>  Согласование табеля</div>
+    <div class="panel-body">
+        <div class="container" @*style="margin-right: 30px; margin-top: 15px;"*@>
+            @if (approverHiatory != null && approverHiatory.Any())
+            {
+                <h4>История согласования</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Согласователь</th>
+                            <th>Статус</th>
+                            <th>Виза</th>
+                            <th>Коментарии</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var apppr in approverHiatory)
+                        {
+                            <tr>
+                                <td>@apppr.AppoverDate.ToString("d MMMM yyyy")</td>
+                                <td>@apppr.AppoverName</td>
+                                <td>@apppr.AppoverStatus</td>
+                                <td>@apppr.AppoverVisa</td>
+                                <td>@apppr.AppoverComment</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            <br/>
+            <h4>Согласование</h4>
+            @*@using (Html.BeginForm("TimeSheetApproval", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    @Html.HiddenFor(x => x.ApprovalDate)
+                    @Html.HiddenFor(x => x.IdApprover)
+                    @Html.HiddenFor(x => x.IdTimeSheet)
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"></label>
+                        <div class="col-lg-10">
+                            @Html.ValidationSummary()
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Виза:</label>
+                        <div class="col-lg-10">
+                            @Html.DropDownListFor(x => x.ApprovalResult, new[]
+                            {
+                                new SelectListItem {Text = "Согласовать табель", Value = bool.TrueString},
+                                new SelectListItem {Text = "Отклонить табель", Value = bool.FalseString}
+                            }, "Выберете вариант...", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword1" class="col-lg-2 control-label">Комментарии:</label>
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(x => x.Comment, new { @class = "form-control", @row = "3", @style = "resize:vertical;" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-default" style="width: 100px">Ок</button>
+                        </div>
+                    </div>
+                }*@
+
+            @using (Html.BeginForm("TimeSheetApproval", "Home", FormMethod.Post, new { @role = "form" }))
+            {
+                @Html.HiddenFor(x => x.ApprovalDate)
+                @Html.HiddenFor(x => x.IdApprover)
+                @Html.HiddenFor(x => x.IdTimeSheet)
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Виза</label>
+                    @Html.DropDownListFor(x => x.ApprovalResult, new[]
+                            {
+                                new SelectListItem {Text = "Согласовать табель", Value = bool.TrueString},
+                                new SelectListItem {Text = "Отклонить табель", Value = bool.FalseString}
+                            }, "Выберете вариант...", new { @class = "form-control" })
+                </div>
+                
+                <div class="form-group">
+                    <label>Комментарии</label>
+                    @Html.TextAreaFor(x => x.Comment, new { @class = "form-control", @row = "3", @style = "resize:vertical;" })
+                </div>
+
+    <button type="submit" class="btn btn-default pull-right" style="width: 100px">Ок</button>
+            }
+        </div>
+    </div>
+</div>
+<div>
+    @if (timeSheets != null)
+    {
+        foreach (var timeSheet in timeSheets)
+        {
+
+            @Html.Partial("PartialView\\TimeSheetPartialView", timeSheet)
+        }
+    }
+</div>
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new[] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
+        CurrentLink = HeaderLink.Approve,
+        IdTimeSheet = idTimeSheet
+    });
+}

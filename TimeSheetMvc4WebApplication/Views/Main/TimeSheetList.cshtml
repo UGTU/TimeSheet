@@ -49,7 +49,7 @@
                                         @*}*@
                                         <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-fullscreen"></span></a>
                                         <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" href="@Url.Action("TimeSheetPdf", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-print"></span></a>
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApproval", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span></a>
+                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApprovalNew", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span></a>
                                     </div>
                                     <div class="panel-body" style="padding-bottom: 5px ">
                                         <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>

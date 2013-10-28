@@ -997,6 +997,7 @@
     <Content Include="Views\Admin\DepartmentManagment.cshtml" />
     <Content Include="Views\Shared\TimeSheetLayout - Copy.cshtml" />
     <Content Include="Views\Shared\HeaderLinks.cshtml" />
+    <Content Include="Views\Main\TimeSheetApprovalNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

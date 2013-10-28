@@ -84,7 +84,44 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         //======================    Согласование табеля     ====================
-
+        [HttpGet]
+        public ActionResult TimeSheetApprovalNew(int idTimeSheet)
+        {
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            if (timeSheet == null)
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            ViewBag.IdTimeSheet = idTimeSheet;
+            ViewBag.TimeSheet = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                LastPaperEmployeeCount,
+                PaperEmployeeCount, false);
+            ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
+            var timeSheetAprovalModel = new TimeSheetAprovalModel();
+            if (Client.CanApprove(idTimeSheet, GetUsername()))
+            {
+                //ViewBag.TimeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                //    LastPaperEmployeeCount, PaperEmployeeCount, false);
+                //var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
+                timeSheetAprovalModel = new TimeSheetAprovalModel
+                {
+                    IdTimeSheet = timeSheet.IdTimeSheet,
+                    ApprovalDate = DateTime.Now,
+                    ApprovalResult = null,
+                    Comment = "",
+                    //IdApprover = approver.DtoApproverDepartments.First().IdApprover
+                    IdApprover = GetCurrentApprover().DtoApproverDepartments.First().IdApprover
+                };
+                //return View(timeSheetAprovalModel);
+            }
+            return View(timeSheetAprovalModel);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         [HttpGet]
         public ActionResult TimeSheetApproval(int idTimeSheet)
         {

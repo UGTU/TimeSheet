@@ -31,7 +31,7 @@
         case HeaderLink.Approve:
         {
             <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetApproval", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
+                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetApprovalNew", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
             </script>
             break;
         }

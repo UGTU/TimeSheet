@@ -321,7 +321,7 @@ namespace TimeSheetMvc4WebApplication
                         AppoverComment = s.Comment,
                         AppoverDate = s.ApprovalDate,
                         AppoverName =
-                            string.Format("{0} {1} {2}", s.Approver.Employee.FirstName,
+                            string.Format("{1} {0} {2}", s.Approver.Employee.FirstName,
                                 s.Approver.Employee.LastName, s.Approver.Employee.Otch),
                         AppoverStatus = s.Approver.ApproverType.ApproverTypeName,
                         AppoverVisa = s.Result ? "Согл." : "Несогл."
