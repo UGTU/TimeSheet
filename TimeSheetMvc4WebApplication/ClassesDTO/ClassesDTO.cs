@@ -241,6 +241,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         [DataMember]
         public string AppoverVisa { get; set; }
         [DataMember]
+        public bool AppoverResult { get; set; }
+        [DataMember]
         public DateTime AppoverDate { get; set; }
     }
 

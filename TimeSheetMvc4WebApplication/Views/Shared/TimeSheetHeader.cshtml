@@ -1,8 +1,9 @@
 ﻿@using TimeSheetMvc4WebApplication
+@using TimeSheetMvc4WebApplication.Controllers
 @{
-    var client = new TimeSheetService();
-    var userName = System.Web.HttpContext.Current.User.Identity.Name;
-    var approver = client.GetCurrentApproverByLogin(userName);
+    var baseController = new BaseController();
+    var approver = baseController.GetCurrentApprover();
+    var userName = baseController.GetUsername();
     if (approver != null)
     {
         userName = String.Format("{0} {1} {2}", approver.Surname, approver.Name, approver.Patronymic);

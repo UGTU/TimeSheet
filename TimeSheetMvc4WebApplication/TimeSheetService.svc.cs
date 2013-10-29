@@ -324,7 +324,8 @@ namespace TimeSheetMvc4WebApplication
                             string.Format("{1} {0} {2}", s.Approver.Employee.FirstName,
                                 s.Approver.Employee.LastName, s.Approver.Employee.Otch),
                         AppoverStatus = s.Approver.ApproverType.ApproverTypeName,
-                        AppoverVisa = s.Result ? "Согл." : "Несогл."
+                        AppoverVisa = s.Result ? "Согласовано" : "Отклонено",
+                        AppoverResult = s.Result
                     }).OrderBy(o => o.AppoverDate).ToArray();
             }
         }

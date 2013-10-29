@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Query.Dynamic;
-using System.Web.Routing;
-using Newtonsoft.Json;
 using Rotativa;
 using Rotativa.Options;
 using TimeSheetMvc4WebApplication.ClassesDTO;
@@ -28,16 +24,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if (!approver.DtoApproverDepartments.Any())
                 throw new HttpException(401, "Попытка несанкционированного доступа");
             if (approver.DtoApproverDepartments.Count() > 1) return View(approver);
-            return RedirectToAction("TimeSheetList",new {id= approver.DtoApproverDepartments.First().IdDepartment});
+            return RedirectToAction("TimeSheetList", new { id = approver.DtoApproverDepartments.First().IdDepartment });
         }
 
 
-        public ActionResult TimeSheetList(int id,bool showAll = false)
+        public ActionResult TimeSheetList(int id, bool showAll = false)
         {
             var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetEmptyTimeSheetList(id,showAll?int.MinValue:12);
+            var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);
             return View(timeSheetList);
         }
 
@@ -80,7 +76,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                 LastPaperEmployeeCount, PaperEmployeeCount,
                 true);
-            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) {PageOrientation = Orientation.Landscape};
+            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) { PageOrientation = Orientation.Landscape };
         }
 
         //======================    Согласование табеля     ====================
@@ -92,134 +88,56 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
             ViewBag.IdTimeSheet = idTimeSheet;
             ViewBag.TimeSheet = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                LastPaperEmployeeCount,
-                PaperEmployeeCount, false);
+                                                                        LastPaperEmployeeCount, PaperEmployeeCount,
+                                                                        false);
             ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
-            var timeSheetAprovalModel = new TimeSheetAprovalModel();
+            ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
             if (Client.CanApprove(idTimeSheet, GetUsername()))
             {
-                //ViewBag.TimeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                //    LastPaperEmployeeCount, PaperEmployeeCount, false);
-                //var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
-                timeSheetAprovalModel = new TimeSheetAprovalModel
-                {
-                    IdTimeSheet = timeSheet.IdTimeSheet,
-                    ApprovalDate = DateTime.Now,
-                    ApprovalResult = null,
-                    Comment = "",
-                    //IdApprover = approver.DtoApproverDepartments.First().IdApprover
-                    IdApprover = GetCurrentApprover().DtoApproverDepartments.First().IdApprover
-                };
-                //return View(timeSheetAprovalModel);
-            }
-            return View(timeSheetAprovalModel);
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        [HttpGet]
-        public ActionResult TimeSheetApproval(int idTimeSheet)
-        {
-            //todo:Полный рефакториг метода
-            //todo:При переходе к согласованию табеля отображать историю согласования, если табель согласован то отображать информацио о успешном согласовании табеля
-            var timeSheet = Client.GetTimeSheet(idTimeSheet);
-            MessageModel message;
-            if (timeSheet == null)
-                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
-            ViewBag.IdTimeSheet = idTimeSheet;
-            if (Client.CanApprove(idTimeSheet, GetUsername()))
-            {
-                ViewBag.TimeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                    LastPaperEmployeeCount, PaperEmployeeCount, false);
-                var approver = GetCurrentApprover();//Client.GetCurrentApproverByLogin(GetUsername());
                 var timeSheetAprovalModel = new TimeSheetAprovalModel
                 {
                     IdTimeSheet = timeSheet.IdTimeSheet,
                     ApprovalDate = DateTime.Now,
                     ApprovalResult = null,
                     Comment = "",
-                    IdApprover = approver.DtoApproverDepartments.First().IdApprover
+                    IdApprover = GetCurrentApprover().DtoApproverDepartments.First().IdApprover
                 };
                 return View(timeSheetAprovalModel);
             }
-            var currentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
-            if (currentApprover != null)
-            {
-                message = new MessageModel
-                {
-                    MessageTitile = "Согласование недоступно.",
-                    Message = string.Format("Текущий соглпсователь: {0} {1} {2} ", currentApprover.Surname,
-                                currentApprover.Name, currentApprover.Patronymic)
-                };
-                //ViewBag.IdTimeSheet = idTimeSheet;
-                return View("WarningMessageShow", message);
-            }
-            message = new MessageModel
-            {
-                MessageTitile = "Табель согласован!",
-                Message = "Сгласование табеля успешно завершено."
-            };
-            //ViewBag.IdTimeSheet = idTimeSheet;
-            return View("SuccessMessageShow", message);
+            return View();
         }
 
         [HttpPost]
-        public ViewResult TimeSheetApproval(TimeSheetAprovalModel timeSheetAprovalModel)
+        public ViewResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
         {
+            //валидация формы
             ViewBag.IdTimeSheet = timeSheetAprovalModel.IdTimeSheet;
             if (timeSheetAprovalModel.ApprovalResult != null &&
-                (bool)timeSheetAprovalModel.ApprovalResult == false & timeSheetAprovalModel.Comment == null)
-                ModelState.AddModelError("Причина не указана", "В случае отклонения табеля необходимо прокомментировать причину!");
-            if (ModelState.IsValid)
+                (bool) timeSheetAprovalModel.ApprovalResult == false & timeSheetAprovalModel.Comment == null)
+                ModelState.AddModelError("Причина не указана",
+                    "В случае отклонения табеля необходимо прокомментировать причину!");
+            //инициализация модели
+            var idTimeSheet = timeSheetAprovalModel.IdTimeSheet;
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            ViewBag.IdTimeSheet = idTimeSheet;
+            ViewBag.TimeSheet = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
+                LastPaperEmployeeCount, PaperEmployeeCount,
+                false);
+            //согласование
+            if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
+                (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
             {
-                if (Client.CanApprove(timeSheetAprovalModel.IdTimeSheet, GetUsername()))
-                {
-                    if (Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
-                        (bool)timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
-                    {
-                        //===Согласовано====
-                        var currentApprover = Client.GetNextApproverForTimeSheet(timeSheetAprovalModel.IdTimeSheet);
-                        var message = new MessageModel();
-                        if (currentApprover != null)
-                        {
-                            message.MessageTitile = (bool)timeSheetAprovalModel.ApprovalResult ? "Согласование табеля выполнено успешно." : "Согласование табеля отклонено, табель направлен наредактирование.";
-                            message.Message = string.Format("Следующий согласователь {0} {1} {2}.", currentApprover.Surname, currentApprover.Name, currentApprover.Patronymic);
-                        }
-                        else
-                        {
-                            message.MessageTitile = "Табель успешно согласован.";
-                            message.Message = string.Format("Согласование табеля успешно завершено.");
-                        }
-                        return View("SuccessMessageShow", message);
-                    }
-                }
-                else
-                {
-                    var currentApprover = Client.GetNextApproverForTimeSheet(timeSheetAprovalModel.IdTimeSheet);
-                    if (currentApprover != null)
-                    {
-                        var message = new MessageModel
-                        {
-                            MessageTitile = "Согласование недоступно.",
-                            Message = string.Format("Текущий соглпсователь: {0} {1} {2} ", currentApprover.Surname,
-                                        currentApprover.Name, currentApprover.Patronymic)
-                        };
-                        //ViewBag.IdTimeSheet = timeSheetAprovalModel.IdTimeSheet;
-                        return View("WarningMessageShow", message);
-                    }
-                }
+                //инициализация модели
+                ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
+                ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
+                return View();
             }
-            var timeSheet = Client.GetTimeSheet(timeSheetAprovalModel.IdTimeSheet);
-            ViewBag.TimeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                LastPaperEmployeeCount, PaperEmployeeCount, false);
+            //инициализация модели
+            ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
+            ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
             return View(timeSheetAprovalModel);
         }
-        
+
         //======================    Json    ====================================
 
         public JsonResult GetTimeSheetModelJson(int idTimeSheet)
@@ -232,7 +150,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var ts = new JsTimeSheetViewModel
             {
                 DayStatusList = Client.GetDayStatusList(),
-                TimeSheet = new Models.Main.JsTimeSheetModel
+                TimeSheet = new JsTimeSheetModel
                 {
                     Department = timeSheet.Department.DepartmentFullName,
                     IdTimeSheet = timeSheet.IdTimeSheet,
@@ -260,7 +178,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
                         Order = i
                     });
                 }
-                
+
 
                 employees.Add(new JsEmployeeModel
                 {
@@ -273,7 +191,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
                     Records = records.ToArray()
                 });
             }
-            
+
             ts.TimeSheet.Employees = employees.ToArray();
             return Json(ts, JsonRequestBehavior.AllowGet);
         }
@@ -281,7 +199,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpPost]
         public JsonResult UpdateTimeSheetRecotds(JsTimeSheetRecordModel[] records)
         {
-            var message = new DtoMessage {Result = Client.EditTimeSheetRecords(records)};
+            var message = new DtoMessage { Result = Client.EditTimeSheetRecords(records) };
             if (!message.Result)
             {
                 message.Message = "При сохранении изменений возникли проблемы. Изменения не сохранены.";
@@ -304,7 +222,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             DtoMessage message;
             if (employees != null && employees.Any())
             {
-                message=Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), employees.ToArray());
+                message = Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), employees.ToArray());
             }
             else
             {
