@@ -26,7 +26,8 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <SilverlightApplicationList>{84FCEF63-22CC-42AF-8F54-61A362B625DD}|..\TimeSheetClient\TimeSheetClient.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -156,7 +157,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -951,24 +951,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\ApproverListPartialView.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\TimeSheetApproval.cshtml" />
-    <Content Include="Views\Home\TimeSheetEmployeePartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetHeader.cshtml" />
-    <Content Include="Views\Home\TimeSheetPaperPartialView.cshtml" />
-    <Content Include="Views\Home\TimeSheetPrint.cshtml" />
-    <Content Include="Views\Home\TimeSheetShow.cshtml" />
     <Content Include="Views\Shared\_EmptyLayout.cshtml" />
     <Content Include="Views\Shared\_SilverlightLayout.cshtml" />
     <Content Include="Views\Shared\Header.cshtml" />
     <Content Include="Views\Shared\WarningMessageShow.cshtml" />
-    <Content Include="Views\Home\Test.cshtml" />
-    <Content Include="Views\Home\PaperFooter.cshtml" />
     <Content Include="Views\Shared\InfoMessageShow.cshtml" />
     <Content Include="Views\Shared\SuccessMessageShow.cshtml" />
     <Content Include="Views\Shared\DangerMessageShow.cshtml" />
-    <Content Include="Views\Home\TimeSheetPartialView.cshtml" />
     <Content Include="Views\Shared\TimeSheetLayout.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\TimeSheetHeader.cshtml" />
