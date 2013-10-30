@@ -67,7 +67,8 @@ namespace TimeSheetMvc4WebApplication
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
             httpContext.Response.TrySkipIisCustomErrors = true;
-            Response.Redirect(string.Format("~/{0}/{1}", redirectController, action));
+            //Response.Redirect(string.Format("~/{0}/{1}", redirectController, action));
+            Response.Redirect(string.Format("~/{0}", action));
         }
 
 

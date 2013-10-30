@@ -70,7 +70,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                 LastPaperEmployeeCount, PaperEmployeeCount,
                 true);
-            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) { PageOrientation = Orientation.Landscape };
+            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) { PageOrientation = Orientation.Landscape};
+            //return View("TimeSheetPrint", timeSheetModel);
         }
 
         //======================    Согласование табеля     ====================

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
-<div @*class="TimeSheeet" style="padding: 20px;"*@>
+<div>
     @foreach (var timeSheet in Model)
     {
         @Html.Partial("PartialView\\TimeSheetPartialView", timeSheet)

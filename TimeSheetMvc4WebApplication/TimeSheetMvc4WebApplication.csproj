@@ -174,18 +174,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\DataContextLoger.cs" />
     <Compile Include="Source\TimeSheetCraterNew.cs" />
-    <Compile Include="Source\TimeSheetCrater - Копировать - Копировать - Копировать.cs" />
-    <Compile Include="Source\TimeSheetCrater - Копировать - Копировать.cs" />
-    <Compile Include="Source\TimeSheetCrater - Копировать.cs" />
-    <Compile Include="Source\TimeSheetCrater.cs" />
     <Compile Include="TimeSheetService.svc.cs">
       <DependentUpon>TimeSheetService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />
-    <Content Include="ClientBin\Debug\TimeSheetClient.xap" />
-    <Content Include="ClientBin\TimeSheetClient.xap" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap\bootstrap-theme.css" />
     <Content Include="Content\bootstrap\bootstrap-theme.min.css" />
@@ -273,16 +267,6 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="ClientBin\System.ComponentModel.DataAnnotations.zip" />
-    <Content Include="ClientBin\System.Windows.Controls.Data.zip" />
-    <Content Include="ClientBin\System.Windows.Controls.Data.Input.zip" />
-    <Content Include="ClientBin\System.Windows.Controls.zip" />
-    <Content Include="ClientBin\System.Windows.Controls.Input.zip" />
-    <Content Include="ClientBin\System.Windows.Data.zip" />
-    <Content Include="ClientBin\System.Xml.Linq.zip" />
-    <Content Include="ClientBin\System.Xml.Serialization.zip" />
-    <Content Include="ClientBin\System.Xml.Utils.zip" />
-    <Content Include="ClientBin\System.Xml.XPath.zip" />
     <None Include="Properties\PublishProfiles\tfs-1.ugtu.net.pubxml" />
     <None Include="Properties\PublishProfiles\tts.ugtu.net.pubxml" />
     <Content Include="NuGet.exe" />
@@ -933,10 +917,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\version.txt" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Silverlight.js" />
     <Content Include="SQLQuery.sql" />
-    <Content Include="TimeSheetClientTestPage.aspx" />
-    <Content Include="TimeSheetClientTestPage.html" />
     <Content Include="TimeSheetService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -950,32 +931,18 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetHeader.cshtml" />
     <Content Include="Views\Shared\_EmptyLayout.cshtml" />
-    <Content Include="Views\Shared\_SilverlightLayout.cshtml" />
-    <Content Include="Views\Shared\Header.cshtml" />
-    <Content Include="Views\Shared\WarningMessageShow.cshtml" />
-    <Content Include="Views\Shared\InfoMessageShow.cshtml" />
-    <Content Include="Views\Shared\SuccessMessageShow.cshtml" />
-    <Content Include="Views\Shared\DangerMessageShow.cshtml" />
     <Content Include="Views\Shared\TimeSheetLayout.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\TimeSheetHeader.cshtml" />
-    <Content Include="Views\Shared\TimeSheetDangerMessageShow.cshtml" />
-    <Content Include="Views\Shared\PartialView\ApproverHeaderNameAccess.cshtml" />
-    <Content Include="Views\Shared\PartialView\ApproverHeaderNameNoAccess.cshtml" />
     <Content Include="Views\Shared\PartialView\DtoApproverDepartmentListPartial.cshtml" />
-    <Content Include="Views\Shared\PartialView\DtoTimeSheetEmployeeEdit.cshtml" />
-    <Content Include="Views\Shared\PartialView\DtoTimeSheetEmployeeEdit1.cshtml" />
     <Content Include="Views\Main\TimeSheetEdit.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Main\TimeSheetList.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetApproveStatus.cshtml" />
-    <Content Include="Views\Main\PartialView\HeaderLoBoxContent.cshtml" />
     <Content Include="Views\Main\TimeSheetShow.cshtml" />
     <Content Include="Views\Main\TimeSheetPrint.cshtml" />
-    <Content Include="Views\Main\TimeSheetApproval.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetPaperPartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetPartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetEmployeePartialView.cshtml" />
@@ -986,7 +953,6 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\ExceptionDay.cshtml" />
     <Content Include="Views\Admin\DepartmentManagment.cshtml" />
-    <Content Include="Views\Shared\TimeSheetLayout - Copy.cshtml" />
     <Content Include="Views\Shared\HeaderLinks.cshtml" />
     <Content Include="Views\Main\TimeSheetApprovalNew.cshtml" />
   </ItemGroup>

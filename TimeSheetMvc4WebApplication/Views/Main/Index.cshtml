@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
-
-@*<h2>Index</h2>*@
 @if (Model.DtoApproverDepartments != null && Model.DtoApproverDepartments.Any())
 {
     Html.RenderPartial("PartialView/DtoApproverDepartmentListPartial", Model.DtoApproverDepartments);

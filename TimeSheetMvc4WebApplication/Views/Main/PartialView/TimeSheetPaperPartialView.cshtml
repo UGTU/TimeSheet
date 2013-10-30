@@ -1,16 +1,5 @@
 ﻿@model TimeSheetMvc4WebApplication.Models.PaperModel
 
-@*<table border="2" bordercolor="black" cellpadding="0" cellspacing="0" style="border-collapse: collapse; table-layout: fixed;">
-        @Html.Partial("PartialView\\TimeSheetHeader", Model.HeaderStyle)
-        @foreach (var employee in Model.Employees)
-        {
-            @Html.Partial("PartialView\\TimeSheetEmployeePartialView", employee)
-        }
-    </table>
-    <div class="paperNum">
-        @Html.Partial("PartialView\\PaperFooter", Model)
-    </div>*@
-
 <table border="2" bordercolor="black" cellpadding="0" cellspacing="0" style="border-collapse: collapse; table-layout: fixed;">
     @Html.Partial("PartialView\\TimeSheetHeader", Model.HeaderStyle)
     @foreach (var employee in Model.Employees)
@@ -19,18 +8,11 @@
     }
 </table>
 @if (Model.IsLast)
-{
-    @Html.Partial("PartialView\\ApproverListPartialView", Model.Approvers)
-    <div>
-        @Html.Partial("PartialView\\PaperFooter", Model)
-    </div>
-}
-else
-{
-    <div class="paperNum">
-        @Html.Partial("PartialView\\PaperFooter", Model)
-    </div>
-}
+    {@Html.Partial("PartialView\\ApproverListPartialView", Model.Approvers)}
+
+<div class="paperNum">
+    @Html.Partial("PartialView\\PaperFooter", Model)
+</div>
 
 
 

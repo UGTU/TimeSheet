@@ -1,5 +1,0 @@
-﻿@model int
-
-<li id="Show"><a href="@Url.Action("TimeSheetShow", "Home", new { idTimeSheet = Model })"><span class="glyphicon glyphicon-fullscreen"></span> Просмотр табеля</a></li>
-<li id="Print"><a href="@Url.Action("TimeSheetPdf", "Home", new { idTimeSheet = Model })" target="blank"><span class="glyphicon glyphicon-print"></span> Печать табеля</a></li>
-<li id="Approval"><a href="@Url.Action("TimeSheetApproval", "Home", new { idTimeSheet = Model })"><span class="glyphicon glyphicon-retweet"></span> Согласование табеля</a></li>
