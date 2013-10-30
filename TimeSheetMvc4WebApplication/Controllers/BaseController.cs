@@ -9,13 +9,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
 {
     public class BaseController : Controller
     {
-        protected static string ErrorPage = "~/Error";
-        
+        protected static string ErrorPage = "~/Error";     
         protected static string NotFoundPage = "~/NotFoundPage";
-        
         public readonly TimeSheetService Client = new TimeSheetService();
 
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        //private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         [Authorize]
         public string GetUsername()
@@ -25,7 +23,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //return "kafedra@ugtu.net"; //получить логин пользователя
             //return "fmarakasov@ugtu.net"; //получить логин пользователя
             //return "tkazakova@ugtu.net"; //получить логин пользователя
-            return "tester3@ugtu.net"; //получить логин пользователя
+            return "tester1@ugtu.net"; //получить логин пользователя
             //return "ovisokolyan@ugtu.net"; //получить логин пользователя
             //return System.Web.HttpContext.Current.User.Identity.Name;
         }
@@ -50,6 +48,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 Session["approver"] = Client.GetCurrentApproverByLogin(GetUsername());
             }
             return Session["approver"] as DtoApprover;
+        }
+
+        protected DtoTimeSheet GetTimeSheetOrThrowException(int id)
+        {
+            var timeSheet = Client.GetTimeSheet(id);
+            if (timeSheet == null)
+                throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + id);
+            return timeSheet;
         }
 
 

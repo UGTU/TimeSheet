@@ -8,8 +8,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
     [Authorize]
     public class AdminController :  BaseController
     {
-        //todo:реализовать функцию отображения и редактирования согласователей для структурных подразделений
-        //todo:реализовать для всех методов этого контроллера проверку на членство пользователя в группе администраторов
         //
         // GET: /Admin/
 

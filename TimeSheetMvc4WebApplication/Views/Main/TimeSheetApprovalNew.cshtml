@@ -53,7 +53,7 @@
                     @Html.HiddenFor(x => x.IdTimeSheet)
                     if (!Html.ViewData.ModelState.IsValid)
                     {
-                        <div @*class="alert alert-danger"*@ style="color: red;">
+                        <div style="color: red;">
                             @Html.ValidationSummary()
                         </div>
                     }
