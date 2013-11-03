@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
+    <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
     <link rel="shortcut icon" href="../../Content/Images/logo.png" />
     @Styles.Render("~/Content/timeSheet")
     @Styles.Render("~/Content/bootstrap/base")

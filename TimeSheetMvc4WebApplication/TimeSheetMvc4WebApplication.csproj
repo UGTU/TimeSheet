@@ -941,7 +941,6 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Main\TimeSheetList.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetApproveStatus.cshtml" />
-    <Content Include="Views\Main\TimeSheetShow.cshtml" />
     <Content Include="Views\Main\TimeSheetPrint.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetPaperPartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetPartialView.cshtml" />
@@ -955,6 +954,9 @@
     <Content Include="Views\Admin\DepartmentManagment.cshtml" />
     <Content Include="Views\Shared\HeaderLinks.cshtml" />
     <Content Include="Views\Main\TimeSheetApprovalNew.cshtml" />
+    <Content Include="Views\Shared\LazyTimeSheetShow.cshtml" />
+    <Content Include="Views\Main\PartialView\PartialTimeSheetShow.cshtml" />
+    <Content Include="Views\Main\TimeSheetShow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -46,11 +46,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
+            return View(idTimeSheet);
+        }
+
+        public PartialViewResult PartialTimeSheetShow(int idTimeSheet)
+        {
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                 LastPaperEmployeeCount,
                 PaperEmployeeCount, false);
-            return View(timeSheetModel);
+            return PartialView("PartialView/PartialTimeSheetShow",timeSheetModel);
         }
 
         [AllowAnonymous]
@@ -78,12 +83,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
-            var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            ApproveViewBagInit(idTimeSheet, timeSheet);
+            ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
             var timeSheetAprovalModel = new TimeSheetAprovalModel
             {
-                IdTimeSheet = timeSheet.IdTimeSheet,
+                IdTimeSheet=idTimeSheet,
                 ApprovalDate = DateTime.Now,
                 ApprovalResult = null,
                 Comment = "",
@@ -101,23 +105,19 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 ModelState.AddModelError("Причина не указана",
                     "В случае отклонения табеля необходимо прокомментировать причину!");
             var idTimeSheet = timeSheetAprovalModel.IdTimeSheet;
-            var timeSheet = Client.GetTimeSheet(idTimeSheet);
             if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
                 (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
             {
-                ApproveViewBagInit(idTimeSheet, timeSheet);
+                ApproveViewBagInit(idTimeSheet);
                 return View();
             }
-            ApproveViewBagInit(idTimeSheet, timeSheet);
+            ApproveViewBagInit(idTimeSheet);
             return View(timeSheetAprovalModel);
         }
 
-        private void ApproveViewBagInit(int idTimeSheet, DtoTimeSheet timeSheet)
+        private void ApproveViewBagInit(int idTimeSheet)
         {
             ViewBag.IdTimeSheet = idTimeSheet;
-            ViewBag.TimeSheet = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                                                                        LastPaperEmployeeCount, PaperEmployeeCount,
-                                                                        false);
             ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
             ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
         }

@@ -1,22 +1,17 @@
 ﻿@using TimeSheetMvc4WebApplication.Models
-@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
-@{
-    ViewBag.Title = "Просмотр табеля";
-    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
-}
+@model int
 
-<div>
-    @foreach (var timeSheet in Model)
-    {
-        @Html.Partial("PartialView\\TimeSheetPartialView", timeSheet)
-    }
-</div>
+@{
+    ViewBag.Title = "Просмотр";
+}
 
 @{
     Html.RenderPartial("HeaderLinks", new HeaderLinckModel
     {
         Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
         CurrentLink = HeaderLink.Show,
-        IdTimeSheet = Model.First().DocumentNumber
+        IdTimeSheet = Model
     });
 }
+
+@Html.Partial("LazyTimeSheetShow",@Model)

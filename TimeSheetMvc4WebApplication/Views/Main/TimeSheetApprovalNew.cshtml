@@ -2,7 +2,7 @@
 @using TimeSheetMvc4WebApplication.Models
 @model TimeSheetAprovalModel
 @{
-    ViewBag.Title = "Согласование табеля";
+    ViewBag.Title = "Согласование";
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
     var timeSheets = ViewBag.TimeSheet as TimeSheetModel[];
     var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
@@ -96,14 +96,7 @@
     </div>
 </div>
 <div>
-    @if (timeSheets != null)
-    {
-        foreach (var timeSheet in timeSheets)
-        {
-
-            @Html.Partial("PartialView\\TimeSheetPartialView", timeSheet)
-        }
-    }
+    @Html.Partial("LazyTimeSheetShow", idTimeSheet)
 </div>
 @{
     Html.RenderPartial("HeaderLinks", new HeaderLinckModel
