@@ -173,6 +173,16 @@ namespace TimeSheetMvc4WebApplication
         }
 
         [OperationContract]
+        public bool IsAnyTimeSheetWithTgisId(int idTimeSheet)
+        {
+            using (var db = new KadrDataContext())
+            using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            {
+                return db.TimeSheet.Any(a => a.id == idTimeSheet);
+            }
+        }
+
+        [OperationContract]
         public DtoTimeSheet[] GetTimeSheetList(int idDepartment)
         {
             using (var db = new KadrDataContext())

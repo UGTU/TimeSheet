@@ -46,7 +46,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
-            return View(idTimeSheet);
+            if (Client.IsAnyTimeSheetWithTgisId(idTimeSheet))
+            {
+                return View(idTimeSheet);
+            } 
+            throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
         }
 
         public PartialViewResult PartialTimeSheetShow(int idTimeSheet)
@@ -76,7 +80,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 LastPaperEmployeeCount, PaperEmployeeCount,
                 true);
             return new ViewAsPdf("TimeSheetPrint", timeSheetModel) { PageOrientation = Orientation.Landscape};
-            //return View("TimeSheetPrint", timeSheetModel);
         }
 
         //======================    Согласование табеля     ====================
