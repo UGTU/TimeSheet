@@ -73,7 +73,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult TimeSheetPdf(int idTimeSheet)
+        public ViewAsPdf TimeSheetPdf(int idTimeSheet)
         {
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
