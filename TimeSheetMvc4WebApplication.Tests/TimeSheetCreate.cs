@@ -25,6 +25,7 @@ namespace TimeSheetMvc4WebApplication.Tests
             var timeSheetCreater = new TimeSheetCrater(IdDepartment, _dateStart, GetDateEnd(), GetDtoApprover("atipunin@ugtu.net"), _db);
             timeSheetCreater.GenerateTimeSheet();
             timeSheetCreater.SubmitTimeSheet();
+            Assert.IsTrue(timeSheetCreater.IdTimeSheet!=null);
         }
         DateTime GetDateEnd()
         {
@@ -36,5 +37,7 @@ namespace TimeSheetMvc4WebApplication.Tests
             var idEmployee = _db.Employee.Where(w => w.EmployeeLogin.ToLower() == employeeLogin.ToLower()).Select(s => s.id).FirstOrDefault();
             return DtoClassConstructor.DtoApprover(_db, idEmployee).DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == IdDepartment);
         }
+
+
     }
 }
