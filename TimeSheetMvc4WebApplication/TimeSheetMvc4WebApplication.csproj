@@ -49,9 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -189,11 +189,10 @@
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />
     <Content Include="Content\bootstrap-datepicker.css" />
-    <Content Include="Content\bootstrap\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
-    <Content Include="Content\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\Gradient.JPG" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo1.png" />
@@ -263,6 +262,7 @@
     <Content Include="Content\themes\TimeSheetApprovalCSS.css" />
     <Content Include="Content\themes\TimeSheetCSS.css" />
     <Content Include="crossdomain.xml" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Kadr.dbml">
@@ -272,9 +272,9 @@
     </Content>
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\Images\Без имени-1.psd" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\tfs-1.ugtu.net.pubxml" />
     <None Include="Properties\PublishProfiles\tts.ugtu.net.pubxml" />
     <Content Include="NuGet.exe" />
@@ -302,6 +302,8 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.ru.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\datejs\date.js" />
     <Content Include="Scripts\datejs\ru-RU.js" />
     <Content Include="Scripts\docs\.htaccess" />
@@ -311,8 +313,6 @@
     <Content Include="Scripts\docs\font\fontawesome-webfont.svgz" />
     <Content Include="Scripts\docs\font\fontawesome-webfont.ttf" />
     <Content Include="Scripts\docs\font\fontawesome-webfont.woff" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docs\css\bootstrap.min.css" />
     <Content Include="Scripts\docs\css\docs.css" />
     <Content Include="Scripts\docs\css\doc_widgets.css" />

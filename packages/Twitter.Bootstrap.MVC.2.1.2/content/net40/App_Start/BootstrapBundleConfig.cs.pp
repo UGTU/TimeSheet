@@ -1,8 +1,8 @@
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
-[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(TimeSheetMvc4WebApplication.App_Start.BootstrapBundleConfig), "RegisterBundles")]
+[assembly: WebActivatorEx.PostApplicationStartMethod(typeof($rootnamespace$.App_Start.BootstrapBundleConfig), "RegisterBundles")]
 
-namespace TimeSheetMvc4WebApplication.App_Start
+namespace $rootnamespace$.App_Start
 {
 	public class BootstrapBundleConfig
 	{
