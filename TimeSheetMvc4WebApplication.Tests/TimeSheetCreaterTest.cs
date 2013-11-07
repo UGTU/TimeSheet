@@ -15,17 +15,18 @@ namespace TimeSheetMvc4WebApplication.Tests
         const int IdDepartment = 39;
         readonly DateTime _dateStart = new DateTime(2024, 1, 1);
         //Работа
-        //readonly KadrDataContext _db = new KadrDataContext("Data Source=ugtudb.ugtu.net;Initial Catalog=Kadr;Persist Security Info=True;User ID=atipunin;Password=090990");
+        readonly KadrDataContext _db = new KadrDataContext("Data Source=ugtudb.ugtu.net;Initial Catalog=Kadr;Persist Security Info=True;User ID=atipunin;Password=090990");
         //Дом
-        readonly KadrDataContext _db = new KadrDataContext("Data Source=ALEXEY-PC\\SQLEXPRESS; Initial Catalog=Kadr; Integrated Security=True;");
+        //readonly KadrDataContext _db = new KadrDataContext("Data Source=ALEXEY-PC\\SQLEXPRESS; Initial Catalog=Kadr; Integrated Security=True;");
 
         [TestMethod]
         public void TimeSheetCreate()
         {
-            var timeSheetCreater = new TimeSheetCrater(IdDepartment, _dateStart, GetDateEnd(), GetDtoApprover("atipunin@ugtu.net"), _db);
+            var timeSheetCreater = new TimeSheetManaget(IdDepartment, _dateStart, GetDateEnd(), GetDtoApprover("atipunin@ugtu.net"), _db);
             timeSheetCreater.GenerateTimeSheet();
-            timeSheetCreater.SubmitTimeSheet();
             Assert.IsTrue(timeSheetCreater.IdTimeSheet!=null);
+            timeSheetCreater.RemoveTimeSheet();
+            Assert.IsNull(timeSheetCreater.IdTimeSheet);
         }
         DateTime GetDateEnd()
         {

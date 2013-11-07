@@ -824,15 +824,6 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
-                var loadOptions = new DataLoadOptions();
-                loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.PlanStaff);
-                loadOptions.LoadWith((PlanStaff ps) => ps.Post);
-                loadOptions.LoadWith((Post p) => p.Category);
-                loadOptions.LoadWith((PlanStaff ps) => ps.WorkShedule);
-                loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.Employee);
-                loadOptions.LoadWith((OK_Otpusk oko) => oko.OK_Otpuskvid);
-                db.LoadOptions = loadOptions;
-
                 try
                 {
                     var dtoApproverDepartment =
