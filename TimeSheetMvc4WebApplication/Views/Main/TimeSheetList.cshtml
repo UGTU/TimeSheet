@@ -2,7 +2,6 @@
 @model IEnumerable<TimeSheetMvc4WebApplication.ClassesDTO.DtoTimeSheet>
 @{
     ViewBag.Title = @ViewBag.Department.DepartmentSmallName;
-    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
     var years = Model.GroupBy(g => g.DateBegin.Year);
     var approver = ViewBag.approver as DtoApprover;
 }
@@ -12,7 +11,7 @@
             <h2>@ViewBag.Department.DepartmentFullName</h2>
         </div>
         <div class="col-sm-6 col-md-3">
-            <a type="button" class="btn btn-default" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
+            <a type="button" class="btn btn-primary" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
                 <span class="glyphicon glyphicon-plus-sign"></span> Сформировать табель
             </a>
         </div>
