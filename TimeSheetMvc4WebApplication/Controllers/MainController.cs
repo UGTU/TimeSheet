@@ -31,6 +31,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult TimeSheetList(int id, bool showAll = false)
         {
             var approver = GetCurrentApprover();
+            ViewBag.idDepartment = id;
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
             var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);

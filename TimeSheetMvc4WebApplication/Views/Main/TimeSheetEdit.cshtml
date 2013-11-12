@@ -43,7 +43,7 @@
             <table class="table @*table-condensed*@ table-bordered">
                 <thead>
                     <tr>
-                        <th style="width: 30px;">#</th>
+                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()"></th>
                         <th>Дата</th>
                         <th>День недели</th>
                         <th>Статус</th>
@@ -70,14 +70,14 @@
         <div class="col-md-5">
 
             <p style="margin-bottom: 0px;margin-top: 10px;">
-                <label class=" control-label">Статус дня:</label>
+                <label class=" control-label">Статус дня</label>
             </p>
             <p>
                 <select class="form-control input-sm" ng-model="selectedDayStatList" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isUpdateDisabled()"></select>
             </p>
             <p style="margin-bottom: 0px;">
                 <label class=" control-label">
-                    Часы:
+                    Часы
                 </label>
             </p>
             <p>
@@ -97,6 +97,26 @@
                     Сохранить изменения
                 </button>
             </p>
+            <br/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#dayStatList">
+                            <span class="glyphicon glyphicon-list"></span> Расшифрофка статусов дней
+                        </a>
+                    </h4>
+                </div>
+                <div id="dayStatList" class="panel-collapse collapse" style="overflow: auto;">
+                    <div class="panel-body" style="padding: 0px; overflow: auto;">
+                        <table class="table table-condensed table-striped">
+                            <tr ng-repeat="dayStat in dayStatList">
+                                <td>{{dayStat.SmallDayStatusName}}</td>
+                                <td>{{dayStat.FullDayStatusName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -122,6 +142,8 @@
         var maxHeight = $(window).height();
         maxHeight = maxHeight - 135;
         $('#employeeList').css('max-height', maxHeight);
+        maxHeight = maxHeight - 280;
+        $('#dayStatList').css('max-height', maxHeight);
     }
 </script>
 
@@ -132,6 +154,7 @@
             $scope.selectedDayStatList = $scope.dayStatList[0];
             $scope.selectedDayJobTimeCount = 0;
             $scope.employees = data.TimeSheet.Employees;
+            $scope.selectAll = false;
             $scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
             angular.forEach($scope.employees, function (empl) {
                 angular.forEach(empl.Records, function (rec) {
@@ -147,10 +170,17 @@
             $('#progress').remove();
             $('.row').removeClass('hidden');
         });
+
+        $scope.checkAllRecord = function() {
+            angular.forEach($scope.currentEmployee.Records, function (empl) {
+                empl.IsCheked = $scope.selectAll;
+            });
+        };
         
 
         $scope.setCurrentEmployeeRecords = function (employee) {
             if ($scope.currentEmployee != null) {
+                $scope.selectAll = false;
                 if (!$scope.isSaveDisabled() && confirm('Сохранить внесённые изменения для табеля сотрудника?')) {
                     // Save it!
                     $scope.saveChanges();

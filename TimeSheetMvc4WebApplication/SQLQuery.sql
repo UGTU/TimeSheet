@@ -1,5 +1,24 @@
+--Удаление табеля
+declare @idTimeSheet int=590
+delete from ShemaTabel.TimeSheetRecord where idTimeSheet=@idTimeSheet
+delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
+delete from ShemaTabel.TimeSheet where id=@idTimeSheet
+
+delete from ShemaTabel.TimeSheetRecord 
+delete from ShemaTabel.TimeSheetApproval
+delete from ShemaTabel.TimeSheet 
+
+--Вывести администраторов
+select*from ShemaTabel.Approver where idApproverType=4
+
+
+select*from ShemaTabel.ApproverType
+
+
+
 
 --##############################################################################################################
+select*from ShemaTabel.DayStatus
 
 
 update FactStaff
