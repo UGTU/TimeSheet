@@ -156,3 +156,6 @@
 2013-11-26 16:55:33.6979|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Start
 2013-11-26 16:55:33.7349|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
 2013-11-26 16:55:33.7459|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
+2013-11-26 16:56:02.6353|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
+2013-11-26 16:56:02.6353|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application End
+2013-11-26 16:56:02.6353|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
