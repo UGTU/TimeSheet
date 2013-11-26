@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -68,6 +69,32 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         [DataMember]
         public DtoApproverDepartment[] DtoApproverDepartments { get; set; }
+
+        public IEnumerable<DtoDepartment> GetApproverDepartments()
+        {
+            var idDepartments = DtoApproverDepartments.Select(s => s.IdDepartment).Distinct();
+            var departments = new List<DtoDepartment>();
+            foreach (var idDepartment in idDepartments)
+            {
+                var d = DtoApproverDepartments.FirstOrDefault(f => f.IdDepartment == idDepartment);
+                if(d!=null)
+                    departments.Add(new DtoDepartment
+                    {
+                        DepartmentFullName = d.DepartmentFullName,
+                        DepartmentSmallName = d.DepartmentSmallName,
+                        IdDepartment = d.IdDepartment,
+                        IdManagerDepartment = d.IdDepartment
+                    });
+            }
+            return departments;
+        }
+
+        public IEnumerable<DtoApproverDepartment> GetDepartmentApproverNumbers(int idDepartnemt)
+        {
+            return DtoApproverDepartments.Where(w => w.IdDepartment == idDepartnemt).ToArray();
+        }
+ 
+
     }
 
     [DataContract]
