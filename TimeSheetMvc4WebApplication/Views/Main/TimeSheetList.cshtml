@@ -11,7 +11,8 @@
         <div class="col-sm-6 col-md-9">
             <h2>@ViewBag.Department.DepartmentFullName</h2>
         </div>
-        @if (approver != null && (approver.IsAdministrator || approver.DtoApproverDepartments.First(f => f.IdDepartment==idDepartment).ApproveNumber == 1))
+        @*@if (approver != null && (approver.IsAdministrator || approver.DtoApproverDepartments.First(f => f.IdDepartment==idDepartment).ApproveNumber == 1))*@
+        @if (approver != null && (approver.IsAdministrator || approver.Allowed(idDepartment, ApproveState.Табельщик)))
         {
             <div class="col-sm-6 col-md-3">
                 <a type="button" class="btn btn-primary" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
@@ -237,7 +238,7 @@
                         if (result.Result) {
                             console.log('timeSheet create succes');
                             $('#myModal').modal('hide');
-                            location.reload();
+                            location.reload(true);
                         } else {
                             alert(result.Message);
                         }

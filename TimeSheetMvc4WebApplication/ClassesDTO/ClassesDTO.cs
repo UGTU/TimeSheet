@@ -9,6 +9,11 @@ using System.Xml.Serialization;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
 {
+    public enum ApproveState
+    {
+        Табельщик=1, НачальникСтруктурногоПодразделения=2, РаботникКадров=3, Администратор=10
+    }
+
     [DataContract]
     public class DtoExceptionDay
     {
@@ -93,8 +98,11 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         {
             return DtoApproverDepartments.Where(w => w.IdDepartment == idDepartnemt).ToArray();
         }
- 
 
+        public bool Allowed(int idDepartment, ApproveState approveState)
+        {
+            return DtoApproverDepartments.Any(a => a.IdDepartment == idDepartment && a.ApproveNumber == (int) approveState);
+        }
     }
 
     [DataContract]
