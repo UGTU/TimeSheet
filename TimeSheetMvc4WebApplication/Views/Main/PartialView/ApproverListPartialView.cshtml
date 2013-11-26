@@ -7,9 +7,9 @@
     var approve3 = Model.FirstOrDefault(w => w.ApproveStep == 3);
     
     //заглушка чтоб не отображались согласователи
-    approve1.ApproveTime = null;
-    approve2.ApproveTime = null;
-    approve3.ApproveTime = null;
+    //approve1.ApproveTime = null;
+    //approve2.ApproveTime = null;
+    //approve3.ApproveTime = null;
     
     
 }
@@ -34,7 +34,8 @@
         <td width="20">&nbsp;</td>
         <td width="200"><div id="idPoddpis">@approve1.Post</div></td>
         <td width="40">&nbsp;</td>
-        <td width="200"><div id="idPoddpis">@*@string.Empty*@ @(approve1.ApproveTime.HasValue?string.Format("{0} ({1})",approve1.Login,approve1.ApproveTime.Value.ToString("d.M.yyyy")):string.Empty)</div></td>
+        @*<td width="200"><div id="idPoddpis" style="text-align: left"> @(approve1.ApproveTime.HasValue ? string.Format("{0} ({1})", approve1.Login, approve1.ApproveTime.Value.ToString("d.M.yyyy")) : string.Empty)</div></td>*@
+        <td width="200"><div id="idPoddpis" style="text-align: left"> @(approve1.ApproveTime.HasValue ? string.Format("{0}", approve1.Login, approve1.ApproveTime.Value.ToString("d.M.yyyy")) : string.Empty)</div></td>
         <td width="26">&nbsp;</td>
         <td width="200"><div id="idPoddpis">@String.Format("{0} {1}.{2}.",approve1.Surname,approve1.Name.First(),approve1.Patronymic.First())</div></td>
         <td width="38">&nbsp;</td>
@@ -57,7 +58,7 @@
         <td>&nbsp;</td>
         <td><div id="idPoddpis">@approve2.Post</div></td>
         <td>&nbsp;</td>
-        <td><div id="idPoddpis">@(approve2.ApproveTime.HasValue?string.Format("{0} ({1})",approve2.Login,approve2.ApproveTime.Value.ToString("d.M.yyyy")):string.Empty)</div></td>
+        <td><div id="idPoddpis" style="text-align: left">@(approve2.ApproveTime.HasValue ? string.Format("{0} ", approve2.Login, approve2.ApproveTime.Value.ToString("d.M.yyyy")) : string.Empty)</div></td>
         <td>&nbsp;</td>
         <td><div id="idPoddpis">@String.Format("{0} {1}.{2}.",approve2.Surname,approve2.Name.First(),approve2.Patronymic.First())</div></td>
         <td>&nbsp;</td>
@@ -80,7 +81,7 @@
         <td>&nbsp;</td>
         <td><div id="idPoddpis">@approve3.Post</div></td>
         <td>&nbsp;</td>
-        <td><div id="idPoddpis">@(approve3.ApproveTime.HasValue?string.Format("{0} ({1})",approve3.Login,approve3.ApproveTime.Value.ToString("d.M.yyyy")):string.Empty)</div></td>
+        <td><div id="idPoddpis" style="text-align: left">@(approve3.ApproveTime.HasValue?string.Format("{0} ",approve3.Login,approve3.ApproveTime.Value.ToString("d.M.yyyy")):string.Empty)</div></td>
         <td>&nbsp;</td>
         <td><div id="idPoddpis">@String.Format("{0} {1}.{2}.",approve3.Surname,approve3.Name.First(),approve3.Patronymic.First())</div></td>
         <td>&nbsp;</td>
