@@ -9,11 +9,29 @@ delete from ShemaTabel.TimeSheetApproval
 delete from ShemaTabel.TimeSheet 
 
 --Вывести администраторов
-select*from ShemaTabel.Approver where idApproverType=4
+select*from ShemaTabel.Approver a 
+	inner join Employee e on e.id=a.idEmployee
+	where idApproverType=4
 
+--Добавить администратора по логину
+declare @idEmpl int = -1000
+declare @emplLogin varchar  = 'ochernova@ugtu.net'
+select @idEmpl   =  e.id from Employee e where e.EmployeeLogin=@emplLogin
+insert into ShemaTabel.Approver
+values(GETDATE(),null,4,51,@idEmpl)
+
+
+
+declare @emplLogin varchar
+set @emplLogin  = 'ochernova@ugtu.net'
+select @emplLogin
+select * from Employee e where e.EmployeeLogin=@emplLogin
+
+select * from Employee e where e.LastName='Чернова'
 
 select*from ShemaTabel.ApproverType
 
+select*from Employee
 
 
 

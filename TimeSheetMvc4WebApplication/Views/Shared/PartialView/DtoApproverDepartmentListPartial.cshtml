@@ -3,9 +3,10 @@
     const int itemsInRow = 4;
 
     var rowColl = Math.Ceiling((double)Model.Count() / (double)itemsInRow);
+    var departments = Model.OrderBy(o => o.DepartmentSmallName);
     for (int i = 0; i < rowColl; i++)
     {
-        var rowItems = Model.Skip(i * itemsInRow).Take(itemsInRow);
+        var rowItems = departments.Skip(i * itemsInRow).Take(itemsInRow);
         var span = Math.Floor(12 / (double)itemsInRow);
         <div class="row">
             @foreach (var item in rowItems)

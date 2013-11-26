@@ -1,0 +1,4 @@
+2013-11-26 09:13:58.1528|ERROR|TimeSheetMvc4WebApplication.MvcApplication|System.Web.HttpException (0x80004005): ѕуть '/Views/Shared/PartialView/DtoApproverDepartmentListPartial.cshtml' не найден.
+   в System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   в System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   в System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
