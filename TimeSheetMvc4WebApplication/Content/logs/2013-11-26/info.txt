@@ -6,3 +6,15 @@
 2013-11-26 09:14:01.0191|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
 2013-11-26 09:14:57.1574|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
 2013-11-26 09:15:27.1729|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
+2013-11-26 15:12:42.9314|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Start
+2013-11-26 15:12:43.5633|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
+2013-11-26 15:12:43.5733|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
+2013-11-26 15:12:45.6440|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
+2013-11-26 15:12:45.6440|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application End
+2013-11-26 15:12:45.6440|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
+2013-11-26 15:12:57.6101|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Start
+2013-11-26 15:12:57.6701|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
+2013-11-26 15:12:57.6812|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Init
+2013-11-26 15:12:59.8002|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
+2013-11-26 15:12:59.8002|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application End
+2013-11-26 15:12:59.8002|INFO|TimeSheetMvc4WebApplication.MvcApplication|Application Dispose
