@@ -90,7 +90,7 @@
                     <table class="table @*table-condensed*@ table-bordered" style="margin-bottom: 0;">
                         <thead>
                             <tr>
-                                <th style="width: 30px;">#</th>
+                                <th style="width: 30px;"><input type="checkbox" ng-model="IsAllCheked" ng-click="IsAllChekedFunc()"></th>
                                 <th style="width: 280px;">Сотрудник</th>
                                 <th style="width: 220px;">Должность</th>
                                 <th style="">Ставка</th>
@@ -109,14 +109,15 @@
                             </tbody>
                         </table>
                     </div>
-                    <h5 class="pull-right">Выбрано человек: {{selectedEmployeesCount()}}</h5>
+                    
                     @*<pre>{{employees}}</pre>*@
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="margin-top: 0px;">
                     <div id="buttons">
                         <div class="pull-left">
-                            <button type="button" class="btn btn-default" ng-click="selectAllemployees()">Выбрать всех</button>
-                            <button type="button" class="btn btn-default" ng-click="clearAllemployees()">Отчистить список</button>
+                            <h5 class="pull-right">Выбрано человек: {{selectedEmployeesCount()}}</h5>
+                            @*<button type="button" class="btn btn-default" ng-click="selectAllemployees()">Выбрать всех</button>
+                            <button type="button" class="btn btn-default" ng-click="clearAllemployees()">Отчистить список</button>*@
                         </div>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                         <button type="button" class="btn btn-primary" ng-click="createTimeSheet()">Сформировать</button>
@@ -166,17 +167,16 @@
         $scope.initTimeSheetCreate = function () {
             $scope.initDates();
             $scope.employeesRefresh();
-
-
         };
 
-        $scope.employeesRefresh = function () {
+        $scope.employeesRefresh = function () {  
             $scope.employees = null;
             var link = '@Html.Raw(@Url.Action("GetEmployeesForTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
             link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
             $http.get(link).success(function (data) {
                 $scope.employees = data;
                 $scope.selectAllemployees();
+                $scope.IsAllCheked = true;
             });
         };
 
@@ -213,6 +213,14 @@
             angular.forEach($scope.employees, function (employee) {
                 employee.IsCheked = false;
             });
+        };
+        
+        $scope.IsAllChekedFunc = function() {
+            if ($scope.IsAllCheked){
+                $scope.selectAllemployees();}
+            else {
+                $scope.clearAllemployees();
+            }
         };
 
         $scope.selectedEmployeesCount = function () {
@@ -252,7 +260,6 @@
 
         $scope.currentMounth = new Date();
         $scope.initDates();
-
     }
 </script>
 
