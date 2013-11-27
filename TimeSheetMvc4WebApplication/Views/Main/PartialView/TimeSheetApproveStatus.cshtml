@@ -39,16 +39,15 @@
 @switch (Model)
 {
     case 0:
-        <span class="label label-danger"><span class="glyphicon glyphicon-edit"></span></span>
+        <span class="label label-danger" data-toggle="tooltip" title="Табель находиться в процессе редактирования"><span class="glyphicon glyphicon-edit"></span></span>
         break;
     case 1:
-    <span class="label label-info"><span class="glyphicon glyphicon-retweet"></span></span>
-        break;
     case 2:
-    <span class="label label-info"><span class="glyphicon glyphicon-retweet"></span></span>
+        <span class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span></span>
         break;
     case 3:
-    <span class="label label-success"><span class="glyphicon glyphicon-check"></span></span>
+        <span class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span></span>
         break;
-    default: break;
+    default:
+        break;
 }
