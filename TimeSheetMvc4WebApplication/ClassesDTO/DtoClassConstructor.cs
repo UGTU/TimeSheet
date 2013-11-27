@@ -87,14 +87,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                                         Patronymic = s.Employee.Otch,
                                         Post = DtoPost(s.PlanStaff.Post),
                                         ApproverDate = approverDate
-                                        
-                                        //,
-                                        //StaffRate = db.FactStaffCurrent.Where(wf => wf.id == s.id).Select(sf => sf.StaffCount).FirstOrDefault(),
-                                        //WorkShedule = new DtoWorkShedule
-                                        //                  {
-                                        //                      IdWorkShedule = s.WorkShedule.id,
-                                        //                      WorkSheduleName = s.WorkShedule.NameShedule
-                                        //                  }
                                     }).FirstOrDefault();
             return factStaffs;
         }

@@ -946,7 +946,6 @@
     <Content Include="Views\Shared\TimeSheetLayout.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Shared\TimeSheetHeader.cshtml" />
-    <Content Include="Views\Shared\PartialView\DtoApproverDepartmentListPartial.cshtml" />
     <Content Include="Views\Main\TimeSheetEdit.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Main\TimeSheetList.cshtml" />
@@ -970,6 +969,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Shared\PartialView\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

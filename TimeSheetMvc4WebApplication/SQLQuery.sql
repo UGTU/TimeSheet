@@ -342,3 +342,12 @@ END
 
 
 alter table ShemaTabel.TimeSheet drop constraint DateAndDepartmentUnique
+
+
+select*from ShemaTabel.TimeSheetApproval a where a.idTimeSheet=600	
+
+delete from ShemaTabel.TimeSheetApproval  where idTimeSheet=600	
+
+select*from ShemaTabel.Approver where id=70
+
+select*from ShemaTabel.ApproverType
