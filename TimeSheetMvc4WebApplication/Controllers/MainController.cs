@@ -34,7 +34,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);
+            //var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);
+            var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
             return View(timeSheetList);
         }
 
@@ -47,7 +48,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
-            if (Client.IsAnyTimeSheetWithTgisId(idTimeSheet))
+            if (Client.IsAnyTimeSheetWithThisId(idTimeSheet))
             {
                 return View(idTimeSheet);
             } 
