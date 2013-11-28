@@ -89,19 +89,26 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
+            var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
+            //todo тут надо вытаскивать пустой табель, без записей
+            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            var currentApprover =
+                GetCurrentApprover()
+                    .GetDepartmentApproverNumbers(timeSheet.Department.IdDepartment)
+                        .First(w => w.ApproveNumber == approveStep+1);
             var timeSheetAprovalModel = new TimeSheetAprovalModel
             {
                 IdTimeSheet=idTimeSheet,
                 ApprovalDate = DateTime.Now,
                 ApprovalResult = null,
                 Comment = "",
-                IdApprover = GetCurrentApprover().DtoApproverDepartments.First().IdApprover
+                IdApprover = currentApprover.IdApprover
             };
             return View(timeSheetAprovalModel);
         }
 
         [HttpPost]
-        public ViewResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
+        public ActionResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
         {
             //валидация формы
             if (timeSheetAprovalModel.ApprovalResult != null &&
@@ -112,8 +119,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
                 (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
             {
-                ApproveViewBagInit(idTimeSheet);
-                return View();
+                return RedirectToAction("TimeSheetApprovalNew", new {idTimeSheet = timeSheetAprovalModel.IdTimeSheet});
             }
             ApproveViewBagInit(idTimeSheet);
             return View(timeSheetAprovalModel);
@@ -158,9 +164,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var dateStart = new DateTime(year, month, 1);
             var dateEnd = dateStart.AddMonths(1).AddDays(-1);
             DtoMessage message;
-            if (employees != null && employees.Any())
+            var dtoFactStaffEmployees = employees.ToArray();
+            if (employees != null && dtoFactStaffEmployees.Any())
             {
-                message = Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), employees.ToArray());
+                message = Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), dtoFactStaffEmployees);
             }
             else
             {

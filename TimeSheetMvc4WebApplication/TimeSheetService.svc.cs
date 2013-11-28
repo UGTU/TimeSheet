@@ -552,23 +552,30 @@ namespace TimeSheetMvc4WebApplication
             {
                 if (CanApprove(idTimeSheet, employeeLogin))
                 {
-                    var approver = GetCurrentApproverByLogin(employeeLogin);
+                    var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
+                    //todo: тут надо вытаскивать пустой табель, без записей
+                    var timeSheet = GetTimeSheet(idTimeSheet);
+                    var idDepartment = timeSheet.Department.IdDepartment;
+                    var approver = GetCurrentApproverByLogin(employeeLogin)
+                        .GetDepartmentApproverNumbers(idDepartment)
+                        .First(w => w.ApproveNumber == approvalStep + 1);
+
                     try
                     {
-                        var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
-                        var dtoApproverDepartment = approver.DtoApproverDepartments.FirstOrDefault();
-                        if (dtoApproverDepartment != null)
-                        {
+                        
+                        //var dtoApproverDepartment = approver.DtoApproverDepartments.FirstOrDefault();
+                        //if (dtoApproverDepartment != null)
+                        //{
                             var timeSheetApproval = new TimeSheetApproval
                             {
                                 ApprovalDate = DateTime.Now,
                                 idTimeSheet = idTimeSheet,
-                                idApprover = dtoApproverDepartment.IdApprover,
+                                idApprover = approver.IdApprover,
                                 Result = result,
                                 Comment = comments
                             };
                             db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
-                        }
+                        //}
                         db.SubmitChanges();
                         //Отправка письма
                         if (result)
@@ -650,12 +657,15 @@ namespace TimeSheetMvc4WebApplication
             {
                 var approver = GetCurrentApproverByLogin(employeeLogin);
                 var timeSheet = db.TimeSheet.FirstOrDefault(f => f.id == idTimeSheet);
+                var timeSheetApprovalStep = GetTimeSheetApproveStep(idTimeSheet) + 1;
                 if (timeSheet != null)
                 {
                     var approveDepartment =
-                        approver.DtoApproverDepartments.FirstOrDefault(f => f.IdDepartment == timeSheet.idDepartment);
+                        approver.GetDepartmentApproverNumbers(timeSheet.idDepartment).FirstOrDefault(f=>f.ApproveNumber==timeSheetApprovalStep);
+                    //var approveDepartment =
+                    //    approver.DtoApproverDepartments.FirstOrDefault(f => f.IdDepartment == timeSheet.idDepartment);
                     if (approveDepartment != null &&
-                        approveDepartment.ApproveNumber == GetTimeSheetApproveStep(idTimeSheet) + 1)
+                        approveDepartment.ApproveNumber == timeSheetApprovalStep)
                     {
                         return true;
                     }

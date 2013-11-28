@@ -350,4 +350,6 @@ delete from ShemaTabel.TimeSheetApproval  where idTimeSheet=600
 
 select*from ShemaTabel.Approver where id=70
 
+select*from ShemaTabel.Approver where idDepartment = 43
+
 select*from ShemaTabel.ApproverType
