@@ -69,8 +69,9 @@
     <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheetList", "Main", new { id = ViewBag.Department.IdDepartment, showAll = true })">Показать все табеля подразделения</a></p>
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" style="width: 650px;">
+        <div class="modal-dialog" style="width: 800px;">
+            @*<div class="modal-content" style="width: 650px;">*@
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Формирование табеля</h4>
@@ -80,7 +81,7 @@
                         <ul class="list-inline">
                             <li style="padding: 0"><button type="button" class="btn btn-default btn-sm" style="width: 115px;" ng-click="decCurrentDate(currentMounth)"><span class="glyphicon glyphicon-chevron-left"></span> {{dateFormat(previousMounth)}}</button></li>
                             <li style="padding: 0">
-                                <div style="width: 340px;">
+                                <div style="width: 500px;">
                                     <h4>Сформировать табель на {{dateFormat(currentMounth)}}</h4>
                                 </div>
                             </li>
@@ -93,7 +94,8 @@
                                 <th style="width: 30px;"><input type="checkbox" ng-model="IsAllCheked" ng-click="IsAllChekedFunc()"></th>
                                 <th style="width: 280px;">Сотрудник</th>
                                 <th style="width: 220px;">Должность</th>
-                                <th style="">Ставка</th>
+                                <th style="width: 70px;">Ставка</th>
+                                <th style="">Рабочая неделя</th>
                             </tr>
                         </thead>
                     </table>
@@ -104,12 +106,13 @@
                                     <td style="width: 30px; padding: 0px; " align="center"><input type="checkbox" ng-model="employee.IsCheked"></td>
                                     <td style="width: 280px; padding: 0px 5px;">{{employeeName(employee)}}</td>
                                     <td style="width: 220px; padding: 0px 5px;">{{employee.Post.PostSmallName}}</td>
-                                    <td style="padding: 0px 5px;">{{employee.StaffRate}}</td>
+                                    <td style="width: 70px; padding: 0px 5px;">{{employee.StaffRate}}</td>
+                                    <td style="padding: 0px 5px;">{{employee.WorkShedule.WorkSheduleName}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    
+
                     @*<pre>{{employees}}</pre>*@
                 </div>
                 <div class="modal-footer" style="margin-top: 0px;">
@@ -122,7 +125,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                         <button type="button" class="btn btn-primary" ng-click="createTimeSheet()">Сформировать</button>
                     </div>
-
                     <div id="progress" class="progress progress-striped active hidden">
                         <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                             <span class="sr-only">45% Complete</span>
