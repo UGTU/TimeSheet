@@ -704,14 +704,14 @@ namespace TimeSheetMvc4WebApplication
                 var url = "http:/" + System.Web.HttpContext.Current.Request.Url.Authority;
                 var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
                 var timeSheetShow =
-                    String.Format("<a href=\"" + url + "/Home/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
+                    String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
                 var timeSheetPrint =
-                    String.Format("<a href=\"" + url + "/Home/TimeSheetPdf?idTimeSheet={0}\">печать</a>",
+                    String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
                         idTimeSheet);
                 var timeSheetApproval =
                     String.Format(
-                        "<a href=\"" + url + "/Home/TimeSheetApproval?idTimeSheet={0}\">ссылке</a>",
+                        "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
                 var stringBuilder = new StringBuilder();
                 if (isApproveFinished)

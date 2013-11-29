@@ -1,5 +1,5 @@
 --Удаление табеля
-declare @idTimeSheet int=590
+declare @idTimeSheet int=601
 delete from ShemaTabel.TimeSheetRecord where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheet where id=@idTimeSheet
