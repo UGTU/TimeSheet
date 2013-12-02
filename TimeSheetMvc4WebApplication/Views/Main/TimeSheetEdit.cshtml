@@ -43,7 +43,7 @@
             <table class="table @*table-condensed*@ table-bordered">
                 <thead>
                     <tr>
-                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()"></th>
+                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()" ng-disabled="isCanTimeSheetEditfunction()"></th>
                         <th>Дата</th>
                         <th>День недели</th>
                         <th>Статус</th>
@@ -52,7 +52,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="record in currentEmployee.Records| orderBy:Order" ng-class="RecorsState(record)" style="max-height: 10px;" @*class="success"*@>
-                        <td style="padding: 0px; " align="center"><input type="checkbox" ng-model="record.IsCheked" @*ng-click="checkRecordClick(record)"*@></td>
+                        <td style="padding: 0px; " align="center"><input type="checkbox" ng-model="record.IsCheked" ng-disabled="isCanTimeSheetEditfunction()" @*ng-click="checkRecordClick(record)"*@></td>
                         <td style="padding: 0px 5px;">{{record.Date}}</td>
                         <td style="padding: 0px;" align="center">{{record.DayAweek}}</td>
                         <td style="padding: 0px 5px; width: 70px;" align="center">
@@ -102,7 +102,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#dayStatList" style="font-size: 14px;">
-                            <span class="glyphicon glyphicon-list"></span> Расшифрофка статусов дней
+                            <span class="glyphicon glyphicon-list"></span> Расшифровка статусов дней
                         </a>
                     </h4>
                 </div>

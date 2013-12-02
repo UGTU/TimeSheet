@@ -593,15 +593,15 @@ namespace TimeSheetMvc4WebApplication
                         .First(w => w.ApproveNumber == approvalStep + 1);
                     try
                     {
-                        var timeSheetApproval = new TimeSheetApproval
-                        {
-                            ApprovalDate = DateTime.Now,
-                            idTimeSheet = idTimeSheet,
+                            var timeSheetApproval = new TimeSheetApproval
+                            {
+                                ApprovalDate = DateTime.Now,
+                                idTimeSheet = idTimeSheet,
                             idApprover = approver.IdApprover,
-                            Result = result,
-                            Comment = comments
-                        };
-                        db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
+                                Result = result,
+                                Comment = comments
+                            };
+                            db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
                         db.SubmitChanges();
                         //Отправка письма
                         if (result)
@@ -740,14 +740,14 @@ namespace TimeSheetMvc4WebApplication
                 var url = "http:/" + System.Web.HttpContext.Current.Request.Url.Authority;
                 var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
                 var timeSheetShow =
-                    String.Format("<a href=\"" + url + "/Home/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
+                    String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
                 var timeSheetPrint =
-                    String.Format("<a href=\"" + url + "/Home/TimeSheetPdf?idTimeSheet={0}\">печать</a>",
+                    String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
                         idTimeSheet);
                 var timeSheetApproval =
                     String.Format(
-                        "<a href=\"" + url + "/Home/TimeSheetApproval?idTimeSheet={0}\">ссылке</a>",
+                        "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
                 var stringBuilder = new StringBuilder();
                 if (isApproveFinished)

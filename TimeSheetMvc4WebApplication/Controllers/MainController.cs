@@ -156,6 +156,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             var date = new DateTime(year, month, 1);
             var empls = Client.GetEmployeesForTimeSheet(idDep, GetUsername(), date, date.AddMonths(1).AddDays(-1));
+            foreach (var empl in empls)
+            {
+                empl.WorkShedule.WorkSheduleName = empl.WorkShedule.WorkSheduleName.Split(' ').First();
+            }
             return Json(empls, JsonRequestBehavior.AllowGet);
         }
 
