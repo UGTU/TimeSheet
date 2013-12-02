@@ -751,7 +751,7 @@ namespace TimeSheetMvc4WebApplication
                 if (isApproveFinished)
                 {
                     stringBuilder.AppendLine("<br/><br/>");
-                    stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                    stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
                     stringBuilder.AppendLine("<br/><br/>");
                     stringBuilder.Append("Табель успешно согласован. ");
                     stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
@@ -780,8 +780,7 @@ namespace TimeSheetMvc4WebApplication
                     }
                 }
                 var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                    "ИС Табель рабочего времени", stringBuilder.ToString());
-                mm.IsBodyHtml = true;
+                    "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
                 var client = new SmtpClient("mail.ugtu.net");
                 client.Send(mm);
                 return true;
