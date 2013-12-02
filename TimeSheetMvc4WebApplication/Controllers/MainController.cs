@@ -34,13 +34,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            //var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);
             var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
             return View(timeSheetList);
         }
 
         public ActionResult TimeSheetEdit(int id)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage;
             return View(id);
         }
 
@@ -48,11 +48,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
-            if (Client.IsAnyTimeSheetWithThisId(idTimeSheet))
-            {
-                return View(idTimeSheet);
-            } 
-            throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
+            return View(idTimeSheet);
         }
 
         public PartialViewResult PartialTimeSheetShow(int idTimeSheet)
@@ -67,6 +64,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [AllowAnonymous]
         public ActionResult TimeSheetPrint(int idTimeSheet)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                 LastPaperEmployeeCount, PaperEmployeeCount,
@@ -88,11 +86,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
             var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
-            //todo тут надо вытаскивать пустой табель, без записей
-            var timeSheet = Client.GetTimeSheet(idTimeSheet);
+            var timeSheet = Client.GetTimeSheet(idTimeSheet,true);
             var currentApprover =
                 GetCurrentApprover()
                     .GetDepartmentApproverNumbers(timeSheet.Department.IdDepartment)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Linq;
-using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.ServiceModel;
@@ -114,7 +113,7 @@ namespace TimeSheetMvc4WebApplication
         public bool IsAnyTimeSheetWithThisId(int idTimeSheet)
         {
             using (var db = new KadrDataContext())
-            using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 return db.TimeSheet.Any(a => a.id == idTimeSheet);
             }
@@ -131,7 +130,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoTimeSheet GetTimeSheet(int idTimeSheet, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
-            using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 return DtoClassConstructor.DtoTimeSheet(db, idTimeSheet, isEmpty);
             }
@@ -148,16 +147,14 @@ namespace TimeSheetMvc4WebApplication
         public DtoTimeSheet[] GetTimeSheetList(int idDepartment, int koll = 0, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
+                //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
             {
-                using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
-                {
-                    return koll <= 0
-                        ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
-                            .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
-                        : db.TimeSheet.Where(w => w.idDepartment == idDepartment)
-                            .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
-                            .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
-                }
+                return koll <= 0
+                    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
+                        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
+                    : db.TimeSheet.Where(w => w.idDepartment == idDepartment)
+                        .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
+                        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
             }
         }
 
@@ -318,37 +315,7 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        private bool RemoveTimeSheet(int idTimeSheet)
-        {
-            using (var db = new KadrDataContext())
-            {
-                try
-                {
-                    var ts = new TimeSheetCraterNew(idTimeSheet, db);
-                    return ts.RemoveTimeSheet();
-                }
-                catch (System.Exception)
-                {
-                    return false;
-                }
-            }
-        }
 
-        private bool RemoveTimeSheetEmployee(int idTimeSheet, int idFactStuffHistory)
-        {
-            using (var db = new KadrDataContext())
-            {
-                try
-                {
-                    var ts = new TimeSheetCraterNew(idTimeSheet, db);
-                    return ts.RemoveEmployee(idFactStuffHistory);
-                }
-                catch (System.Exception)
-                {
-                    return false;
-                }
-            }
-        }
 
         [OperationContract]
         public DtoTimeSheetApproveHistiry[] GetTimeSheetApproveHistory(int idTimeSheet)
@@ -813,7 +780,7 @@ namespace TimeSheetMvc4WebApplication
             string employeeLogin)
         {
             using (var db = new KadrDataContext())
-            using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            //using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 var loadOptions = new DataLoadOptions();
                 loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.PlanStaff);
@@ -833,14 +800,14 @@ namespace TimeSheetMvc4WebApplication
                         dtoApproverDepartment, db);
                     timeSheet.GenerateTimeSheet();
                     timeSheet.SubmitTimeSheet();
-                    return new DtoMessage()
+                    return new DtoMessage
                     {
                         Result = true
                     };
                 }
                 catch (System.Exception ex)
                 {
-                    return new DtoMessage()
+                    return new DtoMessage
                     {
                         Message = ex.Message,
                         Result = false
@@ -855,7 +822,7 @@ namespace TimeSheetMvc4WebApplication
             string employeeLogin, DtoFactStaffEmployee[] employees)
         {
             using (var db = new KadrDataContext())
-            using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            //using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 try
                 {
@@ -866,14 +833,14 @@ namespace TimeSheetMvc4WebApplication
                         dtoApproverDepartment, db);
                     timeSheet.GenerateTimeSheet(employees.Where(w => w.IsCheked).ToArray());
                     timeSheet.SubmitTimeSheet();
-                    return new DtoMessage()
+                    return new DtoMessage
                     {
                         Result = true
                     };
                 }
                 catch (System.Exception ex)
                 {
-                    return new DtoMessage()
+                    return new DtoMessage
                     {
                         Message = ex.Message,
                         Result = false
@@ -882,22 +849,55 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        //==========        Не используемые методы, возможно будут реализованы позже
 
-        [OperationContract]
-        public DtoMessage RefreshTimeSheet(int idTimeSheet)
-        {
-            try
-            {
-                return new DtoMessage();
-            }
-            catch (System.Exception ex)
-            {
-                return new DtoMessage
-                {
-                    Result = false,
-                    Message = ex.Message
-                };
-            }
-        }
+        //private bool RemoveTimeSheet(int idTimeSheet)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    {
+        //        try
+        //        {
+        //            var ts = new TimeSheetCraterNew(idTimeSheet, db);
+        //            return ts.RemoveTimeSheet();
+        //        }
+        //        catch (System.Exception)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //}
+
+        //private bool RemoveTimeSheetEmployee(int idTimeSheet, int idFactStuffHistory)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    {
+        //        try
+        //        {
+        //            var ts = new TimeSheetCraterNew(idTimeSheet, db);
+        //            return ts.RemoveEmployee(idFactStuffHistory);
+        //        }
+        //        catch (System.Exception)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //}
+
+        //[OperationContract]
+        //public DtoMessage RefreshTimeSheet(int idTimeSheet)
+        //{
+        //    try
+        //    {
+        //        return new DtoMessage();
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return new DtoMessage
+        //        {
+        //            Result = false,
+        //            Message = ex.Message
+        //        };
+        //    }
+        //}
     }
 }
