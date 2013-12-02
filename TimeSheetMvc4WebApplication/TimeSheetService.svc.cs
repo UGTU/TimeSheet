@@ -43,7 +43,6 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-
         //==========        Работа с структурными подразделениями
 
         /// <summary>
@@ -185,8 +184,7 @@ namespace TimeSheetMvc4WebApplication
             {
                 return
                     db.Approver.Where(
-                        w =>
-                            w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
+                        w => w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
                             w.DateEnd == null).
                         Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id)).FirstOrDefault();
             }
