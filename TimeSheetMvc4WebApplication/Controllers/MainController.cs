@@ -144,7 +144,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpPost]
         public JsonResult UpdateTimeSheetRecotds(JsTimeSheetRecordModel[] records)
         {
-            var message = new DtoMessage { Result = Client.EditTimeSheetRecords(records) };
+            var r = records.Select(record => new DtoTimeSheetRecord
+            {IdTimeSheetRecord = record.IdTimeSheetRecord, JobTimeCount = record.JobTimeCount, 
+                DayStays = new DtoDayStatus {IdDayStatus = record.IdDayStatus}}).ToList();
+            var message = new DtoMessage { Result = Client.EditTimeSheetRecords(r.ToArray()) };
             if (!message.Result)
                 message.Message = "При сохранении изменений возникли проблемы. Изменения не сохранены.";
             return Json(message, JsonRequestBehavior.AllowGet);
