@@ -13,6 +13,12 @@ namespace TimeSheetMvc4WebApplication
 
             routes.MapRoute(
                 null,
+                url: "EditLogin",
+                defaults: new { controller = "Admin", action = "EditLogin", id = UrlParameter.Optional }
+            );
+            
+            routes.MapRoute(
+                null,
                 url: "Error",
                 defaults: new { controller = "Error", action = "Error", id = UrlParameter.Optional }
             );

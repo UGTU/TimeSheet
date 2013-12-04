@@ -967,6 +967,7 @@
     <Content Include="Views\Shared\LazyTimeSheetShow.cshtml" />
     <Content Include="Views\Main\PartialView\PartialTimeSheetShow.cshtml" />
     <Content Include="Views\Main\TimeSheetShow.cshtml" />
+    <Content Include="Views\Admin\EditLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
