@@ -276,8 +276,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Properties\PublishProfiles\testtabel.ugtu.net.pubxml" />
     <None Include="Properties\PublishProfiles\tfs-1.ugtu.net.pubxml" />
-    <None Include="Properties\PublishProfiles\tts.ugtu.net.pubxml" />
     <Content Include="NuGet.exe" />
     <Content Include="Rotativa\libeay32.dll" />
     <Content Include="Rotativa\libgcc_s_dw2-1.dll" />
