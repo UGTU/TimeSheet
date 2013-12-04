@@ -28,6 +28,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
+        [Authorize(Roles = "ADtoKadr")]
+        public ActionResult EditLogin()
+        {
+            //CheckIsAdmin();
+            return View();
+        }
+
+
+
         private void CheckIsAdmin()
         {
             var approver = GetCurrentApprover();
@@ -90,6 +99,18 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
             var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
             var result = (approveSaveResult && employeeSaveResult) ? true : false;
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize(Roles = "ADtoKadr")]
+        public JsonResult SaveEmployeeLogin(int idEmployee, string employeeLogin)
+        {
+            var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+            var result = new
+            {
+                result = employeeSaveResult,
+                idEmployee = idEmployee
+            };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

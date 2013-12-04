@@ -13,19 +13,19 @@ namespace TimeSheetMvc4WebApplication.Controllers
         // GET: /Error/
         public ActionResult Error()
         {
-            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            //Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return View();
         }
 
         public ActionResult NotFoundPage()
         {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
+            //Response.StatusCode = (int)HttpStatusCode.NotFound;
             return View();
         }
 
         public ActionResult AccessDenied()
         {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
+            //Response.StatusCode = (int)HttpStatusCode.NotFound;
             return View();
         }
 
