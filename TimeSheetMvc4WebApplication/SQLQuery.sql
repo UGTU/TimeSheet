@@ -353,3 +353,11 @@ select*from ShemaTabel.Approver where id=70
 select*from ShemaTabel.Approver where idDepartment = 43
 
 select*from ShemaTabel.ApproverType
+
+
+
+select*from FactStaffWithHistory f inner join PlanStaff p 
+	on f.idPlanStaff=p.id
+
+
+select*from ShemaTabel.FactStaffWithHistory

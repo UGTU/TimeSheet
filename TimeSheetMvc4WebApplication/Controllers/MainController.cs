@@ -169,16 +169,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             var dateStart = new DateTime(year, month, 1);
             var dateEnd = dateStart.AddMonths(1).AddDays(-1);
-            DtoMessage message;
-            var dtoFactStaffEmployees = employees.ToArray();
-            if (employees != null && dtoFactStaffEmployees.Any())
-            {
-                message = Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), dtoFactStaffEmployees);
-            }
-            else
-            {
-                message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername());
-            }
+            employees = employees != null ? employees.Where(w => w.IsCheked).ToArray() : null;
+            var message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername(), employees);
             return Json(message, JsonRequestBehavior.AllowGet);
         }
     }
