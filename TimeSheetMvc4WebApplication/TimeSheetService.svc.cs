@@ -665,7 +665,7 @@ namespace TimeSheetMvc4WebApplication
 
         //==========        Рассылка писем
 
-        private bool EmailSending(int idTimeSheet, bool result, string comments, int approvalStep)
+        private void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep)
         {
             //var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
             if (result)
@@ -692,7 +692,6 @@ namespace TimeSheetMvc4WebApplication
                     SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments);
                 }
             }
-            return true;
         }
 
         //todo:Вот это вот надо убрать в отдельный класс
