@@ -20,8 +20,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult Index()
         {
-            var approver = GetCurrentApprover(); 
-            if (!approver.GetApproverDepartments().Any())
+            var approver = GetCurrentApprover();
+            if (approver==null || approver.GetApproverDepartments() == null || !approver.GetApproverDepartments().Any())
                 throw new HttpException(401, "Попытка несанкционированного доступа");
             if (approver.GetApproverDepartments().Count() > 1) return View(approver);
             return RedirectToAction("TimeSheetList", new { id = approver.GetApproverDepartments().First().IdDepartment });

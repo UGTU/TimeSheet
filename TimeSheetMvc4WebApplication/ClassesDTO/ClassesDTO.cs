@@ -77,6 +77,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         public IEnumerable<DtoDepartment> GetApproverDepartments()
         {
+            if (DtoApproverDepartments == null) return null;
             var idDepartments = DtoApproverDepartments.Select(s => s.IdDepartment).Distinct();
             var departments = new List<DtoDepartment>();
             foreach (var idDepartment in idDepartments)

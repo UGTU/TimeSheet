@@ -24,7 +24,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //return "fmarakasov@ugtu.net"; //получить логин пользователя
             //return "tkazakova@ugtu.net"; //получить логин пользователя
             //return "tester1@ugtu.net"; //получить логин пользователя
-            //return "ovisokolyan@ugtu.net"; //получить логин пользователя
+            //return "yasidanova11@ugtu.net"; //получить логин пользователя
             return System.Web.HttpContext.Current.User.Identity.Name;
         }
 
