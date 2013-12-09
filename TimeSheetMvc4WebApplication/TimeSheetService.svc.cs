@@ -255,7 +255,7 @@ namespace TimeSheetMvc4WebApplication
                         db.add_EmplLogin(itabN, new Binary(new[] { Convert.ToByte(true) }), login);
                     return true;
                 }
-                catch (System.Exception)
+                catch (System.Exception ex)
                 {
                     return false;
                 }
@@ -458,6 +458,7 @@ namespace TimeSheetMvc4WebApplication
                 var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
                 var timeSheet = GetTimeSheet(idTimeSheet, true);
                 var idDepartment = timeSheet.Department.IdDepartment;
+                var departmentName = db.Department.First(f => f.id == idDepartment).DepartmentSmallName;
                 var approver = GetCurrentApproverByLogin(employeeLogin)
                     .GetDepartmentApproverNumbers(idDepartment)
                     .First(w => w.ApproveNumber == approvalStep + 1);
@@ -477,7 +478,7 @@ namespace TimeSheetMvc4WebApplication
                     {
                         TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
                     }
-                    EmailSending(idTimeSheet, result, comments, approvalStep);
+                    EmailSending(idTimeSheet, result, comments, approvalStep,departmentName);
                     return true;
                 }
                 catch (System.Exception)
@@ -614,9 +615,10 @@ namespace TimeSheetMvc4WebApplication
             {
                 try
                 {
+                    //todo:тут надо корректно вытаскивать согласователя
                     var dtoApproverDepartment =
                         GetCurrentApproverByLogin(employeeLogin)
-                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
+                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment );
                     var timeSheet = new TimeSheetManaget(idDepartment, dateBeginPeriod, dateEndPeriod,
                         dtoApproverDepartment, db);
                     timeSheet.GenerateTimeSheet(employees);
@@ -665,7 +667,7 @@ namespace TimeSheetMvc4WebApplication
 
         //==========        Рассылка писем
 
-        private void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep)
+        private void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep, string departmentName)
         {
             //var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
             if (result)
@@ -674,13 +676,13 @@ namespace TimeSheetMvc4WebApplication
                 if (approvalStep < 3)
                 {
                     SendMail(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1), idTimeSheet, true,
-                        comments);
+                        comments,departmentName);
                 }
                 else
                 {
                     for (int i = approvalStep; i > 0; i--)
                     {
-                        SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, true, comments, true);
+                        SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, true, comments,departmentName, isApproveFinished: true);
                     }
                 }
             }
@@ -689,18 +691,17 @@ namespace TimeSheetMvc4WebApplication
                 //=== На данном этапе шаг согласования 0 =============================
                 for (int i = approvalStep; i > 0; i--)
                 {
-                    SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments);
+                    SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments,departmentName);
                 }
             }
         }
 
         //todo:Вот это вот надо убрать в отдельный класс
         //[OperationContract]
-        private bool SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
-            bool isApproveFinished = false)
+        private void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment, string departmentName, bool isApproveFinished = false)
         {
             var requestUrl = System.Web.HttpContext.Current.Request.Url.Authority;
-            Action<object> mailSending = (object urlAuth) =>
+            Action<object> mailSending = urlAuth =>
             {
                 var url = "http:/" + urlAuth;
                 var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
@@ -732,9 +733,9 @@ namespace TimeSheetMvc4WebApplication
                         stringBuilder.AppendLine("<br/><br/>");
                         stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.Append("Вам на согласование был направлен табель рабочего времени. ");
+                        stringBuilder.AppendFormat("Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.", departmentName);
                         stringBuilder.AppendFormat(
-                            "Для того, чтоб приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
+                            "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
                         stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
                     }
                     else
@@ -753,7 +754,6 @@ namespace TimeSheetMvc4WebApplication
             };
             var t1 = new Task(mailSending, requestUrl);
             t1.Start();
-            return true;
         }
 
         ////todo:Вот это вот надо убрать в отдельный класс

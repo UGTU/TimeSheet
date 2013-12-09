@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
+    [AllowAnonymous]
     public class ErrorController : Controller
     {
         //
