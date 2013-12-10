@@ -238,6 +238,30 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string SmallDayStatusName { get; set; }
         [DataMember]
         public string FullDayStatusName { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            var p = obj as DtoDayStatus;
+            if (p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return (IdDayStatus == p.IdDayStatus) && (SmallDayStatusName == p.SmallDayStatusName) && (FullDayStatusName == p.FullDayStatusName);
+        }
+
+        public override int GetHashCode()
+        {
+            return IdDayStatus;
+        }
     }
 
     [DataContract]

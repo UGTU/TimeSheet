@@ -82,6 +82,7 @@ namespace TimeSheetMvc4WebApplication.Models
         public EmployeeRecordModel ПР { get; set; }
         public EmployeeRecordModel УД { get; set; }
         public EmployeeRecordModel ОВ { get; set; }
+        public EmployeeRecordModel[] NonWorkedDays { get; set; }
     }
 
     public class EmployeeRecordModel

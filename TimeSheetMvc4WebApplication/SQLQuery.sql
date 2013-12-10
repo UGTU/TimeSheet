@@ -361,3 +361,5 @@ select*from FactStaffWithHistory f inner join PlanStaff p
 
 
 select*from ShemaTabel.FactStaffWithHistory
+
+select*from ShemaTabel.DayStatus

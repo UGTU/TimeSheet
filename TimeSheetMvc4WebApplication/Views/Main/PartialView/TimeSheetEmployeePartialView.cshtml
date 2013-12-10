@@ -1,5 +1,7 @@
 ﻿@model TimeSheetMvc4WebApplication.Models.EmployeeModel
-
+@{
+    //var nonWorkedDays = Model.NonWorkedDays.OrderBy(o=>o.)
+}
     <tr height=18 >
         <td rowspan=4 height=72 width=38><div  align="center">@Model.EmployeeNumber</div></td>
         <td rowspan=4 style="width: 200px; overflow:hidden;"><div class="EmployeeNameDiv">@string.Format("{0} {1} {2}", Model.Surname, Model.Name, Model.Patronymic) <br/>  @Model.Post <br/> @string.Format("Ставка: {0}",  Model.StaffRate.ToString("0.##"))</div></td>
@@ -73,12 +75,18 @@
         <td class="@Model.Records[30].CSS"><div  align="center">@Model.Records[30].DayStatus</div></td>
         <td> <div align="center"> @Model.SecondHalfMonthDays</div></td>
         <td rowspan=2> <div align="center">@Model.Hours</div></td>
-        <td class="@Model.О.CSS"><div  align="center">@Model.О.DayStatus</div></td>
-        <td class="@Model.О.CSS"><div  align="center">@Model.О.Value</div></td>
-        <td class="@Model.У.CSS"><div  align="center">@Model.У.DayStatus</div></td>
-        <td class="@Model.У.CSS"><div  align="center">@Model.У.Value</div></td>
-        <td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.DayStatus</div></td>
-        <td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.Value</div></td>
+        <td class="@Model.NonWorkedDays[0].CSS"><div align="center">@Model.NonWorkedDays[0].DayStatus</div></td>
+        <td class="@Model.NonWorkedDays[0].CSS"><div align="center">@Model.NonWorkedDays[0].Value</div></td>
+        <td class="@Model.NonWorkedDays[1].CSS"><div align="center">@Model.NonWorkedDays[1].DayStatus</div></td>
+        <td class="@Model.NonWorkedDays[1].CSS"><div align="center">@Model.NonWorkedDays[1].Value</div></td>
+        <td class="@Model.NonWorkedDays[2].CSS"><div align="center">@Model.NonWorkedDays[2].DayStatus</div></td>
+        <td class="@Model.NonWorkedDays[2].CSS"><div align="center">@Model.NonWorkedDays[2].Value</div></td>
+        @*<td class="@Model.О.CSS"><div  align="center">@Model.О.DayStatus</div></td>*@
+        @*<td class="@Model.О.CSS"><div  align="center">@Model.О.Value</div></td>*@
+        @*<td class="@Model.У.CSS"><div  align="center">@Model.У.DayStatus</div></td>*@
+        @*<td class="@Model.У.CSS"><div  align="center">@Model.У.Value</div></td>*@
+        @*<td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.DayStatus</div></td>*@
+        @*<td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.Value</div></td>*@
     </tr>
     <tr height=18 style='border: 1px solid black; border-width: 0px 0px 2px 0px;'>
         <td class="@Model.Records[15].CSS"> <div align="center">@Model.Records[15].Value</div></td>
