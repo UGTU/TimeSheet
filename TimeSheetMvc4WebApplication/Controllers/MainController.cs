@@ -173,5 +173,12 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername(), employees);
             return Json(message, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult DellTimeSheet(int idTimeSheet)
+        {
+            var message = Client.RemoveTimeSheet(idTimeSheet);
+            return Json(message, JsonRequestBehavior.AllowGet);
+        }
     }
 }

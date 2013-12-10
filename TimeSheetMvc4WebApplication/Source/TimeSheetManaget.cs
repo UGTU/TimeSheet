@@ -55,7 +55,7 @@ namespace TimeSheetMvc4WebApplication.Source
 
         public bool RemoveTimeSheet()
         {
-            if (!CanEditTimeSheet()) return false;
+            if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
             _db.TimeSheetApproval.DeleteAllOnSubmit(_db.TimeSheetApproval.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheet.DeleteAllOnSubmit(_db.TimeSheet.Where(w => w.id == _timeSheet.id));

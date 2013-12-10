@@ -30,6 +30,7 @@ namespace TimeSheetMvc4WebApplication.Models
         //private static string _нб = "НБ";
         //private static string _ов = "ОВ";
         private const string Х = "X";
+        private const string Ов = "ОВ";
 
         public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
         {
@@ -244,7 +245,8 @@ namespace TimeSheetMvc4WebApplication.Models
                 ПР = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Пр), Пр, isForPrint),
                 Р = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Р), Р, isForPrint),
                 У = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == У), У, isForPrint),
-                УД = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Уд), Уд, isForPrint)
+                УД = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Уд), Уд, isForPrint),
+                ОВ = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Ов), Ов, isForPrint),
             };
         }
 

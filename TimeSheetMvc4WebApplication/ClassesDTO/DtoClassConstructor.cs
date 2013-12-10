@@ -160,38 +160,45 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             }).FirstOrDefault();
         }
 
-        public static DtoTimeSheet DtoTimeSheet(KadrDataContext db, int idTimeSheet,bool isEmpty=false)
+        public static DtoTimeSheet DtoTimeSheet(KadrDataContext db, int idTimeSheet, bool isEmpty = false)
         {
             var service = new TimeSheetService();
             var timeSheetApprovalStep = service.GetTimeSheetApproveStep(idTimeSheet);
-            var approvers = new List<DtoTimeSheetApprover>();
-            approvers.Add(DtoTimeSheetApprover(db, idTimeSheet, 1, timeSheetApprovalStep));
-            approvers.Add(DtoTimeSheetApprover(db, idTimeSheet, 2, timeSheetApprovalStep));
-            approvers.Add(DtoTimeSheetApprover(db, idTimeSheet, 3, timeSheetApprovalStep));
-            DtoTimeSheet timeSheet = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => new DtoTimeSheet
-                {
-                    IdTimeSheet = s.id,
-                    DateBegin =
-                        s.DateBeginPeriod,
-                    DateEnd = s.DateEndPeriod,
-                    DateComposition = timeSheetApprovalStep<3? DateTime.Now : db.TimeSheetApproval.Where(w=>w.idTimeSheet==idTimeSheet).Max(m=>m.ApprovalDate),
-                    Department =
-                        DtoDepartment(db, s.idDepartment),
-                    Employees = !isEmpty?db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet).Select(se => se.idFactStaffHistory).Distinct().Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se)).ToArray():null,
-                    Approvers = approvers.ToArray(),
-                }).FirstOrDefault();
-                if (timeSheet != null && timeSheet.Employees!=null)
-                    timeSheet.Employees = timeSheet.Employees.
-                        OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
-                        ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
-                        ThenBy(o => o.FactStaffEmployee.Surname).
-                        ToArray();
+            var approvers =
+                Enumerable.Range(1, 3).Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheetApprovalStep));
+            var timeSheet = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => new DtoTimeSheet
+            {
+                IdTimeSheet = s.id,
+                DateBegin = s.DateBeginPeriod,
+                DateEnd = s.DateEndPeriod,
+                DateComposition = s.DateComposition,
+                Department = DtoDepartment(db, s.idDepartment),
+                Employees = !isEmpty ? db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+                        .Select(se => se.idFactStaffHistory)
+                        .Distinct()
+                        .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
+                        .ToArray() : null,
+                Approvers = approvers.ToArray(),
+            }).FirstOrDefault();
+            if (timeSheet == null) return null;
+            if (timeSheet.Employees != null)
+            {
+                timeSheet.Employees = timeSheet.Employees.
+                    OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
+                    ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
+                    ThenBy(o => o.FactStaffEmployee.Surname).
+                    ToArray();
+                timeSheet.EmployeesCount = timeSheet.Employees.Count();
+            }
+            else
+            {
+                timeSheet.EmployeesCount =
+                    db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+                        .Select(s => s.idFactStaffHistory)
+                        .Distinct()
+                        .Count();
+            }
             timeSheet.ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet);
-            timeSheet.EmployeesCount =
-                db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
-                    .Select(s => s.idFactStaffHistory)
-                    .Distinct()
-                    .Count();
             return timeSheet;
         }
 

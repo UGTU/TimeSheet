@@ -638,6 +638,29 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        public DtoMessage RemoveTimeSheet(int idTimeSheet)
+        {
+            using (var db = new KadrDataContext())
+            {
+                try
+                {
+                    var timeSheet = new TimeSheetManaget(idTimeSheet, db);
+                    return new DtoMessage
+                    {
+                        Result = timeSheet.RemoveTimeSheet()
+                    };
+                }
+                catch (System.Exception ex)
+                {
+                    return new DtoMessage
+                    {
+                        Result = false,
+                        Message = ex.Message
+                    };
+                }
+            }
+        }
+
         //==========        Справочники
         /// <summary>
         /// Возвращает статусы дней
@@ -822,22 +845,6 @@ namespace TimeSheetMvc4WebApplication
         //}
 
         //==========        Не используемые методы, возможно будут реализованы позже
-
-        //private bool RemoveTimeSheet(int idTimeSheet)
-        //{
-        //    using (var db = new KadrDataContext())
-        //    {
-        //        try
-        //        {
-        //            var ts = new TimeSheetCraterNew(idTimeSheet, db);
-        //            return ts.RemoveTimeSheet();
-        //        }
-        //        catch (System.Exception)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //}
 
         //private bool RemoveTimeSheetEmployee(int idTimeSheet, int idFactStuffHistory)
         //{
