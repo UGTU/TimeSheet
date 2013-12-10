@@ -1,8 +1,11 @@
 ﻿@model TimeSheetMvc4WebApplication.Models.EmployeeModel
 @{
     //var nonWorkedDays = Model.NonWorkedDays.OrderBy(o=>o.)
+    var takeElements = 0;
+    const int takeElementsCount = 3;
 }
-    <tr height=18 >
+
+<tr height=18 >
         <td rowspan=4 height=72 width=38><div  align="center">@Model.EmployeeNumber</div></td>
         <td rowspan=4 style="width: 200px; overflow:hidden;"><div class="EmployeeNameDiv">@string.Format("{0} {1} {2}", Model.Surname, Model.Name, Model.Patronymic) <br/>  @Model.Post <br/> @string.Format("Ставка: {0}",  Model.StaffRate.ToString("0.##"))</div></td>
         <td style="width: 40px; overflow:hidden;" class="@Model.Records[0].CSS" ><div  align="center">@Model.Records[0].DayStatus</div></td>
@@ -23,12 +26,14 @@
         <td style="width: 40px; overflow:hidden;" class="@Model.Records[31].CSS"><div align="center">@Model.Records[31].DayStatus</div></td>   
         <td width=56><div align="center"> @Model.FirstHalfMonthDays</div></td> 
         <td rowspan=2 width=57><div align="center">@Model.Days</div></td>
-        <td width=40 align="center" class="@Model.В.CSS"><div> @Model.В.DayStatus</div></td>
-        <td width=40 align="center" class="@Model.В.CSS"><div> @Model.В.Value</div></td>
-        <td width=40 align="center" class="@Model.ОЗ.CSS"><div> @Model.ОЗ.DayStatus</div></td>
-        <td width=40 align="center" class="@Model.ОЗ.CSS"><div> @Model.ОЗ.Value</div></td>
-        <td width=40 align="center" class="@Model.НН.CSS"><div> @Model.НН.DayStatus</div></td>
-        <td width=40 align="center" class="@Model.НН.CSS"><div> @Model.НН.Value</div></td>
+        @{
+            foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
+            {
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.DayStatus</div></td>
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.Value</div></td>
+            }
+            takeElements += takeElementsCount;
+        }
         <td rowspan=4 width=53><div align="center">@Model.MounthDays</div></td>
     </tr>
     <tr height=18>
@@ -49,12 +54,14 @@
         <td class="@Model.Records[14].CSS"><div  align="center">@Model.Records[14].Value</div></td>
         <td class="@Model.Records[31].CSS"><div  align="center">@Model.Records[31].Value</div></td>
         <td width=74><div align="center"> @Model.FirstHalfMonthHours</div></td>
-        <td class="@Model.Б.CSS"><div  align="center">@Model.Б.DayStatus</div></td>
-        <td class="@Model.Б.CSS"><div  align="center">@Model.Б.Value</div></td>
-        <td class="@Model.ДО.CSS"><div  align="center">@Model.ДО.DayStatus</div></td>
-        <td class="@Model.ДО.CSS"><div  align="center">@Model.ДО.Value</div></td>
-        <td class="@Model.Р.CSS"><div  align="center">@Model.Р.DayStatus</div></td>
-        <td class="@Model.Р.CSS"><div  align="center">@Model.Р.Value</div></td>
+        @{
+            foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
+            {
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.DayStatus</div></td>
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.Value</div></td>
+            }
+            takeElements += takeElementsCount;
+        }
     </tr>
     <tr height=18>
         <td class="@Model.Records[15].CSS"><div  align="center">@Model.Records[15].DayStatus</div></td>
@@ -75,20 +82,16 @@
         <td class="@Model.Records[30].CSS"><div  align="center">@Model.Records[30].DayStatus</div></td>
         <td> <div align="center"> @Model.SecondHalfMonthDays</div></td>
         <td rowspan=2> <div align="center">@Model.Hours</div></td>
-        <td class="@Model.NonWorkedDays[0].CSS"><div align="center">@Model.NonWorkedDays[0].DayStatus</div></td>
-        <td class="@Model.NonWorkedDays[0].CSS"><div align="center">@Model.NonWorkedDays[0].Value</div></td>
-        <td class="@Model.NonWorkedDays[1].CSS"><div align="center">@Model.NonWorkedDays[1].DayStatus</div></td>
-        <td class="@Model.NonWorkedDays[1].CSS"><div align="center">@Model.NonWorkedDays[1].Value</div></td>
-        <td class="@Model.NonWorkedDays[2].CSS"><div align="center">@Model.NonWorkedDays[2].DayStatus</div></td>
-        <td class="@Model.NonWorkedDays[2].CSS"><div align="center">@Model.NonWorkedDays[2].Value</div></td>
-        @*<td class="@Model.О.CSS"><div  align="center">@Model.О.DayStatus</div></td>*@
-        @*<td class="@Model.О.CSS"><div  align="center">@Model.О.Value</div></td>*@
-        @*<td class="@Model.У.CSS"><div  align="center">@Model.У.DayStatus</div></td>*@
-        @*<td class="@Model.У.CSS"><div  align="center">@Model.У.Value</div></td>*@
-        @*<td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.DayStatus</div></td>*@
-        @*<td class="@Model.ПР.CSS"><div  align="center">@Model.ПР.Value</div></td>*@
+        @{
+            foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
+            {
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.DayStatus</div></td>
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.Value</div></td>
+            }
+            takeElements += takeElementsCount;
+        }
     </tr>
-    <tr height=18 style='border: 1px solid black; border-width: 0px 0px 2px 0px;'>
+    <tr height=18 style='border: 1px solid black; border-width: 0 0 2px 0;'>
         <td class="@Model.Records[15].CSS"> <div align="center">@Model.Records[15].Value</div></td>
         <td class="@Model.Records[16].CSS"> <div align="center">@Model.Records[16].Value</div></td>
         <td class="@Model.Records[17].CSS"> <div align="center">@Model.Records[17].Value</div></td>
@@ -106,12 +109,11 @@
         <td class="@Model.Records[29].CSS"> <div align="center">@Model.Records[29].Value</div></td>
         <td class="@Model.Records[30].CSS"> <div align="center">@Model.Records[30].Value</div></td>
         <td width=74><div align="center">@Model.SecondHalfMonthHours</div></td>
-        <td class="@Model.ОЖ.CSS"> <div align="center">@Model.ОЖ.DayStatus</div></td>
-        <td class="@Model.ОЖ.CSS"> <div align="center">@Model.ОЖ.Value</div></td>
-        <td class="@Model.К.CSS"> <div align="center">@Model.К.DayStatus</div></td>
-        <td class="@Model.К.CSS"> <div align="center">@Model.К.Value</div></td>
-        @*<td class="@Model.УД.CSS"> <div align="center">@Model.УД.DayStatus</div></td>
-        <td class="@Model.УД.CSS"> <div align="center">@Model.УД.Value</div></td>*@
-        <td class="@Model.ОВ.CSS"> <div align="center">@Model.ОВ.DayStatus</div></td>
-        <td class="@Model.ОВ.CSS"> <div align="center">@Model.ОВ.Value</div></td>
+        @{
+            foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
+            {
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.DayStatus</div></td>
+                <td class="@nonWorkedDay.CSS"><div align="center">@nonWorkedDay.Value</div></td>
+            }
+        }
     </tr>
