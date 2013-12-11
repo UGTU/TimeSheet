@@ -102,7 +102,7 @@ namespace TimeSheetMvc4WebApplication
     #endregion
 		
 		public KadrDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrRealTestConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -5515,7 +5515,7 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeSid", DbType="VarBinary(85)", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeSid", DbType="VarBinary(85)", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary EmployeeSid
 		{
 			get

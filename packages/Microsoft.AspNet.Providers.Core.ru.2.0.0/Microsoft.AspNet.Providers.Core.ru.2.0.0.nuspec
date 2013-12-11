@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.Providers.Core.ru</id>
+    <version>2.0.0</version>
+    <title>Русские ресурсы базовых библиотек Microsoft ASP.NET Universal Providers</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/aspnetcomponent_rtw_RUS.htm</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Этот пакет содержит русские вспомогательные сборки для базовых библиотек ASP.NET Universal Providers.</description>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>ru</language>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.Providers.Core" version="[2.0.0]" />
+    </dependencies>
+  </metadata>
+</package>
