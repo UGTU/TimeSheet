@@ -20,11 +20,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult Index()
         {
-            var approver = GetCurrentApprover(); 
-            if (!approver.DtoApproverDepartments.Any())
+            var approver = GetCurrentApprover();
+            if (approver==null || approver.GetApproverDepartments() == null || !approver.GetApproverDepartments().Any())
                 throw new HttpException(401, "Попытка несанкционированного доступа");
-            if (approver.DtoApproverDepartments.Count() > 1) return View(approver);
-            return RedirectToAction("TimeSheetList", new { id = approver.DtoApproverDepartments.First().IdDepartment });
+            if (approver.GetApproverDepartments().Count() > 1) return View(approver);
+            return RedirectToAction("TimeSheetList", new { id = approver.GetApproverDepartments().First().IdDepartment });
         }
 
 
@@ -34,12 +34,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetEmptyTimeSheetList(id, showAll ? int.MinValue : 12);
+            var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
             return View(timeSheetList);
         }
 
         public ActionResult TimeSheetEdit(int id)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage;
             return View(id);
         }
 
@@ -47,11 +48,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetShow(int idTimeSheet)
         {
-            if (Client.IsAnyTimeSheetWithTgisId(idTimeSheet))
-            {
-                return View(idTimeSheet);
-            } 
-            throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + idTimeSheet);
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
+            return View(idTimeSheet);
         }
 
         public PartialViewResult PartialTimeSheetShow(int idTimeSheet)
@@ -66,6 +64,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [AllowAnonymous]
         public ActionResult TimeSheetPrint(int idTimeSheet)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
                 LastPaperEmployeeCount, PaperEmployeeCount,
@@ -87,21 +86,28 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
+            var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
+            var timeSheet = Client.GetTimeSheet(idTimeSheet,true);
+            var currentApprover =
+                GetCurrentApprover()
+                    .GetDepartmentApproverNumbers(timeSheet.Department.IdDepartment)
+                        .First(w => w.ApproveNumber == approveStep+1);
             var timeSheetAprovalModel = new TimeSheetAprovalModel
             {
                 IdTimeSheet=idTimeSheet,
                 ApprovalDate = DateTime.Now,
                 ApprovalResult = null,
                 Comment = "",
-                IdApprover = GetCurrentApprover().DtoApproverDepartments.First().IdApprover
+                IdApprover = currentApprover.IdApprover
             };
             return View(timeSheetAprovalModel);
         }
 
         [HttpPost]
-        public ViewResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
+        public ActionResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
         {
             //валидация формы
             if (timeSheetAprovalModel.ApprovalResult != null &&
@@ -112,8 +118,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
                 (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
             {
-                ApproveViewBagInit(idTimeSheet);
-                return View();
+                return RedirectToAction("TimeSheetApprovalNew", new {idTimeSheet = timeSheetAprovalModel.IdTimeSheet});
             }
             ApproveViewBagInit(idTimeSheet);
             return View(timeSheetAprovalModel);
@@ -139,7 +144,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpPost]
         public JsonResult UpdateTimeSheetRecotds(JsTimeSheetRecordModel[] records)
         {
-            var message = new DtoMessage { Result = Client.EditTimeSheetRecords(records) };
+            var r = records.Select(record => new DtoTimeSheetRecord
+            {IdTimeSheetRecord = record.IdTimeSheetRecord, JobTimeCount = record.JobTimeCount, 
+                DayStays = new DtoDayStatus {IdDayStatus = record.IdDayStatus}}).ToList();
+            var message = new DtoMessage { Result = Client.EditTimeSheetRecords(r.ToArray()) };
             if (!message.Result)
                 message.Message = "При сохранении изменений возникли проблемы. Изменения не сохранены.";
             return Json(message, JsonRequestBehavior.AllowGet);
@@ -161,15 +169,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             var dateStart = new DateTime(year, month, 1);
             var dateEnd = dateStart.AddMonths(1).AddDays(-1);
-            DtoMessage message;
-            if (employees != null && employees.Any())
-            {
-                message = Client.CreateTimeSheetByName(idDep, dateStart, dateEnd, GetUsername(), employees.ToArray());
-            }
-            else
-            {
-                message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername());
-            }
+            employees = employees != null ? employees.Where(w => w.IsCheked).ToArray() : null;
+            var message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername(), employees);
+            return Json(message, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DellTimeSheet(int idTimeSheet)
+        {
+            var message = Client.RemoveTimeSheet(idTimeSheet);
             return Json(message, JsonRequestBehavior.AllowGet);
         }
     }

@@ -116,7 +116,7 @@
         <elementListCompartment Id="30408699-f36c-47eb-a052-a6a0951dd0b6" absoluteBounds="15.89, 20.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(8.25 : 20.03125); (14.7291666666667 : 20.03125 : JumpStart); (14.8958333333333 : 20.03125 : JumpEnd); (15.875 : 20.03125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.25 : 20.03125); (15.875 : 20.03125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/Dep/Dep_ApperoveDepartment" />
       <nodes>
         <classShapeMoniker Id="3565e89c-85e5-4864-8e21-d5b10d39095f" />
@@ -216,20 +216,20 @@
         <classShapeMoniker Id="944ecf47-afa4-4cd2-8cd7-c25066b897cb" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(19.75 : 4.32774983723958); (18.8091063498125 : 4.32774983723958 : JumpStart); (18.6424396831459 : 4.32774983723958 : JumpEnd); (16.125 : 4.32774983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(19.75 : 4.32774983723958); (16.125 : 4.32774983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffCurrent/FactStaffCurrent_OK_Otpusk" />
       <nodes>
         <classShapeMoniker Id="6995b5c4-888d-4296-8014-fb4e7ca66494" />
         <classShapeMoniker Id="944ecf47-afa4-4cd2-8cd7-c25066b897cb" />
       </nodes>
     </associationConnector>
-    <classShape Id="ba1f2217-9fee-4345-ab13-c32e8b032393" absoluteBounds="14.125, 13.5, 2, 5.2323225911458326">
+    <classShape Id="ba1f2217-9fee-4345-ab13-c32e8b032393" absoluteBounds="11.75, 13.5, 2, 5.2323225911458326">
       <DataClassMoniker Name="/KadrDataContext/Employee" />
       <nestedChildShapes>
-        <elementListCompartment Id="4f1283ca-0f78-4a3c-9954-32c6068061d0" absoluteBounds="14.14, 13.96, 1.9700000000000002, 4.672322591145833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="4f1283ca-0f78-4a3c-9954-32c6068061d0" absoluteBounds="11.765, 13.96, 1.9700000000000002, 4.672322591145833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(14.8125 : 18.7323225911458); (14.8125 : 20.125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(12.7499975 : 18.7323225911458); (12.7499975 : 20.3593725); (13.5 : 20.3593725)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/Employee/Employee_Approver" />
       <nodes>
         <classShapeMoniker Id="ba1f2217-9fee-4345-ab13-c32e8b032393" />
@@ -256,7 +256,7 @@
         <classShapeMoniker Id="944ecf47-afa4-4cd2-8cd7-c25066b897cb" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(16.125 : 15.1835034179687); (17.375 : 15.1835034179687)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(13.75 : 15.1835034179687); (17.375 : 15.1835034179687)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/Employee/Employee_FactStaff" />
       <nodes>
         <classShapeMoniker Id="ba1f2217-9fee-4345-ab13-c32e8b032393" />
@@ -317,34 +317,34 @@
         <elementListCompartment Id="5c8bcb93-2c7a-411b-bb35-b8679d7f1ced" absoluteBounds="23.265, 9.71, 1.9700000000000002, 3.9031168619791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="4165f762-0dda-44f8-8888-bab3938da9ff" absoluteBounds="19.75, 13.625, 2, 3.1170068359375">
+    <classShape Id="4165f762-0dda-44f8-8888-bab3938da9ff" absoluteBounds="20.75, 13.625, 2, 3.1170068359375">
       <DataClassMoniker Name="/KadrDataContext/FactStaffHistory" />
       <nestedChildShapes>
-        <elementListCompartment Id="96e21fd7-783e-4864-9bb6-e8f756292af4" absoluteBounds="19.765, 14.085, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="96e21fd7-783e-4864-9bb6-e8f756292af4" absoluteBounds="20.765, 14.085, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(19.375 : 15.1835034179687); (19.75 : 15.1835034179687)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(19.375 : 15.1835034179687); (20.75 : 15.1835034179687)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaff/FactStaff_FactStaffHistory" />
       <nodes>
         <classShapeMoniker Id="fe50737f-0054-4feb-9432-0c878bc9bb2d" />
         <classShapeMoniker Id="4165f762-0dda-44f8-8888-bab3938da9ff" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(23.25 : 10.8032995605469); (21.3333333333333 : 10.8032995605469 : JumpStart); (21.1666666666667 : 10.8032995605469 : JumpEnd); (20.8333333333333 : 10.8032995605469 : JumpStart); (20.6666666666667 : 10.8032995605469 : JumpEnd); (18.8091063498125 : 10.8032995605469 : JumpStart); (18.6424396831459 : 10.8032995605469 : JumpEnd); (18.453240358052 : 10.8032995605469 : JumpStart); (18.2865736913854 : 10.8032995605469 : JumpEnd); (16.75 : 10.8032995605469)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(23.25 : 10.8032995605469); (20.8333333333333 : 10.8032995605469 : JumpStart); (20.6666666666667 : 10.8032995605469 : JumpEnd); (18.8091063498125 : 10.8032995605469 : JumpStart); (18.6424396831459 : 10.8032995605469 : JumpEnd); (18.453240358052 : 10.8032995605469 : JumpStart); (18.2865736913854 : 10.8032995605469 : JumpEnd); (16.75 : 10.8032995605469)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffWithHistory/FactStaffWithHistory_PlanStaff" />
       <nodes>
         <classShapeMoniker Id="5c82f29d-bde6-4344-a36e-cff0582559f4" />
         <classShapeMoniker Id="324e29f2-9e99-4180-b89e-9b41b8c4b0dd" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(23.25 : 12.7205730908203); (21.3333333333333 : 12.7205730908203 : JumpStart); (21.1666666666667 : 12.7205730908203 : JumpEnd); (18.453240358052 : 12.7205730908203 : JumpStart); (18.2865736913854 : 12.7205730908203 : JumpEnd); (18.0763082723554 : 12.7205730908203); (18.0763082723554 : 13.625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(23.25 : 12.7205730908203); (19.1649723415729 : 12.7205730908203 : JumpStart); (18.9983056749063 : 12.7205730908203 : JumpEnd); (18.8091063498125 : 12.7205730908203 : JumpStart); (18.6424396831459 : 12.7205730908203 : JumpEnd); (18.453240358052 : 12.7205730908203 : JumpStart); (18.2865736913854 : 12.7205730908203 : JumpEnd); (18.0763082723554 : 12.7205730908203); (18.0763082723554 : 13.625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffWithHistory/FactStaffWithHistory_FactStaff" />
       <nodes>
         <classShapeMoniker Id="5c82f29d-bde6-4344-a36e-cff0582559f4" />
         <classShapeMoniker Id="fe50737f-0054-4feb-9432-0c878bc9bb2d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(23.25 : 9.99539728027343); (21.25 : 9.99539728027343); (21.25 : 13.625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(24.2315422034337 : 13.7131168619792); (24.2315422034337 : 15.2275623489583); (22.75 : 15.2275623489583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffWithHistory/FactStaffWithHistory_FactStaffHistory" />
       <nodes>
         <classShapeMoniker Id="5c82f29d-bde6-4344-a36e-cff0582559f4" />
@@ -358,7 +358,7 @@
         <classShapeMoniker Id="944ecf47-afa4-4cd2-8cd7-c25066b897cb" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(24.25 : 13.7131168619792); (24.25 : 17.7684147135417); (21.1145833333333 : 17.7684147135417 : JumpStart); (20.9479166666667 : 17.7684147135417 : JumpEnd); (16.125 : 17.7684147135417)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(23.25 : 13.1415385454101); (19.1649723415729 : 13.1415385454101 : JumpStart); (18.9983056749063 : 13.1415385454101 : JumpEnd); (18.8091063498125 : 13.1415385454101 : JumpStart); (18.6424396831459 : 13.1415385454101 : JumpEnd); (18.453240358052 : 13.1415385454101 : JumpStart); (18.2865736913854 : 13.1415385454101 : JumpEnd); (18.1596416056887 : 13.1415385454101 : JumpStart); (17.9929749390221 : 13.1415385454101 : JumpEnd); (17.8660428533255 : 13.1415385454101 : JumpStart); (17.6993761866589 : 13.1415385454101 : JumpEnd); (12.34375 : 13.1415385454101); (12.34375 : 13.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffWithHistory/FactStaffWithHistory_Employee" />
       <nodes>
         <classShapeMoniker Id="5c82f29d-bde6-4344-a36e-cff0582559f4" />
@@ -371,7 +371,7 @@
         <elementListCompartment Id="19bf3207-b7f6-4783-8ad1-e7eade2d870b" absoluteBounds="19.89, 26.46, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(21.03125 : 16.7420068359375); (21.03125 : 26)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(21.3125 : 16.7420068359375); (21.3125 : 26)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/KadrDataContext/FactStaffHistory/FactStaffHistory_TimeSheetRecord" />
       <nodes>
         <classShapeMoniker Id="4165f762-0dda-44f8-8888-bab3938da9ff" />

@@ -1,5 +1,5 @@
 --Удаление табеля
-declare @idTimeSheet int=601
+declare @idTimeSheet int=636
 delete from ShemaTabel.TimeSheetRecord where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheet where id=@idTimeSheet
@@ -342,3 +342,24 @@ END
 
 
 alter table ShemaTabel.TimeSheet drop constraint DateAndDepartmentUnique
+
+
+select*from ShemaTabel.TimeSheetApproval a where a.idTimeSheet=600	
+
+delete from ShemaTabel.TimeSheetApproval  where idTimeSheet=600	
+
+select*from ShemaTabel.Approver where id=70
+
+select*from ShemaTabel.Approver where idDepartment = 43
+
+select*from ShemaTabel.ApproverType
+
+
+
+select*from FactStaffWithHistory f inner join PlanStaff p 
+	on f.idPlanStaff=p.id
+
+
+select*from ShemaTabel.FactStaffWithHistory
+
+select*from ShemaTabel.DayStatus

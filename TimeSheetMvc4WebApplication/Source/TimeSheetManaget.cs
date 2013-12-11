@@ -55,7 +55,7 @@ namespace TimeSheetMvc4WebApplication.Source
 
         public bool RemoveTimeSheet()
         {
-            if (!CanEditTimeSheet()) return false;
+            if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
             _db.TimeSheetApproval.DeleteAllOnSubmit(_db.TimeSheetApproval.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheet.DeleteAllOnSubmit(_db.TimeSheet.Where(w => w.id == _timeSheet.id));
@@ -105,17 +105,24 @@ namespace TimeSheetMvc4WebApplication.Source
             return 0;
         }
 
-        public void GenerateTimeSheet()
-        {
-            InsertEmployees(GetAllEmployees());
-            SubmitTimeSheet();
-        }
+        //public void GenerateTimeSheet()
+        //{
+        //    InsertEmployees(GetAllEmployees());
+        //    SubmitTimeSheet();
+        //}
 
-        public void GenerateTimeSheet(DtoFactStaffEmployee[] employees)
+        public void GenerateTimeSheet(IEnumerable<DtoFactStaffEmployee> employees=null)
         {
-            var factStuffHistiryIdList = employees.Select(s => s.IdFactStaffHistiry).ToArray();
-            InsertEmployees(
-                GetAllEmployees().Where(w => factStuffHistiryIdList.Contains(w.idFactStaffHistory)).ToArray());
+            if (employees == null || !employees.Any())
+            {
+                InsertEmployees(GetAllEmployees());
+            }
+            else
+            {
+                var factStuffHistiryIdList = employees.Select(s => s.IdFactStaffHistiry).ToArray();
+                InsertEmployees(
+                    GetAllEmployees().Where(w => factStuffHistiryIdList.Contains(w.idFactStaffHistory)).ToArray());
+            }
             SubmitTimeSheet();
         }
 
@@ -344,7 +351,7 @@ namespace TimeSheetMvc4WebApplication.Source
         List<TimeSheetRecord> AddExceptoinDaysToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<Exception> exeptions)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
-            foreach (var exception in exeptions)
+            foreach (var exception in exeptions.Where(w=>w.idWorkShedule==employee.PlanStaff.IdWorkShedule))
             {
                 var day = timeSheetRecordLList.FirstOrDefault(f => f.RecordDate.Date == exception.DateException.Date);
                 if (day == null || day.idDayStatus == IdX) continue;

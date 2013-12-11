@@ -1,5 +1,5 @@
 ﻿@using TimeSheetMvc4WebApplication.ClassesDTO
-@model IEnumerable<TimeSheetMvc4WebApplication.ClassesDTO.DtoTimeSheet>
+@model IEnumerable<DtoTimeSheet>
 @{
     ViewBag.Title = @ViewBag.Department.DepartmentSmallName;
     var years = Model.GroupBy(g => g.DateBegin.Year);
@@ -11,7 +11,7 @@
         <div class="col-sm-6 col-md-9">
             <h2>@ViewBag.Department.DepartmentFullName</h2>
         </div>
-        @if (approver != null && (approver.IsAdministrator || approver.DtoApproverDepartments.First(f => f.IdDepartment==idDepartment).ApproveNumber == 1))
+        @if (approver != null && (approver.IsAdministrator || approver.Allowed(idDepartment, ApproveState.Табельщик)))
         {
             <div class="col-sm-6 col-md-3">
                 <a type="button" class="btn btn-primary" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
@@ -42,18 +42,33 @@
                         <div class="@string.Format("col-sm-6 col-md-{0}", span)">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item.ApproveStep)  @item.DateBegin.ToString("MMMM") @*(@item.EmployeesCount)*@ </h3>
+                                    @if (approver != null && (approver.IsAdministrator || approver.Allowed(idDepartment, ApproveState.Табельщик)) && item.ApproveStep == 0)
+                                    {
+                                        <button type="button" data-toggle="tooltip" title="Удалить табель" class="close timeSheetDell" data-dismiss="modal" aria-hidden="true" data-idtimesheet="@item.IdTimeSheet" data-mounth="@item.DateBegin.ToString("MMMM")">&times;</button>
+                                    }
+                                    <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item.ApproveStep)  @item.DateBegin.ToString("MMMM")</h3>
                                 </div>
-                                <div class="panel-body" style="padding: 0px ">
+                                <div class="panel-body" style="padding: 0;">
                                     <div class="centered" style="background-color: #f5f5f5">
-                                        @*@if (item.ApproveStep == 0)
-                                        {*@
-                                            <a style="padding: 5px 20px;" class="btn btn-link btn-sm @(item.ApproveStep!=0?"disabled":"")" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("TimeSheetEdit", "Main", new { id = item.IdTimeSheet })"><span class="glyphicon glyphicon-edit"></span></a>
-                                        @*}*@
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-fullscreen"></span></a>
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("TimeSheetPdf", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-print"></span></a>
-                                        <a style="padding: 5px 20px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApprovalNew", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span></a>
+                                        <ul class="nav nav-justified">
+                                            @if (item.ApproveStep == 0)
+                                            {
+                                                <li>
+                                                    <a style="padding: 5px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("TimeSheetEdit", "Main", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span></a>
+                                                </li>
+                                            }
+                                            <li>
+                                                <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("TimeSheetShow", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                                            </li>
+                                            <li>
+                                                <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("TimeSheetPdf", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-print"></span></a>
+                                            </li>
+                                            <li>
+                                                <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("TimeSheetApprovalNew", "Main", new { IdTimeSheet = item.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span></a>
+                                            </li>
+                                        </ul>
                                     </div>
+
                                     <div class="panel-body" style="padding-bottom: 5px ">
                                         <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>
                                         <p>Человек в табеле: @item.EmployeesCount</p>
@@ -66,11 +81,13 @@
             }
         }
     }
-    <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheetList", "Main", new { id = ViewBag.Department.IdDepartment, showAll = true })">Показать все табеля подразделения</a></p>
+    @if (Model != null && Model.Count() > 10)
+    {
+        <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheetList", "Main", new {id = ViewBag.Department.IdDepartment, showAll = true})">Показать все табеля подразделения</a></p>
+    }
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 800px;">
-            @*<div class="modal-content" style="width: 650px;">*@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -91,7 +108,7 @@
                     <table class="table @*table-condensed*@ table-bordered" style="margin-bottom: 0;">
                         <thead>
                             <tr>
-                                <th style="width: 30px;"><input type="checkbox" ng-model="IsAllCheked" ng-click="IsAllChekedFunc()"></th>
+                                <th style="width: 30px;"><input type="checkbox" ng-model="IsAllCheked"></th>
                                 <th style="width: 280px;">Сотрудник</th>
                                 <th style="width: 220px;">Должность</th>
                                 <th style="width: 70px;">Ставка</th>
@@ -103,24 +120,20 @@
                         <table class="table @*table-condensed*@ table-bordered" style="margin-bottom: 0;">
                             <tbody>
                                 <tr ng-repeat="employee in employees" style="max-height: 10px;">
-                                    <td style="width: 30px; padding: 0px; " align="center"><input type="checkbox" ng-model="employee.IsCheked"></td>
-                                    <td style="width: 280px; padding: 0px 5px;">{{employeeName(employee)}}</td>
-                                    <td style="width: 220px; padding: 0px 5px;">{{employee.Post.PostSmallName}}</td>
-                                    <td style="width: 70px; padding: 0px 5px;">{{employee.StaffRate}}</td>
-                                    <td style="padding: 0px 5px;">{{employee.WorkShedule.WorkSheduleName}}</td>
+                                    <td style="width: 30px; padding: 0; " align="center"><input type="checkbox" ng-model="employee.IsCheked"></td>
+                                    <td style="width: 280px; padding: 0 5px;">{{employeeName(employee)}}</td>
+                                    <td style="width: 220px; padding: 0 5px;">{{employee.Post.PostSmallName}}</td>
+                                    <td style="width: 70px; padding: 0 5px;">{{employee.StaffRate}}</td>
+                                    <td style="padding: 0 5px;">{{employee.WorkShedule.WorkSheduleName}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    @*<pre>{{employees}}</pre>*@
                 </div>
-                <div class="modal-footer" style="margin-top: 0px;">
+                <div class="modal-footer" style="margin-top: 0;">
                     <div id="buttons">
                         <div class="pull-left">
                             <h5 class="pull-right">Выбрано человек: {{selectedEmployeesCount()}}</h5>
-                            @*<button type="button" class="btn btn-default" ng-click="selectAllemployees()">Выбрать всех</button>
-                            <button type="button" class="btn btn-default" ng-click="clearAllemployees()">Отчистить список</button>*@
                         </div>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                         <button type="button" class="btn btn-primary" ng-click="createTimeSheet()">Сформировать</button>
@@ -135,12 +148,32 @@
         </div>
     </div>
 </div>
-
 <script>
     $('.btn').tooltip('hide');
+    $('.close').tooltip('hide');
     $('.label').tooltip('hide');
-</script>
 
+    $('.timeSheetDell').click(function() {
+        //var id = this.data('idtimesheet');
+        var id = $(this).attr("data-idtimesheet");
+        var mounth = $(this).attr("data-mounth");
+        var message = 'Вы уверены что хотите удалить табель за ' + mounth + '?';
+        if (confirm(message)) {
+            var link = '@Url.Action("DellTimeSheet", new { idTimeSheet = "idTimeSheetReplace" })';
+            link = link.replace('idTimeSheetReplace', id);
+            $.post(link).success(
+                function(result) {
+                    if (result.Result) {
+                        console.log('timeSheet dell succes');
+                    } else {
+                        alert(result.Message);
+                    }
+                    location.reload(true);
+                }
+            );
+        }
+    });
+</script>
 <style>
     .btnWidth {
         width: 48px;
@@ -152,7 +185,6 @@
         text-align: center;
     }
 </style>
-
 <script>
     function TimeSheetCreate($scope, $http) {
         $scope.initDates = function () {
@@ -171,7 +203,7 @@
             $scope.employeesRefresh();
         };
 
-        $scope.employeesRefresh = function () {  
+        $scope.employeesRefresh = function () {
             $scope.employees = null;
             var link = '@Html.Raw(@Url.Action("GetEmployeesForTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
             link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
@@ -216,10 +248,15 @@
                 employee.IsCheked = false;
             });
         };
-        
-        $scope.IsAllChekedFunc = function() {
-            if ($scope.IsAllCheked){
-                $scope.selectAllemployees();}
+
+        $scope.$watch('IsAllCheked', function () {
+            $scope.IsAllChekedFunc();
+        });
+
+        $scope.IsAllChekedFunc = function () {
+            if ($scope.IsAllCheked) {
+                $scope.selectAllemployees();
+            }
             else {
                 $scope.clearAllemployees();
             }
@@ -248,7 +285,7 @@
                         if (result.Result) {
                             console.log('timeSheet create succes');
                             $('#myModal').modal('hide');
-                            location.reload();
+                            location.reload(true);
                         } else {
                             alert(result.Message);
                         }
@@ -259,12 +296,7 @@
         };
 
         //======================    Инициализация контроллера   =============================================
-
         $scope.currentMounth = new Date();
         $scope.initDates();
     }
 </script>
-
-
-
-

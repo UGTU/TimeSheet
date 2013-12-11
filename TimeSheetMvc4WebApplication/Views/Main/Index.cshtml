@@ -1,11 +1,40 @@
-﻿@model TimeSheetMvc4WebApplication.ClassesDTO.DtoApprover
+﻿@using TimeSheetMvc4WebApplication.ClassesDTO
+@model DtoApprover
 @{
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
-@if (Model.DtoApproverDepartments != null && Model.DtoApproverDepartments.Any())
-{
-    Html.RenderPartial("PartialView/DtoApproverDepartmentListPartial", Model.DtoApproverDepartments);
+@if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
+{   
+    const int itemsInRow = 4;
+    var rowColl = Math.Ceiling((double)Model.GetApproverDepartments().Count() / (double)itemsInRow);
+    var departments = Model.GetApproverDepartments().OrderBy(o => o.DepartmentSmallName);
+    
+    for (int i = 0; i < rowColl; i++)
+    {
+        var rowItems = departments.Skip(i * itemsInRow).Take(itemsInRow);
+        var span = Math.Floor(12 / (double)itemsInRow);
+        <div class="row">
+            @foreach (var item in rowItems)
+            {
+                <div class="@string.Format("col-sm-6 col-md-{0}", span)">
+                    <h3>@item.DepartmentSmallName</h3>
+                    <p style="height: 50px;">@item.DepartmentFullName</p>
+                    <p style="color: darkgray">
+                        @{
+                            var roles = Model.GetDepartmentApproverNumbers(item.IdDepartment).Select(s => s.ApproveTypeName).ToArray();
+                            for (var i1 = 0; i1 < roles.Count() - 1; i1++)
+                            {
+                                @Html.Raw(string.Format("{0}, ", roles[i]))
+                            }
+                            @Html.Raw(string.Format("{0}", roles.Last()))
+                        }
+                    </p>
+                    <p><a class="btn btn-default btn-sm" href="@Url.Action("TimeSheetList", "Main", new { id = item.IdDepartment })">Перейти к табелям <span class="glyphicon glyphicon-th"></span></a></p>
+                </div>
+            }
+        </div>
+    }
 }
 else
 {
