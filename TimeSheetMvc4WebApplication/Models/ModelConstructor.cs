@@ -148,7 +148,7 @@ namespace TimeSheetMvc4WebApplication.Models
                 {
                     Day = i,
                     CSS = dayX,
-                    DayText = "X"
+                    DayText = "Х"
                 });
             }
             return headerStyle.ToArray();
@@ -340,7 +340,14 @@ namespace TimeSheetMvc4WebApplication.Models
         private static EmployeeRecordModel EmployeeRecordModelCssDecorator(EmployeeRecordModel model, bool isForPrint)
         {
             string css = string.Empty;
-            var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
+            //var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
+            //var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
+            //todo: Вот тут вот убрать этот изврат и посмотреть что стоит в базе X или ИКС
+            DayStatus status;
+            if (!Enum.TryParse(model.DayStatus, out status))
+            {
+                status = DayStatus.Х;
+            }
             if (isForPrint)
             {
                 if ((model.Day == -1 && model.Value != "0") || (model.Day != -1 && status != DayStatus.Я))
