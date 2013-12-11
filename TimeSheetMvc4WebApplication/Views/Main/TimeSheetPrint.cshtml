@@ -1,0 +1,18 @@
+﻿@model TimeSheetMvc4WebApplication.Models.TimeSheetModel[]
+@{
+    ViewBag.Title = "Печать табеля";
+    Layout = "../Shared/_EmptyLayout.cshtml";
+}
+<div class="TimeSheeet" style="margin-top: 0;margin-bottom: 0;">
+
+    @for (int index = 0; index < Model.Length; index++)
+    {
+        var timeSheet = Model[index];
+        @Html.Partial("PartialView/TimeSheetPartialView", timeSheet)
+
+    }
+</div>
+
+<script>
+    $('.paperNum').last().removeClass();
+</script>

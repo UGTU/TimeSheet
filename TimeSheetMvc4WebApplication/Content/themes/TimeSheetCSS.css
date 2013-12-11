@@ -1,12 +1,8 @@
 ﻿/*Я	Часы работы (дневные, вечерние)*/
 .ICSS { 
-    background-color: #CCCCCC;
+    background-color: #ffffff;
     overflow: auto;
     margin: 0;
-    /*width:30px;
-	overflow:hidden;*/
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*Н	Ночные часы работы*/
@@ -15,8 +11,6 @@
     background-color: #CCCC66;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*РВ	Часы работы в выходные, праздничные дни*/
@@ -25,8 +19,6 @@
     background-color: #CCFF66;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*С	Сверхурочные часы работы*/
@@ -35,8 +27,6 @@
     background-color: #66FF99;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*К	Служебная командировка*/
@@ -44,8 +34,6 @@
     background-color: #66CC99;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ПК	Повышение квалификации с отрывам от работы*/
@@ -53,8 +41,6 @@
     background-color: #99FFCC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*О	Ежегодный основной оплачиваемый отпуск*/
@@ -62,8 +48,6 @@
     background-color: #CCCCFF;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*у	Отпуск в связи с обучением с сохранением заработной платы*/
@@ -71,8 +55,6 @@
     background-color: #9966CC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*УД	Дополнительный отпуск в связи с обучением без сохранения заработной платы*/
@@ -80,8 +62,6 @@
     background-color: #CC99FF;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*Р	Отпуск по беременности и родам*/
@@ -89,8 +69,6 @@
     background-color: #CC66FF;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ОЖ	Отпуск без сохранения заработной платы, предоставляемый работнику по уходу за ребенком*/
@@ -98,8 +76,6 @@
     background-color: #CC99CC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ДО	Отпуск без сохранения заработной платы, предоставленный работнику по разрешению работодателя*/
@@ -107,8 +83,6 @@
     background-color: #FFCCFF;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ОЗ	Отпуск без сохранения заработной платы в случаях, предусмотренных законодательством*/
@@ -116,8 +90,6 @@
     background-color: #FF66CC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*Б	Временная нетрудоспособность (кроме случаев, предусмотренных кодом "Т") и отпуска по уходу за больными и по карантину, оформленные листками нетрудоспособности*/
@@ -125,8 +97,6 @@
     background-color: #FF99CC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*Т	Неоплачиваемая нетрудоспособность в случаях, предусмотренных законодательством (в связи с бытовой травмой, по уходу за больными и по карантину и т. д.)*/
@@ -134,8 +104,6 @@
     background-color: #FF6699;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ЛЧ	Часы сокращения работы рабочим и служащим против установленной продолжительности рабочего дня в случаях, предусмотренных законодательством*/
@@ -143,8 +111,6 @@
     background-color: #CC9999;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*ПР	Прогулы (неявки на работу без уважительной причины в течение всего рабочего дня или отсутствие на работе без уважительной причины более 4 часов (непрерывно) в течение всего рабочего дня, административный арест за административные правонарушения, пребывание в медицинском вытрезвителе, забастовки, признанные незаконными, и другие неявки по неуважительным причинам)*/
@@ -152,8 +118,6 @@
     background-color: #FFCCCC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*В	Выходные дни (для еженедельного отдыха) и праздничные дни*/
@@ -161,8 +125,6 @@
     background-color: #FF6633;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 .PrintVCSS {
@@ -170,8 +132,6 @@
     overflow: auto;
     margin: 0;
     -webkit-print-color-adjust: exact;
-     /*width: 100%;
-    height: 100%;*/
 }
 
 /*НН	Неявки по невыясненным причинам (до выяснения обстоятельств)*/
@@ -179,8 +139,6 @@
     background-color: #FFCC99;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*НБ	Отстранение от работы (недопущение к работе) по причинам, предусмотренным законодательством, без начисления заработной платы*/
@@ -188,8 +146,6 @@
     background-color: #FF9900;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*0В	Дополнительные выходные дни (оплачиваемые по договору)*/
@@ -197,8 +153,6 @@
     background-color: #FFCC66;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 /*X	Прочерк в табеле*/
@@ -206,32 +160,25 @@
     background-color: #FFFFCC;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 .PrintXCSS {
     background-color: #EFEFEF;
     overflow: auto;
     margin: 0;
-    -webkit-print-color-adjust: exact; /*width: 100%;
-    height: 100%;*/
+    -webkit-print-color-adjust: exact;
 }
 
 .EmptyCSS {
     background-color: white;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 .defCSS {
     background-color: red;
     overflow: auto;
     margin: 0;
-    /*width: 100%;
-    height: 100%;*/
 }
 
 .paperNum
@@ -251,7 +198,6 @@
 .EmployeeNameDiv {
     margin-right: 3px;
     margin-left: 3px;
-    /*border: 1px solid red;*/
 }
 
 

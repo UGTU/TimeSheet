@@ -1,5 +1,42 @@
+--Удаление табеля
+declare @idTimeSheet int=636
+delete from ShemaTabel.TimeSheetRecord where idTimeSheet=@idTimeSheet
+delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
+delete from ShemaTabel.TimeSheet where id=@idTimeSheet
+
+delete from ShemaTabel.TimeSheetRecord 
+delete from ShemaTabel.TimeSheetApproval
+delete from ShemaTabel.TimeSheet 
+
+--Вывести администраторов
+select*from ShemaTabel.Approver a 
+	inner join Employee e on e.id=a.idEmployee
+	where idApproverType=4
+
+--Добавить администратора по логину
+declare @idEmpl int = -1000
+declare @emplLogin varchar  = 'ochernova@ugtu.net'
+select @idEmpl   =  e.id from Employee e where e.EmployeeLogin=@emplLogin
+insert into ShemaTabel.Approver
+values(GETDATE(),null,4,51,@idEmpl)
+
+
+
+declare @emplLogin varchar
+set @emplLogin  = 'ochernova@ugtu.net'
+select @emplLogin
+select * from Employee e where e.EmployeeLogin=@emplLogin
+
+select * from Employee e where e.LastName='Чернова'
+
+select*from ShemaTabel.ApproverType
+
+select*from Employee
+
+
 
 --##############################################################################################################
+select*from ShemaTabel.DayStatus
 
 
 update FactStaff
@@ -211,7 +248,7 @@ where id = 42
 
 
 --Удаление табеля
-declare @idTimeSheet int=577
+declare @idTimeSheet int=382
 delete from ShemaTabel.TimeSheetRecord where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
 delete from ShemaTabel.TimeSheet where id=@idTimeSheet
@@ -305,3 +342,24 @@ END
 
 
 alter table ShemaTabel.TimeSheet drop constraint DateAndDepartmentUnique
+
+
+select*from ShemaTabel.TimeSheetApproval a where a.idTimeSheet=600	
+
+delete from ShemaTabel.TimeSheetApproval  where idTimeSheet=600	
+
+select*from ShemaTabel.Approver where id=70
+
+select*from ShemaTabel.Approver where idDepartment = 43
+
+select*from ShemaTabel.ApproverType
+
+
+
+select*from FactStaffWithHistory f inner join PlanStaff p 
+	on f.idPlanStaff=p.id
+
+
+select*from ShemaTabel.FactStaffWithHistory
+
+select*from ShemaTabel.DayStatus

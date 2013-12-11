@@ -1,0 +1,332 @@
+﻿@using TimeSheetMvc4WebApplication.Models
+@model int
+
+@{
+    ViewBag.Title = "Редактирование";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+
+<div class="row" id="progress" style="margin-top: 20%;">
+    <div class="col-md-offset-3 col-md-6">
+        <div class="progress progress-striped active">
+            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row hidden" ng-app ng-controller="TimeSheetRecords">
+    <div class="col-md-4">
+        <div class="input-group input-group-sm" style="margin-bottom: 10px;">
+            <input type="text" ng-model="query" class="form-control ">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+        </div>
+
+        <div id="employeeList" class="list-group" style=" overflow: auto; border: 1px solid #dddddd">
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="empl in employees| filter:query" ng-click="setCurrentEmployeeRecords(empl)" ng-class="empl.css">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    {{empl.Surname}} {{empl.Name}} {{empl.Patronymic}}
+                </h4>
+                <p class="list-group-item-text">{{empl.StaffRate}} ст. {{empl.Post.PostSmallName}}</p>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3 style="margin-top: 0; padding-left: 15px;">
+            {{currentEmployee.Surname}} {{currentEmployee.Name}} {{currentEmployee.Patronymic}}
+            <small>Ставка: {{currentEmployee.StaffRate}}, должность: {{currentEmployee.Post.PostSmallName}} </small>
+        </h3>
+        <div class="col-md-7">
+
+            <table class="table @*table-condensed*@ table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()" ng-disabled="isCanTimeSheetEditfunction()"></th>
+                        <th>Дата</th>
+                        <th>День недели</th>
+                        <th>Статус</th>
+                        <th>Часы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="record in currentEmployee.Records| orderBy:Order" ng-class="RecorsState(record)" style="max-height: 10px;" @*class="success"*@>
+                        <td style="padding: 0px; " align="center"><input type="checkbox" ng-model="record.IsCheked" ng-disabled="isCanTimeSheetEditfunction()" @*ng-click="checkRecordClick(record)"*@></td>
+                        <td style="padding: 0px 5px;">{{record.Date}}</td>
+                        <td style="padding: 0px;" align="center">{{record.DayAweek}}</td>
+                        <td style="padding: 0px 5px; width: 70px;" align="center">
+                            <select class="form-control input-sm" ng-model="record.DayStays" style="margin: 2px; padding: 0; height: 18px; width: 50px;" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isCanTimeSheetEditfunction()"></select>
+                        </td>
+                        <td style="padding: 0px 0px 0 5px; width: 75px;" align="center">
+                            <div class="form-group " ng-class="inputJobTimeCountValidate(record.JobTimeCount)" style="margin-bottom: 0;">
+                                <input class="form-control input-sm" ng-model="record.JobTimeCount" type="number" style="margin: 2px; padding: 0px 5px; height: 18px; width: 55px;" ng-disabled="isCanTimeSheetEditfunction()">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+
+            <p style="margin-bottom: 0px;margin-top: 10px;">
+                <label class=" control-label">Статус дня</label>
+            </p>
+            <p>
+                <select class="form-control input-sm" ng-model="selectedDayStatList" ng-options="dayStatus as getDayStatusName(dayStatus) for dayStatus in dayStatList" ng-disabled="isUpdateDisabled()"></select>
+            </p>
+            <p style="margin-bottom: 0px;">
+                <label class=" control-label">
+                    Часы
+                </label>
+            </p>
+            <p>
+                <input class="form-control input-sm" type="number" ng-model="selectedDayJobTimeCount" ng-disabled="isUpdateDisabled()">
+            </p>
+
+            <p class="text-right">
+                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="updateRecords()" ng-disabled="isUpdateDisabled()">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Применить к выбранным записям
+                </button>
+            </p>
+
+            <p class="text-right">
+                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="saveChanges()" ng-disabled="isSaveDisabled()">
+                    <span class="glyphicon glyphicon-floppy-saved"></span>
+                    Сохранить изменения
+                </button>
+            </p>
+            <br/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#dayStatList" style="font-size: 14px;">
+                            <span class="glyphicon glyphicon-list"></span> Расшифровка статусов дней
+                        </a>
+                    </h4>
+                </div>
+                <div id="dayStatList" class="panel-collapse collapse" style="overflow: auto;">
+                    <div class="panel-body" style="padding: 0px; overflow: auto;">
+                        <table class="table table-condensed table-striped">
+                            <tr ng-repeat="dayStat in dayStatList">
+                                <td>{{dayStat.SmallDayStatusName}}</td>
+                                <td>{{dayStat.FullDayStatusName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show,HeaderLink.Pdf,HeaderLink.Approve },
+        CurrentLink = HeaderLink.Edit,
+        IdTimeSheet = Model
+    });
+}
+
+<script>
+    $(window).load(function() {
+        employeeListResize();
+    });
+    $(window).resize(function() {
+        employeeListResize();
+    });
+
+    function employeeListResize() {
+        var maxHeight = $(window).height();
+        maxHeight = maxHeight - 135;
+        $('#employeeList').css('max-height', maxHeight);
+        maxHeight = maxHeight - 280;
+        $('#dayStatList').css('max-height', maxHeight);
+    }
+</script>
+
+<script>
+    function TimeSheetRecords($scope, $http) {
+        $http.get('@Html.Raw(@Url.Action("GetTimeSheetModelJson", "Main", new { idTimeSheet = @Model }))').success(function (data) {
+            $scope.dayStatList = data.DayStatusList;
+            $scope.selectedDayStatList = $scope.dayStatList[0];
+            $scope.selectedDayJobTimeCount = 0;
+            $scope.employees = data.TimeSheet.Employees;
+            $scope.selectAll = false;
+            $scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
+            angular.forEach($scope.employees, function (empl) {
+                angular.forEach(empl.Records, function (rec) {
+                    angular.forEach($scope.dayStatList, function (ds) {
+                        if (ds.IdDayStatus == rec.IdDayStatus) {
+                            rec.DayStays = ds;
+                        }
+                    });
+                });
+            });
+
+            $scope.setCurrentEmployeeRecords($scope.employees[0]);
+            $('#progress').remove();
+            $('.row').removeClass('hidden');
+        });
+
+        $scope.checkAllRecord = function() {
+            angular.forEach($scope.currentEmployee.Records, function (empl) {
+                empl.IsCheked = $scope.selectAll;
+            });
+        };
+        
+
+        $scope.setCurrentEmployeeRecords = function (employee) {
+            if ($scope.currentEmployee != null) {
+                $scope.selectAll = false;
+                if (!$scope.isSaveDisabled() && confirm('Сохранить внесённые изменения для табеля сотрудника?')) {
+                    // Save it!
+                    $scope.saveChanges();
+                }
+                else {
+                    // Do nothing!
+                    $scope.returnEmployeesRecordsToStandart();
+                }   
+            }
+            $scope.currentEmployee = employee;
+            angular.forEach($scope.employees, function (empl) {
+                empl.css = '';
+            });
+            employee.css = 'active';
+            $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+        };
+
+        $scope.saveChanges = function () {
+            if ($scope.currentEmployee == null) return;
+            var employee = $scope.currentEmployee;
+            var employeesRecordsStandard = $scope.employeesRecordsStandard;
+
+            var changes = [];
+            angular.forEach(employee.Records, function (record) {
+                angular.forEach(employeesRecordsStandard, function (recordStandard) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                        changes.push(record);
+                        console.log('######################################################################');
+                        console.log(record.JobTimeCount + ' ' + record.DayStays.IdDayStatus);
+                        console.log(recordStandard.JobTimeCount + ' ' + recordStandard.DayStays.IdDayStatus);
+                        console.log('######################################################################');
+                    }
+                });
+            });
+            if (changes.length > 0) {
+                console.log('save ' + changes.length + ' records');
+                angular.forEach(changes, function (ch) {
+                    ch.IdDayStatus = ch.DayStays.IdDayStatus;
+                });
+                //отправить данные на сервер
+                $http.post('@Url.Action("UpdateTimeSheetRecotds")', changes).success(
+                    function (result) {
+                        if (result.Result) {
+                            console.log('save records succes');                       
+                            $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+                        } else {
+                            alert(result.Message);
+                            $scope.returnEmployeesRecordsToStandart();
+                        }
+                    }
+                );
+            }
+        };
+
+        $scope.returnEmployeesRecordsToStandart = function () {
+            $scope.currentEmployee.Records = angular.copy($scope.employeesRecordsStandard);
+            angular.forEach($scope.currentEmployee.Records, function (rec) {
+                angular.forEach($scope.dayStatList, function (ds) {
+                    if (ds.IdDayStatus == rec.IdDayStatus) {
+                        rec.DayStays = ds;
+                    }
+                });
+            });
+        };
+
+        $scope.isSaveDisabled = function () {
+            if ($scope.currentEmployee == null) return false;
+            var changes = [];
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                angular.forEach($scope.employeesRecordsStandard, function (recordStandard) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                        changes.push(record);
+                    }
+                });
+            });
+            if (changes.length > 0) {
+                return false;
+            }
+            return true;
+        };
+
+        $scope.getDayStatusName = function (dayStatus) {
+            return dayStatus.SmallDayStatusName;
+        };
+
+        $scope.updateRecords = function () {
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                if (record.IsCheked) {
+                    console.log('update record');
+                    record.DayStays = $scope.selectedDayStatList;
+                    record.JobTimeCount = $scope.selectedDayJobTimeCount;
+                    //record.JobTimeCount = 5;
+                    record.IsCheked = false;
+                }
+            });
+        };
+        
+        $scope.isCanTimeSheetEditfunction = function () {
+            if ($scope.TimeSheetApproveStep == 0) return false;
+            return true;
+        };
+
+        $scope.isUpdateDisabled = function () {
+            if ($scope.currentEmployee == null) return true;
+            var result = true;
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                if (record.IsCheked) {
+                    console.log('update enable');
+                    result = false;
+                }
+            });
+            return result;
+        };
+
+        $scope.inputJobTimeCountValidate = function (jobTimeCount) {
+            var r = parseFloat(jobTimeCount);
+            if (isNaN(r) | r > 24) {
+                return 'has-error';
+            }
+            if (r > 8) return 'has-warning';
+            return '';
+        };
+
+        $scope.RecorsState = function (record) {
+            //var r = parseFloat(jobTimeCount);
+            //if (isNaN(r) | r > 24) {
+            //    return 'has-error';
+            //}
+            //if (r > 8) return 'has-warning';
+            //console.log('sss');
+            //return 'success';
+            if (record.DayAweek == 'суббота') return 'weekEnd';
+            if (record.DayAweek == 'воскресенье') return 'weekEnd';
+            //return 'active';
+            return '';
+        };
+    }
+</script>
+
+<style>
+    .errorInput {
+        background-color: papayawhip;
+        border: 1px solid red;
+    }
+
+    .weekEnd {
+        background-color: #f5f5f5;
+    }
+</style>

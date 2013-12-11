@@ -1,0 +1,246 @@
+﻿@using TimeSheetMvc4WebApplication.Models
+@{
+    ViewBag.Title = "Выходные дни и праздники";
+    //Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+
+<div class="row" ng-app ng-controller="ExceptionDay">
+    <div class="row">
+        <div class="col-sm-6 col-md-9">
+            <h2>@ViewBag.Title</h2>
+        </div>
+        <div class="col-sm-6 col-md-3 pull-right" style="padding-right: 0">
+            <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px; width: 200px;" data-toggle="modal" href="#myModal" ng-click="SetCurrentExceptionDay(NewExceptionDay)">
+                <span class="glyphicon glyphicon-plus-sign"></span> Добавить праздник
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="">
+            <ul id="myTab" class="nav nav-tabs">
+                <li ng-repeat="workSchedule in WorkScheduleList" ng-class="{active: workSchedule==CurrentWorkSchedule}" ng-click="SetCurrentWorkSchedule(workSchedule)">
+                    <a href="" data-toggle="tab">{{GetWorkScheduleName(workSchedule)}}</a>
+                </li>
+                <li class="pull-right ">
+                    <ul class="list-inline">
+                        <li>Год: </li>
+                        <li style="padding-right: 0;"><select class="form-control input-sm" ng-model="CurrentYear" ng-options="year as GetYear(year) for year in Years"></select></li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+        <table class="table table-condensed @*table-bordered*@">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Название</th>
+                    <th>День недели</th>
+                    <th>Статус дня</th>
+                    <th>МПС</th>
+                    <th>МНС</th>
+                    <th>ЖПС</th>
+                    <th>ЖНС</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule.IdWorkShedule: CurrentWorkSchedule.IdWorkShedule ,Year:CurrentYear}" style="max-height: 10px;">
+                    <td>{{day.Date.toString('dd MMMM yyyy')}}</td>
+                    <td>{{day.Name}}</td>
+                    <td>{{day.DayAweek}}</td>
+                    <td>{{day.DayStatus.SmallDayStatusName}}</td>
+                    <td>{{day.MPS}}</td>
+                    <td>{{day.MNS}}</td>
+                    <td>{{day.GPS}}</td>
+                    <td>{{day.GNS}}</td>
+                    <td>
+                        <a type="button" ng-click="SetCurrentExceptionDay(day)" class="btn btn-link" style="padding: 0;" data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a type="button" ng-click="Remove(day)" class="btn btn-link" style="padding: 0;" data-toggle="modal" href=""><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Добавить выходной день или праздник</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Дата</p>
+                        <input id="dp3" ng-model="CurrentExceptionDay.FormatDate" class="form-control" type="text" data-date-format="dd.mm.yy">
+                        <p>Название</p>
+                        <input class="form-control" ng-model="CurrentExceptionDay.Name" type="text">
+                        <p>Статус дня</p>
+                        <select class="form-control input-sm" ng-model="CurrentExceptionDay.DayStatus" ng-options="dayStatus as GetDayStatusName(dayStatus) for dayStatus in DayStatusList"></select>
+                        <p>МПС</p>
+                        <input class="form-control" ng-model="CurrentExceptionDay.MPS" type="text">
+                        <p>МНС</p>
+                        <input class="form-control" ng-model="CurrentExceptionDay.MNS" type="text">
+                        <p>ЖПС</p>
+                        <input class="form-control" ng-model="CurrentExceptionDay.GPS" type="text">
+                        <p>ЖНС</p>
+                        <input class="form-control" ng-model="CurrentExceptionDay.GNS" type="text">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" ng-model="CurrentExceptionDay.AddPpDay">
+                                Добавить предпразднечный день
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="buttons">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-primary" onclick="$('#myModal').modal('hide')" ng-click="CreateOrSave()">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[2] { HeaderLink.ExceptionDay, HeaderLink.Department },
+        CurrentLink = HeaderLink.ExceptionDay
+    });
+}
+
+<script>
+    function ExceptionDay($scope, $http) {
+
+        $scope.InitController = function () {
+            $http.get('@Url.Action("GetExceptionDay")').success(function (data) {
+                $scope.WorkScheduleList = data.WorkScheduleList;
+                $scope.CurrentWorkSchedule = $scope.WorkScheduleList[0];
+                $scope.ExceptionDayList = data.ExceptionDayList;
+                $scope.Years = [];
+                angular.forEach($scope.ExceptionDayList, function (day) {
+                    day.Date = new Date(parseInt(day.Date.substr(6)));
+                    if ($scope.Years.indexOf(day.Date.getYear()) === -1) {
+                        $scope.Years.push(day.Date.getYear());
+                        console.log(day.Date.getYear());
+                    }
+                    day.Year = day.Date.getYear();
+                });
+                $scope.CurrentYear = $scope.Years[$scope.Years.length - 1];
+                $scope.Years = $scope.Years.reverse();
+                $scope.DayStatusList = data.DayStatusList;
+                $scope.NewExceptionDay = data.CurrentExceptionDay;
+                $scope.NewExceptionDay.Date = new Date(parseInt($scope.NewExceptionDay.Date.substr(6)));
+            });
+        };
+
+        $scope.InitController();
+
+        $scope.DaysRefresh = function () {
+            $http.get('@Url.Action("GetExceptionDay")').success(function (data) {
+                $scope.ExceptionDayList = data.ExceptionDayList;
+                angular.forEach($scope.ExceptionDayList, function (day) {
+                    day.Date = new Date(parseInt(day.Date.substr(6)));
+                    day.Year = day.Date.getYear();
+                });
+            });
+        };
+
+        $scope.SetCurrentExceptionDay = function (exceptionDay) {
+            if (exceptionDay.DayStatus == null)
+                exceptionDay.DayStatus = $scope.DayStatusList[0];
+            exceptionDay.FormatDate = exceptionDay.Date.toString('dd.MM.yy');
+            angular.forEach($scope.DayStatusList, function (dayStatus) {
+                if (exceptionDay.DayStatus.IdDayStatus == dayStatus.IdDayStatus) {
+                    exceptionDay.DayStatus = dayStatus;
+                }
+            });
+            console.log(exceptionDay.Date);
+            $scope.CurrentExceptionDay = exceptionDay;
+        };
+
+        $scope.CreateOrSave = function () {
+            $scope.CurrentExceptionDay.FormatDate = $("#dp3").val();
+            var d = Date.parse($scope.CurrentExceptionDay.FormatDate);
+            console.log(d);
+            $scope.CurrentExceptionDay.Date = d;
+            $scope.CurrentExceptionDay.WorkShedule = $scope.CurrentWorkSchedule;
+            $scope.SaveExceptionDay($scope.CurrentExceptionDay);
+        };
+
+        $scope.SaveExceptionDay = function (exceptionDay) {
+            $http.post('@Url.Action("AddOrEditExceptoinDay")', exceptionDay).success(
+                function (result) {
+                    if (result.Result) {
+                        console.log('save succes');
+                        $scope.DaysRefresh();
+                        if (exceptionDay.AddPpDay)
+                            $scope.AddPpExceptionDay(exceptionDay);
+                    } else {
+                        alert(result.Message);
+                    }
+                }
+            );
+        };
+
+        $scope.AddPpExceptionDay = function (exceptionDay) {
+            var day = $scope.form = angular.copy(exceptionDay);
+            day.AddPpDay = false;
+            console.log(day.Date);
+            day.Date.addDays(-1);
+            console.log(day.Date);
+            angular.forEach($scope.DayStatusList, function (dayStatus) {
+                if (dayStatus.SmallDayStatusName == 'ПП') {
+                    day.DayStatus = dayStatus;
+                    console.log(dayStatus.SmallDayStatusName);
+                }
+            });
+            $scope.SaveExceptionDay(day);
+        };
+
+        $scope.Remove = function (exceptionDay) {
+            $http.post('@Url.Action("Remove")', exceptionDay).success(
+                function (result) {
+                    if (result.Result) {
+                        console.log('del succes');
+                        $scope.DaysRefresh();
+                    } else {
+                        alert(result.Message);
+                    }
+                }
+            );
+        };
+
+        $scope.GetWorkScheduleName = function (workSchedule) {
+            return workSchedule.WorkSheduleName;
+        };
+
+        $scope.GetYear = function (year) {
+            return year + 1900;
+        };
+
+        $scope.SetCurrentWorkSchedule = function (workSchedule) {
+            $scope.CurrentWorkSchedule = workSchedule;
+        };
+
+        $scope.GetDayStatusName = function (dayStatus) {
+            return dayStatus.SmallDayStatusName;
+        };
+    }
+</script>
+
+
+
+<script>
+    $('#dp3').datepicker({ language: "ru-Ru", weekStart: 1 });
+
+</script>
+
+<style>
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>

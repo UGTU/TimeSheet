@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,9 +9,21 @@ using System.Xml.Serialization;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
 {
+    public enum ApproveState
+    {
+        Табельщик=1, НачальникСтруктурногоПодразделения=2, РаботникКадров=3, Администратор=10
+    }
+
     [DataContract]
     public class DtoExceptionDay
     {
+        public DtoExceptionDay()
+        {
+            IdExceptionDay = int.MinValue;
+            Date = DateTime.Now;
+            Name = "Новый праздник";
+        }
+
         [DataMember]
         public int IdExceptionDay { get; set; }
         [DataMember]
@@ -61,6 +74,36 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         [DataMember]
         public DtoApproverDepartment[] DtoApproverDepartments { get; set; }
+
+        public IEnumerable<DtoDepartment> GetApproverDepartments()
+        {
+            if (DtoApproverDepartments == null) return null;
+            var idDepartments = DtoApproverDepartments.Select(s => s.IdDepartment).Distinct();
+            var departments = new List<DtoDepartment>();
+            foreach (var idDepartment in idDepartments)
+            {
+                var d = DtoApproverDepartments.FirstOrDefault(f => f.IdDepartment == idDepartment);
+                if(d!=null)
+                    departments.Add(new DtoDepartment
+                    {
+                        DepartmentFullName = d.DepartmentFullName,
+                        DepartmentSmallName = d.DepartmentSmallName,
+                        IdDepartment = d.IdDepartment,
+                        IdManagerDepartment = d.IdDepartment
+                    });
+            }
+            return departments;
+        }
+
+        public IEnumerable<DtoApproverDepartment> GetDepartmentApproverNumbers(int idDepartnemt)
+        {
+            return DtoApproverDepartments.Where(w => w.IdDepartment == idDepartnemt).ToArray();
+        }
+
+        public bool Allowed(int idDepartment, ApproveState approveState)
+        {
+            return DtoApproverDepartments.Any(a => a.IdDepartment == idDepartment && a.ApproveNumber == (int) approveState);
+        }
     }
 
     [DataContract]
@@ -195,6 +238,30 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string SmallDayStatusName { get; set; }
         [DataMember]
         public string FullDayStatusName { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            var p = obj as DtoDayStatus;
+            if (p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return (IdDayStatus == p.IdDayStatus) && (SmallDayStatusName == p.SmallDayStatusName) && (FullDayStatusName == p.FullDayStatusName);
+        }
+
+        public override int GetHashCode()
+        {
+            return IdDayStatus;
+        }
     }
 
     [DataContract]
@@ -233,6 +300,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string AppoverComment { get; set; }
         [DataMember]
         public string AppoverVisa { get; set; }
+        [DataMember]
+        public bool AppoverResult { get; set; }
         [DataMember]
         public DateTime AppoverDate { get; set; }
     }

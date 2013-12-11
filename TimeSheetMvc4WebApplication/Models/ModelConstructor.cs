@@ -1,45 +1,92 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using CommonBase;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 
 namespace TimeSheetMvc4WebApplication.Models
 {
+    public enum DayStatus
+    {
+        [Description("Я")]
+        Я=0,
+        [Description("Н")]
+        Н=1,
+        [Description("РВ")]
+        РВ = 2,
+        [Description("С")]
+        С = 3,
+        [Description("К")]
+        К = 4,
+        [Description("ПК")]
+        ПК = 5,
+        [Description("О")]
+        О = 6,
+        [Description("У")]
+        У = 7,
+        [Description("УД")]
+        УД = 8,
+        [Description("Р")]
+        Р = 9,
+        [Description("ОЖ")]
+        ОЖ = 10,
+        [Description("ДО")]
+        ДО = 11,
+        [Description("ОЗ")]
+        ОЗ = 12,
+        [Description("Б")]
+        Б = 13,
+        [Description("Т")]
+        Т = 14,
+        [Description("ЛЧ")]
+        ЛЧ = 15,
+        [Description("ПР")]
+        ПР = 16,
+        [Description("В")]
+        В = 17,
+        [Description("НН")]
+        НН = 18,
+        [Description("НБ")]
+        НБ = 19,
+        [Description("ОВ")]
+        ОВ = 20,
+        [Description("Х")]
+        Х = 21,
+        [Description("ПП")]
+        ПП = 22,
+        //[Description("Empty")]
+        //Empty = 22
+    }
+
     public static class ModelConstructor
     {
-        //private static string _я = "Я";
-        //private static string _н = "Н";
-        //private static string _рв = "РВ";
-        //private static string _с = "С";
-        private const string К = "К";
-        //private static string _пк = "ПК";
-        private const string О = "О";
-        private const string У = "У";
-        private const string Уд = "УД";
-        private const string Р = "Р";
-        private const string Ож = "ОЖ";
-        private const string До = "ДО";
-        private const string Оз = "ОЗ";
-        private const string Б = "Б";
-        //private static string _т = "Т";
-        //private static string _лч = "ЛЧ";
-        private const string Пр = "ПР";
-        private const string В = "В";
-        private const string Нн = "НН";
-        //private static string _нб = "НБ";
-        //private static string _ов = "ОВ";
-        private const string Х = "X";
+        // Статусы дней попадающие в поле табеля Неявки по причинам
+        private static readonly DayStatus[] NonWorked =
+        {
+            DayStatus.В,
+            DayStatus.Б,
+            DayStatus.О,
+            DayStatus.ОЖ,
+            DayStatus.ОЗ,
+            DayStatus.ДО,
+            DayStatus.У,
+            DayStatus.К,
+            DayStatus.НН,
+            DayStatus.Р,
+            DayStatus.ПР,
+            DayStatus.УД,
+            DayStatus.ОВ
+        };
 
         public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
         {
-            //var categories = timeSheet.Employees.Select(s => s.FactStaffEmployee.Post.Category.IdCategory).Distinct();
             var timeSheets = new List<TimeSheetModel>();
             if (timeSheet.Employees.Any(a => a.FactStaffEmployee.Post.Category.IsPPS))
             {
                 timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
                                                          timeSheet.DateBegin, timeSheet.DateEnd,
-                                                         //timeSheet.Employees,
                                                          timeSheet.Employees.Where(
                                                              w => w.FactStaffEmployee.Post.Category.IsPPS).OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).ThenBy(
                                                                   o => o.FactStaffEmployee.Post.Category.OrderBy).ThenBy(t => t.FactStaffEmployee.Surname).ToArray(),
@@ -49,7 +96,6 @@ namespace TimeSheetMvc4WebApplication.Models
                                                          timeSheet.Approvers
                                    ));
             }
-
             if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.Post.Category.IsPPS))
             {
                 timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
@@ -63,11 +109,10 @@ namespace TimeSheetMvc4WebApplication.Models
                                                          timeSheet.Approvers
                                    ));
             }
-
             return timeSheets.ToArray();
         }
 
-        public static HeaderStyle[] GetHeaderStyle(DateTime dateBegin, DateTime dateEnd ,bool isForPrint)
+        private static HeaderStyle[] GetHeaderStyle(DateTime dateBegin, DateTime dateEnd ,bool isForPrint)
         {
             var holiday = "VCSS";
             var dayX = "XCSS";
@@ -79,8 +124,7 @@ namespace TimeSheetMvc4WebApplication.Models
             var headerStyle = new List<HeaderStyle>();
             for (int i = dateBegin.Day; i <= dateEnd.Day; i++)
             {
-                DateTime date = dateBegin.AddDays(i-1);
-                //date.da
+                var date = dateBegin.AddDays(i-1);
                 if (date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday)
                     headerStyle.Add(new HeaderStyle
                                         {
@@ -100,7 +144,6 @@ namespace TimeSheetMvc4WebApplication.Models
             }
             for (int i = dateEnd.Day+1; i <= 31; i++)
             {
-                //date = dateBegin.AddDays(i - 1);
                 headerStyle.Add(new HeaderStyle
                 {
                     Day = i,
@@ -108,16 +151,13 @@ namespace TimeSheetMvc4WebApplication.Models
                     DayText = "X"
                 });
             }
-
-
-
             return headerStyle.ToArray();
         }
 
-        public static TimeSheetModel TimeSheetModelConstructor(int documentNumber, DateTime dateComposition, DateTime dateBeginPeriod,
+        private static TimeSheetModel TimeSheetModelConstructor(int documentNumber, DateTime dateComposition, DateTime dateBeginPeriod,
                                                         DateTime dateEndPeriod, DtoTimeSheetEmployee[] timeSheetEmployees, string departmentName,
                                                         int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint,
-                                                        DtoTimeSheetApprover[] approvers)
+                                                        IEnumerable<DtoTimeSheetApprover> approvers)
         {
             var employees = new List<EmployeeModel>();
             for (int i = 0; i < timeSheetEmployees.Count(); i++)
@@ -132,7 +172,6 @@ namespace TimeSheetMvc4WebApplication.Models
                 if (distributedEmployees == 0)
                 {
                     papers.Add(PaperModelConstructor(false, false, employees.Take(firsPaperPaperRecorddsColl).ToArray(),headerStyle));
-                    //distributedEmployees += firsPaperPaperRecorddsColl;
                     distributedEmployees += firsPaperPaperRecorddsColl < employees.Count
                         ? firsPaperPaperRecorddsColl
                         : employees.Count;
@@ -182,7 +221,7 @@ namespace TimeSheetMvc4WebApplication.Models
             };
         }
 
-        public static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, HeaderStyle[] headerStyle, int transferEmpl)
+        private static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, HeaderStyle[] headerStyle, int transferEmpl)
         {
             var papers = new List<PaperModel> {lastPaper};
             if (papers.Last().Employees.Count() >= lastPaperEmplCall)
@@ -195,7 +234,7 @@ namespace TimeSheetMvc4WebApplication.Models
             return papers.ToArray();
         }
 
-        public static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, HeaderStyle[] headerStyle)
+        private static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, HeaderStyle[] headerStyle)
         {
             return new PaperModel
             {
@@ -206,17 +245,15 @@ namespace TimeSheetMvc4WebApplication.Models
             };
         }
 
-        public static EmployeeModel EmployeeModelConstructor(DtoTimeSheetEmployee employee, int employeeNumber, bool isForPrint)
+        private static EmployeeModel EmployeeModelConstructor(DtoTimeSheetEmployee employee, int employeeNumber, bool isForPrint)
         {
             var records = new List<EmployeeRecordModel>();
             for (int i = 1; i <= 32; i++)
             {
                 var currentRecord = employee.Records.FirstOrDefault(f => f.Date.Day == i);
-                records.Add(currentRecord != null
-                                ? EmployeeRecordModelConstructor(i, isForPrint, currentRecord)
-                                : EmployeeRecordModelConstructor(i, isForPrint));
+                records.Add(EmployeeRecordModelConstructor(i, isForPrint, currentRecord));
             }
-            var mounthDay = employee.Records.Count(c => c.DayStays.SmallDayStatusName != Х);
+            var mounthDay = employee.Records.Count(c => c.DayStays.IdDayStatus != (int)DayStatus.Х);
             return new EmployeeModel
             {
                 Surname = employee.FactStaffEmployee.Surname,
@@ -227,69 +264,64 @@ namespace TimeSheetMvc4WebApplication.Models
                 EmployeeNumber = employeeNumber,
                 Records = records.ToArray(),
                 FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & w.JobTimeCount > 0),
-                FirstHalfMonthHours = employee.Records.Where(w => w.Date.Day < 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
+                FirstHalfMonthHours =
+                    employee.Records.Where(w => w.Date.Day < 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
                 SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 & w.JobTimeCount > 0),
-                SecondHalfMonthHours = employee.Records.Where(w => w.Date.Day >= 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
+                SecondHalfMonthHours =
+                    employee.Records.Where(w => w.Date.Day >= 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
                 Days = employee.Records.Count(w => w.JobTimeCount > 0),
                 MounthDays = mounthDay,
                 Hours = employee.Records.Where(w => w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
-                Б = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Б), Б, isForPrint),
-                В = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == В), В, isForPrint),
-                ДО = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == До), До, isForPrint),
-                К = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == К), К, isForPrint),
-                НН = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Нн), Нн, isForPrint),
-                О = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == О), О, isForPrint),
-                ОЗ = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Оз), Оз, isForPrint),
-                ОЖ = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Ож), Ож, isForPrint),
-                ПР = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Пр), Пр, isForPrint),
-                Р = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Р), Р, isForPrint),
-                У = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == У), У, isForPrint),
-                УД = EmployeeRecordModelConstructor(records.Count(c => c.DayStatus == Уд), Уд, isForPrint)
+                NonWorkedDays =NonWorked.Select(
+                        s => new {DayStatus = s, Count = employee.Records.Count(w => w.DayStays.IdDayStatus == (int) s)})
+                        .OrderByDescending(o => o.Count)
+                        .ThenBy(o => o.DayStatus.Description())
+                        .Select(s => EmployeeRecordModelConstructor(s.Count, s.DayStatus.Description(), isForPrint))
+                        .ToArray()
             };
         }
 
-        public static EmployeeRecordModel EmployeeRecordModelConstructor(int day, bool isForPrint, DtoTimeSheetRecord record = null)
+        private static EmployeeRecordModel EmployeeRecordModelConstructor(int day, bool isForPrint,DtoTimeSheetRecord record = null)
         {
-            if (record != null)
+            EmployeeRecordModel model;
+            if (record == null)
+                model = new EmployeeRecordModel
+                {
+                    Day = day,
+                    DayStatus = DayStatus.Х.Description(),
+                    Value = DayStatus.Х.Description()
+                };
+            else
             {
-                if(record.DayStays.SmallDayStatusName=="X")
-                    return new EmployeeRecordModel
+                if (record.DayStays.SmallDayStatusName == DayStatus.Х.Description())
+                    model = new EmployeeRecordModel
                     {
                         Day = day,
-                        DayStatus = " ",
-                        Value = " ",
-                        CSS = GetCSS("X", isForPrint)
+                        DayStatus = string.Empty,
+                        Value = string.Empty
                     };
-                return new EmployeeRecordModel
+                else
+                    model = new EmployeeRecordModel
                     {
                         Day = day,
                         DayStatus = record.DayStays.SmallDayStatusName,
-                        Value = record.JobTimeCount.ToString(CultureInfo.InvariantCulture),
-                        CSS =  GetCSS(record.DayStays.SmallDayStatusName, isForPrint)
+                        Value = record.JobTimeCount.ToString(CultureInfo.InvariantCulture)
                     };
             }
-            return new EmployeeRecordModel
-            {
-                Day = day,
-                DayStatus = "X",
-                Value = "X",
-                CSS =  GetCSS("X", isForPrint)
-            };
+            return EmployeeRecordModelCssDecorator(model, isForPrint);
         }
 
-        public static EmployeeRecordModel EmployeeRecordModelConstructor(int days, string dayStatus, bool isForPrint)
+        private static EmployeeRecordModel EmployeeRecordModelConstructor(int days, string dayStatus, bool isForPrint)
         {
-            return new EmployeeRecordModel
+            return EmployeeRecordModelCssDecorator(new EmployeeRecordModel
             {
                 Day = -1,
                 DayStatus = dayStatus,
-                Value = days.ToString(CultureInfo.InvariantCulture),
-                //CSS = (isForPrint || days == 0) ? GetCSS("Empty") : GetCSS(dayStatus)
-                CSS = days == 0? GetCSS("Empty",isForPrint) : GetCSS(dayStatus, isForPrint)
-            };
+                Value = days.ToString(CultureInfo.InvariantCulture)
+            }, isForPrint);
         }
 
-        public static ApproverModel ApproverModelConstructor (DtoTimeSheetApprover approver)
+        private static ApproverModel ApproverModelConstructor (DtoTimeSheetApprover approver)
         {
             if(approver!=null)
             return new ApproverModel
@@ -305,71 +337,108 @@ namespace TimeSheetMvc4WebApplication.Models
             return new ApproverModel();
         }
 
-        private static string GetCSS(string dayStaus,bool isForPrint)
+        private static EmployeeRecordModel EmployeeRecordModelCssDecorator(EmployeeRecordModel model, bool isForPrint)
         {
+            string css = string.Empty;
+            var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
             if (isForPrint)
             {
-                switch (dayStaus)
+                if ((model.Day == -1 && model.Value != "0") || (model.Day != -1 && status != DayStatus.Я))
                 {
-                    case "В":
-                        return "PrintVCSS";
-                    case "X":
-                        return "PrintXCSS";
-                    default:
-                        return "EmptyCSS";
+                    switch (status)
+                    {
+                        case DayStatus.В:
+                            css = "PrintVCSS";
+                            break;
+                        case DayStatus.Х:
+                            css = "PrintXCSS";
+                            break;
+                        case DayStatus.Я:
+                            css = "EmptyCSS";
+                            break;
+                        default:
+                            css = "PrintXCSS";
+                            break;
+                    }
                 }
             }
-            switch (dayStaus)
+            else if((model.Day==-1 && model.Value!="0") || model.Day!=-1)
             {
-                case "Я":
-                    return "ICSS";
-                case "Н":
-                    return "NCSS";
-                case "РВ":
-                    return "RvCSS";
-                case "С":
-                    return "SCSS";
-                case "К":
-                    return "KCSS";
-                case "ПК":
-                    return "PkCSS";
-                case "О":
-                    return "OCSS";
-                case "У":
-                    return "YCSS";
-                case "УД":
-                    return "YdCSS";
-                case "Р":
-                    return "PCSS";
-                case "ОЖ":
-                    return "OzhCSS";
-                case "ДО":
-                    return "DoCSS";
-                case "ОЗ":
-                    return "OzCSS";
-                case "Б":
-                    return "BCSS";
-                case "Т":
-                    return "TCSS";
-                case "ЛЧ":
-                    return "LchCSS";
-                case "ПР":
-                    return "PrCSS";
-                case "В":
-                    return "VCSS";
-                case "НН":
-                    return "NnCSS";
-                case "НБ":
-                    return "NbCSS";
-                case "ОВ":
-                    return "OvCSS";
-                case "X":
-                    return "XCSS";
-                case "Empty":
-                    return "EmptyCSS";
-                default:
-                    return "defCSS";
+                switch (status)
+                {
+                    case DayStatus.Я:
+                        css = "ICSS";
+                        break;
+                    case DayStatus.Н:
+                        css = "NCSS";
+                        break;
+                    case DayStatus.РВ:
+                        css = "RvCSS";
+                        break;
+                    case DayStatus.С:
+                        css = "SCSS";
+                        break;
+                    case DayStatus.К:
+                        css = "KCSS";
+                        break;
+                    case DayStatus.ПК:
+                        css = "PkCSS";
+                        break;
+                    case DayStatus.О:
+                        css = "OCSS";
+                        break;
+                    case DayStatus.У:
+                        css = "YCSS";
+                        break;
+                    case DayStatus.УД:
+                        css = "YdCSS";
+                        break;
+                    case DayStatus.Р:
+                        css = "PCSS";
+                        break;
+                    case DayStatus.ОЖ:
+                        css = "OzhCSS";
+                        break;
+                    case DayStatus.ДО:
+                        css = "DoCSS";
+                        break;
+                    case DayStatus.ОЗ:
+                        css = "OzCSS";
+                        break;
+                    case DayStatus.Б:
+                        css = "BCSS";
+                        break;
+                    case DayStatus.Т:
+                        css = "TCSS";
+                        break;
+                    case DayStatus.ЛЧ:
+                        css = "LchCSS";
+                        break;
+                    case DayStatus.ПР:
+                        css = "PrCSS";
+                        break;
+                    case DayStatus.В:
+                        css = "VCSS";
+                        break;
+                    case DayStatus.НН:
+                        css = "NnCSS";
+                        break;
+                    case DayStatus.НБ:
+                        css = "NbCSS";
+                        break;
+                    case DayStatus.ОВ:
+                        css = "OvCSS";
+                        break;
+                    case DayStatus.Х:
+                        css = "XCSS";
+                        break;
+                    default:
+                        css = "defCSS";
+                        break;
+                }
             }
+            model.CSS = css;
+            return model;
         }
     }
 }

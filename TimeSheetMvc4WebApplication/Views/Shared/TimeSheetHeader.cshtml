@@ -1,17 +1,14 @@
 ﻿@using TimeSheetMvc4WebApplication
-@*@model int*@
+@using TimeSheetMvc4WebApplication.Controllers
 @{
-    var client = new TimeSheetService();
-    var userName = System.Web.HttpContext.Current.User.Identity.Name;
-    var approver = client.GetCurrentApproverByLogin(userName);
-            if (approver != null)
-            {
-                userName = String.Format("{0} {1} {2}", approver.Surname, approver.Name, approver.Patronymic);
-            }
+    var baseController = new BaseController();
+    var approver = baseController.GetCurrentApprover();
+    var userName = baseController.GetUsername();
+    if (approver != null)
+    {
+        userName = String.Format("{0} {1} {2}", approver.Surname, approver.Name, approver.Patronymic);
+    }
 }
-
-
-
 
 <nav class="navbar navbar-default" style="border-radius: 0;" role="navigation">
     <div class="container">
@@ -22,19 +19,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <a href="@Url.Action("Index","Main")">
+                <img style="height: 30px; margin-top: 8px; margin-right: 5px; float: left;" src="../../Content/Images/logo.png">
+            </a>
             <a class="navbar-brand" href="@Url.Action("Index","Main")">Табель</a>
         </div>
 
         <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav" id="HeaderLiBox">
-            </ul>
+            <ul class="nav navbar-nav" id="HeaderLiBox"></ul>
             <ul class="nav navbar-nav navbar-right">
-                @if (approver.IsAdministrator)
+                @if (approver!=null && approver.IsAdministrator)
                 {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> @userName <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Администрирование</a></li>
+                            <li><a href="@Url.Action("Index","Admin")"><span class="glyphicon glyphicon-cog"></span> Администрирование</a></li>
                         </ul>
                     </li>
                 }
