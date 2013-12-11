@@ -19,7 +19,7 @@
             {
                 <div class="@string.Format("col-sm-6 col-md-{0}", span)">
                     <h3>@item.DepartmentSmallName</h3>
-                    <p style="height: 40px;">@item.DepartmentFullName</p>
+                    <p style="height: 50px;">@item.DepartmentFullName</p>
                     <p style="color: darkgray">
                         @{
                             var roles = Model.GetDepartmentApproverNumbers(item.IdDepartment).Select(s => s.ApproveTypeName).ToArray();
