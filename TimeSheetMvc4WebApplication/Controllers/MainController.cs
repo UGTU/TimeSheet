@@ -83,6 +83,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         //======================    Согласование табеля     ====================
+
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
@@ -90,14 +91,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
             var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
-            var timeSheet = Client.GetTimeSheet(idTimeSheet,true);
+            var timeSheet = Client.GetTimeSheet(idTimeSheet, true);
             var currentApprover =
                 GetCurrentApprover()
                     .GetDepartmentApproverNumbers(timeSheet.Department.IdDepartment)
-                        .First(w => w.ApproveNumber == approveStep+1);
+                        .First(w => w.ApproveNumber == approveStep + 1);
             var timeSheetAprovalModel = new TimeSheetAprovalModel
             {
-                IdTimeSheet=idTimeSheet,
+                IdTimeSheet = idTimeSheet,
                 ApprovalDate = DateTime.Now,
                 ApprovalResult = null,
                 Comment = "",
