@@ -160,12 +160,51 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             }).FirstOrDefault();
         }
 
+        //public static DtoTimeSheet DtoTimeSheet(KadrDataContext db, int idTimeSheet, bool isEmpty = false)
+        //{
+        //    var service = new TimeSheetService();
+        //    var timeSheetApprovalStep = service.GetTimeSheetApproveStep(idTimeSheet);
+        //    var approvers =
+        //        Enumerable.Range(1, 3).Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheetApprovalStep));
+        //    var timeSheet = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => new DtoTimeSheet
+        //    {
+        //        IdTimeSheet = s.id,
+        //        DateBegin = s.DateBeginPeriod,
+        //        DateEnd = s.DateEndPeriod,
+        //        DateComposition = s.DateComposition,
+        //        Department = DtoDepartment(db, s.idDepartment),
+        //        Employees = !isEmpty ? db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+        //                .Select(se => se.idFactStaffHistory)
+        //                .Distinct()
+        //                .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
+        //                .ToArray() : null,
+        //        Approvers = approvers.ToArray(),
+        //    }).FirstOrDefault();
+        //    if (timeSheet == null) return null;
+        //    if (timeSheet.Employees != null)
+        //    {
+        //        timeSheet.Employees = timeSheet.Employees.
+        //            OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
+        //            ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
+        //            ThenBy(o => o.FactStaffEmployee.Surname).
+        //            ToArray();
+        //        timeSheet.EmployeesCount = timeSheet.Employees.Count();
+        //    }
+        //    else
+        //    {
+        //        timeSheet.EmployeesCount =
+        //            db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+        //                .Select(s => s.idFactStaffHistory)
+        //                .Distinct()
+        //                .Count();
+        //    }
+        //    timeSheet.ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet);
+        //    return timeSheet;
+        //}
+
         public static DtoTimeSheet DtoTimeSheet(KadrDataContext db, int idTimeSheet, bool isEmpty = false)
         {
             var service = new TimeSheetService();
-            var timeSheetApprovalStep = service.GetTimeSheetApproveStep(idTimeSheet);
-            var approvers =
-                Enumerable.Range(1, 3).Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheetApprovalStep));
             var timeSheet = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => new DtoTimeSheet
             {
                 IdTimeSheet = s.id,
@@ -173,32 +212,26 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 DateEnd = s.DateEndPeriod,
                 DateComposition = s.DateComposition,
                 Department = DtoDepartment(db, s.idDepartment),
-                Employees = !isEmpty ? db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
-                        .Select(se => se.idFactStaffHistory)
+                ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet),
+                EmployeesCount = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+                        .Select(ec => ec.idFactStaffHistory)
                         .Distinct()
-                        .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
-                        .ToArray() : null,
-                Approvers = approvers.ToArray(),
+                        .Count()
             }).FirstOrDefault();
             if (timeSheet == null) return null;
-            if (timeSheet.Employees != null)
-            {
-                timeSheet.Employees = timeSheet.Employees.
-                    OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
-                    ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
-                    ThenBy(o => o.FactStaffEmployee.Surname).
-                    ToArray();
-                timeSheet.EmployeesCount = timeSheet.Employees.Count();
-            }
-            else
-            {
-                timeSheet.EmployeesCount =
-                    db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
-                        .Select(s => s.idFactStaffHistory)
-                        .Distinct()
-                        .Count();
-            }
-            timeSheet.ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet);
+            if (isEmpty) return timeSheet;
+            timeSheet.Approvers =
+                Enumerable.Range(1, 3)
+                    .Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheet.ApproveStep))
+                    .ToArray();
+            timeSheet.Employees = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+                .Select(se => se.idFactStaffHistory)
+                .Distinct()
+                .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
+                .ToArray().OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
+                ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
+                ThenBy(o => o.FactStaffEmployee.Surname).
+                ToArray();
             return timeSheet;
         }
 

@@ -369,3 +369,4 @@ set DayStatusName = 'Õ'
 where DayStatusName = 'X'
 
 select*from ShemaTabel.DayStatus d where d.DayStatusName = 'Õ'
+select*from ShemaTabel.DayStatus d where d.DayStatusName = 'Õ'
