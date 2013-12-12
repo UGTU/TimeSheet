@@ -148,7 +148,7 @@ namespace TimeSheetMvc4WebApplication.Models
                 {
                     Day = i,
                     CSS = dayX,
-                    DayText = "Х"
+                    DayText = DayStatus.Х.Description()
                 });
             }
             return headerStyle.ToArray();
@@ -293,7 +293,7 @@ namespace TimeSheetMvc4WebApplication.Models
                 };
             else
             {
-                if (record.DayStays.SmallDayStatusName == DayStatus.Х.Description())
+                if (record.DayStays.IdDayStatus == (int)DayStatus.Х)
                     model = new EmployeeRecordModel
                     {
                         Day = day,
@@ -340,108 +340,104 @@ namespace TimeSheetMvc4WebApplication.Models
         private static EmployeeRecordModel EmployeeRecordModelCssDecorator(EmployeeRecordModel model, bool isForPrint)
         {
             string css = string.Empty;
-            //var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
-            //var status = (DayStatus)Enum.Parse(typeof(DayStatus), model.DayStatus);
-            //todo: Вот тут вот убрать этот изврат и посмотреть что стоит в базе X или ИКС
             DayStatus status;
-            if (!Enum.TryParse(model.DayStatus, out status))
+            if (Enum.TryParse(model.DayStatus, out status))
             {
-                status = DayStatus.Х;
-            }
-            if (isForPrint)
-            {
-                if ((model.Day == -1 && model.Value != "0") || (model.Day != -1 && status != DayStatus.Я))
+                if (isForPrint)
+                {
+                    if ((model.Day == -1 && model.Value != "0") || (model.Day != -1 && status != DayStatus.Я))
+                    {
+                        switch (status)
+                        {
+                            case DayStatus.В:
+                                css = "PrintVCSS";
+                                break;
+                            case DayStatus.Х:
+                                css = "PrintXCSS";
+                                break;
+                            case DayStatus.Я:
+                                css = "EmptyCSS";
+                                break;
+                            default:
+                                css = "PrintXCSS";
+                                break;
+                        }
+                    }
+                }
+                else if ((model.Day == -1 && model.Value != "0") || model.Day != -1)
                 {
                     switch (status)
                     {
+                        case DayStatus.Я:
+                            css = "ICSS";
+                            break;
+                        case DayStatus.Н:
+                            css = "NCSS";
+                            break;
+                        case DayStatus.РВ:
+                            css = "RvCSS";
+                            break;
+                        case DayStatus.С:
+                            css = "SCSS";
+                            break;
+                        case DayStatus.К:
+                            css = "KCSS";
+                            break;
+                        case DayStatus.ПК:
+                            css = "PkCSS";
+                            break;
+                        case DayStatus.О:
+                            css = "OCSS";
+                            break;
+                        case DayStatus.У:
+                            css = "YCSS";
+                            break;
+                        case DayStatus.УД:
+                            css = "YdCSS";
+                            break;
+                        case DayStatus.Р:
+                            css = "PCSS";
+                            break;
+                        case DayStatus.ОЖ:
+                            css = "OzhCSS";
+                            break;
+                        case DayStatus.ДО:
+                            css = "DoCSS";
+                            break;
+                        case DayStatus.ОЗ:
+                            css = "OzCSS";
+                            break;
+                        case DayStatus.Б:
+                            css = "BCSS";
+                            break;
+                        case DayStatus.Т:
+                            css = "TCSS";
+                            break;
+                        case DayStatus.ЛЧ:
+                            css = "LchCSS";
+                            break;
+                        case DayStatus.ПР:
+                            css = "PrCSS";
+                            break;
                         case DayStatus.В:
-                            css = "PrintVCSS";
+                            css = "VCSS";
+                            break;
+                        case DayStatus.НН:
+                            css = "NnCSS";
+                            break;
+                        case DayStatus.НБ:
+                            css = "NbCSS";
+                            break;
+                        case DayStatus.ОВ:
+                            css = "OvCSS";
                             break;
                         case DayStatus.Х:
-                            css = "PrintXCSS";
-                            break;
-                        case DayStatus.Я:
-                            css = "EmptyCSS";
+                            css = "XCSS";
                             break;
                         default:
-                            css = "PrintXCSS";
+                            css = "defCSS";
                             break;
                     }
-                }
-            }
-            else if((model.Day==-1 && model.Value!="0") || model.Day!=-1)
-            {
-                switch (status)
-                {
-                    case DayStatus.Я:
-                        css = "ICSS";
-                        break;
-                    case DayStatus.Н:
-                        css = "NCSS";
-                        break;
-                    case DayStatus.РВ:
-                        css = "RvCSS";
-                        break;
-                    case DayStatus.С:
-                        css = "SCSS";
-                        break;
-                    case DayStatus.К:
-                        css = "KCSS";
-                        break;
-                    case DayStatus.ПК:
-                        css = "PkCSS";
-                        break;
-                    case DayStatus.О:
-                        css = "OCSS";
-                        break;
-                    case DayStatus.У:
-                        css = "YCSS";
-                        break;
-                    case DayStatus.УД:
-                        css = "YdCSS";
-                        break;
-                    case DayStatus.Р:
-                        css = "PCSS";
-                        break;
-                    case DayStatus.ОЖ:
-                        css = "OzhCSS";
-                        break;
-                    case DayStatus.ДО:
-                        css = "DoCSS";
-                        break;
-                    case DayStatus.ОЗ:
-                        css = "OzCSS";
-                        break;
-                    case DayStatus.Б:
-                        css = "BCSS";
-                        break;
-                    case DayStatus.Т:
-                        css = "TCSS";
-                        break;
-                    case DayStatus.ЛЧ:
-                        css = "LchCSS";
-                        break;
-                    case DayStatus.ПР:
-                        css = "PrCSS";
-                        break;
-                    case DayStatus.В:
-                        css = "VCSS";
-                        break;
-                    case DayStatus.НН:
-                        css = "NnCSS";
-                        break;
-                    case DayStatus.НБ:
-                        css = "NbCSS";
-                        break;
-                    case DayStatus.ОВ:
-                        css = "OvCSS";
-                        break;
-                    case DayStatus.Х:
-                        css = "XCSS";
-                        break;
-                    default:
-                        css = "defCSS";
-                        break;
                 }
             }
             model.CSS = css;

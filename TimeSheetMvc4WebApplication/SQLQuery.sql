@@ -362,4 +362,10 @@ select*from FactStaffWithHistory f inner join PlanStaff p
 
 select*from ShemaTabel.FactStaffWithHistory
 
-select*from ShemaTabel.DayStatus
+select*from ShemaTabel.DayStatus d where d.DayStatusName = 'X'
+
+update ShemaTabel.DayStatus
+set DayStatusName = 'Õ'
+where DayStatusName = 'X'
+
+select*from ShemaTabel.DayStatus d where d.DayStatusName = 'Õ'
