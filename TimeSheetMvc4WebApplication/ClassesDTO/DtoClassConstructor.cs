@@ -152,9 +152,9 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 IdDepartment = s.idDepartment,
                 ApproveNumber = (int)s.ApproverType.ApproveNumber,
                 ApproveTypeName = s.ApproverType.ApproverTypeName,
-                DepartmentFullName = db.Department.Where(w => w.id == s.idDepartment).Select(sd => sd.DepartmentName).FirstOrDefault(),
-                DepartmentSmallName = db.Department.Where(w => w.id == s.idDepartment).Select(sd => sd.DepartmentSmallName).FirstOrDefault(),
-                IdManagerDepartment = db.Department.Where(w => w.id == s.idDepartment).Select(sd => sd.idManagerDepartment).FirstOrDefault(),
+                DepartmentFullName = s.Dep.Department.DepartmentName,
+                DepartmentSmallName = s.Dep.Department.DepartmentSmallName,
+                IdManagerDepartment = s.Dep.Department.idManagerDepartment,
                 IdApprover = s.id
             }).FirstOrDefault();
         }
