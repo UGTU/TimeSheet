@@ -14,12 +14,24 @@ select*from ShemaTabel.Approver a
 	where idApproverType=4
 
 --Добавить администратора по логину
-declare @idEmpl int = -1000
-declare @emplLogin varchar  = 'ochernova@ugtu.net'
-select @idEmpl   =  e.id from Employee e where e.EmployeeLogin=@emplLogin
+select* from Employee e where e.EmployeeLogin='ochernova@ugtu.net'
+
+declare @idEmpl int = 5575
 insert into ShemaTabel.Approver
 values(GETDATE(),null,4,51,@idEmpl)
+------------------------------------------------------------
+declare @idEmpl int = -1000
+declare @emplLogin varchar(max)  = 'ochernova@ugtu.net'
+select @emplLogin
 
+select* from Employee e where e.EmployeeLogin=@emplLogin
+
+select @idEmpl   =  e.id from Employee e where e.EmployeeLogin=@emplLogin
+select @idEmpl
+
+insert into ShemaTabel.Approver
+values(GETDATE(),null,4,51,@idEmpl)
+------------------------------------------------------------------
 
 
 declare @emplLogin varchar
@@ -309,19 +321,7 @@ alter table ShemaTabel.TimeSheetRecord add constraint TimeSheetRecordTablePrimar
 
 
  
-go
-alter PROC ShemaTabel.TimeSheetRecordInsert(@ValidXMLInput XML)
-AS BEGIN
-       INSERT INTO ShemaTabel.TimeSheetRecord(RecordDate,JobTimeCount,idTimeSheet,idDayStatus,IsChecked,idFactStaffHistory,IdTimeSheetRecord)
-       SELECT	Col.value('@RecordDate','datetime') ,
-				Col.value('@JobTimeCount','FLOAT'),
-				Col.value('@idTimeSheet','INT'),
-				Col.value('@idDayStatus','INT'),
-				Col.value('@IsChecked','BIT'),
-				Col.value('@idFactStaffHistory','INT'),
-				Col.value('@IdTimeSheetRecord','UNIQUEIDENTIFIER')
-       FROM @ValidXMLInput.nodes('//TimeSheetRecords/Record') Tab(Col)
-END
+
 
 
 go
@@ -370,3 +370,31 @@ where DayStatusName = 'X'
 
 select*from ShemaTabel.DayStatus d where d.DayStatusName = 'Х'
 select*from ShemaTabel.DayStatus d where d.DayStatusName = 'Х'
+
+
+select*from ShemaTabel.TimeSheetRecord
+
+declare @xml xml = cast('
+<TimeSheetRecords>
+ <Record>
+  <IdTimeSheetRecord>50fd85b3-490d-47a0-8040-1e4159deea41</IdTimeSheetRecord> 
+  <JobTimeCount>0</JobTimeCount> 
+  <idTimeSheet>684</idTimeSheet> 
+  <idDayStatus>6</idDayStatus> 
+  <IsChecked>false</IsChecked> 
+  <idFactStaffHistory>2749</idFactStaffHistory> 
+  <RecordDate>2013-12-16</RecordDate> 
+ </Record>
+</TimeSheetRecords>' as xml)
+
+exec ShemaTabel.TimeSheetRecordInsert @xml
+
+select*from ShemaTabel.TimeSheetRecord where IdTimeSheetRecord='50fd85b3-490d-47a0-8040-1e4159deea41'
+
+delete from ShemaTabel.TimeSheetRecord where IdTimeSheetRecord='50fd85b3-490d-47a0-8040-1e4159deea41'
+
+
+
+select convert(varchar(10),getdate(),112)
+
+select convert(char(10), GETDATE(), 127)

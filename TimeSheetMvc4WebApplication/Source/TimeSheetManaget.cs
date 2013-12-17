@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -475,6 +476,7 @@ namespace TimeSheetMvc4WebApplication.Source
         //Сериализует записи табеля в XML
         private XElement SerializeTimeSheetRecordsToXml(IEnumerable<TimeSheetRecord> records)
         {
+            var culture = new CultureInfo("en-US");     
             return new XElement("TimeSheetRecords",records.Select(record => new XElement("Record",
                     new XElement("IdTimeSheetRecord", record.IdTimeSheetRecord),
                     new XElement("JobTimeCount", record.JobTimeCount),
@@ -487,7 +489,7 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Сохраняет записи табеля в базу
-        private bool SubmitTimeSheet()
+        private void SubmitTimeSheet()
         {
             try
             {
@@ -497,15 +499,15 @@ namespace TimeSheetMvc4WebApplication.Source
                 {
                     timeSheetRecord.idTimeSheet = _timeSheet.id;
                 }
-                _db.TimeSheetRecordInsert(SerializeTimeSheetRecordsToXml(_timeSheetRecordLList));
-                return true;
+                var r = SerializeTimeSheetRecordsToXml(_timeSheetRecordLList);
+                _db.TimeSheetRecordInsert(r);
             }
             catch (System.Exception ex)
             {
-                _db.TimeSheet.DeleteOnSubmit(_timeSheet);
                 _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
+                _db.TimeSheet.DeleteOnSubmit(_timeSheet);
                 _db.SubmitChanges();
-                return false;
+                throw;
             }
         }
 
