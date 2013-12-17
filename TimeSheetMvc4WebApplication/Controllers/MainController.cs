@@ -131,6 +131,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
         }
 
+        public FileResult Download()
+        {
+            const string buffer = @"~\Content\Manual\Руководство пользователя ИС Табель.pdf"; //bytes form this
+            return File(buffer, "application/pdf"); 
+            //return File(@"//");
+            //return File(@"~\Files\output.txt", "application/text", "blahblahblah.txt");
+        }
+
         //======================    Json    ====================================
 
         public JsonResult GetTimeSheetModelJson(int idTimeSheet)
