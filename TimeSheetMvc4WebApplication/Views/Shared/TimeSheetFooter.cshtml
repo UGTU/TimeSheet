@@ -12,15 +12,16 @@
 </div>
 <script>
     $(window).load(function () {
-        footerPisition();
+        footerPossitionRefresh();
     });
     $(window).resize(function () {
-        footerPisition();
+        footerPossitionRefresh();
     });
-    function footerPisition() {
-        if ($(document).height() <= $(window).height())
+    function footerPossitionRefresh() {
+        if ($(document).height()  <= $(window).height())
             $(".footer").addClass("navbar-fixed-bottom");
         else
             $(".footer").removeClass("navbar-fixed-bottom");
+        console.log('footer resize');
     }
 </script>
