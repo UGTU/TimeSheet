@@ -17,6 +17,14 @@
     $(window).resize(function () {
         footerPossitionRefresh();
     });
+    //$(document).resize(function () {
+    //    footerPossitionRefresh();
+    //});
+    
+    //$(document).on('DOMSubtreeModified', function() {
+    //    footerPossitionRefresh();
+    //});
+
     function footerPossitionRefresh() {
         if ($(document).height()  <= $(window).height())
             $(".footer").addClass("navbar-fixed-bottom");
