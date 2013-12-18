@@ -28,15 +28,17 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav" id="HeaderLiBox"></ul>
             <ul class="nav navbar-nav navbar-right">
-                @if (approver!=null && approver.IsAdministrator)
+                @if (approver != null && approver.IsAdministrator)
                 {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> @userName <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
-                            @*<li><a href="@Url.Action("Index","Admin")"><span class="glyphicon glyphicon-cog"></span> Администрирование</a></li>*@
                             <li><a href="@Url.Action("ExceptionDay", "Admin")"><span class="glyphicon glyphicon-calendar"></span> Выходные дни и праздники</a></li>
                             <li><a href="@Url.Action("DepartmentManagment","Admin")"><span class="glyphicon glyphicon-briefcase"></span> Структурные подразделения</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <a id="ug" href="@Url.Action("Download","Main")" data-placement="bottom" data-toggle="tooltip" title="Просмотреть руководством пользователя" target="_blank" style="color: #777777"><span class="glyphicon glyphicon-question-sign"></span></a>
                     </li>
                 }
                 else
@@ -47,3 +49,7 @@
         </div>
     </div>
 </nav>
+
+<script>
+    $('#ug').tooltip('hide');
+</script>

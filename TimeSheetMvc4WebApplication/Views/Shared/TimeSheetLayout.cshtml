@@ -1,24 +1,24 @@
 ﻿<!DOCTYPE html>
-<html>
-    <head>
-        <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
-        <link rel="shortcut icon" href="../../Content/Images/logo.png" />
-        @Styles.Render("~/Content/timeSheet")
-        @Styles.Render("~/Content/bootstrap")
-        @Styles.Render("~/Content/bootstrap-datepicker")
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/Content/datejs")
-        @Scripts.Render("~/Content/angularjs")
-        @Scripts.Render("~/Scripts/bootstrap-datepicker")
-    </head>
-    <body class="body">
-        @{ Html.RenderPartial("TimeSheetHeader"); }
-        <div class="container">
-            @RenderBody()
-        </div>
-        @RenderSection("scripts", required: false)
-        @{ Html.RenderPartial("TimeSheetFooter"); }
-    </body>
+<html >
+<head>
+    <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
+    <link rel="shortcut icon" href="../../Content/Images/logo.png" />
+    @Styles.Render("~/Content/timeSheet")
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Content/datejs")
+    @Scripts.Render("~/Content/angularjs")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker")
+</head>
+<body class="body" >
+    @{ Html.RenderPartial("TimeSheetHeader"); }
+    <div class="container" id="mainContainer">
+        @RenderBody()
+    </div>
+    @RenderSection("scripts", required: false)
+    @*@{ Html.RenderPartial("TimeSheetFooter"); }*@
+</body>
 </html>
