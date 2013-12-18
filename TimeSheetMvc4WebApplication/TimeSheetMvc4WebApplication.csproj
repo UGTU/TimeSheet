@@ -171,9 +171,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Kadr.designer.cs">
-      <DependentUpon>Kadr.dbml</DependentUpon>
-      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Kadr.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\DtoToJsonMapper.cs" />
@@ -270,8 +270,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Kadr.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Kadr.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Kadr.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\Images\Без имени-1.psd" />

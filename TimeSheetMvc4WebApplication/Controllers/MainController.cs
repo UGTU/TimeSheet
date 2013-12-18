@@ -133,9 +133,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         public FileResult Download()
+        //public ActionResult Download()
         {
             const string buffer = @"~\Content\Manual\Руководство пользователя ИС Табель.pdf"; //bytes form this
             return File(buffer, "application/pdf"); 
+            //return File(buffer, "application/pdf", "Руководство пользователя ИС Табель.pdf"); 
             //return File(@"//");
             //return File(@"~\Files\output.txt", "application/text", "blahblahblah.txt");
         }
