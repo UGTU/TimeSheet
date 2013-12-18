@@ -278,6 +278,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Manual\Руководство пользователя ИС Табель.pdf" />
     <None Include="Properties\PublishProfiles\testtabel.ugtu.net.pubxml" />
     <None Include="Properties\PublishProfiles\tfs-1.ugtu.net.pubxml" />
     <Content Include="NuGet.exe" />
@@ -943,6 +944,7 @@
     <Content Include="Views\Main\PartialView\PartialTimeSheetShow.cshtml" />
     <Content Include="Views\Main\TimeSheetShow.cshtml" />
     <Content Include="Views\Admin\EditLogin.cshtml" />
+    <Content Include="Views\Shared\TimeSheetFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -40,7 +40,7 @@
         </h3>
         <div class="col-md-7">
 
-            <table class="table @*table-condensed*@ table-bordered">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()" ng-disabled="isCanTimeSheetEditfunction()"></th>
@@ -139,12 +139,16 @@
     });
 
     function employeeListResize() {
-        var maxHeight = $(window).height();
-        maxHeight = maxHeight - 135;
+        var maxHeight = $(document).height();
+        maxHeight = maxHeight - 170;
         $('#employeeList').css('max-height', maxHeight);
         maxHeight = maxHeight - 280;
         $('#dayStatList').css('max-height', maxHeight);
     }
+
+    $(document).ready(function() {
+        $(".footer").remove();
+    });
 </script>
 
 <script>

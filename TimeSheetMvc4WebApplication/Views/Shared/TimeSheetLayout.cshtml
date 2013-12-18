@@ -1,6 +1,5 @@
-﻿@using System.Web.Optimization
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html >
 <head>
     <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
     <link rel="shortcut icon" href="../../Content/Images/logo.png" />
@@ -14,11 +13,12 @@
     @Scripts.Render("~/Content/angularjs")
     @Scripts.Render("~/Scripts/bootstrap-datepicker")
 </head>
-<body class="body">
+<body class="body" >
     @{ Html.RenderPartial("TimeSheetHeader"); }
-    <div class="container">
+    <div class="container" id="mainContainer">
         @RenderBody()
     </div>
-     @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
+    @*@{ Html.RenderPartial("TimeSheetFooter"); }*@
 </body>
 </html>
