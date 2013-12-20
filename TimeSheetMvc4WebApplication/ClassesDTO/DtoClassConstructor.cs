@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Linq;
 using System.Linq;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
@@ -92,6 +93,13 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee)
         {
+            //var loadOptions = new DataLoadOptions();
+            //loadOptions.LoadWith((Approver a) => a.ApproverType);
+            //loadOptions.LoadWith((Approver a) => a.Dep);
+            //loadOptions.LoadWith((Dep d) => d.Department);
+            //db.LoadOptions = loadOptions;
+
+
             const int administratorApproveNumber = 10;
             var approver = db.Employee.Where(w => w.id == idEmployee).
                 Select(s => new DtoApprover

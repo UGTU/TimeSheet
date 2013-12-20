@@ -255,7 +255,7 @@ namespace TimeSheetMvc4WebApplication
                         db.add_EmplLogin(itabN, new Binary(new[] { Convert.ToByte(true) }), login);
                     return true;
                 }
-                catch (System.Exception ex)
+                catch (System.Exception )
                 {
                     return false;
                 }
@@ -721,7 +721,8 @@ namespace TimeSheetMvc4WebApplication
 
         //todo:Вот это вот надо убрать в отдельный класс
         //[OperationContract]
-        private void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment, string departmentName, bool isApproveFinished = false)
+        private void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
+            string departmentName, bool isApproveFinished = false)
         {
             var requestUrl = System.Web.HttpContext.Current.Request.Url.Authority;
             Action<object> mailSending = urlAuth =>
@@ -756,7 +757,9 @@ namespace TimeSheetMvc4WebApplication
                         stringBuilder.AppendLine("<br/><br/>");
                         stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.", departmentName);
+                        stringBuilder.AppendFormat(
+                            "Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.",
+                            departmentName);
                         stringBuilder.AppendFormat(
                             "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
                         stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
@@ -771,112 +774,12 @@ namespace TimeSheetMvc4WebApplication
                     }
                 }
                 var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                    "ИС Табель рабочего времени", stringBuilder.ToString()) { IsBodyHtml = true };
+                    "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
                 var client = new SmtpClient("mail.ugtu.net");
                 client.Send(mm);
             };
             var t1 = new Task(mailSending, requestUrl);
             t1.Start();
         }
-
-        ////todo:Вот это вот надо убрать в отдельный класс
-        ////[OperationContract]
-        //private bool SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
-        //    bool isApproveFinished = false)
-        //{
-        //    try
-        //    {
-        //        //var r = System.Web.HttpContext.Current.Request.Url;
-        //        var url = "http:/" + System.Web.HttpContext.Current.Request.Url.Authority;
-        //        var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
-        //        var timeSheetShow =
-        //            String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
-        //                idTimeSheet);
-        //        var timeSheetPrint =
-        //            String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
-        //                idTimeSheet);
-        //        var timeSheetApproval =
-        //            String.Format(
-        //                "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
-        //                idTimeSheet);
-        //        var stringBuilder = new StringBuilder();
-        //        if (isApproveFinished)
-        //        {
-        //            stringBuilder.AppendLine("<br/><br/>");
-        //            stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
-        //            stringBuilder.AppendLine("<br/><br/>");
-        //            stringBuilder.Append("Табель успешно согласован. ");
-        //            stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
-        //            stringBuilder.AppendFormat(" или вывести табель на {0}.", timeSheetPrint);
-        //            stringBuilder.AppendFormat(" Так же вы можете посетить {0}.", timeSheet);
-        //        }
-        //        else
-        //        {
-        //            if (approveResult)
-        //            {
-        //                stringBuilder.AppendLine("<br/><br/>");
-        //                stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
-        //                stringBuilder.AppendLine("<br/><br/>");
-        //                stringBuilder.Append("Вам на согласование был направлен табель рабочего времени. ");
-        //                stringBuilder.AppendFormat(
-        //                    "Для того, чтоб приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
-        //                stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
-        //            }
-        //            else
-        //            {
-
-        //                stringBuilder.AppendLine("<br/><br/>");
-        //                stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
-        //                stringBuilder.AppendLine("<br/><br/>");
-        //                stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
-        //            }
-        //        }
-        //        var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-        //            "ИС Табель рабочего времени", stringBuilder.ToString()) { IsBodyHtml = true };
-        //        var client = new SmtpClient("mail.ugtu.net");
-        //        client.Send(mm);
-        //        return true;
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        var r = ex.Message;
-        //        return false;
-        //    }
-        //}
-
-        //==========        Не используемые методы, возможно будут реализованы позже
-
-        //private bool RemoveTimeSheetEmployee(int idTimeSheet, int idFactStuffHistory)
-        //{
-        //    using (var db = new KadrDataContext())
-        //    {
-        //        try
-        //        {
-        //            var ts = new TimeSheetCraterNew(idTimeSheet, db);
-        //            return ts.RemoveEmployee(idFactStuffHistory);
-        //        }
-        //        catch (System.Exception)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //}
-
-        //[OperationContract]
-        //public DtoMessage RefreshTimeSheet(int idTimeSheet)
-        //{
-        //    try
-        //    {
-        //        return new DtoMessage();
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        return new DtoMessage
-        //        {
-        //            Result = false,
-        //            Message = ex.Message
-        //        };
-        //    }
-        //}
     }
 }

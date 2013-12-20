@@ -203,14 +203,16 @@
             $scope.employeesRefresh();
         };
 
-        $scope.employeesRefresh = function () {
+        $scope.employeesRefresh = function() {
             $scope.employees = null;
             var link = '@Html.Raw(@Url.Action("GetEmployeesForTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
             link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
-            $http.get(link).success(function (data) {
-                $scope.employees = data;
-                $scope.selectAllemployees();
-                $scope.IsAllCheked = true;
+            $http.get(link).success(function(data) {
+                if ($scope.currentMounth.getYear() + 1900 == data.Year && $scope.currentMounth.getMonth() + 1 == data.Month) {
+                    $scope.employees = data.Employees;
+                    $scope.selectAllemployees();
+                    $scope.IsAllCheked = true;
+                }
             });
         };
 

@@ -124,7 +124,7 @@
 @{
     Html.RenderPartial("HeaderLinks", new HeaderLinckModel
     {
-        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show,HeaderLink.Pdf,HeaderLink.Approve },
+        Links = new HeaderLink[] {HeaderLink.Edit, HeaderLink.Show,HeaderLink.Pdf,HeaderLink.Approve },
         CurrentLink = HeaderLink.Edit,
         IdTimeSheet = Model
     });

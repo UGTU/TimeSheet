@@ -133,13 +133,9 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         public FileResult Download()
-        //public ActionResult Download()
         {
             const string buffer = @"~\Content\Manual\Руководство пользователя ИС Табель.pdf"; //bytes form this
             return File(buffer, "application/pdf"); 
-            //return File(buffer, "application/pdf", "Руководство пользователя ИС Табель.pdf"); 
-            //return File(@"//");
-            //return File(@"~\Files\output.txt", "application/text", "blahblahblah.txt");
         }
 
         //======================    Json    ====================================
@@ -172,7 +168,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
             {
                 empl.WorkShedule.WorkSheduleName = empl.WorkShedule.WorkSheduleName.Split(' ').First();
             }
-            return Json(empls, JsonRequestBehavior.AllowGet);
+            var model = new
+            {
+                Employees = empls,
+                Year = year,
+                Month = month
+            };
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
