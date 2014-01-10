@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 
@@ -34,8 +33,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //CheckIsAdmin();
             return View();
         }
-
-
 
         private void CheckIsAdmin()
         {

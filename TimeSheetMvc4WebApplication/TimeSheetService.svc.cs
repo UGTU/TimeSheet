@@ -26,14 +26,16 @@ namespace TimeSheetMvc4WebApplication
         [Authorize]
         public DtoApprover GetCurrentApproverByLogin(string employeeLogin)
         {
+            //if (string.IsNullOrWhiteSpace(employeeLogin)) return null;
+            //if (employeeLogin == "ALEXEY-PC\\Alexey") employeeLogin = "atipunin@ugtu.net";
+            //if (employeeLogin.ToLower().StartsWith(@"ugtu\".ToLower()))
+            //{
+            //    employeeLogin =
+            //        string.Format("{0}@{1}.NET", employeeLogin.Substring(5, employeeLogin.Length - 5),
+            //            employeeLogin.Substring(0, 4)).ToLower();
+            //}
+            employeeLogin = UserNameAdapter.Adapt(employeeLogin);
             if (string.IsNullOrWhiteSpace(employeeLogin)) return null;
-            if (employeeLogin == "ALEXEY-PC\\Alexey") employeeLogin = "atipunin@ugtu.net";
-            if (employeeLogin.ToLower().StartsWith(@"ugtu\".ToLower()))
-            {
-                employeeLogin =
-                    string.Format("{0}@{1}.NET", employeeLogin.Substring(5, employeeLogin.Length - 5),
-                        employeeLogin.Substring(0, 4)).ToLower();
-            }
             using (var db = new KadrDataContext())
             {
                 var idEmployee =
@@ -721,7 +723,7 @@ namespace TimeSheetMvc4WebApplication
 
         //todo:Вот это вот надо убрать в отдельный класс
         //[OperationContract]
-        private void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
+        private async void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
             string departmentName, bool isApproveFinished = false)
         {
             var requestUrl = System.Web.HttpContext.Current.Request.Url.Authority;
@@ -778,8 +780,10 @@ namespace TimeSheetMvc4WebApplication
                 var client = new SmtpClient("mail.ugtu.net");
                 client.Send(mm);
             };
-            var t1 = new Task(mailSending, requestUrl);
-            t1.Start();
+            
+            await Task.Run(()=> mailSending(requestUrl));
+
+        
         }
     }
 }
