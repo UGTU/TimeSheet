@@ -770,11 +770,8 @@ namespace TimeSheetMvc4WebApplication
                     "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
                 var client = new SmtpClient("mail.ugtu.net");
                 client.Send(mm);
-            };
-            
+            };        
             await Task.Run(()=> mailSending(requestUrl));
-
-        
         }
     }
 }

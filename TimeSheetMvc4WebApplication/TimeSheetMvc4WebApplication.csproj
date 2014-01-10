@@ -190,6 +190,7 @@
     </Compile>
     <Compile Include="Hubs\NoticeHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
+    <Compile Include="Hubs\StockNotice.cs" />
     <Compile Include="Kadr.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

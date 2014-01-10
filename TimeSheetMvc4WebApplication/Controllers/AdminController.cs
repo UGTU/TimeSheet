@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Hubs;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -18,6 +19,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult ExceptionDay()
         {
             CheckIsAdmin();
+
+            //===
+
+            var noticeHub = NoticeHub.Instance.Value;
+            noticeHub.Test().Start();
+
+            //StockNotice.Test().Start();
+
+            //===
+
             return View();
         }
 
