@@ -15,9 +15,9 @@ namespace TimeSheetMvc4WebApplication.Source
             {
                 username =
                     string.Format("{0}@{1}.net", username.Substring(5, username.Length - 5),
-                        username.Substring(0, 4)).ToLower();
+                        username.Substring(0, 4));
             }
-            return username;
+            return username.ToLower();
         }
     }
 }

@@ -19,16 +19,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult ExceptionDay()
         {
             CheckIsAdmin();
-
-            //===
-
-            var noticeHub = NoticeHub.Instance.Value;
-            noticeHub.Test().Start();
-
-            //StockNotice.Test().Start();
-
-            //===
-
             return View();
         }
 
@@ -43,6 +33,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             //CheckIsAdmin();
             return View();
+        }
+
+        public string SendNotice(string username)
+        {
+            //===
+            var noticeHub = NoticeHub.Instance.Value;
+            noticeHub.Test(username).Start();
+            //===
+            return string.IsNullOrWhiteSpace(username) ? "notice send" : "notice send to " + username;
         }
 
         private void CheckIsAdmin()

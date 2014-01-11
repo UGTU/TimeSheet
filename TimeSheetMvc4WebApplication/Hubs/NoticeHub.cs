@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Providers.Entities;
 using CommonBase;
 using Microsoft.AspNet.SignalR;
 using TimeSheetMvc4WebApplication.Source;
@@ -19,6 +20,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
     public class NoticeHub : Hub
     {
         public static readonly Lazy<NoticeHub> Instance = new Lazy<NoticeHub>(() => new NoticeHub(GlobalHost.ConnectionManager.GetHubContext<NoticeHub>()));
+        private static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
         private IHubContext _context;
         private NoticeHub(IHubContext context)
@@ -36,10 +38,16 @@ namespace TimeSheetMvc4WebApplication.Hubs
             if (!string.IsNullOrWhiteSpace(username))
             {
                 //Singlecast notice
-                _context.Clients.Group(UserNameAdapter.Adapt(username)).addChatMessage(dyn);
+                username = UserNameAdapter.Adapt(username);
+                _logger.Info("sent notice to "+username);
+                _context.Clients.Group(username).addChatMessage(dyn);
             }
-            //Multicast notice
-            _context.Clients.All.addNoticeToPage(dyn);
+            else
+            {
+                //Multicast notice
+                _logger.Info("multicast notice send");
+                _context.Clients.All.addNoticeToPage(dyn);
+            }
         }
 
         public void Notice(string title, string message, string username = null)
@@ -84,11 +92,12 @@ namespace TimeSheetMvc4WebApplication.Hubs
 
         public Task Test(string userName = null)
         {
+            string message = "temp mesage" + userName;
             Action noticeSending = () =>
             {
                 var arr = new[] { MessageType.Info, MessageType.Warning, MessageType.Danger };
                 var i = 0;
-                string message = "temp mesage";
+                
                 foreach (var item in arr)
                 {
                     message = message + i.ToString();
@@ -104,13 +113,24 @@ namespace TimeSheetMvc4WebApplication.Hubs
         {
             var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
             Groups.Add(Context.ConnectionId, name);
+            _logger.Info("connect as " + name);
             return base.OnConnected();
+        }
+
+        public override Task OnReconnected()
+        {
+            var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
+            Groups.Remove(Context.ConnectionId, name);
+            Groups.Add(Context.ConnectionId, name);
+            _logger.Info("reconnect as " + name);
+            return base.OnReconnected();
         }
 
         public override Task OnDisconnected()
         {
             var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
             Groups.Remove(Context.ConnectionId, name);
+            _logger.Info("disconnect as " + name);
             return base.OnDisconnected();
         }
     }
