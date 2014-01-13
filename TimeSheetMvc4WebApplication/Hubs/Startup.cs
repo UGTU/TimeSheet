@@ -1,4 +1,5 @@
-﻿using Owin;
+﻿using Microsoft.AspNet.SignalR;
+using Owin;
 using Microsoft.Owin;
 using TimeSheetMvc4WebApplication.Hubs;
 
@@ -11,6 +12,13 @@ namespace TimeSheetMvc4WebApplication.Hubs
     {
         public void Configuration(IAppBuilder app)
         {
+            var config = new HubConfiguration
+            {
+                EnableJavaScriptProxies = true
+            };
+
+            app.MapHubs(config);
+
             // Any connection or hub wire up and configuration should go here
             app.MapSignalR();
         }
