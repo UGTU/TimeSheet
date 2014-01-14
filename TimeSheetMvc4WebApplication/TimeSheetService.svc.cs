@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Hubs;
 using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication
@@ -683,22 +684,21 @@ namespace TimeSheetMvc4WebApplication
 
         //==========        Рассылка писем
 
-        private void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep, string departmentName)
+        private async void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep, string departmentName)
         {
-            //var approvalStep = GetTimeSheetApproveStep(idTimeSheet);
             if (result)
             {
                 approvalStep++;
                 if (approvalStep < 3)
                 {
-                    SendMail(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1), idTimeSheet, true,
+                    await SendMail(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1), idTimeSheet, true,
                         comments,departmentName);
                 }
                 else
                 {
                     for (int i = approvalStep; i > 0; i--)
                     {
-                        SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, true, comments,departmentName, isApproveFinished: true);
+                        await SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, true, comments,departmentName, isApproveFinished: true);
                     }
                 }
             }
@@ -707,71 +707,77 @@ namespace TimeSheetMvc4WebApplication
                 //=== На данном этапе шаг согласования 0 =============================
                 for (int i = approvalStep; i > 0; i--)
                 {
-                    SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments,departmentName);
+                    await SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments,departmentName);
                 }
             }
         }
 
         //todo:Вот это вот надо убрать в отдельный класс
-        //[OperationContract]
-        private async void SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
+        private async Task<bool> SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
             string departmentName, bool isApproveFinished = false)
         {
-            var requestUrl = System.Web.HttpContext.Current.Request.Url.Authority;
-            Action<object> mailSending = urlAuth =>
+            var urlAuth = System.Web.HttpContext.Current.Request.Url.Authority;
+            return await Task.Run(() =>
             {
-                var url = "http:/" + urlAuth;
-                var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
-                var timeSheetShow =
-                    String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
-                        idTimeSheet);
-                var timeSheetPrint =
-                    String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
-                        idTimeSheet);
-                var timeSheetApproval =
-                    String.Format(
-                        "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
-                        idTimeSheet);
-                var stringBuilder = new StringBuilder();
-                if (isApproveFinished)
+                try
                 {
-                    stringBuilder.AppendLine("<br/><br/>");
-                    stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
-                    stringBuilder.AppendLine("<br/><br/>");
-                    stringBuilder.Append("Табель успешно согласован. ");
-                    stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
-                    stringBuilder.AppendFormat(" или вывести табель на {0}.", timeSheetPrint);
-                    stringBuilder.AppendFormat(" Так же вы можете посетить {0}.", timeSheet);
-                }
-                else
-                {
-                    if (approveResult)
+                    var url = "http:/" + urlAuth;
+                    var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
+                    var timeSheetShow =
+                        String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
+                            idTimeSheet);
+                    var timeSheetPrint =
+                        String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
+                            idTimeSheet);
+                    var timeSheetApproval =
+                        String.Format(
+                            "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
+                            idTimeSheet);
+                    var stringBuilder = new StringBuilder();
+                    if (isApproveFinished)
                     {
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                        stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat(
-                            "Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.",
-                            departmentName);
-                        stringBuilder.AppendFormat(
-                            "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
-                        stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
+                        stringBuilder.Append("Табель успешно согласован. ");
+                        stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
+                        stringBuilder.AppendFormat(" или вывести табель на {0}.", timeSheetPrint);
+                        stringBuilder.AppendFormat(" Так же вы можете посетить {0}.", timeSheet);
                     }
                     else
                     {
-
-                        stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
-                        stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
+                        if (approveResult)
+                        {
+                            stringBuilder.AppendLine("<br/><br/>");
+                            stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                            stringBuilder.AppendLine("<br/><br/>");
+                            stringBuilder.AppendFormat(
+                                "Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.",
+                                departmentName);
+                            stringBuilder.AppendFormat(
+                                "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ",
+                                timeSheetApproval);
+                            stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
+                        }
+                        else
+                        {
+                            stringBuilder.AppendLine("<br/><br/>");
+                            stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                            stringBuilder.AppendLine("<br/><br/>");
+                            stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
+                        }
                     }
+                    var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
+                        "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
+                    var client = new SmtpClient("mail.ugtu.net");
+                    client.Send(mm);
+                    return true;
                 }
-                var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                    "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
-                var client = new SmtpClient("mail.ugtu.net");
-                client.Send(mm);
-            };        
-            await Task.Run(()=> mailSending(requestUrl));
+                catch (Exception e)
+                {
+                    return false;
+                }
+            });
         }
     }
 }

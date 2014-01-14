@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Providers.Entities;
 using CommonBase;
 using Microsoft.AspNet.SignalR;
 using TimeSheetMvc4WebApplication.Source;
@@ -19,60 +17,53 @@ namespace TimeSheetMvc4WebApplication.Hubs
     [Authorize]
     public class NoticeHub : Hub
     {
-        public static readonly Lazy<NoticeHub> Instance = new Lazy<NoticeHub>(() => new NoticeHub(GlobalHost.ConnectionManager.GetHubContext<NoticeHub>()));
+        public static readonly NoticeHub Instance = new NoticeHub();
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
-        private readonly IHubContext _context;
-        private NoticeHub(IHubContext context)
-        {
-            _context = context;
+        private new static readonly IHubContext Context;
+        static NoticeHub()
+        {            
+            Context = GlobalHost.ConnectionManager.GetHubContext<NoticeHub>();
         }
-
-        public NoticeHub(){}
-
-        public void Notice(MessageType messageType, string title, string message, string username = null)
+        public async Task Notice(MessageType messageType, string title, string message, string username = null)
         {
-            var dyn = new
+            await Task.Run(() =>
             {
-                type = messageType.Description(),
-                title,
-                message
-            };
-            if (!string.IsNullOrWhiteSpace(username))
-            {
-                //Singlecast notice
-                username = UserNameAdapter.Adapt(username);
-                Logger.Info("send notice to " + username);
-                _context.Clients.Group(username).addNoticeToPage(dyn);
-                //Clients.Group(username).addChatMessage(dyn);
-            }
-            else
-            {
-                //Multicast notice
-                Logger.Info("multicast notice send");
-                _context.Clients.All.addNoticeToPage(dyn);
-                //Clients.All.addNoticeToPage(dyn);
-            }
+                var dyn = new
+                {
+                    type = messageType.Description(),
+                    title,
+                    message
+                };
+                if (!string.IsNullOrWhiteSpace(username))
+                {
+                    //Singlecast notice
+                    username = UserNameAdapter.Adapt(username);
+                    Logger.Info("send notice to " + username);
+                    Context.Clients.Group(username).addNoticeToPage(dyn);
+                }
+                else
+                {
+                    //Multicast notice
+                    Logger.Info("multicast notice send");
+                    Context.Clients.All.addNoticeToPage(dyn);
+                }
+            });
         }
-
-        public void Notice(string title, string message, string username = null)
+        public async Task Notice(string title, string message, string username = null)
         {
-            Notice(MessageType.Info, title, message, username);
+            await Notice(MessageType.Info, title, message, username);
         }
-
-        public void Notice(string message, string username = null)
+        public async Task Notice(string message, string username = null)
         {
-            Notice(string.Empty, message, username);
+            await Notice(string.Empty, message, username);
         }
-
         public Task Test(string userName = null)
         {
-            var message = "temp mesage" + userName;
-            Action noticeSending = () =>
+            return Task.Run(() =>
             {
+                var message = "temp mesage" + userName;
                 var arr = new[] {MessageType.Info, MessageType.Warning, MessageType.Danger};
                 var i = 0;
-
                 foreach (var item in arr)
                 {
                     message = message + i;
@@ -80,16 +71,14 @@ namespace TimeSheetMvc4WebApplication.Hubs
                     Notice(item, "Title", message, userName);
                     i++;
                 }
-            };
-            return new Task(noticeSending);
+            });
         }
-
         public override Task OnConnected()
         {
             try
             {
-                var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
-                Groups.Add(Context.ConnectionId, name);
+                var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
+                Groups.Add(base.Context.ConnectionId, name);
                 Logger.Info("connect as " + name);
             }
             catch (Exception ex)
@@ -98,14 +87,13 @@ namespace TimeSheetMvc4WebApplication.Hubs
             }
             return base.OnConnected();
         }
-
         public override Task OnReconnected()
         {
             try
             {
-                var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
-                Groups.Remove(Context.ConnectionId, name);
-                Groups.Add(Context.ConnectionId, name);
+                var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
+                Groups.Remove(base.Context.ConnectionId, name);
+                Groups.Add(base.Context.ConnectionId, name);
                 Logger.Info("reconnect as " + name);
             }
             catch (Exception ex)
@@ -114,13 +102,12 @@ namespace TimeSheetMvc4WebApplication.Hubs
             }
             return base.OnReconnected();
         }
-
         public override Task OnDisconnected()
         {
             try
             {
-                var name = UserNameAdapter.Adapt(Context.User.Identity.Name);
-                Groups.Remove(Context.ConnectionId, name);
+                var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
+                Groups.Remove(base.Context.ConnectionId, name);
                 Logger.Info("disconnect as " + name);
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 
@@ -196,11 +197,7 @@ namespace TimeSheetMvc4WebApplication.Source
             try
             {
                 var exeptions =
-                    _db.Exception.Where(
-                        w =>
-                            w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod)
-                        .
-                        ToArray();
+                    _db.Exception.Where(w =>w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod).ToArray();
 
                 var factStaffIds = employees.Select(s => s.id).Distinct();
 
@@ -209,12 +206,7 @@ namespace TimeSheetMvc4WebApplication.Source
                         w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
                              w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
 
-                
-                foreach (var employee in employees)
-                {
-                    _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, otpusk));
-                }
-               
+                Parallel.ForEach(employees, employee => _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, otpusk)));
             }
             catch (System.Exception ex)
             {
