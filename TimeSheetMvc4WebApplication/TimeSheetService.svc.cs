@@ -469,15 +469,17 @@ namespace TimeSheetMvc4WebApplication
                     };
                     db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
                     db.SubmitChanges();
-                    if (result && CanApprove(idTimeSheet, employeeLogin))
-                    {
-                        TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
-                    }
-                    EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName);
+                    //if (result && CanApprove(idTimeSheet, employeeLogin))
+                    //{
+                    //    TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
+                    //}
+                    Task.Run(
+                        () => EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, System.Web.HttpContext.Current.Request.Url.Authority));
                     return true;
                 }
-                catch (System.Exception)
+                catch (System.Exception e)
                 {
+                    var s = e.Message;
                     return false;
                 }
             }
@@ -689,7 +691,7 @@ namespace TimeSheetMvc4WebApplication
         //==========        Рассылка писем
 
         private async void EmailSending(string userName, int idTimeSheet, bool result, string comments, int approvalStep,
-            string departmentName)
+            string departmentName,string appDominUrl)
         {
             await Task.Run(() =>
             {
@@ -720,11 +722,18 @@ namespace TimeSheetMvc4WebApplication
                 return approverList;
             }).ContinueWith(async task =>
             {
-                var approverList = await task;
-                var emailSender = new TimeEmailSender("mail.ugtu.net",
-                    System.Web.HttpContext.Current.Request.Url.Authority);
-                emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
-                    approvalStep, departmentName, approvalStep < 3);
+                try
+                {
+                    var approverList = await task;
+                    var emailSender = new TimeEmailSender("mail.ugtu.net",
+                        appDominUrl);
+                    emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
+                        approvalStep, departmentName, approvalStep < 3);
+                }
+                catch (System.Exception e)
+                {
+                    var ex = e;
+                }
             });
         }
     }

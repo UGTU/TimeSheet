@@ -91,8 +91,8 @@ namespace TimeSheetMvc4WebApplication.Source
 
         public async void TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName,bool isApproveFinished)
         {
-            await Task.Run(() =>
-            {
+            //await Task.Run(() =>
+            //{
                 var sandedMail = new List<Task<bool>>();
                 foreach (var approver in approversToSend)
                 {
@@ -100,14 +100,14 @@ namespace TimeSheetMvc4WebApplication.Source
                     sandedMail.Add(SendMail("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
                         "ИС Табель рабочего времени для " + departmentName, mailBody, true));
                 }
-                Task.WhenAll(sandedMail).ContinueWith(async task =>
+                await Task.WhenAll(sandedMail).ContinueWith(async task =>
                 {
                     var noticeHub = NoticeHub.Instance;
                     var sandedMailResults = await task;
                     if (sandedMailResults.Any(a => a == false))
                     {
                         //Отправка сообщения пользователю о том, что во впемя отправи писенм произошла ошибка
-                        noticeHub.Notice(MessageType.Danger, "Согласование", "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление", userName);
+                        await noticeHub.Notice(MessageType.Danger, "Согласование", "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление", userName);
                     }
                     else
                     {
@@ -115,11 +115,11 @@ namespace TimeSheetMvc4WebApplication.Source
                         foreach (var approver in approversToSend)
                         {
                             var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
-                            noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
+                            await noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
                         }
                     }
                 });
-            });
+            //});
         }
     }
 }
