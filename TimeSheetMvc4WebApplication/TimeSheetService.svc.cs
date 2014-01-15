@@ -37,6 +37,7 @@ namespace TimeSheetMvc4WebApplication
                 return DtoClassConstructor.DtoApprover(db, idEmployee);
             }
         }
+
         //==========        Работа с структурными подразделениями
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace TimeSheetMvc4WebApplication
         public bool IsAnyTimeSheetWithThisId(int idTimeSheet)
         {
             using (var db = new KadrDataContext())
-            //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+                //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 return db.TimeSheet.Any(a => a.id == idTimeSheet);
             }
@@ -125,7 +126,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoTimeSheet GetTimeSheet(int idTimeSheet, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
-            //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+                //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 return DtoClassConstructor.DtoTimeSheet(db, idTimeSheet, isEmpty);
             }
@@ -142,7 +143,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoTimeSheet[] GetTimeSheetList(int idDepartment, int koll = 0, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
-            //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
+                //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
             {
                 return koll <= 0
                     ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
@@ -226,7 +227,7 @@ namespace TimeSheetMvc4WebApplication
                 return
                     db.Approver.Where(
                         w => w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
-                            w.DateEnd == null).
+                             w.DateEnd == null).
                         Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id)).FirstOrDefault();
             }
         }
@@ -246,10 +247,10 @@ namespace TimeSheetMvc4WebApplication
                 {
                     var itabN = db.Employee.Where(w => w.id == idEmployee).Select(s => s.itab_n).FirstOrDefault();
                     if (itabN != null)
-                        db.add_EmplLogin(itabN, new Binary(new[] { Convert.ToByte(true) }), login);
+                        db.add_EmplLogin(itabN, new Binary(new[] {Convert.ToByte(true)}), login);
                     return true;
                 }
-                catch (System.Exception )
+                catch (System.Exception)
                 {
                     return false;
                 }
@@ -472,7 +473,7 @@ namespace TimeSheetMvc4WebApplication
                     {
                         TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
                     }
-                    EmailSending(idTimeSheet, result, comments, approvalStep,departmentName);
+                    EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName);
                     return true;
                 }
                 catch (System.Exception)
@@ -516,7 +517,9 @@ namespace TimeSheetMvc4WebApplication
                 var idDepatrment = timeSheet.idDepartment;
                 var approver =
                     db.Approver.FirstOrDefault(
-                        f => f.idDepartment == idDepatrment && f.ApproverType.ApproveNumber == approverNum + 1 && f.DateEnd == null);
+                        f =>
+                            f.idDepartment == idDepatrment && f.ApproverType.ApproveNumber == approverNum + 1 &&
+                            f.DateEnd == null);
                 return approver != null ? DtoClassConstructor.DtoApprover(db, approver.Employee.id) : null;
             }
         }
@@ -538,7 +541,8 @@ namespace TimeSheetMvc4WebApplication
                 var timeSheetApprovalStep = GetTimeSheetApproveStep(idTimeSheet) + 1;
                 if (timeSheet == null) return false;
                 var approveDepartment =
-                    approver.GetDepartmentApproverNumbers(timeSheet.idDepartment).FirstOrDefault(f => f.ApproveNumber == timeSheetApprovalStep);
+                    approver.GetDepartmentApproverNumbers(timeSheet.idDepartment)
+                        .FirstOrDefault(f => f.ApproveNumber == timeSheetApprovalStep);
                 return approveDepartment != null &&
                        approveDepartment.ApproveNumber == timeSheetApprovalStep;
             }
@@ -571,7 +575,7 @@ namespace TimeSheetMvc4WebApplication
                         if (lastApproval.Result)
                         {
                             if (lastApproval.Approver.ApproverType.ApproveNumber != null)
-                                return (int)lastApproval.Approver.ApproverType.ApproveNumber;
+                                return (int) lastApproval.Approver.ApproverType.ApproveNumber;
                         }
                     }
                 }
@@ -580,7 +584,7 @@ namespace TimeSheetMvc4WebApplication
         }
 
 
-        
+
 
 
 
@@ -605,14 +609,14 @@ namespace TimeSheetMvc4WebApplication
             string employeeLogin, IEnumerable<DtoFactStaffEmployee> employees = null)
         {
             using (var db = new KadrDataContext())
-            //using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+                //using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 try
                 {
                     //todo:тут надо корректно вытаскивать согласователя
                     var dtoApproverDepartment =
                         GetCurrentApproverByLogin(employeeLogin)
-                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment );
+                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                     var timeSheet = new TimeSheetManaget(idDepartment, dateBeginPeriod, dateEndPeriod,
                         dtoApproverDepartment, db);
                     timeSheet.GenerateTimeSheet(employees);
@@ -684,99 +688,43 @@ namespace TimeSheetMvc4WebApplication
 
         //==========        Рассылка писем
 
-        private async void EmailSending(int idTimeSheet, bool result, string comments, int approvalStep, string departmentName)
+        private async void EmailSending(string userName, int idTimeSheet, bool result, string comments, int approvalStep,
+            string departmentName)
         {
-            if (result)
+            await Task.Run(() =>
             {
-                approvalStep++;
-                if (approvalStep < 3)
+                var approverList = new List<DtoApprover>();
+                if (result)
                 {
-                    await SendMail(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1), idTimeSheet, true,
-                        comments,departmentName);
-                }
-                else
-                {
-                    for (int i = approvalStep; i > 0; i--)
+                    approvalStep++;
+                    if (approvalStep < 3)
                     {
-                        await SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, true, comments,departmentName, isApproveFinished: true);
-                    }
-                }
-            }
-            else
-            {
-                //=== На данном этапе шаг согласования 0 =============================
-                for (int i = approvalStep; i > 0; i--)
-                {
-                    await SendMail(GetApproverForTimeSheet(idTimeSheet, i), idTimeSheet, false, comments,departmentName);
-                }
-            }
-        }
-
-        //todo:Вот это вот надо убрать в отдельный класс
-        private async Task<bool> SendMail(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
-            string departmentName, bool isApproveFinished = false)
-        {
-            var urlAuth = System.Web.HttpContext.Current.Request.Url.Authority;
-            return await Task.Run(() =>
-            {
-                try
-                {
-                    var url = "http:/" + urlAuth;
-                    var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
-                    var timeSheetShow =
-                        String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
-                            idTimeSheet);
-                    var timeSheetPrint =
-                        String.Format("<a href=\"" + url + "/tabel/{0}\">печать</a>",
-                            idTimeSheet);
-                    var timeSheetApproval =
-                        String.Format(
-                            "<a href=\"" + url + "/Main/TimeSheetApprovalNew?idTimeSheet={0}\">ссылке</a>",
-                            idTimeSheet);
-                    var stringBuilder = new StringBuilder();
-                    if (isApproveFinished)
-                    {
-                        stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
-                        stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.Append("Табель успешно согласован. ");
-                        stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
-                        stringBuilder.AppendFormat(" или вывести табель на {0}.", timeSheetPrint);
-                        stringBuilder.AppendFormat(" Так же вы можете посетить {0}.", timeSheet);
+                        approverList.Add(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1));
                     }
                     else
                     {
-                        if (approveResult)
+                        for (int i = approvalStep; i > 0; i--)
                         {
-                            stringBuilder.AppendLine("<br/><br/>");
-                            stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
-                            stringBuilder.AppendLine("<br/><br/>");
-                            stringBuilder.AppendFormat(
-                                "Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.",
-                                departmentName);
-                            stringBuilder.AppendFormat(
-                                "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ",
-                                timeSheetApproval);
-                            stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
-                        }
-                        else
-                        {
-                            stringBuilder.AppendLine("<br/><br/>");
-                            stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
-                            stringBuilder.AppendLine("<br/><br/>");
-                            stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
+                            approverList.Add(GetApproverForTimeSheet(idTimeSheet, i));
                         }
                     }
-                    var mm = new MailMessage("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                        "ИС Табель рабочего времени", stringBuilder.ToString()) {IsBodyHtml = true};
-                    var client = new SmtpClient("mail.ugtu.net");
-                    client.Send(mm);
-                    return true;
                 }
-                catch (Exception e)
+                else
                 {
-                    return false;
+                    //=== На данном этапе шаг согласования 0 =============================
+                    for (int i = approvalStep; i > 0; i--)
+                    {
+                        approverList.Add(GetApproverForTimeSheet(idTimeSheet, i));
+                    }
                 }
+                return approverList;
+            }).ContinueWith(async task =>
+            {
+                var approverList = await task;
+                var emailSender = new TimeEmailSender("mail.ugtu.net",
+                    System.Web.HttpContext.Current.Request.Url.Authority);
+                emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
+                    approvalStep, departmentName, approvalStep < 3);
             });
         }
     }

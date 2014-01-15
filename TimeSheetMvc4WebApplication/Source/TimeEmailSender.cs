@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
-using WebGrease.Css.Extensions;
+using TimeSheetMvc4WebApplication.Hubs;
 
 namespace TimeSheetMvc4WebApplication.Source
 {
@@ -92,7 +89,7 @@ namespace TimeSheetMvc4WebApplication.Source
             return stringBuilder.ToString();
         }
 
-        private async void TimeSheetApproveEmailSending(IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName,bool isApproveFinished)
+        public async void TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName,bool isApproveFinished)
         {
             await Task.Run(() =>
             {
@@ -105,14 +102,21 @@ namespace TimeSheetMvc4WebApplication.Source
                 }
                 Task.WhenAll(sandedMail).ContinueWith(async task =>
                 {
+                    var noticeHub = NoticeHub.Instance;
                     var sandedMailResults = await task;
                     if (sandedMailResults.Any(a => a == false))
                     {
                         //Отправка сообщения пользователю о том, что во впемя отправи писенм произошла ошибка
+                        noticeHub.Notice(MessageType.Danger, "Согласование", "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление", userName);
                     }
                     else
                     {
                         //Отправка оповещения всем пользователям
+                        foreach (var approver in approversToSend)
+                        {
+                            var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+                            noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
+                        }
                     }
                 });
             });

@@ -1506,7 +1506,7 @@ namespace TimeSheetMvc4WebApplication
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="ShemaTabel.Exception")]
-	public partial class Exception : System.Exception, INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class Exception : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);

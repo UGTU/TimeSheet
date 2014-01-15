@@ -81,7 +81,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
                 Groups.Add(base.Context.ConnectionId, name);
                 Logger.Info("connect as " + name);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Logger.Error(ex);
             }
@@ -96,7 +96,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
                 Groups.Add(base.Context.ConnectionId, name);
                 Logger.Info("reconnect as " + name);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Logger.Error(ex);
             }
@@ -110,7 +110,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
                 Groups.Remove(base.Context.ConnectionId, name);
                 Logger.Info("disconnect as " + name);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Logger.Error(ex);
             }

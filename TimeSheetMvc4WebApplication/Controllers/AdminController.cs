@@ -38,7 +38,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public string SendNotice(string username)
         {
             //===
-            //var noticeHub = NoticeHub.Instance.Value;
             var noticeHub = NoticeHub.Instance;
             noticeHub.Test(username);
             //===
