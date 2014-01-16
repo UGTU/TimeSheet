@@ -466,11 +466,6 @@ namespace TimeSheetMvc4WebApplication
                     };
                     db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
                     db.SubmitChanges();
-                    //if (result && CanApprove(idTimeSheet, employeeLogin))
-                    //{
-                    //    TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
-                    //}
-                    //var appDominUrl = System.Web.HttpContext.Current.Request.Url.Authority;
                     Task.Run(
                         () => EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, appDominUrl ));
                     return true;

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommonBase;
@@ -20,6 +22,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
         public static readonly NoticeHub Instance = new NoticeHub();
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private new static readonly IHubContext Context;
+        private static volatile Dictionary<string,string> _userNameAndConnectionId = new Dictionary<string, string>();
         static NoticeHub()
         {            
             Context = GlobalHost.ConnectionManager.GetHubContext<NoticeHub>();
@@ -78,6 +81,8 @@ namespace TimeSheetMvc4WebApplication.Hubs
             try
             {
                 var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
+                var connectionId = base.Context.ConnectionId;
+                _userNameAndConnectionId.Add(connectionId,name);
                 Groups.Add(base.Context.ConnectionId, name);
                 Logger.Info("connect as " + name);
             }
@@ -91,9 +96,16 @@ namespace TimeSheetMvc4WebApplication.Hubs
         {
             try
             {
-                var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
-                Groups.Remove(base.Context.ConnectionId, name);
-                Groups.Add(base.Context.ConnectionId, name);
+                var connectionId = base.Context.ConnectionId;
+                var name = _userNameAndConnectionId.FirstOrDefault(f => f.Key == connectionId).Value;
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    Groups.Remove(base.Context.ConnectionId, name);
+                    Logger.Info("disconnect as " + name);
+                    name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
+                    _userNameAndConnectionId.Add(connectionId, name);
+                    Groups.Add(base.Context.ConnectionId, name);
+                }
                 Logger.Info("reconnect as " + name);
             }
             catch (System.Exception ex)
@@ -102,13 +114,38 @@ namespace TimeSheetMvc4WebApplication.Hubs
             }
             return base.OnReconnected();
         }
+
         public override Task OnDisconnected()
         {
+            //try
+            //{
+            //    var name = _userNameAndConnectionId.FirstOrDefault(f => f.Key == base.Context.ConnectionId).Value;
+            //    if (!string.IsNullOrWhiteSpace(name))
+            //    {
+            //        Groups.Remove(base.Context.ConnectionId, name);
+            //        Logger.Info("disconnect as " + name);
+            //    }
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    Logger.Error(ex);
+            //}
+            //return base.OnDisconnected();
+
             try
             {
-                var name = UserNameAdapter.Adapt(base.Context.User.Identity.Name);
-                Groups.Remove(base.Context.ConnectionId, name);
-                Logger.Info("disconnect as " + name);
+                Logger.Error("=====> OnDisconnected");
+                var connectionId = base.Context.ConnectionId;
+                Logger.Error(connectionId);
+                var name = _userNameAndConnectionId.FirstOrDefault(f => f.Key == connectionId).Value;
+                Logger.Error(name);
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    Groups.Remove(base.Context.ConnectionId, name);
+                    Logger.Info("disconnect as " + name);
+                    Logger.Error("=====> OnDisconnected success");
+                }
+                Logger.Error("=====================");
             }
             catch (System.Exception ex)
             {
