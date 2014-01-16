@@ -111,13 +111,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
         {
             //валидация формы
+            var appDominUrl = Url.Action("Index", null, null, Request.Url.Scheme);
             if (timeSheetAprovalModel.ApprovalResult != null &&
                 (bool) timeSheetAprovalModel.ApprovalResult == false & timeSheetAprovalModel.Comment == null)
                 ModelState.AddModelError("Причина не указана",
                     "В случае отклонения табеля необходимо прокомментировать причину!");
             var idTimeSheet = timeSheetAprovalModel.IdTimeSheet;
             if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
-                (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
+                (bool)timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment, appDominUrl))
             {
                 return RedirectToAction("TimeSheetApprovalNew", new {idTimeSheet = timeSheetAprovalModel.IdTimeSheet});
             }

@@ -42,25 +42,25 @@ namespace TimeSheetMvc4WebApplication.Source
             string departmentName, bool isApproveFinished = false)
         {
             var timeSheetAppLink = new TagBuilder("a");
-            timeSheetAppLink.Attributes.Add("href",_appDominUrl);
+            timeSheetAppLink.Attributes.Add("href", _appDominUrl);
             timeSheetAppLink.InnerHtml = "ИС \"Табель\"";
 
             var timeSheetShowLink = new TagBuilder("a");
-            timeSheetShowLink.Attributes.Add("href", _appDominUrl+string.Format("/Main/TimeSheetShow?idTimeSheet={0}",idTimeSheet));
+            timeSheetShowLink.Attributes.Add("href", _appDominUrl + string.Format("Main/TimeSheetShow?idTimeSheet={0}", idTimeSheet));
             timeSheetShowLink.InnerHtml = "просмотр табеля";
 
             var timeSheetPrintLink = new TagBuilder("a");
-            timeSheetPrintLink.Attributes.Add("href", _appDominUrl + string.Format("/Main/tabel/{0}", idTimeSheet));
+            timeSheetPrintLink.Attributes.Add("href", _appDominUrl + string.Format("tabel/{0}", idTimeSheet));
             timeSheetPrintLink.InnerHtml = "печать табеля";
 
             var timeSheetApprovalLink = new TagBuilder("a");
-            timeSheetApprovalLink.Attributes.Add("href", _appDominUrl + string.Format("/Main/TimeSheetApprovalNew?idTimeSheet={0}", idTimeSheet));
+            timeSheetApprovalLink.Attributes.Add("href", _appDominUrl + string.Format("Main/TimeSheetApprovalNew?idTimeSheet={0}", idTimeSheet));
             timeSheetApprovalLink.InnerHtml = "согласование табеля";
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
-            stringBuilder.AppendLine();
-            
+            stringBuilder.AppendLine("</br>");
+
             if (isApproveFinished)
             {
                 stringBuilder.AppendFormat("Табель для структурного подразделения {0} успешно согласован.", departmentName);
@@ -81,7 +81,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     stringBuilder.AppendFormat("Согласование табеля для структурного подоразделения {0} было отклонено по причине: {1}", departmentName, comment);
                 }
             }
-            stringBuilder.AppendLine();
+            stringBuilder.AppendLine("</br>");
             stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по ссылке {0}, ", timeSheetShowLink);
             stringBuilder.AppendFormat("вывести его на печать: {0}. ", timeSheetPrintLink);
             stringBuilder.AppendFormat("или просмотреть историю согласования: {0}. ", timeSheetApprovalLink);
@@ -89,25 +89,27 @@ namespace TimeSheetMvc4WebApplication.Source
             return stringBuilder.ToString();
         }
 
-        public async void TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName,bool isApproveFinished)
+        public async Task<bool> TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName, bool isApproveFinished)
         {
-            //await Task.Run(() =>
-            //{
-                var sandedMail = new List<Task<bool>>();
-                foreach (var approver in approversToSend)
-                {
-                    var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
-                    sandedMail.Add(SendMail("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
-                        "ИС Табель рабочего времени для " + departmentName, mailBody, true));
-                }
-                await Task.WhenAll(sandedMail).ContinueWith(async task =>
+            return await Task.Run(async () =>
+            {
+                try
                 {
                     var noticeHub = NoticeHub.Instance;
-                    var sandedMailResults = await task;
-                    if (sandedMailResults.Any(a => a == false))
+                    var sendingResulLIst = new List<bool>();
+                    foreach (var approver in approversToSend)
+                    {
+                        var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+                        sendingResulLIst.Add(await SendMail("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
+                            "ИС Табель рабочего времени для " + departmentName, mailBody, true));
+                    }
+                    if (sendingResulLIst.Any(a => a == false))
                     {
                         //Отправка сообщения пользователю о том, что во впемя отправи писенм произошла ошибка
-                        await noticeHub.Notice(MessageType.Danger, "Согласование", "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление", userName);
+                        await
+                            noticeHub.Notice(MessageType.Danger, "Согласование",
+                                "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление",
+                                userName);
                     }
                     else
                     {
@@ -118,8 +120,62 @@ namespace TimeSheetMvc4WebApplication.Source
                             await noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
                         }
                     }
-                });
-            //});
+                    return true;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            });
         }
+
+
+
+
+
+
+        //public async Task<bool> TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName, bool isApproveFinished)
+        //{
+        //    //await Task.Run(() =>
+        //    //{
+        //    try
+        //    {
+
+
+
+        //        var sandedMail = new List<Task<bool>>();
+        //        foreach (var approver in approversToSend)
+        //        {
+        //            var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+        //            sandedMail.Add(SendMail("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
+        //                "ИС Табель рабочего времени для " + departmentName, mailBody, true));
+        //        }
+        //        await Task.WhenAll(sandedMail).ContinueWith(async task =>
+        //        {
+        //            var noticeHub = NoticeHub.Instance;
+        //            var sandedMailResults = await task;
+        //            if (sandedMailResults.Any(a => a == false))
+        //            {
+        //                //Отправка сообщения пользователю о том, что во впемя отправи писенм произошла ошибка
+        //                await noticeHub.Notice(MessageType.Danger, "Согласование", "Во время отправки электронной почты возникли прпоблемы, возможно почта не была отправлена. Убедитесь что адресат получил уведомление", userName);
+        //            }
+        //            else
+        //            {
+        //                //Отправка оповещения всем пользователям
+        //                foreach (var approver in approversToSend)
+        //                {
+        //                    var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+        //                    await noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
+        //                }
+        //            }
+        //        });
+        //        return true;
+        //    }
+        //    catch (System.Exception e)
+        //    {
+        //        return false;
+        //    }
+        //    //});
+        //}
     }
 }

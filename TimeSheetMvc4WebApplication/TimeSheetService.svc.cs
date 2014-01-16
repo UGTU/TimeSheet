@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
-using System.Net.Mail;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
-using TimeSheetMvc4WebApplication.Hubs;
 using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication
@@ -445,7 +442,7 @@ namespace TimeSheetMvc4WebApplication
         /// <param name="comments">Комментарии</param>
         /// <returns>true случае успешного добавления отметки</returns>
         [OperationContract]
-        public bool TimeSheetApproval(int idTimeSheet, string employeeLogin, bool result, string comments)
+        public bool TimeSheetApproval(int idTimeSheet, string employeeLogin, bool result, string comments, string appDominUrl)
         {
             using (var db = new KadrDataContext())
             {
@@ -473,8 +470,9 @@ namespace TimeSheetMvc4WebApplication
                     //{
                     //    TimeSheetApproval(idTimeSheet, employeeLogin, true, comments);
                     //}
+                    //var appDominUrl = System.Web.HttpContext.Current.Request.Url.Authority;
                     Task.Run(
-                        () => EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, System.Web.HttpContext.Current.Request.Url.Authority));
+                        () => EmailSending(employeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, appDominUrl ));
                     return true;
                 }
                 catch (System.Exception e)
@@ -727,8 +725,8 @@ namespace TimeSheetMvc4WebApplication
                     var approverList = await task;
                     var emailSender = new TimeEmailSender("mail.ugtu.net",
                         appDominUrl);
-                    emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
-                        approvalStep, departmentName, approvalStep < 3);
+                    await emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
+                        approvalStep, departmentName, approvalStep >= 3);
                 }
                 catch (System.Exception e)
                 {

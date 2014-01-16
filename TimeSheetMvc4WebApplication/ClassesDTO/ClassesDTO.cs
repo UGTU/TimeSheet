@@ -7,7 +7,10 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 {
     public enum ApproveState
     {
-        Табельщик=1, НачальникСтруктурногоПодразделения=2, РаботникКадров=3, Администратор=10
+        Табельщик = 1,
+        НачальникСтруктурногоПодразделения = 2,
+        РаботникКадров = 3,
+        Администратор = 10
     }
 
     [DataContract]
@@ -19,7 +22,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             Date = DateTime.Now;
             Name = "Новый праздник";
         }
-
         [DataMember]
         public int IdExceptionDay { get; set; }
         [DataMember]
@@ -40,7 +42,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public DtoWorkShedule WorkShedule { get; set; }
         [DataMember]
         public string DayAweek { get; set; }
-
     }
 
     [DataContract]
