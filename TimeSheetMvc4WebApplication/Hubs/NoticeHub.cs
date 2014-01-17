@@ -117,24 +117,8 @@ namespace TimeSheetMvc4WebApplication.Hubs
 
         public override Task OnDisconnected()
         {
-            //try
-            //{
-            //    var name = _userNameAndConnectionId.FirstOrDefault(f => f.Key == base.Context.ConnectionId).Value;
-            //    if (!string.IsNullOrWhiteSpace(name))
-            //    {
-            //        Groups.Remove(base.Context.ConnectionId, name);
-            //        Logger.Info("disconnect as " + name);
-            //    }
-            //}
-            //catch (System.Exception ex)
-            //{
-            //    Logger.Error(ex);
-            //}
-            //return base.OnDisconnected();
-
             try
             {
-                Logger.Error("=====> OnDisconnected");
                 var connectionId = base.Context.ConnectionId;
                 Logger.Error(connectionId);
                 var name = _userNameAndConnectionId.FirstOrDefault(f => f.Key == connectionId).Value;
@@ -142,10 +126,7 @@ namespace TimeSheetMvc4WebApplication.Hubs
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     Groups.Remove(base.Context.ConnectionId, name);
-                    Logger.Info("disconnect as " + name);
-                    Logger.Error("=====> OnDisconnected success");
                 }
-                Logger.Error("=====================");
             }
             catch (System.Exception ex)
             {
