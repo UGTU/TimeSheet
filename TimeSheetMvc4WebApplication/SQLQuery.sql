@@ -222,8 +222,8 @@ select*from OK_Otpuskvid o inner join ShemaTabel.DayStatus d on o.idDayStatus=d.
 
 
 update OK_Otpuskvid
-set idDayStatus = 10
-where idotpuskvid=26
+set idDayStatus = 6
+where idotpuskvid=12
 
 select*from OK_Otpuskvid
 

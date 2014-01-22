@@ -4,7 +4,6 @@
 @{
     ViewBag.Title = "Согласование";
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
-    var timeSheets = ViewBag.TimeSheet as TimeSheetModel[];
     var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
     var currentApprover = ViewBag.CurrentApprover as DtoApprover;
     int idTimeSheet = ViewBag.IdTimeSheet;
