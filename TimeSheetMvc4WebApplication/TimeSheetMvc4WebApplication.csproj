@@ -53,6 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetDBF">
+      <HintPath>..\packages\dotnetdbf.3.1.0\lib\net35\DotNetDBF.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.dll</HintPath>
@@ -207,6 +210,7 @@
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\TimeSheetManaget.cs" />
     <Compile Include="Source\TimeSheetCraterNew.cs" />
+    <Compile Include="Source\TimeSheetToDbf.cs" />
     <Compile Include="Source\UserNameAdapter.cs" />
     <Compile Include="TimeSheetService.svc.cs">
       <DependentUpon>TimeSheetService.svc</DependentUpon>

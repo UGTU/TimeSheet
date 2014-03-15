@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Hubs;
+using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -44,12 +45,25 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return string.IsNullOrWhiteSpace(username) ? "notice send" : "notice send to " + username;
         }
 
+        public FileResult Download()
+        {
+            //var fileBytes = new byte[10];
+            //const string fileName = "myfile.ext";
+            //return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+
+            var r = new TimeSheetToDbf();
+            var fileBytes = r.GenerateDbf();
+            const string fileName = "myfile.dbf";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
         private void CheckIsAdmin()
         {
             var approver = GetCurrentApprover();
             if(!approver.IsAdministrator)
                 throw new HttpException(401, "Попытка несанкционированного доступа к админке");
         }
+
 
         //=================================== Json  ==============================================
 
