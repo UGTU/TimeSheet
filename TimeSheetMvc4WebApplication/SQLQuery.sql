@@ -222,8 +222,10 @@ select*from OK_Otpuskvid o inner join ShemaTabel.DayStatus d on o.idDayStatus=d.
 
 
 update OK_Otpuskvid
-set idDayStatus = 6
-where idotpuskvid=12
+set idDayStatus = 23
+where idotpuskvid=19
+select*from OK_Otpuskvid o inner join ShemaTabel.DayStatus d on o.idDayStatus=d.id
+
 
 select*from OK_Otpuskvid
 
@@ -281,7 +283,7 @@ delete from ShemaTabel.TimeSheetApproval where idTimeSheet=@idTimeSheet
 
 select*from ShemaTabel.DayStatus
 insert into ShemaTabel.DayStatus
-values('ПП','Пред праздничный день')
+values('ОКД','Оплачиваемый отпуск за счет средств работодателя (п. 5.26 колдоговора - похороны близких родственников)')
 
 
 select*from FactStaff
