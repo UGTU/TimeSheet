@@ -5515,7 +5515,7 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeSid", DbType="VarBinary(85)", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeSid", DbType="VarBinary(85)", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary EmployeeSid
 		{
 			get

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Hubs;
+using TimeSheetMvc4WebApplication.Models;
 using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
@@ -47,11 +48,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public FileResult Download()
         {
-            //var fileBytes = new byte[10];
-            //const string fileName = "myfile.ext";
-            //return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
 
-            var r = new TimeSheetToDbf();
+            var timeSheet = GetTimeSheetOrThrowException(576);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, int.MaxValue,0,0, false);
+
+            var r = new TimeSheetToDbf(timeSheetModel);
             var fileBytes = r.GenerateDbf();
             const string fileName = "myfile.dbf";
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
