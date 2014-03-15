@@ -27,7 +27,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoApprover GetCurrentApproverByLogin(string employeeLogin)
         {
             if (string.IsNullOrWhiteSpace(employeeLogin)) return null;
-            if (employeeLogin == "ALEXEY-PC\\Alexey") employeeLogin = "atipunin@ugtu.net";
+            if (employeeLogin == "ALEXEY-HOME-PC\\Alexey") employeeLogin = "atipunin@ugtu.net";
             if (employeeLogin.ToLower().StartsWith(@"ugtu\".ToLower()))
             {
                 employeeLogin =
