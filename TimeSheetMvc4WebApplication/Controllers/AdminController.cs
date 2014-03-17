@@ -52,8 +52,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var timeSheet = GetTimeSheetOrThrowException(576);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, int.MaxValue,0,0, false);
 
-            var r = new TimeSheetToDbf(timeSheetModel);
-            var fileBytes = r.GenerateDbf();
+            //var r = new TimeSheetToDbf(timeSheetModel);
+            var r = new TimeSheetToDbf();
+            //var fileBytes = r.GenerateDbf(timeSheetModel);
+            var fileBytes = r.GenerateDbf(timeSheet);
             const string fileName = "myfile.dbf";
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
