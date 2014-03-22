@@ -189,6 +189,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -204,6 +205,7 @@
     <Compile Include="Models\Main\TimeSheetViewModel.cs" />
     <Compile Include="Models\ModelConstructor.cs" />
     <Compile Include="Models\Models.cs" />
+    <Content Include="NgTemplates\RegisterTimeSheet.html" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\DataContextLoger.cs" />
     <Compile Include="Source\TimeEmailSender.cs" />
@@ -976,6 +978,8 @@
     <Content Include="Views\Admin\EditLogin.cshtml" />
     <Content Include="Views\Shared\TimeSheetFooter.cshtml" />
     <Content Include="Views\Shared\NoticeScript.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Register\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
