@@ -144,7 +144,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public JsonResult GetTimeSheetModelJson(int idTimeSheet)
         {
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            var dayStatusList = Client.GetDayStatusList();
+            var dayStatusList = Client.GetDayStatusList().Where(w=>w.IsVisible).ToArray();
             var ts = DtoToJsonMapper.TimeSheet(timeSheet, dayStatusList);
             return Json(ts, JsonRequestBehavior.AllowGet);
         }

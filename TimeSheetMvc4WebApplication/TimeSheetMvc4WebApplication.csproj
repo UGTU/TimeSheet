@@ -212,6 +212,7 @@
     <Compile Include="Source\TimeSheetCraterNew.cs" />
     <Compile Include="Source\TimeSheetToDbf.cs" />
     <Compile Include="Source\UserNameAdapter.cs" />
+    <Content Include="SQL\NewScripts.sql" />
     <Compile Include="TimeSheetService.svc.cs">
       <DependentUpon>TimeSheetService.svc</DependentUpon>
     </Compile>
@@ -933,7 +934,7 @@
     <Content Include="Scripts\modernizr-2.7.1.js" />
     <Content Include="Scripts\version.txt" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="SQLQuery.sql" />
+    <Content Include="SQL\SQLQuery.sql" />
     <Content Include="TimeSheetService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

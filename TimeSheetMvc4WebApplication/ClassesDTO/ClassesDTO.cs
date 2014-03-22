@@ -235,6 +235,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string SmallDayStatusName { get; set; }
         [DataMember]
         public string FullDayStatusName { get; set; }
+        [DataMember]
+        public bool IsVisible { get; set; }
 
         public override bool Equals(object obj)
         {

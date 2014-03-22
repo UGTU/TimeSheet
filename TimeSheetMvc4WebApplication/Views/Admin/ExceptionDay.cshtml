@@ -227,12 +227,10 @@
         };
 
         $scope.GetDayStatusName = function (dayStatus) {
-            return dayStatus.SmallDayStatusName;
+            return dayStatus.SmallDayStatusName + ' - ' + dayStatus.FullDayStatusName;
         };
     }
 </script>
-
-
 
 <script>
     $('#dp3').datepicker({ language: "ru-Ru", weekStart: 1 });

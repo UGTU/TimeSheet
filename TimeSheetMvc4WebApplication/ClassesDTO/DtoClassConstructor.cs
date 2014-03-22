@@ -234,7 +234,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                        {
                            IdDayStatus = dayStatus.id,
                            SmallDayStatusName = dayStatus.DayStatusName,
-                           FullDayStatusName = dayStatus.DayStatusFullName
+                           FullDayStatusName = dayStatus.DayStatusFullName,
+                           IsVisible = dayStatus.IsVisible
                        };
         }
 

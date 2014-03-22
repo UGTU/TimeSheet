@@ -1,5 +1,8 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using CommonBase;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Hubs;
 using TimeSheetMvc4WebApplication.Models;
@@ -73,11 +76,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public JsonResult GetExceptionDay()
         {
             CheckIsAdmin();
+            //var list = new List<string> {Models.DayStatus.ПП.Description(), Models.DayStatus.В.Description(), Models.DayStatus.Я.Description()};
             var exceptionDay = new
             {
                 WorkScheduleList = Client.GetWorkScheduleList(),
                 ExceptionDayList = Client.GetExeptionsDays(),
                 DayStatusList = Client.GetDayStatusList(),
+                //DayStatusList = Client.GetDayStatusList().Where(w=>list.Contains(w.SmallDayStatusName)),
                 CurrentExceptionDay = new DtoExceptionDay()
             };
             return Json(exceptionDay, JsonRequestBehavior.AllowGet);

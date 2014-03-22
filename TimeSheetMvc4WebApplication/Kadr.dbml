@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Kadr" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ALEXEY-HOME-PC;Initial Catalog=Kadr;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrConnectionString1" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="KadrRealTest" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=KadrRealTest;User ID=atipunin" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrRealTestConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Department" Member="Department">
     <Type Name="Department">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -25,17 +25,6 @@
       <Column Name="ApproverTypeName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="ApproveNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="ApproverType_Approver" Member="Approver" ThisKey="id" OtherKey="idApproverType" Type="Approver" />
-    </Type>
-  </Table>
-  <Table Name="ShemaTabel.DayStatus" Member="DayStatus">
-    <Type Name="DayStatus">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="DayStatusName" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
-      <Column Name="DayStatusFullName" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
-      <Association Name="DayStatus_EventSuperType" Member="EventSuperType" ThisKey="id" OtherKey="idDayStatus" Type="EventSuperType" />
-      <Association Name="DayStatus_Exception" Member="Exception" ThisKey="id" OtherKey="idDayStatus" Type="Exception" />
-      <Association Name="DayStatus_OK_Otpuskvid" Member="OK_Otpuskvid" ThisKey="id" OtherKey="idDayStatus" Type="OK_Otpuskvid" />
-      <Association Name="DayStatus_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idDayStatus" Type="TimeSheetRecord" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.EmployeeEvent" Member="EmployeeEvent">
@@ -69,8 +58,8 @@
       <Column Name="KolHourGPS" Type="System.Single" DbType="Real" CanBeNull="true" />
       <Column Name="KolHourGNS" Type="System.Single" DbType="Real" CanBeNull="true" />
       <Column Name="idWorkShedule" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="DayStatus_Exception" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
       <Association Name="WorkShedule_Exception" Member="WorkShedule" ThisKey="idWorkShedule" OtherKey="id" Type="WorkShedule" IsForeignKey="true" />
+      <Association Name="DayStatus_Exception" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.TimeSheet" Member="TimeSheet">
@@ -349,6 +338,18 @@
       <Association Name="FactStaffHistory_TimeSheetRecord" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" />
       <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
       <Association Name="DayStatus_TimeSheetRecord" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="ShemaTabel.DayStatus" Member="DayStatus">
+    <Type Name="DayStatus">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DayStatusName" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="DayStatusFullName" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
+      <Column Name="IsVisible" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="DayStatus_EventSuperType" Member="EventSuperType" ThisKey="id" OtherKey="idDayStatus" Type="EventSuperType" />
+      <Association Name="DayStatus_Exception" Member="Exception" ThisKey="id" OtherKey="idDayStatus" Type="Exception" />
+      <Association Name="DayStatus_OK_Otpuskvid" Member="OK_Otpuskvid" ThisKey="id" OtherKey="idDayStatus" Type="OK_Otpuskvid" />
+      <Association Name="DayStatus_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idDayStatus" Type="TimeSheetRecord" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">
