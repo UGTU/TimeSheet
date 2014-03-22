@@ -727,7 +727,7 @@ namespace TimeSheetMvc4WebApplication
             Action<object> mailSending = urlAuth =>
             {
                 var url = "http:/" + urlAuth;
-                var timeSheet = "<a href=\"" + url + "\">ИС \"Табель\"</a>";
+                var timeSheet = "<a href=\"" + url + "\">ИС \"Табель рабочего времени\"</a>";
                 var timeSheetShow =
                     String.Format("<a href=\"" + url + "/Main/TimeSheetShow?idTimeSheet={0}\">ссылке</a>",
                         idTimeSheet);
@@ -744,7 +744,7 @@ namespace TimeSheetMvc4WebApplication
                     stringBuilder.AppendLine("<br/><br/>");
                     stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
                     stringBuilder.AppendLine("<br/><br/>");
-                    stringBuilder.Append("Табель успешно согласован. ");
+                    stringBuilder.Append("Табель успешно согласован.");
                     stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по {0}, ", timeSheetShow);
                     stringBuilder.AppendFormat(" или вывести табель на {0}.", timeSheetPrint);
                     stringBuilder.AppendFormat(" Так же вы можете посетить {0}.", timeSheet);
@@ -754,18 +754,18 @@ namespace TimeSheetMvc4WebApplication
                     if (approveResult)
                     {
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                        stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.", departmentName);
+                        stringBuilder.AppendFormat("Вам на согласование был направлен табель рабочего времени структурного подразделения \"{0}\". ", departmentName);
                         stringBuilder.AppendFormat(
-                            "Для того, что бы приступить к согласованию тебеля перейдите по {0}, ", timeSheetApproval);
+                            "Для того, чтобы приступить к согласованию тебеля, перейдите по {0} ", timeSheetApproval);
                         stringBuilder.AppendFormat(" или посетите {0}.", timeSheet);
                     }
                     else
                     {
 
                         stringBuilder.AppendLine("<br/><br/>");
-                        stringBuilder.AppendFormat("Здравствуйте {0} {1}.", approver.Name, approver.Patronymic);
+                        stringBuilder.AppendFormat("Здравствуйте, {0} {1}.", approver.Name, approver.Patronymic);
                         stringBuilder.AppendLine("<br/><br/>");
                         stringBuilder.AppendFormat("Согласование табеля было отклонено по причине: {0}", comment);
                     }
