@@ -66,7 +66,7 @@
 </script>
 <script>
     $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(-1)})\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-chevron-left\"></span></a></li>");
-    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Реест табелей за @currentDate.ToString("MMMM yyyy") г.</p></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Реестр табелей за @currentDate.ToString("MMMM yyyy") г.</p></li>");
     $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(1)})\" style=\"cursor:pointer;cursor:hand\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a></li>");
 </script>
 
