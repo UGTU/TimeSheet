@@ -1,65 +1,72 @@
-﻿@using TimeSheetMvc4WebApplication.ClassesDTO
-@model DtoApprover
-@{
+﻿@{
     ViewBag.Title = "Реестр табелей";
-    
+    DateTime currentDate = ViewBag.Date;
 }
-
-
-@if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
-{
+<div class="row" ng-app ng-controller="TimeSheetRecords">
     <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Структурное подразделение</th>
-          <th>Табеля</th>
-        </tr>
-      </thead>
+        <thead>
+            <tr>
+                <th style="width: 400px;">Структурное подразделение</th>
+                <th>Табеля</th>
+            </tr>
+        </thead>
         <tbody>
-            @foreach (var dep in  Model.GetApproverDepartments().OrderBy(o => o.DepartmentSmallName))
-            {
-                <tr>
-                    <td>@dep.DepartmentSmallName</td>
-                    <td>Mark</td>
-                </tr>
-            }
+            <tr ng-repeat="dep in departments">
+                <td>{{dep.DepartmentSmallName}}</td>
+                <td>
+                    <ul style="margin-bottom: 0" class="list-inline">
+                        <li ng-repeat="ts in dep.timesheets" style="padding-left: 5px;padding-right: 5px;">
+                            <a href="{{timeSheetViewLink(ts)}}" style=" text-decoration: none">
+                                <span ng-if="ts.ApproveStep==0" class="label label-danger" data-toggle="tooltip" title="Табель находится в процессе редактирования"><span class="glyphicon glyphicon-edit"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел.</span>
+                                <span ng-if="ts.ApproveStep==1" class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                                <span ng-if="ts.ApproveStep==2" class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                                <span ng-if="ts.ApproveStep==3" class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
         </tbody>
     </table>
-    
-    
-    @*const int itemsInRow = 4;
-    var rowColl = Math.Ceiling((double)Model.GetApproverDepartments().Count() / (double)itemsInRow);
-    var departments = Model.GetApproverDepartments().OrderBy(o => o.DepartmentSmallName);
+</div>
+<script>
+    $('.btn').tooltip('hide');
+    $('.close').tooltip('hide');
+    $('.label').tooltip('hide');
+</script>
+<script>
+    function TimeSheetRecords($scope, $http) {
+        $http.get('@Url.Action("GetData", "Register", new { date = currentDate })').success(function (data) {
+            $scope.departments = data.deps;
+            angular.forEach($scope.departments, function (dep) {
+                var tsList = [];
+                angular.forEach(data.ts, function (ts) {
+                    if (dep.IdDepartment == ts.Department.IdDepartment)
+                        tsList.push(ts);
+                });
+                dep.timesheets = tsList;
+            });
+        });
 
-    for (int i = 0; i < rowColl; i++)
-    {
-        var rowItems = departments.Skip(i * itemsInRow).Take(itemsInRow);
-        var span = Math.Floor(12 / (double)itemsInRow);
-        <div class="row">
-            @foreach (var item in rowItems)
-            {
-                <div class="@string.Format("col-sm-6 col-md-{0}", span)">
-                    <h3>@item.DepartmentSmallName</h3>
-                    <p style="height: 50px;">@item.DepartmentFullName</p>
-                    <p style="color: darkgray">
-                        @{
-                var roles = Model.GetDepartmentApproverNumbers(item.IdDepartment).Select(s => s.ApproveTypeName).ToArray();
-                for (var i1 = 0; i1 < roles.Count() - 1; i1++)
-                {
-                    @Html.Raw(string.Format("{0}, ", roles[i]))
-                }
-                @Html.Raw(string.Format("{0}", roles.Last()))
-                        }
-                    </p>
-                    <p><a class="btn btn-default btn-sm" href="@Url.Action("TimeSheetList", "Main", new { id = item.IdDepartment })">Перейти к табелям <span class="glyphicon glyphicon-th"></span></a></p>
-                </div>
-            }
-        </div>
-    }*@
-}
-else
-{
-    <div class="alert alert-error">
-        <p>За вами не закреплено ни одного структурного подразделения.</p>
-    </div>
-}
+        $scope.jsonDateToDate = function (date) {
+            var myDate = new Date(date.match(/\d+/)[0] * 1);
+            return myDate.toString('dd.MM');
+        };
+
+        $scope.timeSheetViewLink = function (ts) {
+            var link = '@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = "replace" })';
+            return link.replace('replace', ts.IdTimeSheet);
+        };
+
+        $scope.timeSheetApprovalLink = function (ts) {
+            var link = '@Url.Action("TimeSheetApprovalNew", "Main", new { idtimesheet = "replace" })';
+            return link.replace('replace', ts.IdTimeSheet);
+        };
+    }
+</script>
+<script>
+    $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(-1)})\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-chevron-left\"></span></a></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Реест табелей за @currentDate.ToString("MMMM yyyy") г.</p></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(1)})\" style=\"cursor:pointer;cursor:hand\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a></li>");
+</script>
+

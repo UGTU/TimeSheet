@@ -979,7 +979,6 @@
     <Content Include="Views\Shared\TimeSheetFooter.cshtml" />
     <Content Include="Views\Shared\NoticeScript.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
-    <Content Include="Views\Register\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

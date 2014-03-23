@@ -151,6 +151,18 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        public DtoTimeSheet[] GetTimeSheetListForDepartments(int[] idDepartment,DateTime dateStart, int koll = 0, bool isEmpty = false)
+        {
+            using (var db = new KadrDataContext())
+            {
+                return koll <= 0
+                    ? db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
+                        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
+                    : db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
+                        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
+            }
+        }
+
         /// <summary>
         /// Редактирует записи в табеле
         /// </summary>
