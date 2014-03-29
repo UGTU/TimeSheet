@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using TimeSheetMvc4WebApplication.App_Start;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Source;
 
@@ -142,10 +143,16 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
                 //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
             {
+                //return koll <= 0
+                //    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake==false)
+                //        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
+                //    : db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
+                //        .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
+                //        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
                 return koll <= 0
-                    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake==false)
+                    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
-                    : db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
+                    : db.TimeSheet.Where(w => w.idDepartment == idDepartment)
                         .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
             }
