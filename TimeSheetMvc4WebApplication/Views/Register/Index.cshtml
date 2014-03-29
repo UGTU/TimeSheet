@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="dep in departments">
+            <tr ng-repeat="dep in departments|orderBy:'DepartmentSmallName'">
                 <td>{{dep.DepartmentSmallName}}</td>
                 <td>
                     <ul style="margin-bottom: 0" class="list-inline">
@@ -66,7 +66,39 @@
 </script>
 <script>
     $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(-1)})\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-chevron-left\"></span></a></li>");
-    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Реестр табелей за @currentDate.ToString("MMMM yyyy") г.</p></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Табеля за @currentDate.ToString("MMMM yyyy").ToLower() г.</p></li>");
     $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(1)})\" style=\"cursor:pointer;cursor:hand\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a></li>");
+
+    //$('#HeaderLiBox').append("<li id=\"111\"><button type=\"submit\" class=\"btn btn-default navbar-btn\">Submit</button></li>");
+
+    //$('#HeaderLiBox').append("<li id=\"111\">" +
+    //    "<div class=\"btn-group navbar-form form-inline\" data-toggle=\"buttons\">" +
+    //        "<label class=\"btn btn-default\">" +
+    //            "<input type=\"radio\" name=\"options\" id=\"option1\"><span class=\"glyphicon glyphicon-align-justify\"></span> Option 1" +
+    //        "</label>" +
+    //        "<label class=\"btn btn-default\">" +
+    //            "<input type=\"radio\" name=\"options\" id=\"option2\"><span class=\"glyphicon glyphicon-th-large\"></span> Option 2" +
+    //        "</label>" +
+    //    "</div></li>");
+
+    $('#HeaderLiBox').append("<li id=\"111\">" +
+    "<div class=\"btn-group navbar-form form-inline\">" +
+        "<a class=\"btn btn-default active\" href=\"@Url.Action("Index","Register")\">" +
+            "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
+        "</a>" +
+        "<a class=\"btn btn-default\" href=\"@Url.Action("Index","Main")\">" +
+            "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
+        "</a>" +
+    "</div></li>");
+
+    @*$('#HeaderLiBox').append("<li id=\"111\">" +
+"<div class=\"btn-group navbar-form form-inline\">" +
+    "<a class=\"btn btn-default active\" href=\"@Url.Action("Index","Register")\">" +
+        "<span class=\"glyphicon glyphicon-align-justify\"></span> Option 1" +
+    "</a>" +
+    "<a class=\"btn btn-default\" href=\"@Url.Action("Index","Main")\">" +
+        "<span class=\"glyphicon glyphicon-th-large\"></span> Option 2" +
+    "</a>" +
+"</div></li>");*@
 </script>
 
