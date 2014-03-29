@@ -178,6 +178,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 DateComposition = s.DateComposition,
                 Department = DtoDepartment(db, s.idDepartment),
                 ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet),
+                IsFake = s.IsFake,
                 EmployeesCount = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
                         .Select(ec => ec.idFactStaffHistory)
                         .Distinct()

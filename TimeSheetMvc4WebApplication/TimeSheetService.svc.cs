@@ -143,13 +143,42 @@ namespace TimeSheetMvc4WebApplication
                 //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
             {
                 return koll <= 0
-                    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
+                    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake==false)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
-                    : db.TimeSheet.Where(w => w.idDepartment == idDepartment)
+                    : db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
                         .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
             }
         }
+
+        //public DtoTimeSheet[] GetFakeTimeSheetList(int idDepartment)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    {
+        //        return   db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
+        //                .OrderByDescending(o => o.DateBeginPeriod)
+        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
+        //    }
+        //}
+
+        public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart)
+        {
+            using (var db = new KadrDataContext())
+            {
+                var ts = new TimeSheet
+                {
+                    idDepartment = idDepartment,
+                    DateComposition = DateTime.Now,
+                    DateBeginPeriod = dateStart,
+                    DateEndPeriod = dateStart.AddMonths(1).AddDays(-1),
+                    ApproveStep = 0,
+                    IsFake = true
+                };
+                db.TimeSheet.InsertOnSubmit(ts);
+                db.SubmitChanges();
+            }
+        }
+
 
         public DtoTimeSheet[] GetTimeSheetListForDepartments(int[] idDepartment,DateTime dateStart, int koll = 0, bool isEmpty = false)
         {
@@ -162,6 +191,18 @@ namespace TimeSheetMvc4WebApplication
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
             }
         }
+
+        //public DtoTimeSheet[] GetFakeTimeSheetListForDepartments(int[] idDepartment, DateTime dateStart, int koll = 0, bool isEmpty = false)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    {
+        //        return koll <= 0
+        //            ? db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
+        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
+        //            : db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
+        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
+        //    }
+        //}
 
         /// <summary>
         /// Редактирует записи в табеле

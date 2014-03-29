@@ -42,3 +42,15 @@ else
         <p>За вами не закреплено ни одного структурного подразделения.</p>
     </div>
 }
+
+<script>
+    $('#HeaderLiBox').append("<li id=\"111\">" +
+    "<div class=\"btn-group navbar-form form-inline\">" +
+        "<a class=\"btn btn-default\" href=\"@Url.Action("Index","Register")\">" +
+            "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
+        "</a>" +
+        "<a class=\"btn btn-default active\" href=\"@Url.Action("Index","Main")\">" +
+            "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
+        "</a>" +
+    "</div></li>");
+</script>

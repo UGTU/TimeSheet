@@ -200,6 +200,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Kadr.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Kadr1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Kadr.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\DtoToJsonMapper.cs" />
     <Compile Include="Models\Main\TimeSheetViewModel.cs" />
@@ -301,7 +306,7 @@
     <Content Include="Kadr.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <SubType>Designer</SubType>
-      <LastGenOutput>Kadr.designer.cs</LastGenOutput>
+      <LastGenOutput>Kadr1.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\Images\Без имени-1.psd" />

@@ -187,6 +187,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int EmployeesCount { get; set; }
         [DataMember]
         public int ApproveStep { get; set; }
+        [DataMember]
+        public bool IsFake { get; set; }
     }
 
     [DataContract]

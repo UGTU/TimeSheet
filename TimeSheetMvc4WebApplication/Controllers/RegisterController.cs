@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure.DependencyResolution;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,6 +31,27 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 ts = timesheets
             };
             return Json(dyn, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFakeTimeSheet(int idDep, DateTime date)
+        {
+            try
+            {
+                Client.CreateFakeTimeSheet(idDep,date);
+                var result = new
+                {
+                    Result = true
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (System.Exception)
+            {
+                var result = new
+                {
+                    Result = false
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 	}
 }
