@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Kadr" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=Kadr;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=KadrRealTest;User ID=atipunin" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrRealTestConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Department" Member="Department">
     <Type Name="Department">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -109,6 +109,7 @@
       <Column Name="DepartmentGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Association Name="Dep_ApperoveDepartment" Member="ApperoveDepartment" ThisKey="id" OtherKey="idDepartment" Type="ApperoveDepartment" />
       <Association Name="Dep_Approver" Member="Approver" ThisKey="id" OtherKey="idDepartment" Type="Approver" />
+      <Association Name="Dep_TimeSheet" Member="TimeSheet" ThisKey="id" OtherKey="idDepartment" Type="TimeSheet" />
       <Association Name="Department_Dep" Member="Department" ThisKey="id" OtherKey="id" Type="Department" IsForeignKey="true" />
       <Association Name="PlanStaff_Dep" Member="PlanStaff" ThisKey="idManagerPlanStaff" OtherKey="id" Type="PlanStaff" IsForeignKey="true" />
     </Type>
@@ -349,6 +350,7 @@
       <Association Name="TimeSheet_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
       <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Approver_TimeSheet" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
+      <Association Name="Dep_TimeSheet" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

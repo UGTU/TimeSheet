@@ -161,10 +161,14 @@ namespace TimeSheetMvc4WebApplication
         //    }
         //}
 
-        public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart)
+        public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
         {
             using (var db = new KadrDataContext())
             {
+                 var dtoApproverDepartment =
+                        GetCurrentApproverByLogin(approver.EmployeeLogin)
+                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
+
                 var ts = new TimeSheet
                 {
                     idDepartment = idDepartment,
@@ -172,9 +176,21 @@ namespace TimeSheetMvc4WebApplication
                     DateBeginPeriod = dateStart,
                     DateEndPeriod = dateStart.AddMonths(1).AddDays(-1),
                     ApproveStep = 0,
-                    IsFake = true
+                    IsFake = true,
+                    idCreater = dtoApproverDepartment.IdApprover
                 };
                 db.TimeSheet.InsertOnSubmit(ts);
+                db.SubmitChanges();
+            }
+        }
+
+        public void DelFakeTimeSheet(int id)
+        {
+            using (var db = new KadrDataContext())
+            {
+                var ts = db.TimeSheet.FirstOrDefault(f => f.id == id);
+                if (ts == null || !ts.IsFake) throw new System.Exception("Fake timeSheet delition proplems");
+                db.TimeSheet.DeleteOnSubmit(ts);
                 db.SubmitChanges();
             }
         }

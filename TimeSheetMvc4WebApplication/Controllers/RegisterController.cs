@@ -37,7 +37,28 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             try
             {
-                Client.CreateFakeTimeSheet(idDep,date);
+                Client.CreateFakeTimeSheet(idDep,date, GetCurrentApprover());
+                var result = new
+                {
+                    Result = true
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (System.Exception)
+            {
+                var result = new
+                {
+                    Result = false
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult DellFakeTimeSheet(int id)
+        {
+            try
+            {
+                Client.DelFakeTimeSheet(id);
                 var result = new
                 {
                     Result = true

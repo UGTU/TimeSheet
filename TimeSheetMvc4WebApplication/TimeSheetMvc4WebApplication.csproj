@@ -195,11 +195,6 @@
     </Compile>
     <Compile Include="Hubs\NoticeHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
-    <Compile Include="Kadr.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Kadr.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Kadr1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

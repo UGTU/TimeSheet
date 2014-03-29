@@ -102,7 +102,7 @@ namespace TimeSheetMvc4WebApplication
     #endregion
 		
 		public KadrDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrRealTestConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -2376,6 +2376,8 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntitySet<Approver> _Approver;
 		
+		private EntitySet<TimeSheet> _TimeSheet;
+		
 		private EntityRef<Department> _Department;
 		
 		private EntityRef<PlanStaff> _PlanStaff;
@@ -2408,6 +2410,7 @@ namespace TimeSheetMvc4WebApplication
 		{
 			this._ApperoveDepartment = new EntitySet<ApperoveDepartment>(new Action<ApperoveDepartment>(this.attach_ApperoveDepartment), new Action<ApperoveDepartment>(this.detach_ApperoveDepartment));
 			this._Approver = new EntitySet<Approver>(new Action<Approver>(this.attach_Approver), new Action<Approver>(this.detach_Approver));
+			this._TimeSheet = new EntitySet<TimeSheet>(new Action<TimeSheet>(this.attach_TimeSheet), new Action<TimeSheet>(this.detach_TimeSheet));
 			this._Department = default(EntityRef<Department>);
 			this._PlanStaff = default(EntityRef<PlanStaff>);
 			OnCreated();
@@ -2627,6 +2630,19 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_TimeSheet", Storage="_TimeSheet", ThisKey="id", OtherKey="idDepartment")]
+		public EntitySet<TimeSheet> TimeSheet
+		{
+			get
+			{
+				return this._TimeSheet;
+			}
+			set
+			{
+				this._TimeSheet.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Department_Dep", Storage="_Department", ThisKey="id", OtherKey="id", IsForeignKey=true)]
 		public Department Department
 		{
@@ -2734,6 +2750,18 @@ namespace TimeSheetMvc4WebApplication
 		}
 		
 		private void detach_Approver(Approver entity)
+		{
+			this.SendPropertyChanging();
+			entity.Dep = null;
+		}
+		
+		private void attach_TimeSheet(TimeSheet entity)
+		{
+			this.SendPropertyChanging();
+			entity.Dep = this;
+		}
+		
+		private void detach_TimeSheet(TimeSheet entity)
 		{
 			this.SendPropertyChanging();
 			entity.Dep = null;
@@ -7861,6 +7889,8 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntityRef<Approver> _Approver;
 		
+		private EntityRef<Dep> _Dep;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7890,6 +7920,7 @@ namespace TimeSheetMvc4WebApplication
 			this._TimeSheetApproval = new EntitySet<TimeSheetApproval>(new Action<TimeSheetApproval>(this.attach_TimeSheetApproval), new Action<TimeSheetApproval>(this.detach_TimeSheetApproval));
 			this._TimeSheetRecord = new EntitySet<TimeSheetRecord>(new Action<TimeSheetRecord>(this.attach_TimeSheetRecord), new Action<TimeSheetRecord>(this.detach_TimeSheetRecord));
 			this._Approver = default(EntityRef<Approver>);
+			this._Dep = default(EntityRef<Dep>);
 			OnCreated();
 		}
 		
@@ -7924,6 +7955,10 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idDepartment != value))
 				{
+					if (this._Dep.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnidDepartmentChanging(value);
 					this.SendPropertyChanging();
 					this._idDepartment = value;
@@ -8133,6 +8168,40 @@ namespace TimeSheetMvc4WebApplication
 						this._idCreater = default(int);
 					}
 					this.SendPropertyChanged("Approver");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_TimeSheet", Storage="_Dep", ThisKey="idDepartment", OtherKey="id", IsForeignKey=true)]
+		public Dep Dep
+		{
+			get
+			{
+				return this._Dep.Entity;
+			}
+			set
+			{
+				Dep previousValue = this._Dep.Entity;
+				if (((previousValue != value) 
+							|| (this._Dep.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Dep.Entity = null;
+						previousValue.TimeSheet.Remove(this);
+					}
+					this._Dep.Entity = value;
+					if ((value != null))
+					{
+						value.TimeSheet.Add(this);
+						this._idDepartment = value.id;
+					}
+					else
+					{
+						this._idDepartment = default(int);
+					}
+					this.SendPropertyChanged("Dep");
 				}
 			}
 		}
