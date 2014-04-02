@@ -44,11 +44,12 @@
     </table>
 </div>
 <script>
-
+    $.ajaxSetup({ cache: false });
 </script>
 <script>
     function TimeSheetRecords($scope, $http) {
-
+        $http.defaults.headers.common['Cache-Control'] = 'no-cache';
+        
         $scope.loadData = function () {
             $http.get('@Url.Action("GetData", "Register", new { date = currentDate })').success(function (data) {
                 $scope.departments = data.deps;
@@ -60,6 +61,7 @@
                     });
                     dep.timesheets = tsList;
                 });
+                console.log('data loaded');
             });
         };
 
