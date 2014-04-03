@@ -14,6 +14,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
     {
         //
         // GET: /Register/
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult Index(DateTime? date)
         {
             ViewBag.Date = date??DateTime.Now;
@@ -21,6 +22,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         //==========    Json    =============================================
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult GetData(DateTime date)
         {
             var departments = GetCurrentApprover().GetApproverDepartments().ToArray();
@@ -33,6 +35,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(dyn, JsonRequestBehavior.AllowGet);
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult AddFakeTimeSheet(int idDep, DateTime date)
         {
             try
@@ -54,6 +57,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             }
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult DellFakeTimeSheet(int id)
         {
             try

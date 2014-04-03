@@ -1,7 +1,10 @@
-﻿@using TimeSheetMvc4WebApplication.ClassesDTO
+﻿@using System
+@using System.Linq
+@using TimeSheetMvc4WebApplication.ClassesDTO
 @model DtoApprover
 @{
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+    var approver = ViewBag.approver as DtoApprover;
 }
 
 @if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
@@ -43,14 +46,17 @@ else
     </div>
 }
 
-<script>
-    $('#HeaderLiBox').append("<li id=\"111\">" +
-    "<div class=\"btn-group navbar-form form-inline\">" +
-        "<a class=\"btn btn-default\" href=\"@Url.Action("Index","Register")\">" +
+@if (approver != null && (approver.IsAdministrator || approver.Allowed(ApproveState.РаботникКадров)))
+{
+    <script>
+        $('#HeaderLiBox').append("<li id=\"111\">" +
+            "<div class=\"btn-group navbar-form form-inline\">" +
+            "<a class=\"btn btn-default\" href=\"@Url.Action("Index", "Register")\">" +
             "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
-        "</a>" +
-        "<a class=\"btn btn-default active\" href=\"@Url.Action("Index","Main")\">" +
+            "</a>" +
+            "<a class=\"btn btn-default active\" href=\"@Url.Action("Index", "Main")\">" +
             "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
-        "</a>" +
-    "</div></li>");
-</script>
+            "</a>" +
+            "</div></li>");
+    </script>
+}

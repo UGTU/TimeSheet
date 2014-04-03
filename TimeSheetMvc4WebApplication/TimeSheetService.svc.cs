@@ -158,20 +158,12 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        //public DtoTimeSheet[] GetFakeTimeSheetList(int idDepartment)
-        //{
-        //    using (var db = new KadrDataContext())
-        //    {
-        //        return   db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
-        //                .OrderByDescending(o => o.DateBeginPeriod)
-        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, true)).ToArray();
-        //    }
-        //}
-
         public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
         {
             using (var db = new KadrDataContext())
             {
+                if(db.TimeSheet.Any(a=>a.idDepartment==idDepartment&& a.DateBeginPeriod==dateStart))
+                    throw new System.Exception("Табель на этот месяц уже сформирован.");
                  var dtoApproverDepartment =
                         GetCurrentApproverByLogin(approver.EmployeeLogin)
                             .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);

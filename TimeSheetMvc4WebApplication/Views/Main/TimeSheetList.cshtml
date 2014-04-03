@@ -1,5 +1,7 @@
-﻿@using TimeSheetMvc4WebApplication.ClassesDTO
-@model IEnumerable<DtoTimeSheet>
+﻿@using System
+@using System.Linq
+@using TimeSheetMvc4WebApplication.ClassesDTO
+@model System.Collections.Generic.IEnumerable<DtoTimeSheet>
 @{
     ViewBag.Title = @ViewBag.Department.DepartmentSmallName;
     var years = Model.GroupBy(g => g.DateBegin.Year);

@@ -17,3 +17,11 @@ ALTER TABLE ShemaTabel.TimeSheet
 ADD IsFake bit NOT NULL DEFAULT(0)
 go
 select*from ShemaTabel.TimeSheet
+
+-----	Main department
+select*from Department
+Go
+ALTER TABLE ShemaTabel.TimeSheet
+ADD IsFake bit NOT NULL DEFAULT(0)
+go
+select*from ShemaTabel.TimeSheet

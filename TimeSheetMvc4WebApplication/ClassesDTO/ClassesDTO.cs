@@ -101,6 +101,11 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         {
             return DtoApproverDepartments.Any(a => a.IdDepartment == idDepartment && a.ApproveNumber == (int) approveState);
         }
+
+        public bool Allowed(ApproveState approveState)
+        {
+            return DtoApproverDepartments.Any(a =>a.ApproveNumber == (int)approveState);
+        }
     }
 
     [DataContract]
@@ -114,6 +119,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string DepartmentFullName { get; set; }
         [DataMember]
         public int? IdManagerDepartment { get; set; }
+        public bool IsMain { get; set; }
     }
 
     [DataContract]

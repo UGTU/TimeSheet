@@ -38,33 +38,38 @@
     <div class="col-md-8" ng-hide="DepartmentApproveHide()">
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
         <hr style="margin-top: 0;" />
-        <h4>Табельщик</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
-            </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
-            </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="SelectedDepartment.IsMain"> Создавать отдельный табель
+            </label>
         </div>
-
-        <h4>Начальник структурного подразделения</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
+        <div ng-show="SelectedDepartment.IsMain">
+            <h4>Табельщик</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
+                </div>
             </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+            <h4>Начальник структурного подразделения</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+                </div>
             </div>
-        </div>
-
-        <h4>Работник отдела кадров</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
-            </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+            <h4>Работник отдела кадров</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+                </div>
             </div>
         </div>
         <div class="row">
