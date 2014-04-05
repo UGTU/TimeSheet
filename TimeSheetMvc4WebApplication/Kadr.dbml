@@ -313,6 +313,7 @@
       <Association Name="TimeSheet_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
       <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Approver_TimeSheet" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
+      <Association Name="Dep_TimeSheet" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Dep" Member="Dep">
@@ -330,13 +331,14 @@
       <Column Name="HasTimeSheet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Dep_Approver" Member="Approver" ThisKey="id" OtherKey="idDepartment" Type="Approver" />
       <Association Name="Dep_PlanStaff" Member="PlanStaff" ThisKey="id" OtherKey="idDepartment" Type="PlanStaff" />
+      <Association Name="Dep_TimeSheet" Member="TimeSheet" ThisKey="id" OtherKey="idDepartment" Type="TimeSheet" />
+      <Association Name="Dep_Department" Member="Department" ThisKey="id" OtherKey="id" Type="Department" Cardinality="One" />
       <Association Name="PlanStaff_Dep" Member="PlanStaff1" ThisKey="idManagerPlanStaff" OtherKey="id" Type="PlanStaff" IsForeignKey="true" />
-      <Association Name="Department_Dep" Member="Department" ThisKey="id" OtherKey="id" Type="Department" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Department" Member="Department">
     <Type Name="Department">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="DepartmentName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="DepartmentSmallName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="idDepartmentType" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -352,7 +354,7 @@
       <Column Name="DepartmentGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="idFundingCenter" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HasTimeSheet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Department_Dep" Member="Dep" ThisKey="id" OtherKey="id" Type="Dep" />
+      <Association Name="Dep_Department" Member="Dep" ThisKey="id" OtherKey="id" Type="Dep" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

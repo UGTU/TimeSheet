@@ -6,7 +6,6 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using TimeSheetMvc4WebApplication.App_Start;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Source;
 
@@ -54,6 +53,28 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        public bool UpdateDepartment(DtoDepartment department)
+        {
+            using (var db = new KadrDataContext())
+            {
+                try
+                {
+                    var dep = db.Dep.FirstOrDefault(f => f.id == department.IdDepartment);
+                    if (dep != null)
+                    {
+                        dep.HasTimeSheet = department.HasTimeSheet;
+                        db.SubmitChanges();
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Возвращает список всех текущих сотрудников структурного подразделения
         /// </summary>
@@ -71,12 +92,33 @@ namespace TimeSheetMvc4WebApplication
         }
 
 
+
+
         [OperationContract]
-        public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, string employeeLogin,
-            DateTime dateStart, DateTime dateEnd)
+        public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, string employeeLogin, DateTime dateStart, DateTime dateEnd)
         {
+            //using (var db = new KadrDataContext())
+            //{
+            //    var loadOptions = new DataLoadOptions();
+            //    loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.PlanStaff);
+            //    loadOptions.LoadWith((PlanStaff ps) => ps.Post);
+            //    loadOptions.LoadWith((Post p) => p.Category);
+            //    loadOptions.LoadWith((PlanStaff ps) => ps.WorkShedule);
+            //    loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.Employee);
+            //    loadOptions.LoadWith((OK_Otpusk oko) => oko.OK_Otpuskvid);
+            //    db.LoadOptions = loadOptions;
+            //    var dtoApproverDepartment =
+            //        GetCurrentApproverByLogin(employeeLogin)
+            //            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
+            //    var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
+            //    return
+            //        ts.GetAllEmployees()
+            //            .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
+            //            .ToArray();
+            //}
             using (var db = new KadrDataContext())
             {
+                //var depsId = GetDepartmentsIdList(idDepartment);
                 var loadOptions = new DataLoadOptions();
                 loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.PlanStaff);
                 loadOptions.LoadWith((PlanStaff ps) => ps.Post);
@@ -87,8 +129,14 @@ namespace TimeSheetMvc4WebApplication
                 db.LoadOptions = loadOptions;
                 var dtoApproverDepartment =
                     GetCurrentApproverByLogin(employeeLogin)
-                        .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
-                var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
+                        .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment==idDepartment);
+                //var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
+                //return
+                //    ts.GetAllEmployees()
+                //        .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
+                //        .ToArray();
+
+                var ts = new TimeSheetManaget(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
                 return
                     ts.GetAllEmployees()
                         .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
@@ -167,7 +215,6 @@ namespace TimeSheetMvc4WebApplication
                  var dtoApproverDepartment =
                         GetCurrentApproverByLogin(approver.EmployeeLogin)
                             .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
-
                 var ts = new TimeSheet
                 {
                     idDepartment = idDepartment,
@@ -682,7 +729,9 @@ namespace TimeSheetMvc4WebApplication
                             .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                     var timeSheet = new TimeSheetManaget(idDepartment, dateBeginPeriod, dateEndPeriod,
                         dtoApproverDepartment, db);
-                    timeSheet.GenerateTimeSheet(employees);
+                    //var timeSheet = new TimeSheetCraterNew(idDepartment, dateBeginPeriod, dateEndPeriod,
+                    //    dtoApproverDepartment, db);
+                    timeSheet.GenerateTimeSheet(employees.ToArray());
                     return new DtoMessage
                     {
                         Result = true

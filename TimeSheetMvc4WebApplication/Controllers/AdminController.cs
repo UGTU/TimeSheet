@@ -131,6 +131,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SaveDepartment(DtoDepartment department)
+        {
+            ////todo:Сделать метод проверки и сохранять логин только если он обновлён
+            //var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
+            //var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+            //var result = (approveSaveResult && employeeSaveResult) ? true : false;
+            var result = Client.UpdateDepartment(department);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [Authorize(Roles = "ADtoKadr")]
         public JsonResult SaveEmployeeLogin(int idEmployee, string employeeLogin)
         {

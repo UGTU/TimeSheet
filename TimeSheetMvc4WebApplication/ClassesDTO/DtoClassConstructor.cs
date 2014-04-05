@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Linq;
 using System.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
 {
@@ -144,12 +145,15 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         public static DtoDepartment DtoDepartment(KadrDataContext db, int idDepartment)
         {
+            var dep = db.Department.FirstOrDefault(w => w.id == idDepartment);
+            if(dep==null) throw new System.Exception("Запрашиваемый отдел не найден. IdDep="+idDepartment);
             return new DtoDepartment
             {
-                IdDepartment = idDepartment,
-                DepartmentFullName = db.Department.Where(w => w.id == idDepartment).Select(s => s.DepartmentName).FirstOrDefault(),
-                DepartmentSmallName = db.Department.Where(w => w.id == idDepartment).Select(s => s.DepartmentSmallName).FirstOrDefault(),
-                IdManagerDepartment = db.Department.Where(w => w.id == idDepartment).Select(s => s.idManagerDepartment).FirstOrDefault()
+                IdDepartment = dep.id,
+                DepartmentFullName = dep.DepartmentName,
+                DepartmentSmallName = dep.DepartmentSmallName,
+                IdManagerDepartment = dep.idManagerDepartment,
+                HasTimeSheet = dep.HasTimeSheet
             };
         }
 

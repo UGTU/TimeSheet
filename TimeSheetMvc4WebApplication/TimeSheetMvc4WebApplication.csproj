@@ -285,7 +285,6 @@
     <Compile Include="Source\TimeEmailSender.cs" />
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\TimeSheetManaget.cs" />
-    <Compile Include="Source\TimeSheetCraterNew.cs" />
     <Compile Include="Source\TimeSheetToDbf.cs" />
     <Compile Include="Source\UserNameAdapter.cs" />
     <Content Include="Scripts\angular-animate.js" />

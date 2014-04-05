@@ -96,6 +96,9 @@ namespace TimeSheetMvc4WebApplication
     partial void InsertDep(Dep instance);
     partial void UpdateDep(Dep instance);
     partial void DeleteDep(Dep instance);
+    partial void InsertDepartment(Department instance);
+    partial void UpdateDepartment(Department instance);
+    partial void DeleteDepartment(Department instance);
     #endregion
 		
 		public KadrDataContext() : 
@@ -7064,6 +7067,8 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntityRef<Approver> _Approver;
 		
+		private EntityRef<Dep> _Dep;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7093,6 +7098,7 @@ namespace TimeSheetMvc4WebApplication
 			this._TimeSheetApproval = new EntitySet<TimeSheetApproval>(new Action<TimeSheetApproval>(this.attach_TimeSheetApproval), new Action<TimeSheetApproval>(this.detach_TimeSheetApproval));
 			this._TimeSheetRecord = new EntitySet<TimeSheetRecord>(new Action<TimeSheetRecord>(this.attach_TimeSheetRecord), new Action<TimeSheetRecord>(this.detach_TimeSheetRecord));
 			this._Approver = default(EntityRef<Approver>);
+			this._Dep = default(EntityRef<Dep>);
 			OnCreated();
 		}
 		
@@ -7127,6 +7133,10 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idDepartment != value))
 				{
+					if (this._Dep.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnidDepartmentChanging(value);
 					this.SendPropertyChanging();
 					this._idDepartment = value;
@@ -7340,6 +7350,40 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_TimeSheet", Storage="_Dep", ThisKey="idDepartment", OtherKey="id", IsForeignKey=true)]
+		public Dep Dep
+		{
+			get
+			{
+				return this._Dep.Entity;
+			}
+			set
+			{
+				Dep previousValue = this._Dep.Entity;
+				if (((previousValue != value) 
+							|| (this._Dep.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Dep.Entity = null;
+						previousValue.TimeSheet.Remove(this);
+					}
+					this._Dep.Entity = value;
+					if ((value != null))
+					{
+						value.TimeSheet.Add(this);
+						this._idDepartment = value.id;
+					}
+					else
+					{
+						this._idDepartment = default(int);
+					}
+					this.SendPropertyChanged("Dep");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -7417,6 +7461,10 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntitySet<PlanStaff> _PlanStaff;
 		
+		private EntitySet<TimeSheet> _TimeSheet;
+		
+		private EntityRef<Department> _Department;
+		
 		private EntityRef<PlanStaff> _PlanStaff1;
 		
     #region Extensibility Method Definitions
@@ -7451,6 +7499,8 @@ namespace TimeSheetMvc4WebApplication
 		{
 			this._Approver = new EntitySet<Approver>(new Action<Approver>(this.attach_Approver), new Action<Approver>(this.detach_Approver));
 			this._PlanStaff = new EntitySet<PlanStaff>(new Action<PlanStaff>(this.attach_PlanStaff), new Action<PlanStaff>(this.detach_PlanStaff));
+			this._TimeSheet = new EntitySet<TimeSheet>(new Action<TimeSheet>(this.attach_TimeSheet), new Action<TimeSheet>(this.detach_TimeSheet));
+			this._Department = default(EntityRef<Department>);
 			this._PlanStaff1 = default(EntityRef<PlanStaff>);
 			OnCreated();
 		}
@@ -7705,6 +7755,48 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_TimeSheet", Storage="_TimeSheet", ThisKey="id", OtherKey="idDepartment")]
+		public EntitySet<TimeSheet> TimeSheet
+		{
+			get
+			{
+				return this._TimeSheet;
+			}
+			set
+			{
+				this._TimeSheet.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_Department", Storage="_Department", ThisKey="id", OtherKey="id", IsUnique=true, IsForeignKey=false)]
+		public Department Department
+		{
+			get
+			{
+				return this._Department.Entity;
+			}
+			set
+			{
+				Department previousValue = this._Department.Entity;
+				if (((previousValue != value) 
+							|| (this._Department.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Department.Entity = null;
+						previousValue.Dep = null;
+					}
+					this._Department.Entity = value;
+					if ((value != null))
+					{
+						value.Dep = this;
+					}
+					this.SendPropertyChanged("Department");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PlanStaff_Dep", Storage="_PlanStaff1", ThisKey="idManagerPlanStaff", OtherKey="id", IsForeignKey=true)]
 		public PlanStaff PlanStaff1
 		{
@@ -7782,11 +7874,25 @@ namespace TimeSheetMvc4WebApplication
 			this.SendPropertyChanging();
 			entity.Dep = null;
 		}
+		
+		private void attach_TimeSheet(TimeSheet entity)
+		{
+			this.SendPropertyChanging();
+			entity.Dep = this;
+		}
+		
+		private void detach_TimeSheet(TimeSheet entity)
+		{
+			this.SendPropertyChanging();
+			entity.Dep = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Department")]
-	public partial class Department
+	public partial class Department : INotifyPropertyChanging, INotifyPropertyChanged
 	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _id;
 		
@@ -7820,11 +7926,53 @@ namespace TimeSheetMvc4WebApplication
 		
 		private bool _HasTimeSheet;
 		
+		private EntityRef<Dep> _Dep;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OnDepartmentNameChanging(string value);
+    partial void OnDepartmentNameChanged();
+    partial void OnDepartmentSmallNameChanging(string value);
+    partial void OnDepartmentSmallNameChanged();
+    partial void OnidDepartmentTypeChanging(System.Nullable<int> value);
+    partial void OnidDepartmentTypeChanged();
+    partial void OnidManagerDepartmentChanging(System.Nullable<int> value);
+    partial void OnidManagerDepartmentChanged();
+    partial void OnKadrIDChanging(System.Nullable<int> value);
+    partial void OnKadrIDChanged();
+    partial void OndateCreateChanging(System.DateTime value);
+    partial void OndateCreateChanged();
+    partial void OndateExitChanging(System.Nullable<System.DateTime> value);
+    partial void OndateExitChanged();
+    partial void OnidManagerPlanStaffChanging(System.Nullable<int> value);
+    partial void OnidManagerPlanStaffChanged();
+    partial void OnidBeginPrikazChanging(int value);
+    partial void OnidBeginPrikazChanged();
+    partial void OnidEndPrikazChanging(System.Nullable<int> value);
+    partial void OnidEndPrikazChanged();
+    partial void OnSeverKoeffChanging(System.Nullable<int> value);
+    partial void OnSeverKoeffChanged();
+    partial void OnRayonKoeffChanging(System.Nullable<int> value);
+    partial void OnRayonKoeffChanged();
+    partial void OnDepartmentGUIDChanging(System.Guid value);
+    partial void OnDepartmentGUIDChanged();
+    partial void OnidFundingCenterChanging(System.Nullable<int> value);
+    partial void OnidFundingCenterChanged();
+    partial void OnHasTimeSheetChanging(bool value);
+    partial void OnHasTimeSheetChanged();
+    #endregion
+		
 		public Department()
 		{
+			this._Dep = default(EntityRef<Dep>);
+			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int id
 		{
 			get
@@ -7835,7 +7983,15 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._id != value))
 				{
+					if (this._Dep.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
 					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
 				}
 			}
 		}
@@ -7851,7 +8007,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._DepartmentName != value))
 				{
+					this.OnDepartmentNameChanging(value);
+					this.SendPropertyChanging();
 					this._DepartmentName = value;
+					this.SendPropertyChanged("DepartmentName");
+					this.OnDepartmentNameChanged();
 				}
 			}
 		}
@@ -7867,7 +8027,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._DepartmentSmallName != value))
 				{
+					this.OnDepartmentSmallNameChanging(value);
+					this.SendPropertyChanging();
 					this._DepartmentSmallName = value;
+					this.SendPropertyChanged("DepartmentSmallName");
+					this.OnDepartmentSmallNameChanged();
 				}
 			}
 		}
@@ -7883,7 +8047,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idDepartmentType != value))
 				{
+					this.OnidDepartmentTypeChanging(value);
+					this.SendPropertyChanging();
 					this._idDepartmentType = value;
+					this.SendPropertyChanged("idDepartmentType");
+					this.OnidDepartmentTypeChanged();
 				}
 			}
 		}
@@ -7899,7 +8067,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idManagerDepartment != value))
 				{
+					this.OnidManagerDepartmentChanging(value);
+					this.SendPropertyChanging();
 					this._idManagerDepartment = value;
+					this.SendPropertyChanged("idManagerDepartment");
+					this.OnidManagerDepartmentChanged();
 				}
 			}
 		}
@@ -7915,7 +8087,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._KadrID != value))
 				{
+					this.OnKadrIDChanging(value);
+					this.SendPropertyChanging();
 					this._KadrID = value;
+					this.SendPropertyChanged("KadrID");
+					this.OnKadrIDChanged();
 				}
 			}
 		}
@@ -7931,7 +8107,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._dateCreate != value))
 				{
+					this.OndateCreateChanging(value);
+					this.SendPropertyChanging();
 					this._dateCreate = value;
+					this.SendPropertyChanged("dateCreate");
+					this.OndateCreateChanged();
 				}
 			}
 		}
@@ -7947,7 +8127,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._dateExit != value))
 				{
+					this.OndateExitChanging(value);
+					this.SendPropertyChanging();
 					this._dateExit = value;
+					this.SendPropertyChanged("dateExit");
+					this.OndateExitChanged();
 				}
 			}
 		}
@@ -7963,7 +8147,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idManagerPlanStaff != value))
 				{
+					this.OnidManagerPlanStaffChanging(value);
+					this.SendPropertyChanging();
 					this._idManagerPlanStaff = value;
+					this.SendPropertyChanged("idManagerPlanStaff");
+					this.OnidManagerPlanStaffChanged();
 				}
 			}
 		}
@@ -7979,7 +8167,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idBeginPrikaz != value))
 				{
+					this.OnidBeginPrikazChanging(value);
+					this.SendPropertyChanging();
 					this._idBeginPrikaz = value;
+					this.SendPropertyChanged("idBeginPrikaz");
+					this.OnidBeginPrikazChanged();
 				}
 			}
 		}
@@ -7995,7 +8187,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idEndPrikaz != value))
 				{
+					this.OnidEndPrikazChanging(value);
+					this.SendPropertyChanging();
 					this._idEndPrikaz = value;
+					this.SendPropertyChanged("idEndPrikaz");
+					this.OnidEndPrikazChanged();
 				}
 			}
 		}
@@ -8011,7 +8207,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._SeverKoeff != value))
 				{
+					this.OnSeverKoeffChanging(value);
+					this.SendPropertyChanging();
 					this._SeverKoeff = value;
+					this.SendPropertyChanged("SeverKoeff");
+					this.OnSeverKoeffChanged();
 				}
 			}
 		}
@@ -8027,7 +8227,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._RayonKoeff != value))
 				{
+					this.OnRayonKoeffChanging(value);
+					this.SendPropertyChanging();
 					this._RayonKoeff = value;
+					this.SendPropertyChanged("RayonKoeff");
+					this.OnRayonKoeffChanged();
 				}
 			}
 		}
@@ -8043,7 +8247,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._DepartmentGUID != value))
 				{
+					this.OnDepartmentGUIDChanging(value);
+					this.SendPropertyChanging();
 					this._DepartmentGUID = value;
+					this.SendPropertyChanged("DepartmentGUID");
+					this.OnDepartmentGUIDChanged();
 				}
 			}
 		}
@@ -8059,7 +8267,11 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._idFundingCenter != value))
 				{
+					this.OnidFundingCenterChanging(value);
+					this.SendPropertyChanging();
 					this._idFundingCenter = value;
+					this.SendPropertyChanged("idFundingCenter");
+					this.OnidFundingCenterChanged();
 				}
 			}
 		}
@@ -8075,8 +8287,66 @@ namespace TimeSheetMvc4WebApplication
 			{
 				if ((this._HasTimeSheet != value))
 				{
+					this.OnHasTimeSheetChanging(value);
+					this.SendPropertyChanging();
 					this._HasTimeSheet = value;
+					this.SendPropertyChanged("HasTimeSheet");
+					this.OnHasTimeSheetChanged();
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Dep_Department", Storage="_Dep", ThisKey="id", OtherKey="id", IsForeignKey=true)]
+		public Dep Dep
+		{
+			get
+			{
+				return this._Dep.Entity;
+			}
+			set
+			{
+				Dep previousValue = this._Dep.Entity;
+				if (((previousValue != value) 
+							|| (this._Dep.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Dep.Entity = null;
+						previousValue.Department = null;
+					}
+					this._Dep.Entity = value;
+					if ((value != null))
+					{
+						value.Department = this;
+						this._id = value.id;
+					}
+					else
+					{
+						this._id = default(int);
+					}
+					this.SendPropertyChanged("Dep");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}

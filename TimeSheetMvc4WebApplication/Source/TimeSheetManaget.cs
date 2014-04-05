@@ -127,15 +127,39 @@ namespace TimeSheetMvc4WebApplication.Source
             SubmitTimeSheet();
         }
 
+
+        private IEnumerable<int> GetInnerDepartmentsIdForTS(KadrDataContext db, IEnumerable<int> idsDepartment)
+        {
+            var list = new List<int>();
+            foreach (var id in idsDepartment)
+            {
+                list.Add(id);
+                var temp = db.Department.Where(w => w.idManagerDepartment == id && w.HasTimeSheet == false).Select(s => s.id);
+                list.AddRange(GetInnerDepartmentsIdForTS(db, temp));
+            }
+            return list.ToArray();
+        }
+
         public FactStaffWithHistory[] GetAllEmployees()
         {
+            var deps = GetInnerDepartmentsIdForTS(_db, new int[] { _timeSheet.idDepartment });
             var employees = _db.FactStaffWithHistory.Where(
-                w => w.PlanStaff.idDepartment == _timeSheet.idDepartment &&
+                w => deps.Contains(w.PlanStaff.idDepartment) &&
                      (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
                      w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
                      w.idTypeWork != IdWorkTypePochesovik).ToArray();
             return employees;
         }
+
+        //public FactStaffWithHistory[] GetAllEmployees()
+        //{
+        //    var employees = _db.FactStaffWithHistory.Where(
+        //        w => w.PlanStaff.idDepartment == _timeSheet.idDepartment &&
+        //             (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
+        //             w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
+        //             w.idTypeWork != IdWorkTypePochesovik).ToArray();
+        //    return employees;
+        //}
 
         private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList)
         {
