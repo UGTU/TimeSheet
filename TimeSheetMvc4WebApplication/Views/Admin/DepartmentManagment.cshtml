@@ -38,12 +38,12 @@
     <div class="col-md-8" ng-hide="DepartmentApproveHide()">
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
         <hr style="margin-top: 0;" />
-        <div class="checkbox">
+        @*<div class="checkbox">
             <label>
                 <input type="checkbox" ng-model="SelectedDepartment.IsMain"> Создавать отдельный табель
             </label>
         </div>
-        <div ng-show="SelectedDepartment.IsMain">
+        <div ng-show="SelectedDepartment.IsMain">*@
             <h4>Табельщик</h4>
             <div class="row">
                 <div class="col-lg-5">
@@ -71,7 +71,7 @@
                     <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
                 </div>
             </div>
-        </div>
+        @*</div>*@
         <div class="row">
             <div class="col-lg-12">
                 <p>

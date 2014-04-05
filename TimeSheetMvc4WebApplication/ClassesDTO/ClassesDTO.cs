@@ -119,7 +119,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string DepartmentFullName { get; set; }
         [DataMember]
         public int? IdManagerDepartment { get; set; }
-        public bool IsMain { get; set; }
+        //public bool IsMain { get; set; }
     }
 
     [DataContract]

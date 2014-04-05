@@ -400,3 +400,7 @@ delete from ShemaTabel.TimeSheetRecord where IdTimeSheetRecord='50fd85b3-490d-47
 select convert(varchar(10),getdate(),112)
 
 select convert(char(10), GETDATE(), 127)
+
+
+select*from DepartmentType
+
