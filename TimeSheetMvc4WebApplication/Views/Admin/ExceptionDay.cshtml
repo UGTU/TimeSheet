@@ -1,7 +1,6 @@
 ﻿@using TimeSheetMvc4WebApplication.Models
 @{
     ViewBag.Title = "Выходные дни и праздники";
-    //Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
 
 <div class="row" ng-app ng-controller="ExceptionDay">
@@ -10,7 +9,7 @@
             <h2>@ViewBag.Title</h2>
         </div>
         <div class="col-sm-6 col-md-3 pull-right" style="padding-right: 0">
-            <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px; width: 200px;" data-toggle="modal" href="#myModal" ng-click="SetCurrentExceptionDay(NewExceptionDay)">
+            <a type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" data-toggle="modal" href="#myModal" ng-click="SetCurrentExceptionDay(NewExceptionDay)">
                 <span class="glyphicon glyphicon-plus-sign"></span> Добавить праздник
             </a>
         </div>
@@ -45,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule.IdWorkShedule: CurrentWorkSchedule.IdWorkShedule ,Year:CurrentYear}" style="max-height: 10px;">
+                <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule: CurrentWorkSchedule,Year:CurrentYear}" style="max-height: 10px;">
                     <td>{{day.Date.toString('dd MMMM yyyy')}}</td>
                     <td>{{day.Name}}</td>
                     <td>{{day.DayAweek}}</td>
@@ -59,6 +58,20 @@
                         <a type="button" ng-click="Remove(day)" class="btn btn-link" style="padding: 0;" data-toggle="modal" href=""><span class="glyphicon glyphicon-trash"></span></a>
                     </td>
                 </tr>
+                @*<tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule.IdWorkShedule: CurrentWorkSchedule.IdWorkShedule ,Year:CurrentYear}" style="max-height: 10px;">
+                    <td>{{day.Date.toString('dd MMMM yyyy')}}</td>
+                    <td>{{day.Name}}</td>
+                    <td>{{day.DayAweek}}</td>
+                    <td>{{day.DayStatus.SmallDayStatusName}}</td>
+                    <td>{{day.MPS}}</td>
+                    <td>{{day.MNS}}</td>
+                    <td>{{day.GPS}}</td>
+                    <td>{{day.GNS}}</td>
+                    <td>
+                        <a type="button" ng-click="SetCurrentExceptionDay(day)" class="btn btn-link" style="padding: 0;" data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a type="button" ng-click="Remove(day)" class="btn btn-link" style="padding: 0;" data-toggle="modal" href=""><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>*@
             </tbody>
         </table>
 

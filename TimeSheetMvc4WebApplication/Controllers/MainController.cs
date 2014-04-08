@@ -24,8 +24,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.approver = approver;
             if (approver==null || approver.GetApproverDepartments() == null || !approver.GetApproverDepartments().Any())
                 throw new HttpException(401, "Попытка несанкционированного доступа");
-            if (approver.GetApproverDepartments().Count() > 1) return View(approver);
-            return RedirectToAction("TimeSheetList", new { id = approver.GetApproverDepartments().First().IdDepartment });
+            if (approver.GetApproverDepartments().Count() <= 1)
+                return RedirectToAction("TimeSheetList",
+                    new {id = approver.GetApproverDepartments().First().IdDepartment});
+            if (approver.Allowed(ApproveState.РаботникКадров)) return RedirectToAction("Index", "Register");
+            return View(approver);
         }
 
 
