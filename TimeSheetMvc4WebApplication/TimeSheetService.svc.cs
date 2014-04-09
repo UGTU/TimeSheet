@@ -6,7 +6,9 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Models.Main;
 using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication
@@ -203,6 +205,69 @@ namespace TimeSheetMvc4WebApplication
                     : db.TimeSheet.Where(w => w.idDepartment == idDepartment)
                         .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
+            }
+        }
+
+        public DtoTimeSheet[] GetTimeSheetList(int idDepartment, bool isEmpty = false,
+            TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
+        {
+            using (var db = new KadrDataContext())
+            {
+                var approveSteps = TimeSheetFilterAdapter(filter);
+                return db.TimeSheet.Where(
+                    w =>
+                        w.idDepartment == idDepartment &&
+                        w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+                        approveSteps.Contains(w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).First().Result
+                            ? w.TimeSheetApproval.OrderBy(o => o.ApprovalDate)
+                                .First()
+                                .Approver.ApproverType.ApproveNumber
+                            : 0)).OrderByDescending(o => o.DateBeginPeriod).Skip(skip).Take(take)
+                    .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
+            }
+        }
+
+        public int GetTimeSheetListCount(int idDepartment, bool isEmpty = false, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
+        {
+            using (var db = new KadrDataContext())
+            {
+                var approveSteps = TimeSheetFilterAdapter(filter);
+                return
+                    db.TimeSheet.Count(
+                        w =>
+                            w.idDepartment == idDepartment &&
+                            w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+                            approveSteps.Contains(w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).First().Result
+                                ? w.TimeSheetApproval.OrderBy(o => o.ApprovalDate)
+                                    .First()
+                                    .Approver.ApproverType.ApproveNumber
+                                : 0));
+            }
+        }
+
+        //int GetApproveStep(KadrDataContext db, int idTimeSheet)
+        //{
+        //    var lastDateOfTimeSheetApproval =
+        //            db.TimeSheetApproval.Where(w => w.idTimeSheet == idTimeSheet)
+        //                .OrderByDescending(o => o.ApprovalDate).FirstOrDefault();
+        //    if (lastDateOfTimeSheetApproval == null) return 0;
+        //    return lastDateOfTimeSheetApproval.Result ? lastDateOfTimeSheetApproval.Approver.ApproverType.ApproveNumber : 0;
+        //}
+
+        private int[] TimeSheetFilterAdapter(TimeSheetFilter filter)
+        {
+            switch (filter)
+            {
+                case TimeSheetFilter.All:
+                    return new[] {0, 1, 2, 3};
+                case TimeSheetFilter.Edit:
+                    return new[] {0};
+                case TimeSheetFilter.Approve:
+                    return new[] {2, 2};
+                case TimeSheetFilter.Approved:
+                    return new[] {3};
+                default:
+                    throw new System.Exception("Заданое условие фильтрации недоступно");
             }
         }
 
@@ -663,30 +728,48 @@ namespace TimeSheetMvc4WebApplication
         /// </summary>
         /// <param name="idTimeSheet">Идентификатор табеля</param>
         /// <returns></returns>
-        [OperationContract]
+        //[OperationContract]
+        //public int GetTimeSheetApproveStep(int idTimeSheet)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    {
+        //        var lastDateOfTimeSheetApproval =
+        //            db.TimeSheetApproval.Where(w => w.idTimeSheet == idTimeSheet)
+        //                .OrderByDescending(o => o.ApprovalDate)
+        //                .FirstOrDefault();
+        //        if (lastDateOfTimeSheetApproval != null)
+        //        {
+        //            var lastApproval =
+        //                db.TimeSheetApproval.FirstOrDefault(
+        //                    w =>
+        //                        w.idTimeSheet == idTimeSheet &
+        //                        w.ApprovalDate == lastDateOfTimeSheetApproval.ApprovalDate);
+
+        //            if (lastApproval != null)
+        //            {
+        //                if (lastApproval.Result)
+        //                {
+        //                    if (lastApproval.Approver.ApproverType.ApproveNumber != null)
+        //                        return (int) lastApproval.Approver.ApproverType.ApproveNumber;
+        //                }
+        //            }
+        //        }
+        //        return 0;
+        //    }
+        //}
         public int GetTimeSheetApproveStep(int idTimeSheet)
         {
             using (var db = new KadrDataContext())
             {
                 var lastDateOfTimeSheetApproval =
                     db.TimeSheetApproval.Where(w => w.idTimeSheet == idTimeSheet)
-                        .OrderByDescending(o => o.ApprovalDate)
-                        .FirstOrDefault();
+                        .OrderByDescending(o => o.ApprovalDate).FirstOrDefault();
                 if (lastDateOfTimeSheetApproval != null)
                 {
-                    var lastApproval =
-                        db.TimeSheetApproval.FirstOrDefault(
-                            w =>
-                                w.idTimeSheet == idTimeSheet &
-                                w.ApprovalDate == lastDateOfTimeSheetApproval.ApprovalDate);
-
-                    if (lastApproval != null)
+                    if (lastDateOfTimeSheetApproval.Result)
                     {
-                        if (lastApproval.Result)
-                        {
-                            if (lastApproval.Approver.ApproverType.ApproveNumber != null)
-                                return (int) lastApproval.Approver.ApproverType.ApproveNumber;
-                        }
+                        if (lastDateOfTimeSheetApproval.Approver.ApproverType.ApproveNumber != null)
+                            return (int) lastDateOfTimeSheetApproval.Approver.ApproverType.ApproveNumber;
                     }
                 }
                 return 0;

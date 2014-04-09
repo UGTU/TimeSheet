@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\DtoToJsonMapper.cs" />
+    <Compile Include="Models\Main\TimeSheetFilter.cs" />
     <Compile Include="Models\Main\TimeSheetViewModel.cs" />
     <Compile Include="Models\ModelConstructor.cs" />
     <Compile Include="Models\Models.cs" />

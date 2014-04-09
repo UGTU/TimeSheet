@@ -42,6 +42,18 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View(timeSheetList);
         }
 
+        public ActionResult TimeSheetList1(int id, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
+        {
+            var approver = GetCurrentApprover();
+            ViewBag.idDepartment = id;
+            ViewBag.approver = approver;
+            ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
+            ViewBag.TimeSheetCount = Client.GetTimeSheetListCount(id, true, filter, skip, take);
+            //var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12, true);
+            var timeSheetList = Client.GetTimeSheetList(id,true,filter,skip,take);
+            return View("TimeSheetList",timeSheetList);
+        }
+
         public ActionResult TimeSheetEdit(int id)
         {
             if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage;

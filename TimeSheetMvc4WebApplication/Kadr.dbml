@@ -4,7 +4,7 @@
     <Type Name="ApproverType">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ApproverTypeName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ApproveNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ApproveNumber" Type="System.Int32" DbType="Int" CanBeNull="false" />
       <Association Name="ApproverType_Approver" Member="Approver" ThisKey="id" OtherKey="idApproverType" Type="Approver" />
     </Type>
   </Table>

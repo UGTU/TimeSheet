@@ -354,7 +354,7 @@ namespace TimeSheetMvc4WebApplication
 		
 		private string _ApproverTypeName;
 		
-		private System.Nullable<int> _ApproveNumber;
+		private int _ApproveNumber;
 		
 		private EntitySet<Approver> _Approver;
 		
@@ -366,7 +366,7 @@ namespace TimeSheetMvc4WebApplication
     partial void OnidChanged();
     partial void OnApproverTypeNameChanging(string value);
     partial void OnApproverTypeNameChanged();
-    partial void OnApproveNumberChanging(System.Nullable<int> value);
+    partial void OnApproveNumberChanging(int value);
     partial void OnApproveNumberChanged();
     #endregion
 		
@@ -417,7 +417,7 @@ namespace TimeSheetMvc4WebApplication
 		}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApproveNumber", DbType="Int")]
-		public System.Nullable<int> ApproveNumber
+		public int ApproveNumber
 		{
 			get
 			{
