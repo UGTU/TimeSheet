@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,6 +18,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         private const int FirstPaperEmployeeCount = 5;
         private const int LastPaperEmployeeCount = 5;
         private const int PaperEmployeeCount = 8;
+        private const int TimeSheetsPerPage = 12;
 
         public ActionResult Index()
         {
@@ -42,16 +44,18 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View(timeSheetList);
         }
 
-        public ActionResult TimeSheetList1(int id, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
+        //public ActionResult TimeSheetList1(int id, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
+        public ActionResult TimeSheetList1(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
         {
+            var skip = page>1?TimeSheetsPerPage*(page - 1):0;
             var approver = GetCurrentApprover();
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            ViewBag.TimeSheetCount = Client.GetTimeSheetListCount(id, true, filter, skip, take);
-            //var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12, true);
-            var timeSheetList = Client.GetTimeSheetList(id,true,filter,skip,take);
-            return View("TimeSheetList",timeSheetList);
+            var r = Provider.GetTimeSheetList(id, filter, skip, TimeSheetsPerPage);
+            ViewBag.TimeSheetCount = r.Count;
+            var timeSheetList = r.TimeSheets.OrderBy(o=>o.DateBegin);
+            return View(timeSheetList);
         }
 
         public ActionResult TimeSheetEdit(int id)

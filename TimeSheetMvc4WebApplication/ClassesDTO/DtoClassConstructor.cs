@@ -157,6 +157,30 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             };
         }
 
+        //public static DtoDepartment DtoDepartment(Dep dep)
+        //{
+        //    return new DtoDepartment
+        //    {
+        //        IdDepartment = dep.id,
+        //        DepartmentFullName = dep.Department.DepartmentName,
+        //        DepartmentSmallName = dep.Department.DepartmentSmallName,
+        //        IdManagerDepartment = dep.Department.idManagerDepartment,
+        //        HasTimeSheet = dep.HasTimeSheet
+        //    };
+        //}
+
+        public static DtoDepartment DtoDepartment(Department dep)
+        {
+            return new DtoDepartment
+            {
+                IdDepartment = dep.id,
+                DepartmentFullName = dep.DepartmentName,
+                DepartmentSmallName = dep.DepartmentSmallName,
+                IdManagerDepartment = dep.idManagerDepartment,
+                HasTimeSheet = dep.HasTimeSheet
+            };
+        }
+
         public static DtoApproverDepartment DtoApproverDepartment(KadrDataContext db, int idApprover)
         {
             return db.Approver.Where(w => w.id == idApprover).Select(s => new DtoApproverDepartment
@@ -202,6 +226,31 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
                 ThenBy(o => o.FactStaffEmployee.Surname).
                 ToArray();
+            return timeSheet;
+        }
+
+        /// <summary>
+        /// Возвращает пустой табель
+        /// </summary>
+        /// <param name="ts"></param>
+        /// <returns></returns>
+        public static DtoTimeSheet DtoTimeSheet(TimeSheet ts)
+        {
+            var timeSheet = new DtoTimeSheet
+            {
+                IdTimeSheet = ts.id,
+                DateBegin = ts.DateBeginPeriod,
+                DateEnd = ts.DateEndPeriod,
+                DateComposition = ts.DateComposition,
+                Department = DtoDepartment(ts.Dep.Department),
+                IsFake = ts.IsFake,
+                EmployeesCount = ts.TimeSheetRecord.Select(ec => ec.idFactStaffHistory).Distinct().Count(),
+                ApproveStep = (ts.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+                        ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
+                            ? ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
+                                .First().Approver.ApproverType.ApproveNumber
+                            : 0
+            };
             return timeSheet;
         }
 

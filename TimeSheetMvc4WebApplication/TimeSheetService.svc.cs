@@ -208,42 +208,7 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        public DtoTimeSheet[] GetTimeSheetList(int idDepartment, bool isEmpty = false,
-            TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
-        {
-            using (var db = new KadrDataContext())
-            {
-                var approveSteps = TimeSheetFilterAdapter(filter);
-                return db.TimeSheet.Where(
-                    w =>
-                        w.idDepartment == idDepartment &&
-                        w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
-                        approveSteps.Contains(w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).First().Result
-                            ? w.TimeSheetApproval.OrderBy(o => o.ApprovalDate)
-                                .First()
-                                .Approver.ApproverType.ApproveNumber
-                            : 0)).OrderByDescending(o => o.DateBeginPeriod).Skip(skip).Take(take)
-                    .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
-            }
-        }
 
-        public int GetTimeSheetListCount(int idDepartment, bool isEmpty = false, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
-        {
-            using (var db = new KadrDataContext())
-            {
-                var approveSteps = TimeSheetFilterAdapter(filter);
-                return
-                    db.TimeSheet.Count(
-                        w =>
-                            w.idDepartment == idDepartment &&
-                            w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
-                            approveSteps.Contains(w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).First().Result
-                                ? w.TimeSheetApproval.OrderBy(o => o.ApprovalDate)
-                                    .First()
-                                    .Approver.ApproverType.ApproveNumber
-                                : 0));
-            }
-        }
 
         //int GetApproveStep(KadrDataContext db, int idTimeSheet)
         //{
@@ -254,22 +219,7 @@ namespace TimeSheetMvc4WebApplication
         //    return lastDateOfTimeSheetApproval.Result ? lastDateOfTimeSheetApproval.Approver.ApproverType.ApproveNumber : 0;
         //}
 
-        private int[] TimeSheetFilterAdapter(TimeSheetFilter filter)
-        {
-            switch (filter)
-            {
-                case TimeSheetFilter.All:
-                    return new[] {0, 1, 2, 3};
-                case TimeSheetFilter.Edit:
-                    return new[] {0};
-                case TimeSheetFilter.Approve:
-                    return new[] {2, 2};
-                case TimeSheetFilter.Approved:
-                    return new[] {3};
-                default:
-                    throw new System.Exception("Заданое условие фильтрации недоступно");
-            }
-        }
+
 
         public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -11,7 +12,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
     {
         protected static string ErrorPage = "~/Error";     
         protected static string NotFoundPage = "~/NotFoundPage";
-        public readonly TimeSheetService Client = new TimeSheetService();
+        protected readonly TimeSheetService Client = new TimeSheetService();
+        protected readonly DataProvider Provider = new DataProvider();
 
         //private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
