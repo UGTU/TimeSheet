@@ -27,7 +27,7 @@ go
 select*from ShemaTabel.TimeSheet
 
 go
-alter VIEW ShemaTabel.TimeSheetView AS
+create VIEW ShemaTabel.TimeSheetView AS
 SELECT id,idDepartment,idCreater,DateBeginPeriod,DateEndPeriod,DateComposition,IsFake, 
 	(select count(DISTINCT tsr.idFactStaffHistory)
 	 from ShemaTabel.TimeSheetRecord tsr 

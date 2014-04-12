@@ -34,26 +34,27 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
 
-        public ActionResult TimeSheetList(int id, bool showAll = false)
-        {
-            var approver = GetCurrentApprover();
-            ViewBag.idDepartment = id;
-            ViewBag.approver = approver;
-            ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
-            return View(timeSheetList);
-        }
+        //public ActionResult TimeSheetList(int id, bool showAll = false)
+        //{
+        //    var approver = GetCurrentApprover();
+        //    ViewBag.idDepartment = id;
+        //    ViewBag.approver = approver;
+        //    ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
+        //    var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
+        //    return View(timeSheetList);
+        //}
 
-        //public ActionResult TimeSheetList1(int id, TimeSheetFilter filter = TimeSheetFilter.All, int skip = 0, int take = 12)
-        public ActionResult TimeSheetList1(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
+        public ActionResult TimeSheetList(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
         {
             var skip = page>1?TimeSheetsPerPage*(page - 1):0;
             var approver = GetCurrentApprover();
+            var r = Provider.GetTimeSheetList(id, filter, skip, TimeSheetsPerPage);
+            ViewBag.TimeSheetCount = (int)Math.Ceiling(r.Count / (double)TimeSheetsPerPage);
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
+            ViewBag.Filter = filter;
+            ViewBag.CuttentPage = page;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var r = Provider.GetTimeSheetList(id, filter, skip, TimeSheetsPerPage);
-            ViewBag.TimeSheetCount = r.Count;
             var timeSheetList = r.TimeSheets.OrderBy(o=>o.DateBegin);
             return View(timeSheetList);
         }

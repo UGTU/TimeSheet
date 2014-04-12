@@ -370,10 +370,10 @@
       <Column Name="DateEndPeriod" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="DateComposition" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="IsFake" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="EmployeeCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EmployeeCount" Type="System.Int32" DbType="Int" CanBeNull="false" />
       <Column Name="ApproveStep" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="TimeSheetView_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
+      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Dep_TimeSheetView" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
       <Association Name="Approver_TimeSheetView" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
     </Type>

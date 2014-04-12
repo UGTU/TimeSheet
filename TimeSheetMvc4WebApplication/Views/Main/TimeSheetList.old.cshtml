@@ -82,7 +82,7 @@
                                     }
                                     else
                                     {
-                                        <div class="panel-body" style="padding-bottom: 5px;">
+                                        <div class="panel-body" style="padding-bottom: 5px;" >
                                             <p>Предоставлен бумажный вариант табеля</p>
                                         </div>
                                     }
@@ -94,20 +94,10 @@
             }
         }
     }
-    <ul class="pagination pull-right" style="margin: 0">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-    </ul>
-
-    @*@if (Model != null && Model.Count() > 10)
-        {
-            <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheetList", "Main", new {id = ViewBag.Department.IdDepartment, showAll = true})">Показать все табеля подразделения</a></p>
-        }*@
+    @if (Model != null && Model.Count() > 10)
+    {
+        <p class="pull-right"><a class="btn btn-link" href="@Url.Action("TimeSheetList", "Main", new {id = ViewBag.Department.IdDepartment, showAll = true})">Показать все табеля подразделения</a></p>
+    }
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 800px;">
@@ -171,34 +161,6 @@
         </div>
     </div>
 </div>
-@*<li id="111">*@
-    <div class="btn-group navbar-form form-inline" style="margin: 0;padding: 0">
-        @*<a class="btn btn-default" href="@Url.Action("Index", "Register" )">
-            <span class="glyphicon glyphicon-align-justify"></span> Все
-        </a>*@
-        <a class="btn btn-default btn-danger" href="#">
-            <span class="glyphicon glyphicon-edit"></span>
-        </a>
-        <a class="btn btn-default btn-info" href="#">
-            <span class="glyphicon glyphicon-retweet"></span>
-        </a>
-        <a class="btn btn-default btn-success" href="#">
-            <span class="glyphicon glyphicon-check"></span>
-        </a>
-    </div>
-@*</li>*@
-
-@*<script>
-    $('#HeaderLiBox').append("<li id=\"111\">" +
-        "<div class=\"btn-group navbar-form form-inline\">" +
-        "<a class=\"btn btn-default\" href=\"@Url.Action("Index", "Register")\">" +
-        "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
-        "</a>" +
-        "<a class=\"btn btn-default active\" href=\"@Url.Action("Index", "Main")\">" +
-        "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
-        "</a>" +
-        "</div></li>");
-</script>*@
 <script>
     $('.btn').tooltip('hide');
     $('.close').tooltip('hide');
@@ -335,18 +297,18 @@
             var link = '@Html.Raw(@Url.Action("CreateTimeSheet", "Main", new { idDep = ViewBag.Department.IdDepartment, year = "replaceYear", month = "replaceMonth" }))';
             link = link.replace('replaceYear', $scope.currentMounth.getYear() + 1900).replace('replaceMonth', $scope.currentMounth.getMonth() + 1);
             $http.post(link, selectedEmployees).success(
-                function (result) {
-                    if (result.Result) {
-                        console.log('timeSheet create succes');
-                        $('#myModal').modal('hide');
-                        location.reload(true);
-                    } else {
-                        alert(result.Message);
+                    function (result) {
+                        if (result.Result) {
+                            console.log('timeSheet create succes');
+                            $('#myModal').modal('hide');
+                            location.reload(true);
+                        } else {
+                            alert(result.Message);
+                        }
+                        $('#progress').addClass("hidden");
+                        $('#buttons').removeClass("hidden");
                     }
-                    $('#progress').addClass("hidden");
-                    $('#buttons').removeClass("hidden");
-                }
-            );
+                );
         };
 
         //======================    Инициализация контроллера   =============================================

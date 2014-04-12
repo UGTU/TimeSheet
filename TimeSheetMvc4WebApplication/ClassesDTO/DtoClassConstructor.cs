@@ -234,25 +234,25 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         /// </summary>
         /// <param name="ts"></param>
         /// <returns></returns>
-        public static DtoTimeSheet DtoTimeSheet(TimeSheet ts)
-        {
-            var timeSheet = new DtoTimeSheet
-            {
-                IdTimeSheet = ts.id,
-                DateBegin = ts.DateBeginPeriod,
-                DateEnd = ts.DateEndPeriod,
-                DateComposition = ts.DateComposition,
-                Department = DtoDepartment(ts.Dep.Department),
-                IsFake = ts.IsFake,
-                EmployeesCount = ts.TimeSheetRecord.Select(ec => ec.idFactStaffHistory).Distinct().Count(),
-                ApproveStep = (ts.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
-                        ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
-                            ? ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
-                                .First().Approver.ApproverType.ApproveNumber
-                            : 0
-            };
-            return timeSheet;
-        }
+        //public static DtoTimeSheet DtoTimeSheet(TimeSheet ts)
+        //{
+        //    var timeSheet = new DtoTimeSheet
+        //    {
+        //        IdTimeSheet = ts.id,
+        //        DateBegin = ts.DateBeginPeriod,
+        //        DateEnd = ts.DateEndPeriod,
+        //        DateComposition = ts.DateComposition,
+        //        Department = DtoDepartment(ts.Dep.Department),
+        //        IsFake = ts.IsFake,
+        //        EmployeesCount = ts.TimeSheetRecord.Select(ec => ec.idFactStaffHistory).Distinct().Count(),
+        //        ApproveStep = (ts.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+        //                ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
+        //                    ? ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
+        //                        .First().Approver.ApproverType.ApproveNumber
+        //                    : 0
+        //    };
+        //    return timeSheet;
+        //}
         public static DtoTimeSheet DtoTimeSheet(TimeSheetView ts)
         {
             var timeSheet = new DtoTimeSheet
@@ -263,12 +263,15 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 DateComposition = ts.DateComposition,
                 Department = DtoDepartment(ts.Dep.Department),
                 IsFake = ts.IsFake,
-                EmployeesCount = ts.TimeSheetRecord.Select(ec => ec.idFactStaffHistory).Distinct().Count(),
-                ApproveStep = (ts.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
-                        ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
-                            ? ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
-                                .First().Approver.ApproverType.ApproveNumber
-                            : 0
+                EmployeesCount = ts.EmployeeCount,
+                ApproveStep = ts.ApproveStep
+
+                //EmployeesCount = ts.TimeSheetRecord.Select(ec => ec.idFactStaffHistory).Distinct().Count(),
+                //ApproveStep = (ts.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+                //        ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
+                //            ? ts.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
+                //                .First().Approver.ApproverType.ApproveNumber
+                //            : 0
             };
             return timeSheet;
         }
