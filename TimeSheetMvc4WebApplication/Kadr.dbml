@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="KadrRealTest" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ALEXEY-HOME-PC;Initial Catalog=Kadr;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HomeDbKadrConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=KadrRealTest;User ID=atipunin" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrRealTestConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="ShemaTabel.ApproverType" Member="ApproverType">
     <Type Name="ApproverType">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -53,6 +53,7 @@
       <Column Name="Comment" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
       <Association Name="Approver_TimeSheetApproval" Member="Approver" ThisKey="idApprover" OtherKey="id" Type="Approver" IsForeignKey="true" />
       <Association Name="TimeSheet_TimeSheetApproval" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
+      <Association Name="TimeSheetView_TimeSheetApproval" Member="TimeSheetView" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheetView" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.WorkShedule" Member="WorkShedule">
@@ -95,6 +96,7 @@
       <Association Name="Approver_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idApprover" Type="TimeSheetApproval" />
       <Association Name="Approver_ApperoveDepartment" Member="ApperoveDepartment" ThisKey="id" OtherKey="idApprover" Type="ApperoveDepartment" />
       <Association Name="Approver_TimeSheet" Member="TimeSheet" ThisKey="id" OtherKey="idCreater" Type="TimeSheet" />
+      <Association Name="Approver_TimeSheetView" Member="TimeSheetView" ThisKey="id" OtherKey="idCreater" Type="TimeSheetView" />
       <Association Name="ApproverType_Approver" Member="ApproverType" ThisKey="idApproverType" OtherKey="id" Type="ApproverType" IsForeignKey="true" />
       <Association Name="Employee_Approver" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
       <Association Name="Dep_Approver" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
@@ -285,6 +287,7 @@
       <Association Name="FactStaffHistory_TimeSheetRecord" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" />
       <Association Name="DayStatus_TimeSheetRecord" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
       <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
+      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetView" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheetView" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.DayStatus" Member="DayStatus">
@@ -333,6 +336,7 @@
       <Association Name="Dep_PlanStaff" Member="PlanStaff" ThisKey="id" OtherKey="idDepartment" Type="PlanStaff" />
       <Association Name="Dep_TimeSheet" Member="TimeSheet" ThisKey="id" OtherKey="idDepartment" Type="TimeSheet" />
       <Association Name="Dep_Department" Member="Department" ThisKey="id" OtherKey="id" Type="Department" Cardinality="One" />
+      <Association Name="Dep_TimeSheetView" Member="TimeSheetView" ThisKey="id" OtherKey="idDepartment" Type="TimeSheetView" />
       <Association Name="PlanStaff_Dep" Member="PlanStaff1" ThisKey="idManagerPlanStaff" OtherKey="id" Type="PlanStaff" IsForeignKey="true" />
     </Type>
   </Table>
@@ -355,6 +359,23 @@
       <Column Name="idFundingCenter" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HasTimeSheet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Dep_Department" Member="Dep" ThisKey="id" OtherKey="id" Type="Dep" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="ShemaTabel.TimeSheetView" Member="TimeSheetView">
+    <Type Name="TimeSheetView">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idDepartment" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idCreater" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateBeginPeriod" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="DateEndPeriod" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="DateComposition" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsFake" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ApproveStep" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
+      <Association Name="TimeSheetView_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
+      <Association Name="Dep_TimeSheetView" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
+      <Association Name="Approver_TimeSheetView" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

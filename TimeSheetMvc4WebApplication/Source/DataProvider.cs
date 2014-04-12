@@ -11,27 +11,52 @@ namespace TimeSheetMvc4WebApplication.Source
 {
     public class DataProvider
     {
+        //public TimeSheetsAndCount GetTimeSheetList(int idDepartment, TimeSheetFilter filter, int skip, int take)
+        //{
+        //    using (var db = new KadrDataContext())
+        //    //using (var dbloger = new DataContextLoger("GetTimeSheetList.txt", FileMode.OpenOrCreate, db))
+        //    {
+        //        var loadOptions = new DataLoadOptions();
+        //        loadOptions.LoadWith((TimeSheet ts) => ts.Dep);
+        //        loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetApproval);
+        //        loadOptions.LoadWith((TimeSheetApproval tsa) => tsa.Approver);
+        //        loadOptions.LoadWith((Dep dep) => dep.Department);
+        //        db.LoadOptions = loadOptions;
+
+        //        var approveSteps = TimeSheetFilterAdapter(filter);
+        //        var query = db.TimeSheet.Where(
+        //            w =>
+        //                w.idDepartment == idDepartment &&
+        //                approveSteps.Contains((w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
+        //                w.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
+        //                    ? w.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
+        //                        .First().Approver.ApproverType.ApproveNumber
+        //                    : 0)
+        //            );
+        //        return new TimeSheetsAndCount
+        //        {
+        //            Count = query.Count(),
+        //            TimeSheets = query.OrderByDescending(o => o.DateBeginPeriod).Skip(skip).Take(take)
+        //                .Select(s => DtoClassConstructor.DtoTimeSheet(s)).ToArray()
+        //        };
+        //    }
+        //}
+
         public TimeSheetsAndCount GetTimeSheetList(int idDepartment, TimeSheetFilter filter, int skip, int take)
         {
             using (var db = new KadrDataContext())
             //using (var dbloger = new DataContextLoger("GetTimeSheetList.txt", FileMode.OpenOrCreate, db))
             {
-                var loadOptions = new DataLoadOptions();
-                loadOptions.LoadWith((TimeSheet ts) => ts.Dep);
-                loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetApproval);
-                loadOptions.LoadWith((TimeSheetApproval tsa) => tsa.Approver);
-                loadOptions.LoadWith((Dep dep) => dep.Department);
-                db.LoadOptions = loadOptions;
+                //var loadOptions = new DataLoadOptions();
+                //loadOptions.LoadWith((TimeSheet ts) => ts.Dep);
+                //loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetApproval);
+                //loadOptions.LoadWith((TimeSheetApproval tsa) => tsa.Approver);
+                //loadOptions.LoadWith((Dep dep) => dep.Department);
+                //db.LoadOptions = loadOptions;
 
                 var approveSteps = TimeSheetFilterAdapter(filter);
-                var query = db.TimeSheet.Where(
-                    w =>
-                        w.idDepartment == idDepartment &&
-                        approveSteps.Contains((w.TimeSheetApproval.OrderBy(o => o.ApprovalDate).FirstOrDefault() != null &&
-                        w.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate).First().Result)
-                            ? w.TimeSheetApproval.OrderByDescending(o => o.ApprovalDate)
-                                .First().Approver.ApproverType.ApproveNumber
-                            : 0)
+                var query = db.TimeSheetView.Where(
+                    w => w.idDepartment == idDepartment && approveSteps.Contains(w.ApproveStep)
                     );
                 return new TimeSheetsAndCount
                 {
