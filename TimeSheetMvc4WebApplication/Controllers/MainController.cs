@@ -29,7 +29,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if (approver.GetApproverDepartments().Count() <= 1)
                 return RedirectToAction("TimeSheetList",
                     new {id = approver.GetApproverDepartments().First().IdDepartment});
-            if (approver.Allowed(ApproveState.РаботникКадров)) return RedirectToAction("Index", "Register");
+            //if (approver.Allowed(ApproveState.РаботникКадров)) return RedirectToAction("Index", "Register");
             return View(approver);
         }
 

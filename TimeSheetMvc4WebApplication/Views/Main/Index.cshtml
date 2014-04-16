@@ -49,7 +49,10 @@ else
 @if (approver != null && (approver.IsAdministrator || approver.Allowed(ApproveState.РаботникКадров)))
 {
     <script>
-        $('#HeaderLiBox').append("<li id=\"111\">" +
+        $('#HeaderLiBox').append("<li id=\"111\" class=\"active\"><a href=\"@Url.Action("Index", "Main")\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-th-large\"></span> Подразделения</a></li>");
+        $('#HeaderLiBox').append("<li id=\"111\" ><a href=\"@Url.Action("Index", "Register")\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-align-justify\"></span> Табеля</a></li>");
+        
+        @*$('#HeaderLiBox').append("<li id=\"111\">" +
             "<div class=\"btn-group navbar-form form-inline\">" +
             "<a class=\"btn btn-default\" href=\"@Url.Action("Index", "Register")\">" +
             "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
@@ -57,6 +60,6 @@ else
             "<a class=\"btn btn-default active\" href=\"@Url.Action("Index", "Main")\">" +
             "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
             "</a>" +
-            "</div></li>");
+            "</div></li>");*@
     </script>
 }
