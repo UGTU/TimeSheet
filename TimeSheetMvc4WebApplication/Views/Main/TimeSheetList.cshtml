@@ -168,46 +168,48 @@
 </div>
 
 <div style="margin-bottom: 20px;">
-
-    @Helpers.Pagenator(url, currentPage, pageCount);
-    <div class="btn-group navbar-form form-inline" style="margin: 0; padding: 0">
-        @if (filter == TimeSheetFilter.Edit)
-        {
-            <a class="btn btn-default btn btn-default btn-danger active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                <span class="glyphicon glyphicon-edit"></span>
-            </a>
-        }
-        else
-        {
-            <a class="btn btn-default btn btn-default btn-danger" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Edit})">
-                <span class="glyphicon glyphicon-edit"></span>
-            </a>
-        }
-        @if (filter == TimeSheetFilter.Approve)
-        {
-            <a class="btn btn-default btn-info active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                <span class="glyphicon glyphicon-retweet"></span>
-            </a>
-        }
-        else
-        {
-            <a class="btn btn-default btn-info" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approve})">
-                <span class="glyphicon glyphicon-retweet"></span>
-            </a>
-        }
-        @if (filter == TimeSheetFilter.Approved)
-        {
-            <a class="btn btn-default btn-success active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                <span class="glyphicon glyphicon-check"></span>
-            </a>
-        }
-        else
-        {
-            <a class="btn btn-default btn-success" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approved})">
-                <span class="glyphicon glyphicon-check"></span>
-            </a>
-        }
-    </div>
+    @if (pageCount > 1 && filter == TimeSheetFilter.All)
+    {
+        @Helpers.Pagenator(url, currentPage, pageCount)
+        <div class="btn-group navbar-form form-inline" style="margin: 0; padding: 0">
+            @if (filter == TimeSheetFilter.Edit)
+            {
+                <a class="btn btn-default btn btn-default btn-danger active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-default btn btn-default btn-danger" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Edit})">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+            }
+            @if (filter == TimeSheetFilter.Approve)
+            {
+                <a class="btn btn-default btn-info active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                    <span class="glyphicon glyphicon-retweet"></span>
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-default btn-info" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approve})">
+                    <span class="glyphicon glyphicon-retweet"></span>
+                </a>
+            }
+            @if (filter == TimeSheetFilter.Approved)
+            {
+                <a class="btn btn-default btn-success active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                    <span class="glyphicon glyphicon-check"></span>
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-default btn-success" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approved})">
+                    <span class="glyphicon glyphicon-check"></span>
+                </a>
+            }
+        </div>
+    }
 </div>
 
 <script>

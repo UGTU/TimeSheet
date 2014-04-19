@@ -32,7 +32,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var skip = page > 1 ? DepartmentsPerPage * (page - 1) : 0;
             ViewBag.DepartmentsPageCount = (int)Math.Ceiling(approver.DtoApproverDepartments.Count() / (double)DepartmentsPerPage);
             ViewBag.CurrentPage = page;
-            ViewBag.Departments = approver.DtoApproverDepartments.OrderBy(o=>o.DepartmentSmallName).Skip(skip).Take(DepartmentsPerPage);
+            //ViewBag.Departments = approver.DtoApproverDepartments.OrderBy(o=>o.DepartmentSmallName).Skip(skip).Take(DepartmentsPerPage);
+            ViewBag.Departments = approver.DtoApproverDepartments.Skip(skip).Take(DepartmentsPerPage);
             return View(approver);
         }
 

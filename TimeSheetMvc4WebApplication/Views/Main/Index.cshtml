@@ -8,6 +8,7 @@
     var pageCount = (int)ViewBag.DepartmentsPageCount;
     var currentPage = (int)ViewBag.CurrentPage;
     var departments = ViewBag.Departments as IEnumerable<DtoDepartment>;
+    const int charCountForDepFullName = 70;
 }
 
 @if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
@@ -26,13 +27,13 @@
             {
                 <div class="@string.Format("col-sm-6 col-md-{0}", span)">
                     <h3>@item.DepartmentSmallName</h3>
-                    <p style="height: 50px;">@item.DepartmentFullName</p>
+                    <p style="height: 50px;">@(item.DepartmentFullName.Count() > charCountForDepFullName ? item.DepartmentFullName.Substring(0, charCountForDepFullName) + "..." : item.DepartmentFullName)</p>
                     <p style="color: darkgray">
                         @{
                             var roles = Model.GetDepartmentApproverNumbers(item.IdDepartment).Select(s => s.ApproveTypeName).ToArray();
                             for (var i1 = 0; i1 < roles.Count() - 1; i1++)
                             {
-                                @Html.Raw(string.Format("{0}, ", roles[i]))
+                                @Html.Raw(string.Format("{0}, ", roles[i1]))
                             }
                             @Html.Raw(string.Format("{0}", roles.Last()))
                         }

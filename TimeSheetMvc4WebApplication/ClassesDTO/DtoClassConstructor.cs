@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Linq;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Schema;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
@@ -113,7 +114,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     ItabN = s.itab_n,
                     SexBit = s.SexBit,
                     DtoApproverDepartments = db.Approver.Where(w => w.idEmployee == idEmployee && w.DateEnd==null).
-                        Select(sa => DtoApproverDepartment(db,sa.id)).ToArray()
+                        //Select(sa => DtoApproverDepartment(db,sa.id)).ToArray()
+                        Select(sa => DtoApproverDepartment(sa)).ToArray()
                 }).FirstOrDefault();
             if (approver != null)
             {
@@ -123,11 +125,17 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                                                    FirstOrDefault(w => w.ApproveNumber == administratorApproveNumber) != null;
                     if (approver.IsAdministrator)
                     {
-                        approver.DtoApproverDepartments =
-                            db.Approver.Where(w => w.ApproverType.ApproveNumber == 1 & w.DateEnd==null).Select(
-                                s => DtoApproverDepartment(db,s.id)).ToArray();
                         var idApprover =
                             db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
+                        //approver.DtoApproverDepartments =
+                        //    db.Approver.Where(w => w.ApproverType.ApproveNumber == 1 & w.DateEnd==null).Select(
+                        //        s => DtoApproverDepartment(db,s.id)).ToArray();
+                        //approver.DtoApproverDepartments =
+                        //    db.Approver.Where(w =>w.ApproverType.ApproveNumber == 1 && w.DateEnd == null && w.Dep.HasTimeSheet).Select(
+                        //        s => DtoApproverDepartment(s)).ToArray();
+                        approver.DtoApproverDepartments = db.Approver.Where(w => w.DateEnd == null && w.Dep.HasTimeSheet).DistinctBy(d=>d.idDepartment)
+                                .Select(DtoApproverDepartment).OrderBy(o=>o.DepartmentSmallName).ToArray();
+                        
                         foreach (var department in approver.DtoApproverDepartments)
                         {
                             department.ApproveNumber = 10;
@@ -181,6 +189,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             };
         }
 
+        //Old version
         public static DtoApproverDepartment DtoApproverDepartment(KadrDataContext db, int idApprover)
         {
             return db.Approver.Where(w => w.id == idApprover).Select(s => new DtoApproverDepartment
@@ -193,6 +202,20 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 IdManagerDepartment = s.Dep.Department.idManagerDepartment,
                 IdApprover = s.id
             }).FirstOrDefault();
+        }
+
+        public static DtoApproverDepartment DtoApproverDepartment(Approver approver)
+        {
+            return new DtoApproverDepartment
+            {
+                IdDepartment = approver.idDepartment,
+                ApproveNumber = approver.ApproverType.ApproveNumber,
+                ApproveTypeName = approver.ApproverType.ApproverTypeName,
+                DepartmentFullName = approver.Dep.Department.DepartmentName,
+                DepartmentSmallName = approver.Dep.Department.DepartmentSmallName,
+                IdManagerDepartment = approver.Dep.Department.idManagerDepartment,
+                IdApprover = approver.id
+            };
         }
 
         public static DtoTimeSheet DtoTimeSheet(KadrDataContext db, int idTimeSheet, bool isEmpty = false)
