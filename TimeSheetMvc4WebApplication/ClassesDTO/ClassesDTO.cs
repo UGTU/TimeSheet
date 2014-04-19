@@ -66,8 +66,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
     [DataContract]
     public class DtoApprover:DtoEmployee
     {
-        [DataMember]
-        public bool IsAdministrator { get; set; }
+        //[DataMember]
+        //public bool IsAdministrator { get; set; }
 
         [DataMember]
         public DtoApproverDepartment[] DtoApproverDepartments { get; set; }

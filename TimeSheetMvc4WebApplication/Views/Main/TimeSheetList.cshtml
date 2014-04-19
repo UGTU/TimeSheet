@@ -21,7 +21,7 @@
         <div class="col-sm-6 col-md-9">
             <h2>@ViewBag.Department.DepartmentFullName</h2>
         </div>
-        @if (approver != null && (approver.IsAdministrator || approver.Allowed(idDepartment, ApproveState.Табельщик)))
+        @if (approver != null && (User.IsInRole("TabelAdmin") || approver.Allowed(idDepartment, ApproveState.Табельщик)))
         {
             <div class="col-sm-6 col-md-3">
                 <a type="button" class="btn btn-primary" style="margin-top: 20px; width: 100%" data-toggle="modal" href="#myModal" ng-click="initTimeSheetCreate()">
@@ -52,7 +52,7 @@
                         <div class="@string.Format(" col-sm-6 col-md-{0}", span)">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    @if (approver != null && (approver.IsAdministrator || approver.Allowed(idDepartment, ApproveState.Табельщик)) && item.ApproveStep == 0 && !item.IsFake)
+                                    @if (approver != null && (User.IsInRole("TabelAdmin") || approver.Allowed(idDepartment, ApproveState.Табельщик)) && item.ApproveStep == 0 && !item.IsFake)
                                     {
                                         <button type="button" data-toggle="tooltip" title="Удалить табель" class="close timeSheetDell" data-dismiss="modal" aria-hidden="true" data-idtimesheet="@item.IdTimeSheet" data-mounth="@item.DateBegin.ToString("MMMM")">&times;</button>
                                     }

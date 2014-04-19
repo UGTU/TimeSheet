@@ -27,6 +27,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return System.Web.HttpContext.Current.User.Identity.Name;
         }
 
+        [Authorize]
+        public string GetApproverName()
+        {
+            var approver = GetCurrentApprover();
+            return approver != null
+                ? string.Format("{0} {1} {2}", approver.Surname, approver.Name, approver.Patronymic)
+                : "Неавторизован!";
+        }
+
         public RedirectResult RedirectToNotFoundPage
         {
             get { return Redirect(NotFoundPage); }
@@ -41,10 +50,9 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public DtoApprover GetCurrentApprover()
         {
-            if (Session == null) return Client.GetCurrentApproverByLogin(GetUsername());
             if (Session["approver"] == null)
             {
-                Session["approver"] = Client.GetCurrentApproverByLogin(GetUsername());
+                Session["approver"] = Client.GetCurrentApproverByLogin(GetUsername(), User.IsInRole("TabelAdmin"));
             }
             return Session["approver"] as DtoApprover;
         }

@@ -56,7 +56,7 @@ else
     @Helpers.Pagenator(Url.Action("Index", new {page = "pageReplace"}), currentPage, pageCount);
 }
 
-@if (approver != null && (approver.IsAdministrator || approver.Allowed(ApproveState.РаботникКадров)))
+@if (approver != null && (User.IsInRole("TabelAdmin") || approver.Allowed(ApproveState.РаботникКадров)))
 {
     <script>
         $('#HeaderLiBox').append("<li id=\"111\" class=\"active\"><a href=\"@Url.Action("Index", "Main")\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-th-large\"></span> Подразделения</a></li>");

@@ -15,21 +15,23 @@ namespace TimeSheetMvc4WebApplication.Controllers
     {
         //
         // GET: /Admin/
-
+        //[Authorize(Roles = "TabelAdmin")]
         public ActionResult Index()
         {
             return RedirectToAction("ExceptionDay");
         }
 
+        [Authorize(Roles = "TabelExceptionDaysAdmin")]
         public ActionResult ExceptionDay()
         {
-            CheckIsAdmin();
+            //CheckIsAdmin();
             return View();
         }
 
+        [Authorize(Roles = "TabelDepartmentAdmin")]
         public ActionResult DepartmentManagment()
         {
-            CheckIsAdmin();
+            //CheckIsAdmin();
             return View();
         }
 
@@ -65,8 +67,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         private void CheckIsAdmin()
         {
-            var approver = GetCurrentApprover();
-            if(!approver.IsAdministrator)
+            //var approver = GetCurrentApprover();
+            //if(!approver.IsAdministrator)
+            //    throw new HttpException(401, "Попытка несанкционированного доступа к админке");
+            if (User.IsInRole("TabelAdmin"))
                 throw new HttpException(401, "Попытка несанкционированного доступа к админке");
         }
 

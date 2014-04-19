@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Linq;
 using System.Linq;
+using System.Web.Providers.Entities;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Schema;
 
@@ -93,7 +94,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             return factStaffs;
         }
 
-        public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee)
+        public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee, bool isAdmin=false)
         {
             //var loadOptions = new DataLoadOptions();
             //loadOptions.LoadWith((Approver a) => a.ApproverType);
@@ -121,9 +122,10 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             {
                 if (approver.DtoApproverDepartments != null)
                 {
-                    approver.IsAdministrator = approver.DtoApproverDepartments.
-                                                   FirstOrDefault(w => w.ApproveNumber == administratorApproveNumber) != null;
-                    if (approver.IsAdministrator)
+                    //approver.IsAdministrator = approver.DtoApproverDepartments.
+                    //                               FirstOrDefault(w => w.ApproveNumber == administratorApproveNumber) != null;
+                    //if (approver.IsAdministrator)
+                    if (isAdmin)
                     {
                         var idApprover =
                             db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
@@ -145,7 +147,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     }
                     return approver;
                 }
-                approver.IsAdministrator = false;
+                //approver.IsAdministrator = false;
                 return null;
             }
             return null;

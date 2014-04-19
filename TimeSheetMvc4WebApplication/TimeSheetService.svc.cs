@@ -21,10 +21,11 @@ namespace TimeSheetMvc4WebApplication
         /// Розвращает текущего пользователя системы
         /// </summary>
         /// <param name="employeeLogin">Логин пользователя в системе</param>
+        /// <param name="isAdmin"></param>
         /// <returns></returns>
         [OperationContract]
         [Authorize]
-        public DtoApprover GetCurrentApproverByLogin(string employeeLogin)
+        public DtoApprover GetCurrentApproverByLogin(string employeeLogin, bool isAdmin = false)
         {
             employeeLogin = UserNameAdapter.Adapt(employeeLogin);
             if (string.IsNullOrWhiteSpace(employeeLogin)) return null;
@@ -33,7 +34,7 @@ namespace TimeSheetMvc4WebApplication
                 var idEmployee =
                     db.Employee.Where(w => w.EmployeeLogin.ToLower() == employeeLogin.ToLower())
                         .Select(s => s.id).FirstOrDefault();
-                return DtoClassConstructor.DtoApprover(db, idEmployee);
+                return DtoClassConstructor.DtoApprover(db, idEmployee, isAdmin);
             }
         }
 
@@ -345,9 +346,10 @@ namespace TimeSheetMvc4WebApplication
         /// </summary>
         /// <param name="idDepartment">Идентификатор структурного подразделения</param>
         /// <param name="approveNumber">Номер согласования 1-3</param>
+        /// <param name="isAdmin">Является ли пользователь администратором (для администратора выбираются все подразделения а не только закреплённые за ним)</param>
         /// <returns>Согласователь структурного подразделения</returns>
         [OperationContract]
-        public DtoApprover GetDepartmentApprover(int idDepartment, int approveNumber)
+        public DtoApprover GetDepartmentApprover(int idDepartment, int approveNumber,bool isAdmin=false)
         {
             using (var db = new KadrDataContext())
             {
@@ -355,7 +357,7 @@ namespace TimeSheetMvc4WebApplication
                     db.Approver.Where(
                         w => w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
                              w.DateEnd == null).
-                        Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id)).FirstOrDefault();
+                        Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id,isAdmin)).FirstOrDefault();
             }
         }
 

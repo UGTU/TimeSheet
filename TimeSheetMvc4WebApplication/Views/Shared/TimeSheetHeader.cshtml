@@ -1,15 +1,4 @@
-﻿@using TimeSheetMvc4WebApplication.Controllers
-@{
-    var baseController = new BaseController();
-    var approver = baseController.GetCurrentApprover();
-    var userName = baseController.GetUsername();
-    if (approver != null)
-    {
-        userName = String.Format("{0} {1} {2}", approver.Surname, approver.Name, approver.Patronymic);
-    }
-}
-
-<nav class="navbar navbar-default" style="border-radius: 0;" role="navigation">
+﻿<nav class="navbar navbar-default" style="border-radius: 0;" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -27,10 +16,10 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav" id="HeaderLiBox"></ul>
             <ul class="nav navbar-nav navbar-right">
-                @if (approver != null && approver.IsAdministrator)
+                @if (User.IsInRole("TabelAdmin"))
                 {
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> @userName <b class="caret"></b></a>
+                        <a href="#" id="approverName" class="dropdown-toggle" data-toggle="dropdown">  <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="@Url.Action("ExceptionDay", "Admin")"><span class="glyphicon glyphicon-calendar"></span> Выходные дни и праздники</a></li>
                             <li><a href="@Url.Action("DepartmentManagment","Admin")"><span class="glyphicon glyphicon-briefcase"></span> Структурные подразделения</a></li>
@@ -42,7 +31,7 @@
                 }
                 else
                 {
-                    <li><a><span class="glyphicon glyphicon-user"></span> @userName</a></li>
+                    <li><a id="approverName"></a></li>
                 }
             </ul>
         </div>
@@ -51,4 +40,10 @@
 
 <script>
     $('#ug').tooltip('hide');
+    $.ajax({
+        url: '@Url.Action("GetApproverName","Base")',
+        cache: true,
+        success: function(data) {
+            $('#approverName').prepend('<span class="glyphicon glyphicon-user"></span> ' + data);
+        }});
 </script>
