@@ -8,6 +8,8 @@ namespace TimeSheetMvc4WebApplication
         // Дополнительные сведения о Bundling см. по адресу http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.UseCdn = true;
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -48,6 +50,12 @@ namespace TimeSheetMvc4WebApplication
             BundleTable.Bundles.Add(new ScriptBundle("~/Scripts/bootstrap-datepicker").Include("~/Scripts/bootstrap-datepicker.js",
                                                                                                    "~/Scripts/bootstrap-datepicker.ru.js"));
             BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap-datepicker").Include("~/Content/bootstrap-datepicker.css"));
+            BundleTable.Bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
+            BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css"));
+            BundleTable.Bundles.Add(new StyleBundle("~/Content/bootstrap-theme").Include("~/Content/bootstrap-theme.css"));
+
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

@@ -5,15 +5,19 @@
 @{
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
     var approver = ViewBag.approver as DtoApprover;
+    var pageCount = (int)ViewBag.DepartmentsPageCount;
+    var currentPage = (int)ViewBag.CurrentPage;
+    var departments = ViewBag.Departments as IEnumerable<DtoDepartment>;
 }
 
 @if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
 {   
     const int itemsInRow = 4;
-    var rowColl = Math.Ceiling((double)Model.GetApproverDepartments().Count() / (double)itemsInRow);
-    var departments = Model.GetApproverDepartments().OrderBy(o => o.DepartmentSmallName);
+    //var rowColl = Math.Ceiling((double)Model.GetApproverDepartments().Count() / (double)itemsInRow);
+    //var departments = Model.GetApproverDepartments().OrderBy(o => o.DepartmentSmallName);
+    var rowColl = Math.Ceiling((double) departments.Count()/(double) itemsInRow);
     
-    for (int i = 0; i < rowColl; i++)
+    for (var i = 0; i < rowColl; i++)
     {
         var rowItems = departments.Skip(i * itemsInRow).Take(itemsInRow);
         var span = Math.Floor(12 / (double)itemsInRow);
@@ -44,6 +48,11 @@ else
     <div class="alert alert-error">
         <p>За вами не закреплено ни одного структурного подразделения.</p>
     </div>
+}
+
+@if (pageCount > 1)
+{
+    @Helpers.Pagenator(Url.Action("Index", new {page = "pageReplace"}), currentPage, pageCount);
 }
 
 @if (approver != null && (approver.IsAdministrator || approver.Allowed(ApproveState.РаботникКадров)))

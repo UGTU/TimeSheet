@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -19,8 +18,9 @@ namespace TimeSheetMvc4WebApplication.Controllers
         private const int LastPaperEmployeeCount = 5;
         private const int PaperEmployeeCount = 8;
         private const int TimeSheetsPerPage = 12;
+        private const int DepartmentsPerPage = 16;
 
-        public ActionResult Index()
+        public ActionResult Index(int page=1)
         {
             var approver = GetCurrentApprover();
             ViewBag.approver = approver;
@@ -29,7 +29,10 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if (approver.GetApproverDepartments().Count() <= 1)
                 return RedirectToAction("TimeSheetList",
                     new {id = approver.GetApproverDepartments().First().IdDepartment});
-            //if (approver.Allowed(ApproveState.РаботникКадров)) return RedirectToAction("Index", "Register");
+            var skip = page > 1 ? DepartmentsPerPage * (page - 1) : 0;
+            ViewBag.DepartmentsPageCount = (int)Math.Ceiling(approver.DtoApproverDepartments.Count() / (double)DepartmentsPerPage);
+            ViewBag.CurrentPage = page;
+            ViewBag.Departments = approver.DtoApproverDepartments.OrderBy(o=>o.DepartmentSmallName).Skip(skip).Take(DepartmentsPerPage);
             return View(approver);
         }
 
