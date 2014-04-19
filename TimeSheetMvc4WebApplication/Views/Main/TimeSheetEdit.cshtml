@@ -90,6 +90,12 @@
                     Применить к выбранным записям
                 </button>
             </p>
+            
+            <p class="text-right">
+                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="copyAndPastRecords()" ng-disabled="iscopyAndPastRecordsDisabled()">
+                    {{copyAndPastRecordText}}
+                </button>
+            </p>
 
             <p class="text-right">
                 <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="saveChanges()" ng-disabled="isSaveDisabled()">
@@ -160,6 +166,7 @@
             $scope.employees = data.TimeSheet.Employees;
             $scope.selectAll = false;
             $scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
+            $scope.RecodsForCopy = [];
             angular.forEach($scope.employees, function (empl) {
                 angular.forEach(empl.Records, function (rec) {
                     angular.forEach($scope.dayStatList, function (ds) {
@@ -177,9 +184,11 @@
 
 
         $scope.$watch('selectAll', function() {
-            angular.forEach($scope.currentEmployee.Records, function (empl) {
-                        empl.IsCheked = $scope.selectAll;
-                    });
+            if (typeof $scope.currentEmployee != 'undefined') {
+                angular.forEach($scope.currentEmployee.Records, function(empl) {
+                    empl.IsCheked = $scope.selectAll;
+                });
+            }
         });
         
 
@@ -299,6 +308,94 @@
             });
             return result;
         };
+
+        //=========================
+        $scope.copyAndPastRecords = function () {
+            if (!$scope.isUpdateDisabled()){
+                $scope.copy();
+                return;
+            }
+            $scope.paste();
+        };
+
+        $scope.iscopyAndPastRecordsDisabled = function () {
+            if (typeof $scope.RecodsForCopy == 'undefined') {
+                $scope.copyAndPastRecordText = 'Копировать';
+                console.log("1");
+                return true;
+            }
+            if (!$scope.isUpdateDisabled()) {
+                $scope.copyAndPastRecordText = 'Копировать';
+                console.log("2");
+                return false;
+            }
+            if ($scope.isUpdateDisabled()) {
+                console.log($scope.RecodsForCopy.length);
+                if ($scope.RecodsForCopy.length > 0 && $scope.canCopyAndPastRecord()) {
+                    $scope.copyAndPastRecordText = 'Вставить';
+                    console.log("3");
+                    return false;
+                } else {
+                    $scope.copyAndPastRecordText = 'Вставить';
+                    console.log("4");
+                    return true;
+                }
+            } else {
+                if ($scope.RecodsForCopy.length > 0 & $scope.canCopyAndPastRecord()) {
+                    $scope.copyAndPastRecordText = 'Копировать';
+                    console.log("5");
+                    return false;
+                } else {
+                    $scope.copyAndPastRecordText = 'Копировать';
+                    console.log("6");
+                    return true;
+                }
+            }
+            $scope.copyAndPastRecordText = 'Копировать';
+            console.log("5");
+            return true;
+        };
+
+        $scope.canCopyAndPastRecord = function () {
+            //var res = false;
+            angular.forEach($scope.RecodsForCopy, function (record) {
+                angular.forEach($scope.currentEmployee.Records, function (currenUserRecord) {
+                    if (record.Date == currenUserRecord.Date) {
+                        if (currenUserRecord.DayStays != record.DayStays |
+                            currenUserRecord.JobTimeCount != record.JobTimeCount)
+                            return true;
+                        //currenUserRecord.DayStays = record.DayStays;
+                        //currenUserRecord.JobTimeCount = record.JobTimeCount;
+                    }
+                });
+            });
+            return false;
+        }
+
+        $scope.copy = function () {
+            console.log('copy');
+            $scope.RecodsForCopy = [];
+            angular.forEach($scope.currentEmployee.Records, function (record) {
+                if (record.IsCheked) {
+                    //$scope.RecodsForCopy.push(angular.copy(record));
+                    $scope.RecodsForCopy.push(record);
+                    record.IsCheked = false;
+                }
+            });
+        }
+
+        $scope.paste = function () {
+            console.log('past');
+            angular.forEach($scope.RecodsForCopy, function (record) {
+                angular.forEach($scope.currentEmployee.Records, function (currenUserRecord) {
+                    if (record.Date == currenUserRecord.Date) {
+                        currenUserRecord.DayStays = record.DayStays;
+                        currenUserRecord.JobTimeCount = record.JobTimeCount;
+                    }
+                });
+            });
+        }
+        //=========================
 
         $scope.inputJobTimeCountValidate = function (jobTimeCount) {
             var r = parseFloat(jobTimeCount);
