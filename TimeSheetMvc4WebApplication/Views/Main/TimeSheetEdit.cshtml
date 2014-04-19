@@ -43,7 +43,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" ng-click="checkAllRecord()" ng-disabled="isCanTimeSheetEditfunction()"></th>
+                        <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" @*ng-click="checkAllRecord()"*@ ng-disabled="isCanTimeSheetEditfunction()"></th>
                         <th>Дата</th>
                         <th>День недели</th>
                         <th>Статус</th>
@@ -175,11 +175,12 @@
             $('.row').removeClass('hidden');
         });
 
-        $scope.checkAllRecord = function() {
+
+        $scope.$watch('selectAll', function() {
             angular.forEach($scope.currentEmployee.Records, function (empl) {
-                empl.IsCheked = $scope.selectAll;
-            });
-        };
+                        empl.IsCheked = $scope.selectAll;
+                    });
+        });
         
 
         $scope.setCurrentEmployeeRecords = function (employee) {
