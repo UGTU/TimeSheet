@@ -65,14 +65,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
-        private void CheckIsAdmin()
-        {
-            //var approver = GetCurrentApprover();
-            //if(!approver.IsAdministrator)
-            //    throw new HttpException(401, "Попытка несанкционированного доступа к админке");
-            if (!User.IsInRole("TabelAdmin"))
-                throw new HttpException(401, "Попытка несанкционированного доступа к админке");
-        }
 
 
         //=================================== Json  ==============================================

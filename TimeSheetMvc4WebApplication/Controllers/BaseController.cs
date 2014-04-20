@@ -48,12 +48,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
             filterContext.Result = Redirect(ErrorPage);
         }
 
+        [Authorize]
         public DtoApprover GetCurrentApprover()
         {
-            if (Session["approver"] == null)
-            {
-                Session["approver"] = Client.GetCurrentApproverByLogin(GetUsername(), User.IsInRole("TabelAdmin"));
-            }
+            if (Session["approver"] != null) 
+                return Session["approver"] as DtoApprover;
+            //var app = Client.GetCurrentApproverByLogin(GetUsername(), User.Identity.IsAuthenticated && User.IsInRole("TabelAdmin"));
+            var app = Client.GetCurrentApproverByLogin(GetUsername(), System.Web.HttpContext.Current.User.Identity.IsAuthenticated && System.Web.HttpContext.Current.User.IsInRole("TabelAdmin"));
+            Session["approver"] = app;
+            Session["approverName"] = string.Format("{0} {1} {2}", app.Surname, app.Name, app.Patronymic);
             return Session["approver"] as DtoApprover;
         }
 
