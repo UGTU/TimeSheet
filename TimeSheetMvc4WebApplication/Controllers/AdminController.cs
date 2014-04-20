@@ -70,7 +70,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //var approver = GetCurrentApprover();
             //if(!approver.IsAdministrator)
             //    throw new HttpException(401, "Попытка несанкционированного доступа к админке");
-            if (User.IsInRole("TabelAdmin"))
+            if (!User.IsInRole("TabelAdmin"))
                 throw new HttpException(401, "Попытка несанкционированного доступа к админке");
         }
 
@@ -79,7 +79,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public JsonResult GetExceptionDay()
         {
-            CheckIsAdmin();
+            //CheckIsAdmin();
             var exceptionDay = new
             {
                 WorkScheduleList = Client.GetWorkScheduleList(),

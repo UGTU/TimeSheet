@@ -6,9 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Ajax.Utilities;
 using TimeSheetMvc4WebApplication.ClassesDTO;
-using TimeSheetMvc4WebApplication.Models.Main;
 using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication
@@ -100,25 +98,6 @@ namespace TimeSheetMvc4WebApplication
         [OperationContract]
         public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, string employeeLogin, DateTime dateStart, DateTime dateEnd)
         {
-            //using (var db = new KadrDataContext())
-            //{
-            //    var loadOptions = new DataLoadOptions();
-            //    loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.PlanStaff);
-            //    loadOptions.LoadWith((PlanStaff ps) => ps.Post);
-            //    loadOptions.LoadWith((Post p) => p.Category);
-            //    loadOptions.LoadWith((PlanStaff ps) => ps.WorkShedule);
-            //    loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.Employee);
-            //    loadOptions.LoadWith((OK_Otpusk oko) => oko.OK_Otpuskvid);
-            //    db.LoadOptions = loadOptions;
-            //    var dtoApproverDepartment =
-            //        GetCurrentApproverByLogin(employeeLogin)
-            //            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
-            //    var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
-            //    return
-            //        ts.GetAllEmployees()
-            //            .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
-            //            .ToArray();
-            //}
             using (var db = new KadrDataContext())
             {
                 //var depsId = GetDepartmentsIdList(idDepartment);
@@ -130,16 +109,7 @@ namespace TimeSheetMvc4WebApplication
                 loadOptions.LoadWith((FactStaffWithHistory fswh) => fswh.Employee);
                 loadOptions.LoadWith((OK_Otpusk oko) => oko.OK_Otpuskvid);
                 db.LoadOptions = loadOptions;
-                var dtoApproverDepartment =
-                    GetCurrentApproverByLogin(employeeLogin)
-                        .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment==idDepartment);
-                //var ts = new TimeSheetCraterNew(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
-                //return
-                //    ts.GetAllEmployees()
-                //        .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
-                //        .ToArray();
-
-                var ts = new TimeSheetManaget(idDepartment, dateStart, dateEnd, dtoApproverDepartment, db);
+                var ts = new TimeSheetManaget(idDepartment, dateStart, dateEnd, employeeLogin, db);
                 return
                     ts.GetAllEmployees()
                         .Select(s => DtoClassConstructor.DtoFactStaffEmployee(db, s.idFactStaffHistory))
@@ -194,12 +164,6 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
                 //using (var dbloger = new DataContextLoger("GetTimeSheetListLog.txt", FileMode.OpenOrCreate, db))
             {
-                //return koll <= 0
-                //    ? db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake==false)
-                //        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
-                //    : db.TimeSheet.Where(w => w.idDepartment == idDepartment && w.IsFake == false)
-                //        .OrderByDescending(o => o.DateBeginPeriod).Take(koll)
-                //        .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
                 return koll <= 0
                     ? db.TimeSheet.Where(w => w.idDepartment == idDepartment)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
@@ -211,26 +175,13 @@ namespace TimeSheetMvc4WebApplication
 
 
 
-        //int GetApproveStep(KadrDataContext db, int idTimeSheet)
-        //{
-        //    var lastDateOfTimeSheetApproval =
-        //            db.TimeSheetApproval.Where(w => w.idTimeSheet == idTimeSheet)
-        //                .OrderByDescending(o => o.ApprovalDate).FirstOrDefault();
-        //    if (lastDateOfTimeSheetApproval == null) return 0;
-        //    return lastDateOfTimeSheetApproval.Result ? lastDateOfTimeSheetApproval.Approver.ApproverType.ApproveNumber : 0;
-        //}
-
-
-
         public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
         {
             using (var db = new KadrDataContext())
             {
                 if(db.TimeSheet.Any(a=>a.idDepartment==idDepartment&& a.DateBeginPeriod==dateStart))
                     throw new System.Exception("Табель на этот месяц уже сформирован.");
-                 var dtoApproverDepartment =
-                        GetCurrentApproverByLogin(approver.EmployeeLogin)
-                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
+                var dtoApproverDepartment = approver.DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                 var ts = new TimeSheet
                 {
                     idDepartment = idDepartment,
@@ -269,18 +220,6 @@ namespace TimeSheetMvc4WebApplication
                         .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
             }
         }
-
-        //public DtoTimeSheet[] GetFakeTimeSheetListForDepartments(int[] idDepartment, DateTime dateStart, int koll = 0, bool isEmpty = false)
-        //{
-        //    using (var db = new KadrDataContext())
-        //    {
-        //        return koll <= 0
-        //            ? db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
-        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray()
-        //            : db.TimeSheet.Where(w => idDepartment.Contains(w.idDepartment) && w.DateBeginPeriod.Year == dateStart.Year && w.DateBeginPeriod.Month == dateStart.Month)
-        //                .Select(s => DtoClassConstructor.DtoTimeSheet(db, s.id, isEmpty)).ToArray();
-        //    }
-        //}
 
         /// <summary>
         /// Редактирует записи в табеле
@@ -675,40 +614,6 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-        /// <summary>
-        /// Возвращает шаг согласования для табеля
-        /// </summary>
-        /// <param name="idTimeSheet">Идентификатор табеля</param>
-        /// <returns></returns>
-        //[OperationContract]
-        //public int GetTimeSheetApproveStep(int idTimeSheet)
-        //{
-        //    using (var db = new KadrDataContext())
-        //    {
-        //        var lastDateOfTimeSheetApproval =
-        //            db.TimeSheetApproval.Where(w => w.idTimeSheet == idTimeSheet)
-        //                .OrderByDescending(o => o.ApprovalDate)
-        //                .FirstOrDefault();
-        //        if (lastDateOfTimeSheetApproval != null)
-        //        {
-        //            var lastApproval =
-        //                db.TimeSheetApproval.FirstOrDefault(
-        //                    w =>
-        //                        w.idTimeSheet == idTimeSheet &
-        //                        w.ApprovalDate == lastDateOfTimeSheetApproval.ApprovalDate);
-
-        //            if (lastApproval != null)
-        //            {
-        //                if (lastApproval.Result)
-        //                {
-        //                    if (lastApproval.Approver.ApproverType.ApproveNumber != null)
-        //                        return (int) lastApproval.Approver.ApproverType.ApproveNumber;
-        //                }
-        //            }
-        //        }
-        //        return 0;
-        //    }
-        //}
         public int GetTimeSheetApproveStep(int idTimeSheet)
         {
             using (var db = new KadrDataContext())
@@ -728,16 +633,6 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
-
-
-
-
-
-
-
-
-
-
         //==================================================================================================================================================================================
 
         /// <summary>
@@ -754,18 +649,12 @@ namespace TimeSheetMvc4WebApplication
             string employeeLogin, IEnumerable<DtoFactStaffEmployee> employees = null)
         {
             using (var db = new KadrDataContext())
-                //using (var dbloger = new DataContextLoger("CreateTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 try
                 {
                     //todo:тут надо корректно вытаскивать согласователя
-                    var dtoApproverDepartment =
-                        GetCurrentApproverByLogin(employeeLogin)
-                            .DtoApproverDepartments.FirstOrDefault(w => w.IdDepartment == idDepartment);
                     var timeSheet = new TimeSheetManaget(idDepartment, dateBeginPeriod, dateEndPeriod,
-                        dtoApproverDepartment, db);
-                    //var timeSheet = new TimeSheetCraterNew(idDepartment, dateBeginPeriod, dateEndPeriod,
-                    //    dtoApproverDepartment, db);
+                        employeeLogin, db);
                     timeSheet.GenerateTimeSheet(employees.ToArray());
                     return new DtoMessage
                     {

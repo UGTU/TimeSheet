@@ -37,17 +37,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View(approver);
         }
 
-
-        //public ActionResult TimeSheetList(int id, bool showAll = false)
-        //{
-        //    var approver = GetCurrentApprover();
-        //    ViewBag.idDepartment = id;
-        //    ViewBag.approver = approver;
-        //    ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-        //    var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
-        //    return View(timeSheetList);
-        //}
-
         public ActionResult TimeSheetList(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
         {
             var skip = page>1?TimeSheetsPerPage*(page - 1):0;

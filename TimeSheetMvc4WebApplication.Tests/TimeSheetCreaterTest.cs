@@ -19,15 +19,15 @@ namespace TimeSheetMvc4WebApplication.Tests
         //Дом
         //readonly KadrDataContext _db = new KadrDataContext("Data Source=ALEXEY-PC\\SQLEXPRESS; Initial Catalog=Kadr; Integrated Security=True;");
 
-        [TestMethod]
-        public void TimeSheetCreate()
-        {
-            var timeSheetCreater = new TimeSheetManaget(IdDepartment, _dateStart, GetDateEnd(), GetDtoApprover("atipunin@ugtu.net"), _db);
-            timeSheetCreater.GenerateTimeSheet();
-            Assert.IsTrue(timeSheetCreater.IdTimeSheet!=null);
-            timeSheetCreater.RemoveTimeSheet();
-            Assert.IsNull(timeSheetCreater.IdTimeSheet);
-        }
+        //[TestMethod]
+        //public void TimeSheetCreate()
+        //{
+        //    var timeSheetCreater = new TimeSheetManaget(IdDepartment, _dateStart, GetDateEnd(), GetDtoApprover("atipunin@ugtu.net"), _db);
+        //    timeSheetCreater.GenerateTimeSheet();
+        //    Assert.IsTrue(timeSheetCreater.IdTimeSheet!=null);
+        //    timeSheetCreater.RemoveTimeSheet();
+        //    Assert.IsNull(timeSheetCreater.IdTimeSheet);
+        //}
         DateTime GetDateEnd()
         {
             return _dateStart.AddMonths(1).AddDays(-1);

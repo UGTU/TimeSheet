@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Linq;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml.Linq;
 using TimeSheetMvc4WebApplication.ClassesDTO;
@@ -33,14 +34,18 @@ namespace TimeSheetMvc4WebApplication.Source
 
         readonly List<TimeSheetRecord> _timeSheetRecordLList = new List<TimeSheetRecord>();
 
-        public TimeSheetManaget(int idDepartment, DateTime dateBeginPeriod, DateTime dateEndPeriod,DtoApproverDepartment dtoApproverDepartment, KadrDataContext db)
+
+        public TimeSheetManaget(int idDepartment, DateTime dateBeginPeriod, DateTime dateEndPeriod, string employeeLogin, KadrDataContext db)
         {
+            employeeLogin = UserNameAdapter.Adapt(employeeLogin);
             SetDataContext(db);
-            if (dtoApproverDepartment == null) return;
+            var approver =
+                db.Approver.FirstOrDefault(f => f.Employee.EmployeeLogin.ToLower() == employeeLogin.ToLower());
+            if (approver == null) throw new System.Exception("Указан недоступный создатель табеля.");
             _timeSheet = new TimeSheet
             {
                 idDepartment = idDepartment,
-                idCreater = dtoApproverDepartment.IdApprover,
+                idCreater = approver.id,
                 DateBeginPeriod = dateBeginPeriod,
                 DateEndPeriod = dateEndPeriod,
                 DateComposition = DateTime.Now,
@@ -106,11 +111,6 @@ namespace TimeSheetMvc4WebApplication.Source
             return 0;
         }
 
-        //public void GenerateTimeSheet()
-        //{
-        //    InsertEmployees(GetAllEmployees());
-        //    SubmitTimeSheet();
-        //}
 
         public void GenerateTimeSheet(IEnumerable<DtoFactStaffEmployee> employees=null)
         {
@@ -151,15 +151,6 @@ namespace TimeSheetMvc4WebApplication.Source
             return employees;
         }
 
-        //public FactStaffWithHistory[] GetAllEmployees()
-        //{
-        //    var employees = _db.FactStaffWithHistory.Where(
-        //        w => w.PlanStaff.idDepartment == _timeSheet.idDepartment &&
-        //             (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
-        //             w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
-        //             w.idTypeWork != IdWorkTypePochesovik).ToArray();
-        //    return employees;
-        //}
 
         private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList)
         {

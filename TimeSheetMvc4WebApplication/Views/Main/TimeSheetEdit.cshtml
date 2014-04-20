@@ -92,7 +92,7 @@
             </p>
             
             <p class="text-right" >
-                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="copyAndPastRecords()" ng-disabled="iscopyAndPastRecordsDisabled()">
+                <button @*ng-bind-html="copyAndPastRecordText"*@ type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="copyAndPastRecords()" ng-disabled="iscopyAndPastRecordsDisabled()">
                     {{copyAndPastRecordText}}
                 </button>
             </p>
@@ -357,6 +357,7 @@
         //};
 
         $scope.iscopyAndPastRecordsDisabled = function () {
+            //var copyStr = "<span class=\"glyphicon glyphicon-search\"></span> Копировать";
             var copyStr = "Копировать";
             var pastStr = 'Вставить';
             if (typeof $scope.RecodsForCopy == 'undefined') {

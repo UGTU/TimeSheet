@@ -75,6 +75,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 }
                 else approver = new Approver();
             }
+            if (approver == null) return null;
             if (approverNumber == 3) idDepartment = IdKadrDepartment;
             var factStaffs =
                 db.FactStaff.Where(w => w.idEmployee == approver.idEmployee & w.PlanStaff.idDepartment == idDepartment & w.DateEnd==null).
