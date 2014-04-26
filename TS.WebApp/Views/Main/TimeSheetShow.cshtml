@@ -1,0 +1,17 @@
+﻿@using TimeSheetMvc4WebApplication.Models
+@model int
+
+@{
+    ViewBag.Title = "Просмотр";
+}
+
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new HeaderLink[4] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
+        CurrentLink = HeaderLink.Show,
+        IdTimeSheet = Model
+    });
+}
+
+@Html.Partial("LazyTimeSheetShow",@Model)

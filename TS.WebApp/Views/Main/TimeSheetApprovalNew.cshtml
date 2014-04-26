@@ -1,0 +1,105 @@
+﻿@using TimeSheetMvc4WebApplication.ClassesDTO
+@using TimeSheetMvc4WebApplication.Models
+@model TimeSheetAprovalModel
+@{
+    ViewBag.Title = "Согласование";
+    Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+    var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
+    var currentApprover = ViewBag.CurrentApprover as DtoApprover;
+    int idTimeSheet = ViewBag.IdTimeSheet;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <span class="glyphicon glyphicon-retweet"></span>  Согласование табеля</div>
+    <div class="panel-body">
+            @if (approverHiatory != null && approverHiatory.Any())
+            {
+                <h4>История согласования</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Согласователь</th>
+                            <th>Статус</th>
+                            <th>Виза</th>
+                            <th>Коментарии</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var apppr in approverHiatory)
+                        {
+                            <tr class="@(apppr.AppoverResult ? "" : "danger")">
+                                <td>@apppr.AppoverDate.ToString("d MMMM yyyy")</td>
+                                <td>@apppr.AppoverName</td>
+                                <td>@apppr.AppoverStatus</td>
+                                <td>@apppr.AppoverVisa</td>
+                                <td>@apppr.AppoverComment</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            
+            @if (Model != null)
+            {
+                <h4>Согласование</h4>
+                using (Html.BeginForm("TimeSheetApprovalNew", "Main", FormMethod.Post, new { @role = "form" }))
+                {
+                    @Html.HiddenFor(x => x.ApprovalDate)
+                    @Html.HiddenFor(x => x.IdApprover)
+                    @Html.HiddenFor(x => x.IdTimeSheet)
+                    if (!Html.ViewData.ModelState.IsValid)
+                    {
+                        <div style="color: red;">
+                            @Html.ValidationSummary()
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Виза</label>
+                        @Html.DropDownListFor(x => x.ApprovalResult, new[]
+                        {
+                            new SelectListItem {Text = "Согласовать табель", Value = bool.TrueString},
+                            new SelectListItem {Text = "Отклонить табель", Value = bool.FalseString}
+                        }, "Выберите вариант...", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Комментарии</label>
+                        @Html.TextAreaFor(x => x.Comment, new { @class = "form-control", @row = "3", @style = "resize:vertical;" })
+                    </div>
+
+                    <button type="submit" class="btn btn-default pull-right" style="width: 100px">Ок</button>
+                }
+            }
+            else
+            {
+                if (currentApprover != null)
+                {
+                    <div class="alert alert-warning">
+                        <h4 style="margin: 0;">
+                            @string.Format("Текущий согласователь: {0} {1} {2} ", currentApprover.Surname,
+                                currentApprover.Name, currentApprover.Patronymic)
+                        </h4>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success">
+                        <h4 style="margin: 0;">Согласование табеля успешно завершено</h4>
+                    </div>
+                }
+            }
+        @*</div>*@
+    </div>
+</div>
+<div>
+    @Html.Partial("LazyTimeSheetShow", idTimeSheet)
+</div>
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new[] { HeaderLink.Edit, HeaderLink.Show, HeaderLink.Pdf, HeaderLink.Approve },
+        CurrentLink = HeaderLink.Approve,
+        IdTimeSheet = idTimeSheet
+    });
+}

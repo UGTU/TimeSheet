@@ -1,0 +1,284 @@
+﻿@using TimeSheetMvc4WebApplication.Models
+@{
+    ViewBag.Title = "Структурные подразделения";
+    //Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+}
+<h2>Структурные подразделения</h2>
+<div class="row " ng-app ng-controller="Department">
+    <div class="col-md-4">
+        <div class="input-group input-group-sm" style="margin-bottom: 10px;">
+            <input type="text" ng-model="query" class="form-control " ng-change="Search()">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+        </div>
+        <div id="employeeList" class="list-group" style="overflow: auto; border: 1px solid #dddddd; min-height: 100px; -ms-border-radius: 5px; border-radius: 5px;">
+            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()" ng-hide="BackHide()">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    {{CurrentDepartment.DepartmentSmallName}}
+                </h4>
+                <p class="list-group-item-text"> На уровень вверх</p>
+            </a>
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
+                <span ng-hide="CanSetAsCurrentDepartment(dep.IdDepartment)" class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)"><span class="glyphicon glyphicon-chevron-right"></span></span>
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    {{dep.DepartmentSmallName}}
+                </h4>
+                <p class="list-group-item-text">{{dep.DepartmentFullName}} </p>
+            </a>
+            <div class="progress progress-striped active" id="deparmentsLoad" style="margin: 20px 20px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8" ng-hide="DepartmentApproveHide()">
+        <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
+        <hr style="margin-top: 0;" />
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="SelectedDepartment.HasTimeSheet"> Создавать отдельный табель
+            </label>
+        </div>
+        <div ng-show="SelectedDepartment.HasTimeSheet">
+            <h4>Табельщик</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
+                </div>
+            </div>
+            <h4>Начальник структурного подразделения</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+                </div>
+            </div>
+            <h4>Работник отдела кадров</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    <button style="margin-top: 10px" type="button" class="btn btn-default pull-right" ng-disabled="IsSaveDisable()" ng-click="Save()">
+                        <span class="glyphicon glyphicon-floppy-saved"></span> Сохранить изменения
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Department($scope, $http) {
+        $http.get('@Html.Raw(@Url.Action("GetDepartment", "Admin", new { idTimeSheet = @Model }))').success(function (data) {
+            $scope.Departments = data;
+            $scope.DepIdList = [];
+            $scope.SetCurrentDepartment(null);
+            $scope.CurrentDepartment = null;
+            $('#deparmentsLoad').remove();
+        });
+
+        $scope.SetCurrentDepartment = function (idMenagDepartnent) {
+            if ($scope.DepIdList.indexOf(idMenagDepartnent) === -1) {
+                $scope.DepIdList.push(idMenagDepartnent);
+            }
+            var deps = [];
+            $scope.CurrentDepartment = null;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idMenagDepartnent)
+                    deps.push(dep);
+                if (dep.IdDepartment == idMenagDepartnent) {
+                    $scope.CurrentDepartment = dep;
+                }
+            });
+            $scope.CerrentDepartments = deps;
+            $scope.SelectDepartment(deps[0]);
+        };
+
+        $scope.Search = function () {
+            if ($scope.query != '') {
+                $scope.CerrentDepartments = $scope.Departments;
+            } else
+                $scope.SetCurrentDepartment(null);
+        };
+
+        $scope.Back = function () {
+            $scope.DepIdList.splice($scope.DepIdList.length - 1, 1);
+            $scope.SetCurrentDepartment($scope.DepIdList[$scope.DepIdList.length - 1]);
+        };
+
+        $scope.BackHide = function () {
+            return $scope.CurrentDepartment == null ? true : false;
+        };
+
+        $scope.SelectDepartment = function (department) {
+            $scope.ClearCss();
+            department.css = "active";
+            $scope.SelectedDepartment = department;
+            $scope.SelectedDepartmentEtalon = angular.copy($scope.SelectedDepartment);
+            $scope.GetApprovers(department.IdDepartment);
+        };
+
+        $scope.ClearCss = function () {
+            angular.forEach($scope.Departments, function (dep) {
+                dep.css = "";
+            });
+        };
+
+        $scope.GetApprovers = function (idDepartment) {
+            var link = '@Html.Raw(@Url.Action("GetApproverForDepartment", "Admin", new { id = "replaceId" }))';
+            link = link.replace("replaceId", idDepartment);
+            $http.get(link).success(function (data) {
+                $scope.d = data;
+                $scope.sdEmployees = data.DepartmetEmployees;
+                $scope.sdKadrEmployees = data.KadrEmployees;
+                $scope.sdApprover1 = $scope.InitApprover(data.Approver1, $scope.sdEmployees);
+                $scope.sdApprover2 = $scope.InitApprover(data.Approver2, $scope.sdEmployees);
+                $scope.sdApprover3 = $scope.InitApprover(data.Approver3, $scope.sdKadrEmployees);
+                $scope.ApproversClone();
+            });
+        };
+
+        $scope.ApproversClone = function () {
+            $scope.clApprover1 = angular.copy($scope.sdApprover1);
+            $scope.clApprover2 = angular.copy($scope.sdApprover2);
+            $scope.clApprover3 = angular.copy($scope.sdApprover3);
+        };
+
+        $scope.IsApproversEquals = function (sdApprover, clApprover) {
+            return angular.equals(sdApprover, clApprover);
+        };
+
+        $scope.IsSaveDisable = function () {
+            if (!$scope.IsApproversEquals($scope.sdApprover1, $scope.clApprover1))
+                return false;
+            if (!$scope.IsApproversEquals($scope.sdApprover2, $scope.clApprover2))
+                return false;
+            if (!$scope.IsApproversEquals($scope.sdApprover3, $scope.clApprover3))
+                return false;
+            if (!angular.equals($scope.SelectedDepartment, $scope.SelectedDepartmentEtalon))
+                return false;
+            return true;
+        };
+
+
+        $scope.InitApprover = function (approver, employees) {
+            if (approver == null) return null;
+            var empl;
+            angular.forEach(employees, function (employee) {
+                if (approver.IdEmployee == employee.IdEmployee) {
+                    empl = employee;
+                    return;
+                }
+            });
+            return empl;
+        };
+
+        $scope.DepartmentApproveHide = function () {
+            if ($scope.sdEmployees == null || $scope.sdEmployees.length == 0)
+                return true;
+            return false;
+        };
+
+        $scope.GetEmployeeName = function (employee) {
+            return employee.Surname + ' ' + employee.Name + ' ' + employee.Patronymic;
+        };
+
+
+        $scope.CanSetAsCurrentDepartment = function (idDepartment) {
+            var result = true;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idDepartment)
+                    result = false;
+            });
+            return result;
+        };
+
+        $scope.SaveApprover = function (approver, clapprover, appoveStep) {
+            var link = '@Html.Raw(@Url.Action("SaveApproverDepartment", "Admin", new { idDepartmen = "idDepartmenReplace", approveNumber = "approveNumberReplace", idEmployee = "idEmployeeReplace", employeeLogin = "employeeLoginReplace" }))';
+            link = link.replace("idDepartmenReplace", $scope.SelectedDepartment.IdDepartment).replace("approveNumberReplace", appoveStep).replace("idEmployeeReplace", approver.IdEmployee).replace("employeeLoginReplace", approver.EmployeeLogin);
+            console.log(link);
+            $http.get(link).success(function (data) {
+                if (data) {
+                    console.log('approve save success');
+                    switch (appoveStep) {
+                        case 1:
+                            $scope.clApprover1 = angular.copy($scope.sdApprover1);
+                            break;
+                        case 2:
+                            $scope.clApprover2 = angular.copy($scope.sdApprover2);
+                            break;
+                        case 3:
+                            $scope.clApprover3 = angular.copy($scope.sdApprover3);
+                            break;
+                        default:
+                            console.log('Какая то wtf произошла');
+                    }   
+                }
+                else
+                    alert('При сохранении возникли проблемы, изменения не сохранены');
+            });
+        };
+
+        $scope.SaveDepartmet = function () {
+            var link = '@Html.Raw(@Url.Action("SaveDepartment", "Admin"))';
+            console.log(link);
+            $http.post(link, $scope.SelectedDepartment).success(function (data) {
+                if (data) {
+                    console.log('approve save success');
+                    $scope.SelectedDepartmentEtalon = angular.copy($scope.SelectedDepartment);
+                }
+                else
+                    alert('При сохранении возникли проблемы, изменения не сохранены');
+            });
+        };
+
+        $scope.Save = function () {
+            if (!$scope.IsApproversEquals($scope.sdApprover1, $scope.clApprover1))
+                $scope.SaveApprover($scope.sdApprover1, $scope.clApprover1, 1);
+            if (!$scope.IsApproversEquals($scope.sdApprover2, $scope.clApprover2))
+                $scope.SaveApprover($scope.sdApprover2, $scope.clApprover2, 2);
+            if (!$scope.IsApproversEquals($scope.sdApprover3, $scope.clApprover3))
+                $scope.SaveApprover($scope.sdApprover3, $scope.clApprover3, 3);
+            if (!angular.equals($scope.SelectedDepartment, $scope.SelectedDepartmentEtalon))
+                $scope.SaveDepartmet($scope.SelectedDepartment);
+        };
+
+
+    };
+</script>
+<script>
+    $(window).load(function () {
+        employeeListResize();
+    });
+    $(window).resize(function () {
+        employeeListResize();
+    });
+
+    function employeeListResize() {
+        var maxHeight = $(window).height();
+        maxHeight = maxHeight - 200;
+        $('#employeeList').css('max-height', maxHeight);
+    }
+</script>
+@{
+    Html.RenderPartial("HeaderLinks", new HeaderLinckModel
+    {
+        Links = new[] { HeaderLink.ExceptionDay, HeaderLink.Department },
+        CurrentLink = HeaderLink.Department
+    });
+}

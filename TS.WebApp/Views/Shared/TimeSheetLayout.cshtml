@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
+        <link rel="shortcut icon" href="../../Content/Images/logo.png" />
+        @*@Styles.Render("~/Content/timeSheet")
+        @Styles.Render("~/Content/bootstrap")
+        @Styles.Render("~/Content/bootstrap-datepicker")*@
+        @Styles.Render(new []{"~/Content/timeSheet","~/Content/bootstrap","~/Content/bootstrap-datepicker"})
+        @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/Content/datejs")
+        @Scripts.Render("~/Content/angularjs")
+        @Scripts.Render("~/Scripts/bootstrap-datepicker")*@
+        @Scripts.Render(new []{"~/bundles/jquery","~/bundles/jqueryui","~/bundles/bootstrap","~/Content/datejs","~/Content/angularjs","~/Scripts/bootstrap-datepicker"})
+        
+    </head>
+    <body class="body">
+        @{ Html.RenderPartial("TimeSheetHeader"); }
+        <div class="container" id="mainContainer">
+            @RenderBody()
+        </div>
+        @RenderSection("scripts", required: false)
+        @* Отправка уведомлений клиенту *@
+        @{ Html.RenderPartial("NoticeScript"); }
+        <div id="noticePool" style="border: 0px solid red; width: 400px; position: absolute;top: 60px;right: 5px;z-index: 100"></div>
+    </body>
+</html>
