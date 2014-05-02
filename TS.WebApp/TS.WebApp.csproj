@@ -646,7 +646,6 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
-    <Content Include="SQL\NewScripts.sql" />
     <Compile Include="TimeSheetService.svc.cs">
       <DependentUpon>TimeSheetService.svc</DependentUpon>
     </Compile>
@@ -962,7 +961,6 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\version.txt" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="SQL\SQLQuery.sql" />
     <Content Include="TimeSheetService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1007,6 +1005,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="SQL\" />
     <Folder Include="Views\EmailSending\" />
     <Folder Include="Views\Shared\PartialView\" />
   </ItemGroup>
