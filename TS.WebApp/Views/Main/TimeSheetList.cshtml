@@ -72,10 +72,10 @@
                                                     </li>
                                                 }
                                                 <li>
-                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("timesheetshow", "Main" , new {idtimesheet=item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("Show", "TsShow" , new {id=item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
                                                 </li>
                                                 <li>
-                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("timesheetpdf", "Main" , new {idtimesheet=item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
+                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("Pdf", "TsShow" , new {id=item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
                                                 </li>
                                                 <li>
                                                     <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("timesheetapprovalnew", "Main" , new {idtimesheet=item.IdTimeSheet})"><span class="glyphicon glyphicon-retweet"></span></a>

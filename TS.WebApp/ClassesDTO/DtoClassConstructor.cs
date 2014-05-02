@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
 using System.Web.Providers.Entities;
@@ -94,6 +95,59 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                                     }).FirstOrDefault();
             return factStaffs;
         }
+
+        //public static DtoTimeSheetApprover DtoTimeSheetApprover(KadrDataContext db, int idTimeSheet, int approverNumber, int timeSheetApprovalStep)
+        //public static DtoTimeSheetApprover DtoTimeSheetApprover(TimeSheetApproval approval)
+        //{
+        //    //var idDepartment = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => s.idDepartment).FirstOrDefault();
+        //    //DateTime? approverDate = null;
+        //    //Approver approver;
+        //    //Если текущий шаг не согласован то подтягиваем текущих согласователей cтруктурного подразделения
+        //    //if (timeSheetApprovalStep < approverNumber)
+        //    //{
+        //    //    approver =
+        //    //        db.Approver.FirstOrDefault(
+        //    //            f =>
+        //    //            f.idDepartment == idDepartment && f.ApproverType.ApproveNumber == approverNumber &&
+        //    //            f.DateEnd == null);
+        //    //}
+        //    //Если текущий шаг согласован то подтягиваем согласовавшее лицо.
+        //    //else
+        //    //{
+        //    //    var timeSheetApproval =
+        //    //        db.TimeSheetApproval.Where(
+        //    //            f => f.idTimeSheet == idTimeSheet && f.Approver.ApproverType.ApproveNumber == approverNumber);
+
+        //        if (timeSheetApproval.Any())
+        //        {
+        //            //approver =
+        //            //    timeSheetApproval.First(f => f.ApprovalDate == timeSheetApproval.Max(m => m.ApprovalDate)).
+        //            //        Approver;
+        //            var tsa = timeSheetApproval.First(f => f.ApprovalDate == timeSheetApproval.Max(m => m.ApprovalDate));
+        //            approver = tsa.Approver;
+        //            approverDate = tsa.ApprovalDate;
+        //        }
+        //        else approver = new Approver();
+        //    }
+        //    if (approver == null) return null;
+        //    if (approverNumber == 3) idDepartment = IdKadrDepartment;
+        //    var factStaffs =
+        //        db.FactStaff.Where(w => w.idEmployee == approver.idEmployee & w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).
+        //            Select(s => new DtoTimeSheetApprover
+        //            {
+        //                AppoverNumber = (int)approver.ApproverType.ApproveNumber,
+        //                EmployeeLogin = approver.Employee.EmployeeLogin,
+        //                IdEmployee = s.id,
+        //                IdFactStaff = s.id,
+        //                ItabN = s.Employee.itab_n,
+        //                Name = s.Employee.FirstName,
+        //                Surname = s.Employee.LastName,
+        //                Patronymic = s.Employee.Otch,
+        //                Post = DtoPost(s.PlanStaff.Post),
+        //                ApproverDate = approverDate
+        //            }).FirstOrDefault();
+        //    return factStaffs;
+        //}
 
         public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee, bool isAdmin=false)
         {
@@ -255,6 +309,57 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             return timeSheet;
         }
 
+        public static DtoTimeSheet DtoTimeSheet(TimeSheetView ts, bool isEmpty = false)
+        {
+            //var service = new TimeSheetService();
+            //var timeSheet = db.TimeSheet.Where(w => w.id == idTimeSheet).Select(s => new DtoTimeSheet
+            //{
+            //    IdTimeSheet = s.id,
+            //    DateBegin = s.DateBeginPeriod,
+            //    DateEnd = s.DateEndPeriod,
+            //    DateComposition = s.DateComposition,
+            //    Department = DtoDepartment(db, s.idDepartment),
+            //    ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet),
+            //    IsFake = s.IsFake,
+            //    EmployeesCount = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+            //            .Select(ec => ec.idFactStaffHistory)
+            //            .Distinct()
+            //            .Count()
+            //}).FirstOrDefault();
+            var timeSheet = new DtoTimeSheet
+            {
+                IdTimeSheet = ts.id,
+                DateBegin = ts.DateBeginPeriod,
+                DateEnd = ts.DateEndPeriod,
+                DateComposition = ts.DateComposition,
+                Department = DtoDepartment(ts.Dep.Department),
+                ApproveStep = ts.ApproveStep,
+                IsFake = ts.IsFake,
+                EmployeesCount = ts.EmployeeCount
+            };
+            if (isEmpty) return timeSheet;
+            var rec = ts.TimeSheetRecord.ToArray();
+            var employees = rec.DistinctBy(d => d.idFactStaffHistory);
+            timeSheet.Employees = employees.Select(s => DtoTimeSheetEmployee(s.FactStaffHistory,rec.Where(w=>w.idFactStaffHistory==s.idFactStaffHistory))).ToArray();
+            //timeSheet.Employees = employees.Select(s => DtoTimeSheetEmployee(db, idTimeSheet, se));
+            //timeSheet.Approvers =
+            //    Enumerable.Range(1, 3)
+            //        .Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheet.ApproveStep))
+            //        .ToArray();
+
+            //timeSheet.Employees = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+            //    .Select(se => se.idFactStaffHistory)
+            //    .Distinct()
+            //    .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
+            //    .ToArray().OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).
+            //    ThenBy(t => t.FactStaffEmployee.Post.Category.OrderBy).
+            //    ThenBy(o => o.FactStaffEmployee.Surname).
+            //    ToArray();
+            //timeSheet.Employees = ts.TimeSheetRecord.DistinctBy()
+
+            return timeSheet;
+        }
+
         /// <summary>
         /// Возвращает пустой табель
         /// </summary>
@@ -311,8 +416,23 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             {
                 FactStaffEmployee = DtoFactStaffEmployee(db, idFactStaffHistory),
                 Records = records,
-                IsChecked = records.Any(w => w.IsChecked),
+                //IsChecked = records.Any(w => w.IsChecked),
                 IdTimeSheet = idTimeSheet
+            };
+        }
+
+        //public static DtoTimeSheetEmployee DtoTimeSheetEmployee(KadrDataContext db, int idTimeSheet, int idFactStaffHistory)
+        public static DtoTimeSheetEmployee DtoTimeSheetEmployee(FactStaffHistory staff, IEnumerable<TimeSheetRecord> records)
+        {
+            //var records =
+            //    db.TimeSheetRecord.Where(w => w.idTimeSheet == idTimeSheet & w.idFactStaffHistory == idFactStaffHistory).Select(
+            //        s => DtoTimeSheetRecord(s)).ToArray();
+            var singleRecord = records.First();
+            return new DtoTimeSheetEmployee
+            {
+                FactStaffEmployee = DtoFactStaffEmployee(staff),
+                Records = records.Select(s => DtoTimeSheetRecord(s)).ToArray(),
+                IdTimeSheet = singleRecord.idTimeSheet
             };
         }
 
@@ -358,6 +478,39 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Post = DtoPost(s.FactStaff.PlanStaff.Post),
                 WorkShedule = DtoWorkShedule(s.FactStaff.PlanStaff.WorkShedule)
             }).FirstOrDefault();
+        }
+
+        public static DtoFactStaffEmployee DtoFactStaffEmployee(FactStaffHistory factStaff)
+        {
+
+            //return db.FactStaffHistory.Where(w => w.id == idFactStaffHistory).Select(s => new DtoFactStaffEmployee
+            //{
+            //    IdFactStaffHistiry = s.id,
+            //    IdFactStaff = s.FactStaff.id,
+            //    IdEmployee = s.FactStaff.idEmployee,
+            //    EmployeeLogin = s.FactStaff.Employee.EmployeeLogin,
+            //    Surname = s.FactStaff.Employee.LastName,
+            //    Name = s.FactStaff.Employee.FirstName,
+            //    Patronymic = s.FactStaff.Employee.Otch,
+            //    ItabN = s.FactStaff.Employee.itab_n,
+            //    StaffRate = s.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
+            //    Post = DtoPost(s.FactStaff.PlanStaff.Post),
+            //    WorkShedule = DtoWorkShedule(s.FactStaff.PlanStaff.WorkShedule)
+            //}).FirstOrDefault();
+            return new DtoFactStaffEmployee
+            {
+                IdFactStaffHistiry = factStaff.id,
+                IdFactStaff = factStaff.FactStaff.id,
+                IdEmployee = factStaff.FactStaff.idEmployee,
+                EmployeeLogin = factStaff.FactStaff.Employee.EmployeeLogin,
+                Surname = factStaff.FactStaff.Employee.LastName,
+                Name = factStaff.FactStaff.Employee.FirstName,
+                Patronymic = factStaff.FactStaff.Employee.Otch,
+                ItabN = factStaff.FactStaff.Employee.itab_n,
+                StaffRate = factStaff.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
+                Post = DtoPost(factStaff.FactStaff.PlanStaff.Post),
+                WorkShedule = DtoWorkShedule(factStaff.FactStaff.PlanStaff.WorkShedule)
+            };
         }
 
         public static DtoWorkShedule DtoWorkShedule(WorkShedule workShedule)

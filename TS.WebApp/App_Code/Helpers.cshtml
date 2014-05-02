@@ -1,17 +1,21 @@
-﻿@helper Pagenator(string url, int currentPage, int pageCount, int pagesPerPage = 10)
+﻿@using System.Web.Mvc
+@using System.Web.Routing
+
+@helper Pagenator(string url, int currentPage, int pageCount, int pagesPerPage = 10)
 {
-    var endPageNo = (currentPage + pagesPerPage / 2) > pageCount ? pageCount : (currentPage + pagesPerPage / 2);
+    var endPageNo = (currentPage + pagesPerPage / 2) >= pageCount ? pageCount : (currentPage + pagesPerPage / 2);
     var startPageNo = endPageNo - pagesPerPage < 1 ? 1 : endPageNo - pagesPerPage;
     if (startPageNo == 1)
     {
-        endPageNo = pagesPerPage <= pageCount ? pagesPerPage : pageCount;
+        //endPageNo = startPageNo+pagesPerPage < pageCount ? pagesPerPage : pageCount;
+        endPageNo = startPageNo + pagesPerPage < pageCount ? startPageNo + pagesPerPage : pageCount;
     }
     <ul class="pagination pull-right" style="margin: 0">
         @if (startPageNo < currentPage)
         {
             <li><a href="@url.Replace("pageReplace", (currentPage - 1).ToString())">&laquo;</a></li>
         }
-        @for (int i = startPageNo; i <= endPageNo; i++)
+        @for (var i = startPageNo; i <= endPageNo; i++)
         {
             <li class="@(i==currentPage?"active":"")"><a href="@url.Replace("pageReplace", i.ToString())">@i</a></li>
         }
@@ -21,5 +25,6 @@
         }
     </ul>
 }
+
 
 

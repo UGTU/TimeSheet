@@ -1,5 +1,6 @@
-﻿@{
-    var username = (Session["approverName"] as string) ?? "";
+﻿@using TimeSheetMvc4WebApplication.Source
+@{
+    var username = SessionHelper.ApproverName;
 }
 <nav class="navbar navbar-default" style="border-radius: 0;" role="navigation">
     <div class="container">

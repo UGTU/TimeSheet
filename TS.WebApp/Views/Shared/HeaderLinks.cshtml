@@ -1,56 +1,6 @@
 ﻿@using TimeSheetMvc4WebApplication.Models
 @model HeaderLinckModel
 
-
-@*@foreach (var link in Model.Links)
-{
-    switch (link)
-    {
-        case HeaderLink.Edit:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new {id = Model.IdTimeSheet})\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование табеля</a></li>");
-            </script>
-            break;
-        }
-        case HeaderLink.Show:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр табеля</a></li>");
-            </script>
-            break;
-        }
-        case HeaderLink.Pdf:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a target=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-print\"></span> Печать табеля</a></li>");
-            </script>
-            break;
-        }
-        case HeaderLink.Approve:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetApprovalNew", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование табеля</a></li>");
-            </script>
-            break;
-        }
-        case HeaderLink.ExceptionDay:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\" ><a href=\"@Url.Action("ExceptionDay", "Admin")\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");
-            </script>
-            break;
-        }
-        case HeaderLink.Department:
-        {
-            <script>
-                $('#HeaderLiBox').append("<li id=\"@link\" ><a href=\"@Url.Action("DepartmentManagment", "Admin")\"><span class=\"glyphicon glyphicon-briefcase\"></span> Структурные подразделения</a></li>");
-            </script>
-            break;
-        }
-    }
-}*@
-
 @foreach (var link in Model.Links)
 {
     switch (link)
@@ -58,42 +8,42 @@
         case HeaderLink.Edit:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetEdit", "Main", new {id = Model.IdTimeSheet})\"><span class=\"glyphicon glyphicon-edit\"></span> Редактирование</a></li>");
+                    $('#HeaderLiBox').append('<li id="@link"><a href="@Url.Action("TimeSheetEdit", "Main", new {id = Model.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span> Редактирование</a></li>');
                 </script>
                 break;
             }
         case HeaderLink.Show:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetShow", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-fullscreen\"></span> Просмотр</a></li>");
+                $('#HeaderLiBox').append('<li id="@link"><a href="@Url.Action("Show", "TsShow", new { id = Model.IdTimeSheet })"><span class="glyphicon glyphicon-fullscreen"></span> Просмотр</a></li>');
                 </script>
                 break;
             }
         case HeaderLink.Pdf:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a target=\"_blank\" href=\"@Url.Action("TimeSheetPdf", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-print\"></span> Печать</a></li>");
+                $('#HeaderLiBox').append('<li id="@link"><a target="_blank" href="@Url.Action("Pdf", "TsShow", new { id = Model.IdTimeSheet })"><span class="glyphicon glyphicon-print"></span> Печать</a></li>');
                 </script>
                 break;
             }
         case HeaderLink.Approve:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\"><a href=\"@Url.Action("TimeSheetApprovalNew", "Main", new { idtimesheet = Model.IdTimeSheet })\"><span class=\"glyphicon glyphicon-retweet\"></span> Согласование</a></li>");
+                $('#HeaderLiBox').append('<li id="@link"><a href="@Url.Action("TimeSheetApprovalNew", "Main", new { idtimesheet = Model.IdTimeSheet })"><span class="glyphicon glyphicon-retweet"></span> Согласование</a></li>');
                 </script>
                 break;
             }
         case HeaderLink.ExceptionDay:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\" ><a href=\"@Url.Action("ExceptionDay", "Admin")\"><span class=\"glyphicon glyphicon-calendar\"></span> Выходные дни и праздники</a></li>");
+                $('#HeaderLiBox').append('<li id="@link" ><a href="@Url.Action("ExceptionDay", "Admin")"><span class="glyphicon glyphicon-calendar"></span> Выходные дни и праздники</a></li>');
                 </script>
                 break;
             }
         case HeaderLink.Department:
             {
                 <script>
-                $('#HeaderLiBox').append("<li id=\"@link\" ><a href=\"@Url.Action("DepartmentManagment", "Admin")\"><span class=\"glyphicon glyphicon-briefcase\"></span> Структурные подразделения</a></li>");
+                $('#HeaderLiBox').append('<li id="@link" ><a href="@Url.Action("DepartmentManagment", "Admin")"><span class="glyphicon glyphicon-briefcase"></span> Структурные подразделения</a></li>');
                 </script>
                 break;
             }

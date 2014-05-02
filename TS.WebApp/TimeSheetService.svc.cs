@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
@@ -145,7 +146,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoTimeSheet GetTimeSheet(int idTimeSheet, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
-                //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            //using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
             {
                 return DtoClassConstructor.DtoTimeSheet(db, idTimeSheet, isEmpty);
             }

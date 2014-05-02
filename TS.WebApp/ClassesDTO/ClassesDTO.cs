@@ -287,8 +287,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         [DataMember]
         public DtoTimeSheetRecord[] Records { get; set; }
 
-        [DataMember]
-        public bool IsChecked;
+        //[DataMember]
+        //public bool IsChecked;
 
         [DataMember]
         public int IdTimeSheet;

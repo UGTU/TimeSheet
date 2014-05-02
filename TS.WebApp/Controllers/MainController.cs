@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Rotativa;
-using Rotativa.Options;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Models;
 using TimeSheetMvc4WebApplication.Models.Main;
@@ -14,9 +12,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
     [Authorize]
     public class MainController : BaseController
     {
-        private const int FirstPaperEmployeeCount = 5;
-        private const int LastPaperEmployeeCount = 5;
-        private const int PaperEmployeeCount = 8;
         private const int TimeSheetsPerPage = 12;
         private const int DepartmentsPerPage = 16;
 
@@ -30,17 +25,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 return RedirectToAction("TimeSheetList",
                     new {id = approver.GetApproverDepartments().First().IdDepartment});
             var skip = page > 1 ? DepartmentsPerPage * (page - 1) : 0;
-            ViewBag.DepartmentsPageCount = (int)Math.Ceiling(approver.DtoApproverDepartments.Count() / (double)DepartmentsPerPage);
+            ViewBag.DepartmentsPageCount = (int)Math.Ceiling(approver.DtoApproverDepartments.Count() / (Decimal)DepartmentsPerPage);
             ViewBag.CurrentPage = page;
-            //ViewBag.Departments = approver.DtoApproverDepartments.OrderBy(o=>o.DepartmentSmallName).Skip(skip).Take(DepartmentsPerPage);
             ViewBag.Departments = approver.DtoApproverDepartments.Skip(skip).Take(DepartmentsPerPage);
             return View(approver);
         }
 
         public ActionResult TimeSheetList(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
         {
-            var skip = page>1?TimeSheetsPerPage*(page - 1):0;
             var approver = GetCurrentApprover();
+            var skip = page>1?TimeSheetsPerPage*(page - 1):0;
             var r = Provider.GetTimeSheetList(id, filter, skip, TimeSheetsPerPage);
             ViewBag.TimeSheetCount = (int)Math.Ceiling(r.Count / (double)TimeSheetsPerPage);
             ViewBag.idDepartment = id;
@@ -56,44 +50,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage;
             return View(id);
-        }
-
-        //======================    Отображение табеля     ====================
-
-        public ActionResult TimeSheetShow(int idTimeSheet)
-        {
-            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
-            return View(idTimeSheet);
-        }
-
-        public PartialViewResult PartialTimeSheetShow(int idTimeSheet)
-        {
-            var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                LastPaperEmployeeCount,
-                PaperEmployeeCount, false);
-            return PartialView("PartialView/PartialTimeSheetShow",timeSheetModel);
-        }
-
-        [AllowAnonymous]
-        public ActionResult TimeSheetPrint(int idTimeSheet)
-        {
-            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
-            var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                LastPaperEmployeeCount, PaperEmployeeCount,
-                true);
-            return View(timeSheetModel);
-        }
-
-        [AllowAnonymous]
-        public ViewAsPdf TimeSheetPdf(int idTimeSheet)
-        {
-            var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, FirstPaperEmployeeCount,
-                LastPaperEmployeeCount, PaperEmployeeCount,
-                true);
-            return new ViewAsPdf("TimeSheetPrint", timeSheetModel) { PageOrientation = Orientation.Landscape};
         }
 
         //======================    Согласование табеля     ====================
@@ -146,6 +102,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
             ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
         }
+
+        //=======================================================================================================
 
         public FileResult Download()
         {

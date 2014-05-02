@@ -33,16 +33,16 @@ namespace TimeSheetMvc4WebApplication
 
             routes.MapRoute(
                 "ShortTimeSheetPdf",
-                "tabel/{idTimeSheet}",
-                new {controller = "Main", action = "TimeSheetPdf", id = UrlParameter.Optional},
-                constraints: new {idTimeSheet = @"\d+"}
+                "TabelPdf/{id}",
+                new { controller = "TsShow", action = "Pdf", id = UrlParameter.Optional },
+                constraints: new {id = @"\d+"}
                 );
 
             routes.MapRoute(
                 "ShortTimeSheetShow",
-                "tabelshow/{idTimeSheet}",
-                new { controller = "Main", action = "TimeSheetShow", id = UrlParameter.Optional },
-                constraints: new {idTimeSheet = @"\d+"}
+                "TabelShow/{id}",
+                new { controller = "TsShow", action = "Show", id = UrlParameter.Optional },
+                constraints: new {id = @"\d+"}
                 );
 
             routes.MapRoute(

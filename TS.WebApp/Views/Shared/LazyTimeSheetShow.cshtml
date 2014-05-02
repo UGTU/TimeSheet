@@ -17,7 +17,6 @@
 
 <script>
     $(document).ready(function () {
-        $("#@timeSheetId").load("@Html.Raw(Url.Action("PartialTimeSheetShow", "Main", new { idTimeSheet =Model}))", function () {
-        });
+        $("#@timeSheetId").load("@Html.Raw(Url.Action("PartialShow", "TsShow", new RouteValueDictionary{{"id",Model}}))", function () {});
     });
 </script>
