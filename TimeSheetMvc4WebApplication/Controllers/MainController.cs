@@ -17,24 +17,49 @@ namespace TimeSheetMvc4WebApplication.Controllers
         private const int FirstPaperEmployeeCount = 5;
         private const int LastPaperEmployeeCount = 5;
         private const int PaperEmployeeCount = 8;
+        private const int TimeSheetsPerPage = 12;
+        private const int DepartmentsPerPage = 16;
 
-        public ActionResult Index()
+        public ActionResult Index(int page=1)
         {
             var approver = GetCurrentApprover();
+            ViewBag.approver = approver;
             if (approver==null || approver.GetApproverDepartments() == null || !approver.GetApproverDepartments().Any())
                 throw new HttpException(401, "Попытка несанкционированного доступа");
-            if (approver.GetApproverDepartments().Count() > 1) return View(approver);
-            return RedirectToAction("TimeSheetList", new { id = approver.GetApproverDepartments().First().IdDepartment });
+            if (approver.GetApproverDepartments().Count() <= 1)
+                return RedirectToAction("TimeSheetList",
+                    new {id = approver.GetApproverDepartments().First().IdDepartment});
+            var skip = page > 1 ? DepartmentsPerPage * (page - 1) : 0;
+            ViewBag.DepartmentsPageCount = (int)Math.Ceiling(approver.DtoApproverDepartments.Count() / (double)DepartmentsPerPage);
+            ViewBag.CurrentPage = page;
+            //ViewBag.Departments = approver.DtoApproverDepartments.OrderBy(o=>o.DepartmentSmallName).Skip(skip).Take(DepartmentsPerPage);
+            ViewBag.Departments = approver.DtoApproverDepartments.Skip(skip).Take(DepartmentsPerPage);
+            return View(approver);
         }
 
 
-        public ActionResult TimeSheetList(int id, bool showAll = false)
+        //public ActionResult TimeSheetList(int id, bool showAll = false)
+        //{
+        //    var approver = GetCurrentApprover();
+        //    ViewBag.idDepartment = id;
+        //    ViewBag.approver = approver;
+        //    ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
+        //    var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
+        //    return View(timeSheetList);
+        //}
+
+        public ActionResult TimeSheetList(int id,int page=1, TimeSheetFilter filter = TimeSheetFilter.All)
         {
+            var skip = page>1?TimeSheetsPerPage*(page - 1):0;
             var approver = GetCurrentApprover();
+            var r = Provider.GetTimeSheetList(id, filter, skip, TimeSheetsPerPage);
+            ViewBag.TimeSheetCount = (int)Math.Ceiling(r.Count / (double)TimeSheetsPerPage);
             ViewBag.idDepartment = id;
             ViewBag.approver = approver;
+            ViewBag.Filter = filter;
+            ViewBag.CuttentPage = page;
             ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
-            var timeSheetList = Client.GetTimeSheetList(id, showAll ? int.MinValue : 12,true);
+            var timeSheetList = r.TimeSheets.OrderBy(o=>o.DateBegin);
             return View(timeSheetList);
         }
 
@@ -83,6 +108,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         //======================    Согласование табеля     ====================
+
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
@@ -90,14 +116,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
             var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
-            var timeSheet = Client.GetTimeSheet(idTimeSheet,true);
+            var timeSheet = Client.GetTimeSheet(idTimeSheet, true);
             var currentApprover =
                 GetCurrentApprover()
                     .GetDepartmentApproverNumbers(timeSheet.Department.IdDepartment)
-                        .First(w => w.ApproveNumber == approveStep+1);
+                        .First(w => w.ApproveNumber == approveStep + 1);
             var timeSheetAprovalModel = new TimeSheetAprovalModel
             {
-                IdTimeSheet=idTimeSheet,
+                IdTimeSheet = idTimeSheet,
                 ApprovalDate = DateTime.Now,
                 ApprovalResult = null,
                 Comment = "",
@@ -110,13 +136,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public ActionResult TimeSheetApprovalNew(TimeSheetAprovalModel timeSheetAprovalModel)
         {
             //валидация формы
+            var appDominUrl = Url.Action("Index", null, null, Request.Url.Scheme);
             if (timeSheetAprovalModel.ApprovalResult != null &&
                 (bool) timeSheetAprovalModel.ApprovalResult == false & timeSheetAprovalModel.Comment == null)
                 ModelState.AddModelError("Причина не указана",
                     "В случае отклонения табеля необходимо прокомментировать причину!");
             var idTimeSheet = timeSheetAprovalModel.IdTimeSheet;
             if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
-                (bool) timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment))
+                (bool)timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment, appDominUrl))
             {
                 return RedirectToAction("TimeSheetApprovalNew", new {idTimeSheet = timeSheetAprovalModel.IdTimeSheet});
             }
@@ -135,8 +162,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             const string buffer = @"~\Content\Manual\Руководство пользователя ИС Табель.pdf"; //bytes form this
             return File(buffer, "application/pdf"); 
-            //return File(@"//");
-            //return File(@"~\Files\output.txt", "application/text", "blahblahblah.txt");
         }
 
         //======================    Json    ====================================
@@ -144,7 +169,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public JsonResult GetTimeSheetModelJson(int idTimeSheet)
         {
             var timeSheet = GetTimeSheetOrThrowException(idTimeSheet);
-            var dayStatusList = Client.GetDayStatusList();
+            var dayStatusList = Client.GetDayStatusList().Where(w=>w.IsVisible).ToArray();
             var ts = DtoToJsonMapper.TimeSheet(timeSheet, dayStatusList);
             return Json(ts, JsonRequestBehavior.AllowGet);
         }
@@ -169,7 +194,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
             {
                 empl.WorkShedule.WorkSheduleName = empl.WorkShedule.WorkSheduleName.Split(' ').First();
             }
-            return Json(empls, JsonRequestBehavior.AllowGet);
+            var model = new
+            {
+                Employees = empls,
+                Year = year,
+                Month = month
+            };
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -3,7 +3,6 @@
     ViewBag.Title = "Структурные подразделения";
     //Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
-
 <h2>Структурные подразделения</h2>
 <div class="row " ng-app ng-controller="Department">
     <div class="col-md-4">
@@ -13,7 +12,6 @@
                 <span class="glyphicon glyphicon-search"></span>
             </span>
         </div>
-
         <div id="employeeList" class="list-group" style="overflow: auto; border: 1px solid #dddddd; min-height: 100px; -ms-border-radius: 5px; border-radius: 5px;">
             <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()" ng-hide="BackHide()">
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
@@ -38,39 +36,44 @@
     <div class="col-md-8" ng-hide="DepartmentApproveHide()">
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
         <hr style="margin-top: 0;" />
-        <h4>Табельщик</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
-            </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
-            </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="SelectedDepartment.HasTimeSheet"> Создавать отдельный табель
+            </label>
         </div>
-
-        <h4>Начальник структурного подразделения</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
+        <div ng-show="SelectedDepartment.HasTimeSheet">
+            <h4>Табельщик</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
+                </div>
             </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+            <h4>Начальник структурного подразделения</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+                </div>
             </div>
-        </div>
-
-        <h4>Работник отдела кадров</h4>
-        <div class="row">
-            <div class="col-lg-5">
-                <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
-            </div>
-            <div class="col-lg-7">
-                <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+            <h4>Работник отдела кадров</h4>
+            <div class="row">
+                <div class="col-lg-5">
+                    <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
+                </div>
+                <div class="col-lg-7">
+                    <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <p>
-                    <button type="button" class="btn btn-default pull-right" ng-disabled="IsSaveDisable()" ng-click="Save()">
+                    <button style="margin-top: 10px" type="button" class="btn btn-default pull-right" ng-disabled="IsSaveDisable()" ng-click="Save()">
                         <span class="glyphicon glyphicon-floppy-saved"></span> Сохранить изменения
                     </button>
                 </p>
@@ -78,8 +81,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script>
     function Department($scope, $http) {
@@ -128,7 +129,7 @@
             $scope.ClearCss();
             department.css = "active";
             $scope.SelectedDepartment = department;
-            console.log(department.IdDepartment);
+            $scope.SelectedDepartmentEtalon = angular.copy($scope.SelectedDepartment);
             $scope.GetApprovers(department.IdDepartment);
         };
 
@@ -168,6 +169,8 @@
             if (!$scope.IsApproversEquals($scope.sdApprover2, $scope.clApprover2))
                 return false;
             if (!$scope.IsApproversEquals($scope.sdApprover3, $scope.clApprover3))
+                return false;
+            if (!angular.equals($scope.SelectedDepartment, $scope.SelectedDepartmentEtalon))
                 return false;
             return true;
         };
@@ -212,6 +215,32 @@
             $http.get(link).success(function (data) {
                 if (data) {
                     console.log('approve save success');
+                    switch (appoveStep) {
+                        case 1:
+                            $scope.clApprover1 = angular.copy($scope.sdApprover1);
+                            break;
+                        case 2:
+                            $scope.clApprover2 = angular.copy($scope.sdApprover2);
+                            break;
+                        case 3:
+                            $scope.clApprover3 = angular.copy($scope.sdApprover3);
+                            break;
+                        default:
+                            console.log('Какая то wtf произошла');
+                    }   
+                }
+                else
+                    alert('При сохранении возникли проблемы, изменения не сохранены');
+            });
+        };
+
+        $scope.SaveDepartmet = function () {
+            var link = '@Html.Raw(@Url.Action("SaveDepartment", "Admin"))';
+            console.log(link);
+            $http.post(link, $scope.SelectedDepartment).success(function (data) {
+                if (data) {
+                    console.log('approve save success');
+                    $scope.SelectedDepartmentEtalon = angular.copy($scope.SelectedDepartment);
                 }
                 else
                     alert('При сохранении возникли проблемы, изменения не сохранены');
@@ -225,12 +254,13 @@
                 $scope.SaveApprover($scope.sdApprover2, $scope.clApprover2, 2);
             if (!$scope.IsApproversEquals($scope.sdApprover3, $scope.clApprover3))
                 $scope.SaveApprover($scope.sdApprover3, $scope.clApprover3, 3);
+            if (!angular.equals($scope.SelectedDepartment, $scope.SelectedDepartmentEtalon))
+                $scope.SaveDepartmet($scope.SelectedDepartment);
         };
 
 
     };
 </script>
-
 <script>
     $(window).load(function () {
         employeeListResize();
@@ -245,7 +275,6 @@
         $('#employeeList').css('max-height', maxHeight);
     }
 </script>
-
 @{
     Html.RenderPartial("HeaderLinks", new HeaderLinckModel
     {
@@ -253,4 +282,3 @@
         CurrentLink = HeaderLink.Department
     });
 }
-

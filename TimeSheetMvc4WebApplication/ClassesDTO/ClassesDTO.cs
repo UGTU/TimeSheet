@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 
 namespace TimeSheetMvc4WebApplication.ClassesDTO
 {
     public enum ApproveState
     {
-        Табельщик=1, НачальникСтруктурногоПодразделения=2, РаботникКадров=3, Администратор=10
+        Табельщик = 1,
+        НачальникСтруктурногоПодразделения = 2,
+        РаботникКадров = 3,
+        Администратор = 10
     }
 
     [DataContract]
@@ -23,7 +22,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             Date = DateTime.Now;
             Name = "Новый праздник";
         }
-
         [DataMember]
         public int IdExceptionDay { get; set; }
         [DataMember]
@@ -44,7 +42,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public DtoWorkShedule WorkShedule { get; set; }
         [DataMember]
         public string DayAweek { get; set; }
-
     }
 
     [DataContract]
@@ -104,6 +101,11 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         {
             return DtoApproverDepartments.Any(a => a.IdDepartment == idDepartment && a.ApproveNumber == (int) approveState);
         }
+
+        public bool Allowed(ApproveState approveState)
+        {
+            return DtoApproverDepartments.Any(a =>a.ApproveNumber == (int)approveState);
+        }
     }
 
     [DataContract]
@@ -117,6 +119,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string DepartmentFullName { get; set; }
         [DataMember]
         public int? IdManagerDepartment { get; set; }
+        public bool HasTimeSheet { get; set; }
     }
 
     [DataContract]
@@ -190,6 +193,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int EmployeesCount { get; set; }
         [DataMember]
         public int ApproveStep { get; set; }
+        [DataMember]
+        public bool IsFake { get; set; }
     }
 
     [DataContract]
@@ -238,6 +243,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string SmallDayStatusName { get; set; }
         [DataMember]
         public string FullDayStatusName { get; set; }
+        [DataMember]
+        public bool IsVisible { get; set; }
 
         public override bool Equals(object obj)
         {

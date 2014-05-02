@@ -25,6 +25,9 @@ namespace TimeSheetMvc4WebApplication
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //====Что бы ускорить рендер страничек
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine()); 
         }
 
 

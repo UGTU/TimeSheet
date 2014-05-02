@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -126,15 +127,39 @@ namespace TimeSheetMvc4WebApplication.Source
             SubmitTimeSheet();
         }
 
+
+        private IEnumerable<int> GetInnerDepartmentsIdForTS(KadrDataContext db, IEnumerable<int> idsDepartment)
+        {
+            var list = new List<int>();
+            foreach (var id in idsDepartment)
+            {
+                list.Add(id);
+                var temp = db.Department.Where(w => w.idManagerDepartment == id && w.HasTimeSheet == false).Select(s => s.id);
+                list.AddRange(GetInnerDepartmentsIdForTS(db, temp));
+            }
+            return list.ToArray();
+        }
+
         public FactStaffWithHistory[] GetAllEmployees()
         {
+            var deps = GetInnerDepartmentsIdForTS(_db, new int[] { _timeSheet.idDepartment });
             var employees = _db.FactStaffWithHistory.Where(
-                w => w.PlanStaff.idDepartment == _timeSheet.idDepartment &&
+                w => deps.Contains(w.PlanStaff.idDepartment) &&
                      (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
                      w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
                      w.idTypeWork != IdWorkTypePochesovik).ToArray();
             return employees;
         }
+
+        //public FactStaffWithHistory[] GetAllEmployees()
+        //{
+        //    var employees = _db.FactStaffWithHistory.Where(
+        //        w => w.PlanStaff.idDepartment == _timeSheet.idDepartment &&
+        //             (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
+        //             w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
+        //             w.idTypeWork != IdWorkTypePochesovik).ToArray();
+        //    return employees;
+        //}
 
         private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList)
         {
@@ -475,6 +500,7 @@ namespace TimeSheetMvc4WebApplication.Source
         //Сериализует записи табеля в XML
         private XElement SerializeTimeSheetRecordsToXml(IEnumerable<TimeSheetRecord> records)
         {
+            var culture = new CultureInfo("en-US");     
             return new XElement("TimeSheetRecords",records.Select(record => new XElement("Record",
                     new XElement("IdTimeSheetRecord", record.IdTimeSheetRecord),
                     new XElement("JobTimeCount", record.JobTimeCount),
@@ -487,7 +513,7 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Сохраняет записи табеля в базу
-        private bool SubmitTimeSheet()
+        private void SubmitTimeSheet()
         {
             try
             {
@@ -497,15 +523,15 @@ namespace TimeSheetMvc4WebApplication.Source
                 {
                     timeSheetRecord.idTimeSheet = _timeSheet.id;
                 }
-                _db.TimeSheetRecordInsert(SerializeTimeSheetRecordsToXml(_timeSheetRecordLList));
-                return true;
+                var r = SerializeTimeSheetRecordsToXml(_timeSheetRecordLList);
+                _db.TimeSheetRecordInsert(r);
             }
             catch (System.Exception ex)
             {
-                _db.TimeSheet.DeleteOnSubmit(_timeSheet);
                 _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
+                _db.TimeSheet.DeleteOnSubmit(_timeSheet);
                 _db.SubmitChanges();
-                return false;
+                throw;
             }
         }
 

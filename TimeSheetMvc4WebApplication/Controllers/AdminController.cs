@@ -1,7 +1,12 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CommonBase;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Hubs;
+using TimeSheetMvc4WebApplication.Models;
+using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -35,7 +40,28 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
+        public string SendNotice(string username)
+        {
+            //===
+            var noticeHub = NoticeHub.Instance;
+            noticeHub.Test(username);
+            //===
+            return string.IsNullOrWhiteSpace(username) ? "notice send" : "notice send to " + username;
+        }
 
+        public FileResult Download()
+        {
+
+            var timeSheet = GetTimeSheetOrThrowException(576);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, int.MaxValue,0,0, false);
+
+            //var r = new TimeSheetToDbf(timeSheetModel);
+            var r = new TimeSheetToDbf();
+            //var fileBytes = r.GenerateDbf(timeSheetModel);
+            var fileBytes = r.GenerateDbf(timeSheet);
+            const string fileName = "myfile.dbf";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
 
         private void CheckIsAdmin()
         {
@@ -43,6 +69,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             if(!approver.IsAdministrator)
                 throw new HttpException(401, "Попытка несанкционированного доступа к админке");
         }
+
 
         //=================================== Json  ==============================================
 
@@ -99,6 +126,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
             var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
             var result = (approveSaveResult && employeeSaveResult) ? true : false;
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveDepartment(DtoDepartment department)
+        {
+            ////todo:Сделать метод проверки и сохранять логин только если он обновлён
+            //var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
+            //var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+            //var result = (approveSaveResult && employeeSaveResult) ? true : false;
+            var result = Client.UpdateDepartment(department);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

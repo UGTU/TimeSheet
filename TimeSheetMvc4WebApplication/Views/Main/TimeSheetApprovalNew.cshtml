@@ -4,17 +4,14 @@
 @{
     ViewBag.Title = "Согласование";
     Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
-    var timeSheets = ViewBag.TimeSheet as TimeSheetModel[];
     var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
     var currentApprover = ViewBag.CurrentApprover as DtoApprover;
     int idTimeSheet = ViewBag.IdTimeSheet;
-
 }
 
 <div class="panel panel-default">
     <div class="panel-heading"> <span class="glyphicon glyphicon-retweet"></span>  Согласование табеля</div>
     <div class="panel-body">
-        @*<div class="container">*@
             @if (approverHiatory != null && approverHiatory.Any())
             {
                 <h4>История согласования</h4>
@@ -42,7 +39,7 @@
                     </tbody>
                 </table>
             }
-
+            
             @if (Model != null)
             {
                 <h4>Согласование</h4>

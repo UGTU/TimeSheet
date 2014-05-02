@@ -1,5 +1,4 @@
-﻿@using TimeSheetMvc4WebApplication
-@using TimeSheetMvc4WebApplication.Controllers
+﻿@using TimeSheetMvc4WebApplication.Controllers
 @{
     var baseController = new BaseController();
     var approver = baseController.GetCurrentApprover();
@@ -37,14 +36,14 @@
                             <li><a href="@Url.Action("DepartmentManagment","Admin")"><span class="glyphicon glyphicon-briefcase"></span> Структурные подразделения</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <a id="ug" href="@Url.Action("Download","Main")" data-placement="bottom" data-toggle="tooltip" title="Просмотреть руководство пользователя" target="_blank" style="color: #777777"><span class="glyphicon glyphicon-question-sign"></span></a>
+                    </li>
                 }
                 else
                 {
                     <li><a><span class="glyphicon glyphicon-user"></span> @userName</a></li>
                 }
-                <li>
-                    <a id="ug" href="@Url.Action("Download","Main")" data-placement="bottom" data-toggle="tooltip" title="Просмотреть руководством пользователя" target="_blank" style="color: #777777"><span class="glyphicon glyphicon-question-sign"></span></a>
-                </li>
             </ul>
         </div>
     </div>

@@ -1,4 +1,4 @@
-﻿@model int
+﻿@model TimeSheetMvc4WebApplication.ClassesDTO.DtoTimeSheet
 
 @*@switch (Model)
 {
@@ -19,35 +19,25 @@
         break;
 }*@
 
-@*@switch (Model)
+@if (!Model.IsFake)
 {
-    case 0:
-        <span class="label label-danger"></span> Редакт.</span>
-        break;
-    case 1:
-    <span class="label label-info">Визир.</span>
-        break;
-    case 2:
-    <span class="label label-info">Визир.</span>
-        break;
-    case 3:
-    <span class="label label-success">Соглас.</span>
-        break;
-    default:break;
-}*@
-
-@switch (Model)
+    switch (Model.ApproveStep)
+    {
+        case 0:
+            <span class="label label-danger" data-toggle="tooltip" title="Табель находится в процессе редактирования"><span class="glyphicon glyphicon-edit"></span></span>
+            break;
+        case 1:
+        case 2:
+            <span class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span></span>
+            break;
+        case 3:
+            <span class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span></span>
+            break;
+        default:
+            break;
+    }
+}
+else
 {
-    case 0:
-        <span class="label label-danger" data-toggle="tooltip" title="Табель находится в процессе редактирования"><span class="glyphicon glyphicon-edit"></span></span>
-        break;
-    case 1:
-    case 2:
-        <span class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span></span>
-        break;
-    case 3:
-        <span class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span></span>
-        break;
-    default:
-        break;
+    <span class="label label-default" data-toggle="tooltip" title="Предоставлен бымажный вариант табеля"><span class="glyphicon glyphicon-file"></span></span>
 }
