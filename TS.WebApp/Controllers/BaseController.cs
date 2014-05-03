@@ -39,8 +39,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         protected DtoTimeSheet GetTimeSheetOrThrowException(int id)
         {
-            //var timeSheet = Client.GetTimeSheet(id);
-            var timeSheet = Provider.GetTimeSheet(id);
+            var timeSheet = Client.GetTimeSheet(id);
+            //var timeSheet = Provider.GetTimeSheet(id);
             if (timeSheet == null)
                 throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + id);
             return timeSheet;

@@ -32,14 +32,18 @@ namespace TimeSheetMvc4WebApplication.Source
         public DtoTimeSheet GetTimeSheet(int idTimeSheet, bool isEmpty = false)
         {
             using (var db = new KadrDataContext())
-            using (var dbloger = new DataContextLoger("GetTimeSheetLog.txt", FileMode.OpenOrCreate, db))
+            using (var dbloger = new DataContextLoger("GetTimeSheetLog.sql", FileMode.OpenOrCreate, db))
             {
                 var loadOptions = new DataLoadOptions();
                 loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetRecord);
+                loadOptions.LoadWith((TimeSheet ts) => ts.Dep);
+                loadOptions.LoadWith((Dep d) => d.Department);
                 loadOptions.LoadWith((TimeSheetRecord tsr) => tsr.FactStaffHistory);
+                loadOptions.LoadWith((FactStaffWithHistory f) => f.FactStaff);
+                loadOptions.LoadWith((FactStaff f) => f.Employee);
                 loadOptions.LoadWith((FactStaffWithHistory f) => f.PlanStaff);
-                //loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetRecord);
-                //loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetRecord);
+                loadOptions.LoadWith((PlanStaff p) => p.Post);
+                loadOptions.LoadWith((Post p) => p.Category);
                 db.LoadOptions = loadOptions;
                 //return DtoClassConstructor.DtoTimeSheet(db, idTimeSheet, isEmpty);
                 return db.TimeSheetView.Where(f =>f.id==idTimeSheet).Select(s=> DtoClassConstructor.DtoTimeSheet(s, isEmpty)).FirstOrDefault();

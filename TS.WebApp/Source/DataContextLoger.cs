@@ -11,7 +11,8 @@ namespace TimeSheetMvc4WebApplication.Source
         public DataContextLoger(string filename, FileMode fileMode,DataContext context)
         {
             #if DEBUG
-             _fs = new FileStream("G:\\"+filename, fileMode);
+             //_fs = new FileStream("G:\\"+filename, fileMode);
+            _fs = new FileStream("D:\\" + filename, fileMode);
              _sr = new StreamWriter(_fs);
              _sr.WriteLine(string.Format("##############################     {0}     ##############################",DateTime.Now));
              context.Log = _sr;
