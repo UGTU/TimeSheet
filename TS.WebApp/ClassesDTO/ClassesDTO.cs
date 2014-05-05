@@ -68,6 +68,11 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string EmployeeLogin { get; set; }
         [DataMember]
         public bool SexBit { get; set; }
+
+        public string FullName
+        {
+            get { return string.Format("{0} {1} {2}",Surname,Name,Patronymic); }
+        }
     }
 
     [DataContract]

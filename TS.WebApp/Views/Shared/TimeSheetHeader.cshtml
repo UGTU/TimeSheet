@@ -1,6 +1,7 @@
 ﻿@using TimeSheetMvc4WebApplication.Source
 @{
-    var username = SessionHelper.ApproverName;
+    var approver = SessionHelper.Approver;
+    var username = approver!=null?approver.FullName:string.Empty;
 }
 <nav class="navbar navbar-default" style="border-radius: 0;" role="navigation">
     <div class="container">
