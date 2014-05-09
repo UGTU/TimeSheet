@@ -189,6 +189,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IDataProvider.cs" />
+    <Compile Include="AppDomine\Approver.cs" />
+    <Compile Include="AppDomine\ApproveType.cs" />
+    <Compile Include="AppDomine\BaseTimeSheet.cs" />
+    <Compile Include="AppDomine\Department.cs" />
+    <Compile Include="AppDomine\DepartmentApprover.cs" />
+    <Compile Include="AppDomine\Persone.cs" />
+    <Compile Include="AppDomine\TimeSheet.cs" />
+    <Compile Include="AppDomine\ApproverResult.cs" />
     <Compile Include="App_Start\BootstrapBundleConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -206,6 +215,8 @@
     </Compile>
     <Compile Include="Hubs\NoticeHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
+    <Compile Include="Implementation\MsSqlDataProvider.cs" />
+    <Compile Include="Implementation\ObjectMapper.cs" />
     <Compile Include="Kadr1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

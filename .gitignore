@@ -156,6 +156,8 @@ $RECYCLE.BIN/
 .DS_Store
 
 packages/
+TestResults/
+ModelingProject1/
 
 TS.WebApp/Content/logs/
 
