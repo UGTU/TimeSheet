@@ -74,6 +74,13 @@ namespace TS.AppDomine.Abstract
         /// <returns></returns>
         bool EditExeptionsDay(ExceptionDay exceptionDay);
         /// <summary>
+        /// Возвращает список выходных и праздничных дней за период
+        /// </summary>
+        /// <param name="dateStart">Дата начала периода</param>
+        /// <param name="dateEnd">Дата окончания периода</param>
+        /// <returns></returns>
+        IEnumerable<ExceptionDay> GetExeptionsDays(DateTime dateStart, DateTime dateEnd);
+        /// <summary>
         /// Удаляет день исключения
         /// </summary>
         /// <param name="exceptionDay"></param>
@@ -102,12 +109,12 @@ namespace TS.AppDomine.Abstract
         /// Возвращает список статусов дней
         /// </summary>
         /// <returns></returns>
-        DayStatus[] GetDayStatusList();
+        IEnumerable<DayStatus> GetDayStatusList();
         /// <summary>
         /// Возвращает список режимов работ
         /// </summary>
         /// <returns></returns>
-        WorkShedule[] GetWorkScheduleList();
+        IEnumerable<WorkShedule> GetWorkScheduleList();
 
 
 

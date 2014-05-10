@@ -17,8 +17,8 @@ namespace TS.AppDomine.Abstract
         /// <summary>
         /// Сохраняет табель в хранилище
         /// </summary>
-        /// <param name="saveAsFake">Если передать true то табель юудет сохранён как ложный</param>
+        //// <param name="saveAsFake">Если передать true то табель юудет сохранён как ложный</param>
         /// <returns></returns>
-        BaseTimeSheet Save(bool saveAsFake);
+        void Save();
     }
 }
