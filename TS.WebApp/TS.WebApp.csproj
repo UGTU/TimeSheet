@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{65A8A19E-08E2-444E-97FF-842361841EDD}</ProjectGuid>
-    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TimeSheetMvc4WebApplication</RootNamespace>
@@ -229,6 +229,8 @@
     <Compile Include="Models\Main\TimeSheetViewModel.cs" />
     <Compile Include="Models\ModelConstructor.cs" />
     <Compile Include="Models\Models.cs" />
+    <Compile Include="UOWRepositories\LinqContext.cs" />
+    <Compile Include="UOWRepositories\TsRepositoryExtensions.cs" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -1031,6 +1033,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UOW\UOW.csproj">
+      <Project>{ce8fa354-321f-4ea1-933a-5444520d000e}</Project>
+      <Name>UOW</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

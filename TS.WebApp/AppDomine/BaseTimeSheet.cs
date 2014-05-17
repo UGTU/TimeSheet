@@ -8,7 +8,7 @@ namespace TimeSheetMvc4WebApplication.AppDomine
     /// <summary>
     /// Базовый класс табеля, не содержит записей табеля по сотрудникам
     /// </summary>
-    public class BaseTimeSheet
+    public class BaseTimeSheet 
     {
         public int IdTimeSheet { get; set; }
         public Department Department { get; set; }

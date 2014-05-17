@@ -4,13 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{46B0CA15-404F-48F0-82DA-82532F725B8B}</ProjectGuid>
+    <ProjectGuid>{CE8FA354-321F-4EA1-933A-5444520D000E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TS.AppDomine</RootNamespace>
-    <AssemblyName>TS.AppDomine</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>UOW</RootNamespace>
+    <AssemblyName>UOW</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,29 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IDataProvider.cs" />
-    <Compile Include="Abstract\ITimeSheetGenerator.cs" />
-    <Compile Include="DomineModel\Approver.cs" />
-    <Compile Include="DomineModel\ApproverResult.cs" />
-    <Compile Include="DomineModel\ApproveType.cs" />
-    <Compile Include="DomineModel\BaseTimeSheet.cs" />
-    <Compile Include="DomineModel\DayStatus.cs" />
-    <Compile Include="DomineModel\Department.cs" />
-    <Compile Include="DomineModel\DepartmentApprover.cs" />
-    <Compile Include="DomineModel\Employee.cs" />
-    <Compile Include="DomineModel\ExceptionDay.cs" />
-    <Compile Include="DomineModel\Persone.cs" />
-    <Compile Include="DomineModel\Post.cs" />
-    <Compile Include="DomineModel\TimeSheetFilter.cs" />
-    <Compile Include="DomineModel\WorkScheduleType.cs" />
-    <Compile Include="DomineModel\WorkShedule.cs" />
-    <Compile Include="Implementation\TimeSheetGenerator.cs" />
+    <Compile Include="EnumerableAsyncExtensions.cs" />
+    <Compile Include="IDataContext.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IRepositoryEntity.cs" />
+    <Compile Include="IRepositoryFactory.cs" />
+    <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DomineModel\TimeSheet.cs" />
-    <Compile Include="DomineModel\TimeSheetRecord.cs" />
-    <Compile Include="DomineModel\User.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="RepositoryExtensions.cs" />
+    <Compile Include="UnitOfWork.cs" />
+    <Compile Include="UnitOfWorkAsyncExtensions.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

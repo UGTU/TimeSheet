@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TimeSheetMvc4WebApplication.AppDomine;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Models;
 using TimeSheetMvc4WebApplication.Models.Main;
+using TimeSheetMvc4WebApplication.UOWRepositories;
+using UOW;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -14,6 +17,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
     {
         private const int TimeSheetsPerPage = 12;
         private const int DepartmentsPerPage = 16;
+        //private readonly IUnitOfWork _unitOfWork = new UnitOfWork(new LinqContext(new KadrDataContext()),RepositoryFactory.Default);
 
         public ActionResult Index(int page=1)
         {

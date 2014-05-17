@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using TS.AppDomine.Abstract;
 using TS.AppDomine.DomineModel;
 
@@ -14,9 +10,8 @@ namespace TS.AppDomine.Implementation
     {
         private readonly IDataProvider _provider;
         private readonly TimeSheet _timeSheet;
-        //public BaseTimeSheet TimeSheet { get { return _timeSheet; } }
-
-        public TimeSheetGenerator(IDataProvider provider, Department department, DateTime dateBeginPeriod, DateTime dateEndPeriod, int idApprover, bool isCorrection = false, bool isFake = false)
+        public BaseTimeSheet TimeSheet { get { return _timeSheet; } }
+        public TimeSheetGenerator(IDataProvider provider, Department department, DateTime dateBeginPeriod, DateTime dateEndPeriod, bool isCorrection = false, bool isFake = false)
         {
             _provider = provider;
             _timeSheet = new TimeSheet
@@ -27,21 +22,22 @@ namespace TS.AppDomine.Implementation
                 Department = department,
                 IsCorrection = isCorrection,
                 IsFake = isFake,
+                ApproveStep = 0,
             };
         }
 
         public void GenerateTimeSheet(IEnumerable<Employee> employees = null)
         {
-            if(_timeSheet.IsFake) return;
+            if (_timeSheet.IsFake) return;
             if (employees == null)
-                employees = _provider.GetEmployeesForTimeSheet(_timeSheet.Department.IdDepartment, _timeSheet.DateBegin,_timeSheet.DateEnd);
+                employees = _provider.GetEmployeesForTimeSheet(_timeSheet.Department.IdDepartment, _timeSheet.DateBegin, _timeSheet.DateEnd);
             _timeSheet.Employees = employees;
-            var exeptionDays = _provider.GetExeptionsDays(_timeSheet.DateBegin, _timeSheet.DateEnd);
+            var exeptionDays = _provider.GetExeptionsDays(_timeSheet.DateBegin, _timeSheet.DateEnd).ToArray();
             foreach (var employee in _timeSheet.Employees)
             {
-                GenerateTimeSheetForEmployee(employee, exeptionDays.Where(w=>w.WorkShedule==employee.WorkShedule));
+                employee.Records = GenerateTimeSheetForEmployee(employee,
+                    exeptionDays.Where(w => w.WorkShedule == employee.WorkShedule));
             }
-            //throw new NotImplementedException();
         }
 
         //===========================   private Methods     ========================================================================
@@ -58,7 +54,7 @@ namespace TS.AppDomine.Implementation
         private DayStatus dayStatusYavka;
         private DayStatus dayStatusHolidays;
 
-        private void GenerateTimeSheetForEmployee(Employee employee, IEnumerable<ExceptionDay> exceptionDays)
+        private IEnumerable<TimeSheetRecord> GenerateTimeSheetForEmployee(Employee employee, IEnumerable<ExceptionDay> exceptionDays)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (var i = _timeSheet.DateBegin.Day - 1; i < _timeSheet.DateBegin.Day; i++)
@@ -67,10 +63,25 @@ namespace TS.AppDomine.Implementation
                 if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateStart > date)
                 {
                     timeSheetRecordLList.Add(new TimeSheetRecord(date, dayStatusX, 0));
+                    continue;
                 }
-                if(employee.IsPps)
-
+                if (employee.IsPps)
+                {
+                    timeSheetRecordLList.Add(PpsTimeSheetGenerate1(employee, date));
+                    continue;
+                }
+                if (employee.WorkShedule.Id == (int) WorkScheduleType.SixDay)
+                {
+                    timeSheetRecordLList.Add(SixDayesTimeSheetGenerate1(employee, date));
+                    continue;
+                }
+                if (employee.WorkShedule.Id == (int)WorkScheduleType.FiveDay)
+                {
+                    timeSheetRecordLList.Add(FiveDayesTimeSheetGenerate1(employee, date));
+                    continue;
+                }
             }
+            return timeSheetRecordLList;
         }
 
         private TimeSheetRecord FiveDayesTimeSheetGenerate1(Employee employee, DateTime date)
@@ -86,171 +97,95 @@ namespace TS.AppDomine.Implementation
             switch (date.DayOfWeek)
             {
                 case DayOfWeek.Friday:
-                {
-                    var fridayWorkingHours = workingHours;
-                    fridayWorkingHours.WomanFullDay = 6;
-                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, fridayWorkingHours);
-                    break;
-                }
-                case DayOfWeek.Saturday:
-                case DayOfWeek.Sunday:
-                {
-                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays, new WorkingHours());
-                    break;
-                }
-                default:
-                {
-                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, workingHours);
-                    break;
-                }
-            }
-            return timeSheetRecord;
-        }
-
-
-
-        private List<TimeSheetRecord> FiveDayesTimeSheetGenerate(Employee employee)
-        {
-            var workingHours = new WorkingHours
-            {
-                ManFullDay = 8,
-                ManNotFullDay = 8,
-                WomanFullDay = 7.5,
-                WomanNotFullDay = 7.2
-            };
-            var timeSheetRecordLList = new List<TimeSheetRecord>();
-            for (var i = _timeSheet.DateBegin.Day - 1; i < _timeSheet.DateBegin.Day; i++)
-            {
-                TimeSheetRecord timeSheetRecord;
-                var date = _timeSheet.DateBegin.AddDays(i);
-                if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateStart > date)
-                {
-                    timeSheetRecord = new TimeSheetRecord(date,dayStatusX, 0);
-                    timeSheetRecordLList.Add(timeSheetRecord);
-                    continue;
-                }
-                switch (date.DayOfWeek)
-                {
-                    case DayOfWeek.Friday:
                     {
                         var fridayWorkingHours = workingHours;
                         fridayWorkingHours.WomanFullDay = 6;
                         timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, fridayWorkingHours);
                         break;
                     }
-                    case DayOfWeek.Saturday:
-                    case DayOfWeek.Sunday:
+                case DayOfWeek.Saturday:
+                case DayOfWeek.Sunday:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays,new WorkingHours());
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays, new WorkingHours());
                         break;
                     }
-                    default:
+                default:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka,workingHours);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, workingHours);
                         break;
                     }
-                }
-                timeSheetRecordLList.Add(timeSheetRecord);
             }
-            return timeSheetRecordLList;
+            return timeSheetRecord;
         }
 
-        private List<TimeSheetRecord> SixDayesTimeSheetGenerate(Employee employee)
+        private TimeSheetRecord SixDayesTimeSheetGenerate1(Employee employee, DateTime date)
         {
             var workingHours = new WorkingHours
             {
-                ManFullDay = 8,
-                ManNotFullDay = 8,
-                WomanFullDay = 7.5,
-                WomanNotFullDay = 7.2
+                ManFullDay = 7,
+                ManNotFullDay = 6.6,
+                WomanFullDay = 6.25,
+                WomanNotFullDay = 6
             };
-            var timeSheetRecordLList = new List<TimeSheetRecord>();
-            for (var i = _timeSheet.DateBegin.Day - 1; i < _timeSheet.DateBegin.Day; i++)
+            TimeSheetRecord timeSheetRecord;
+            switch (date.DayOfWeek)
             {
-                TimeSheetRecord timeSheetRecord;
-                var date = _timeSheet.DateBegin.AddDays(i);
-                if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateStart > date)
-                {
-                    timeSheetRecord = new TimeSheetRecord(date, dayStatusX, 0);
-                    timeSheetRecordLList.Add(timeSheetRecord);
-                    continue;
-                }
-                switch (date.DayOfWeek)
-                {
-                    case DayOfWeek.Friday:
-                        {
-                            var fridayWorkingHours = workingHours;
-                            fridayWorkingHours.WomanFullDay = 6;
-                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, fridayWorkingHours);
-                            break;
-                        }
-                    case DayOfWeek.Saturday:
-                    case DayOfWeek.Sunday:
-                        {
-                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays, new WorkingHours());
-                            break;
-                        }
-                    default:
-                        {
-                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, workingHours);
-                            break;
-                        }
-                }
-                timeSheetRecordLList.Add(timeSheetRecord);
+                case DayOfWeek.Saturday:
+                    {
+                        var saturdayWorkingHours = workingHours;
+                        saturdayWorkingHours.WomanFullDay = 4.75;
+                        saturdayWorkingHours.ManFullDay = 5;
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, saturdayWorkingHours);
+                        break;
+                    }
+                case DayOfWeek.Sunday:
+                    {
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays, new WorkingHours());
+                        break;
+                    }
+                default:
+                    {
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, workingHours);
+                        break;
+                    }
             }
-            return timeSheetRecordLList;
+            return timeSheetRecord;
         }
 
-        //private List<TimeSheetRecord> PpsTimeSheetGenerate(Employee employee)
-        //{
-        //    const double fullPps = 6.25;
-        //    const double notFullPps = 6;
-        //    const double saturdayPps = 4.75;
+        private TimeSheetRecord PpsTimeSheetGenerate1(Employee employee, DateTime date)
+        {
+            var workingHours = new WorkingHours
+            {
+                ManFullDay = 6.25,
+                ManNotFullDay = 6,
+                WomanFullDay = 6.25,
+                WomanNotFullDay = 6
+            };
+            TimeSheetRecord timeSheetRecord;
+            switch (date.DayOfWeek)
+            {
+                case DayOfWeek.Saturday:
+                    {
+                        var saturdayWorkingHours = workingHours;
+                        saturdayWorkingHours.WomanFullDay = 4.75;
+                        saturdayWorkingHours.ManFullDay = 4.75;
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, saturdayWorkingHours);
+                        break;
+                    }
+                case DayOfWeek.Sunday:
+                    {
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusHolidays, new WorkingHours());
+                        break;
+                    }
+                default:
+                    {
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, dayStatusYavka, workingHours);
+                        break;
+                    }
+            }
+            return timeSheetRecord;
+        }
 
-        //    var timeSheetRecordLList = new List<TimeSheetRecord>();
-        //    for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
-        //    {
-        //        TimeSheetRecord timeSheetRecord;
-        //        var date = _timeSheet.DateBeginPeriod.AddDays(i);
-        //        if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateBegin > date)
-        //        {
-        //            timeSheetRecord = NewTimeSheetRecord(date, employee.idFactStaffHistory, IdX, _timeSheet.id, 0);
-        //            timeSheetRecordLList.Add(timeSheetRecord);
-        //            continue;
-        //        }
-        //        switch (date.DayOfWeek)
-        //        {
-        //            case DayOfWeek.Saturday:
-        //                {
-        //                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, saturdayPps, notFullPps,
-        //                        saturdayPps, notFullPps);
-        //                    break;
-        //                }
-        //            case DayOfWeek.Sunday:
-        //                {
-        //                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdVihodnoy);
-        //                    break;
-        //                }
-        //            default:
-        //                {
-        //                    timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, fullPps, notFullPps,
-        //                        fullPps, notFullPps);
-        //                    break;
-        //                }
-        //        }
-        //        timeSheetRecordLList.Add(timeSheetRecord);
-        //    }
-        //    return timeSheetRecordLList;
-        //}
-
-        //private TimeSheetRecord GenerageTimeSheetRecord(Employee employee, DateTime date, DayStatus dayStatus,
-        //    double manFullDay = 0, double manNotFullDay = 0, double womanFullDay = 0, double womanNotFullDay = 0)
-        //{
-        //    return employee.Rate == 1
-        //        ? new TimeSheetRecord(date, dayStatus, employee.SexBit ? manNotFullDay : womanNotFullDay)
-        //        : new TimeSheetRecord(date, dayStatus,
-        //            (double) employee.Rate*(employee.SexBit ? manNotFullDay : womanNotFullDay));
-        //}
         private TimeSheetRecord GenerageTimeSheetRecord(Employee employee, DateTime date, DayStatus dayStatus, WorkingHours hours)
         {
             return employee.Rate == 1
@@ -259,11 +194,9 @@ namespace TS.AppDomine.Implementation
                     (double)employee.Rate * (employee.SexBit ? hours.ManNotFullDay : hours.WomanNotFullDay));
         }
 
-
         public void Save()
         {
-            //_timeSheet.IsFake = saveAsFake;
-            //return _provider.SaveTimeSheet(_timeSheet) ? _timeSheet : null;
+            _provider.SaveTimeSheet(_timeSheet);
         }
     }
 }

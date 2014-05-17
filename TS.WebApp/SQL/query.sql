@@ -5,3 +5,7 @@ select DISTINCT tsr.idTimeSheet, tsr.idFactStaffHistory  from ShemaTabel.TimeShe
 
 select DISTINCT tsr.idTimeSheet, tsr.idFactStaffHistory  from ShemaTabel.TimeSheetRecord tsr where tsr.idTimeSheet=802
 
+
+
+select*from ShemaTabel.WorkShedule
+
