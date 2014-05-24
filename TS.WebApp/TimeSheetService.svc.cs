@@ -293,11 +293,13 @@ namespace TimeSheetMvc4WebApplication
         {
             using (var db = new KadrDataContext())
             {
-                return
-                    db.Approver.Where(
-                        w => w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
-                             w.DateEnd == null).
-                        Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id,isAdmin)).FirstOrDefault();
+                //return
+                //    db.Approver.Where(
+                //        w => w.idDepartment == idDepartment && w.ApproverType.ApproveNumber == approveNumber && w.DateEnd == null).
+                //        Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id,isAdmin)).FirstOrDefault();
+                var approver = db.Approver.Where(w =>w.idDepartment == idDepartment && w.ApproverType.ApproveNumber == approveNumber &&w.DateEnd == null);
+                var approverDepartment = approver.Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id, isAdmin)).FirstOrDefault();
+                return approverDepartment;
             }
         }
 

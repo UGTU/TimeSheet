@@ -49,9 +49,12 @@ namespace TimeSheetMvc4WebApplication.Controllers
         protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
-            SessionHelper.Approver = Client.GetCurrentApproverByLogin(GetUsername(),
-                System.Web.HttpContext.Current.User.Identity.IsAuthenticated &&
-                System.Web.HttpContext.Current.User.IsInRole("TabelAdmin"));
+            if (SessionHelper.Approver == null)
+            {
+                SessionHelper.Approver = Client.GetCurrentApproverByLogin(GetUsername(),
+                    System.Web.HttpContext.Current.User.Identity.IsAuthenticated &&
+                    System.Web.HttpContext.Current.User.IsInRole("TabelAdmin"));
+            }
         }
     }
 }
