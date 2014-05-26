@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure.DependencyResolution;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Schema;
-using TimeSheetMvc4WebApplication.ClassesDTO;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
+    /// <summary>
+    /// Реестр табелей
+    /// </summary>
     [Authorize]
     public class RegisterController : BaseController
     {
@@ -20,22 +18,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.Date = date ?? DateTime.Now;
             return View();
         }
-
-
-        //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-        //public ActionResult Index(int? month, int? year)
-        //{
-        //    //ViewBag.Date = new DateTime(year,month,1);
-        //    try
-        //    {
-        //        ViewBag.Date = new DateTime(year.Value, month.Value, 1);
-        //    }
-        //    catch (SystemException)
-        //    {
-        //        ViewBag.Date = DateTime.Now;
-        //    }
-        //    return View();
-        //}
 
         //==========    Json    =============================================
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
