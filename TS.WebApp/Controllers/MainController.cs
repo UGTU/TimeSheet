@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Models;
 using TimeSheetMvc4WebApplication.Models.Main;
+using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -59,7 +60,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
             ApproveViewBagInit(idTimeSheet);
-            if (!Client.CanApprove(idTimeSheet, GetUsername())) return View();
+            if (!Client.CanApprove(idTimeSheet, GetCurrentApprover())) return View();
             var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);
             var timeSheet = Client.GetTimeSheet(idTimeSheet, true);
             var currentApprover =
@@ -87,7 +88,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
                 ModelState.AddModelError("Причина не указана",
                     "В случае отклонения табеля необходимо прокомментировать причину!");
             var idTimeSheet = timeSheetAprovalModel.IdTimeSheet;
-            if (ModelState.IsValid && Client.CanApprove(idTimeSheet,GetUsername()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetUsername(),
+            if (ModelState.IsValid && Client.CanApprove(idTimeSheet, GetCurrentApprover()) && Client.TimeSheetApproval(timeSheetAprovalModel.IdTimeSheet, GetCurrentApprover(),
                 (bool)timeSheetAprovalModel.ApprovalResult, timeSheetAprovalModel.Comment, appDominUrl))
             {
                 return RedirectToAction("TimeSheetApprovalNew", new {idTimeSheet = timeSheetAprovalModel.IdTimeSheet});
@@ -136,7 +137,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public JsonResult GetEmployeesForTimeSheet(int idDep, int year, int month)
         {
             var date = new DateTime(year, month, 1);
-            var empls = Client.GetEmployeesForTimeSheet(idDep, GetUsername(), date, date.AddMonths(1).AddDays(-1));
+            var empls = Client.GetEmployeesForTimeSheet(idDep, GetCurrentApprover(), date, date.AddMonths(1).AddDays(-1));
             foreach (var empl in empls)
             {
                 empl.WorkShedule.WorkSheduleName = empl.WorkShedule.WorkSheduleName.Split(' ').First();
@@ -156,7 +157,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var dateStart = new DateTime(year, month, 1);
             var dateEnd = dateStart.AddMonths(1).AddDays(-1);
             employees = employees != null ? employees.Where(w => w.IsCheked).ToArray() : null;
-            var message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetUsername(), employees);
+            var message = Client.CreateTimeSheet(idDep, dateStart, dateEnd, GetCurrentApprover(), employees);
             return Json(message, JsonRequestBehavior.AllowGet);
         }
 

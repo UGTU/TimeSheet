@@ -15,7 +15,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         protected readonly TimeSheetService Client = new TimeSheetService();
         protected readonly DataProvider Provider = new DataProvider();
 
-        public string GetUsername()
+        private string GetUsername()
         {
             //return "atipunin@ugtu.net"; //получить логин пользователя
             //return "grahimova@ugtu.net"; //получить логин пользователя
@@ -40,7 +40,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         protected DtoTimeSheet GetTimeSheetOrThrowException(int id)
         {
             var timeSheet = Client.GetTimeSheet(id);
-            //var timeSheet = Provider.GetTimeSheet(id);
             if (timeSheet == null)
                 throw new HttpException(404, "Запрашиваемый табель не обнаружен, табель №" + id);
             return timeSheet;
@@ -49,9 +48,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
         protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
+            //SessionHelper.Approver = Client.GetCurrentApproverByLogin(GetUsername(),
+            //    System.Web.HttpContext.Current.User.Identity.IsAuthenticated &&
+            //    System.Web.HttpContext.Current.User.IsInRole("TabelAdmin"));
+
             SessionHelper.Approver = Client.GetCurrentApproverByLogin(GetUsername(),
-                System.Web.HttpContext.Current.User.Identity.IsAuthenticated &&
-                System.Web.HttpContext.Current.User.IsInRole("TabelAdmin"));
+                User.Identity.IsAuthenticated && User.IsInRole("TabelAdmin"));
+
+            //SessionHelper.Approver = Client.GetCurrentApproverByLogin("reb00ter@ugtu.net",true);
         }
     }
 }

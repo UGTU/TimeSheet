@@ -149,7 +149,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         //    return factStaffs;
         //}
 
-        public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee, bool isAdmin=false)
+        public static DtoApprover DtoApprover(KadrDataContext db, int idEmployee, bool isAdmin = false)
         {
             //var loadOptions = new DataLoadOptions();
             //loadOptions.LoadWith((Approver a) => a.ApproverType);
@@ -157,8 +157,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             //loadOptions.LoadWith((Dep d) => d.Department);
             //db.LoadOptions = loadOptions;
 
-
-            const int administratorApproveNumber = 10;
             var approver = db.Employee.Where(w => w.id == idEmployee).
                 Select(s => new DtoApprover
                 {
@@ -169,7 +167,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     Patronymic = s.Otch,
                     ItabN = s.itab_n,
                     SexBit = s.SexBit,
-                    DtoApproverDepartments = db.Approver.Where(w => w.idEmployee == idEmployee && w.DateEnd==null).
+                    DtoApproverDepartments = db.Approver.Where(w => w.idEmployee == idEmployee && w.DateEnd == null).
                         //Select(sa => DtoApproverDepartment(db,sa.id)).ToArray()
                         Select(sa => DtoApproverDepartment(sa)).ToArray()
                 }).FirstOrDefault();
@@ -177,22 +175,13 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             {
                 if (approver.DtoApproverDepartments != null)
                 {
-                    //approver.IsAdministrator = approver.DtoApproverDepartments.
-                    //                               FirstOrDefault(w => w.ApproveNumber == administratorApproveNumber) != null;
-                    //if (approver.IsAdministrator)
                     if (isAdmin)
                     {
                         var idApprover =
                             db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
-                        //approver.DtoApproverDepartments =
-                        //    db.Approver.Where(w => w.ApproverType.ApproveNumber == 1 & w.DateEnd==null).Select(
-                        //        s => DtoApproverDepartment(db,s.id)).ToArray();
-                        //approver.DtoApproverDepartments =
-                        //    db.Approver.Where(w =>w.ApproverType.ApproveNumber == 1 && w.DateEnd == null && w.Dep.HasTimeSheet).Select(
-                        //        s => DtoApproverDepartment(s)).ToArray();
-                        approver.DtoApproverDepartments = db.Approver.Where(w => w.DateEnd == null && w.Dep.HasTimeSheet).DistinctBy(d=>d.idDepartment)
-                                .Select(DtoApproverDepartment).OrderBy(o=>o.DepartmentSmallName).ToArray();
-                        
+                        approver.DtoApproverDepartments = db.Approver.Where(w => w.DateEnd == null && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
+                                .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
+
                         foreach (var department in approver.DtoApproverDepartments)
                         {
                             department.ApproveNumber = 10;
@@ -202,10 +191,38 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     }
                     return approver;
                 }
-                //approver.IsAdministrator = false;
                 return null;
             }
             return null;
+        }
+
+        //Для пользователей на AD
+        public static DtoApprover DtoApproverIfNullAndAdmin(KadrDataContext db, bool isAdmin = false)
+        {
+            //var loadOptions = new DataLoadOptions();
+            //loadOptions.LoadWith((Approver a) => a.ApproverType);
+            //loadOptions.LoadWith((Approver a) => a.Dep);
+            //loadOptions.LoadWith((Dep d) => d.Department);
+            //db.LoadOptions = loadOptions;
+
+            var approver = new DtoApprover();
+            if (isAdmin)
+            {
+
+                //var idApprover =
+                //    db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
+                approver.DtoApproverDepartments =
+                    db.Approver.Where(w => w.DateEnd == null && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
+                        .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
+
+                foreach (var department in approver.DtoApproverDepartments)
+                {
+                    department.ApproveNumber = 10;
+                    department.ApproveTypeName = "Администратор";
+                    //department.IdApprover = idApprover;
+                }
+            }
+            return approver;
         }
 
         public static DtoDepartment DtoDepartment(KadrDataContext db, int idDepartment)
