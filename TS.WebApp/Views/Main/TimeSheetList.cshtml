@@ -168,8 +168,8 @@
 </div>
 
 <div style="margin-bottom: 20px;">
-    @if (pageCount > 1 && filter == TimeSheetFilter.All)
-    {
+    @*@if (pageCount > 1 && filter == TimeSheetFilter.All)
+    {*@
         @Helpers.Pagenator(url, currentPage, pageCount)
         <div class="btn-group navbar-form form-inline" style="margin: 0; padding: 0">
             @if (filter == TimeSheetFilter.Edit)
@@ -209,7 +209,7 @@
                 </a>
             }
         </div>
-    }
+    @*}*@
 </div>
 
 <script>
