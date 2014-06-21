@@ -23,12 +23,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult GetData(DateTime date)
         {
+            date = new DateTime(date.Year,date.Month,1);
             var departments = GetCurrentApprover().GetApproverDepartments().ToArray();
             var timesheets = Client.GetTimeSheetListForDepartments(departments.Select(s=>s.IdDepartment).ToArray(),date, 0, true);
             var dyn = new
             {
                 deps = departments,
-                ts = timesheets
+                ts = timesheets,
+                dateString = String.Format("Табеля за {0} г!",date.ToString("MMMM yyyy")) 
             };
             return Json(dyn, JsonRequestBehavior.AllowGet);
         }

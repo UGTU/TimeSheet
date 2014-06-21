@@ -44,6 +44,7 @@ namespace TimeSheetMvc4WebApplication
                         ));
 
             BundleTable.Bundles.Add(new ScriptBundle("~/Content/datejs").Include("~/Scripts/datejs/date.js", "~/Scripts/datejs/ru-RU.js"));
+            BundleTable.Bundles.Add(new ScriptBundle("~/Content/moment-with-langs").Include("~/Scripts/moment-with-langs.min.js"));
             BundleTable.Bundles.Add(new ScriptBundle("~/Content/angularjs").Include("~/Scripts/angular.js"));
             BundleTable.Bundles.Add(new StyleBundle("~/Content/timeSheet").Include("~/Content/themes/TimeSheetCSS.css", "~/Content/themes/TimeSheetApprovalCSS.css"));
 

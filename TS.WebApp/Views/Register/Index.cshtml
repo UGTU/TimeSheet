@@ -3,7 +3,7 @@
     DateTime currentDate = ViewBag.Date;
 }
 <div class="row" ng-app ng-controller="TimeSheetRecords">
-    <table class="table table-hover">
+    <table class="table table-hover" ng-show="departments">
         <thead>
             <tr>
                 <th style="width: 400px;">Структурное подразделение</th>
@@ -25,7 +25,6 @@
                                 <span ng-show="ts.ApproveStep==3" class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
                             </a>
                             <span ng-show="ts.IsFake==true" class="label label-default" data-toggle="tooltip" title="Предоставлен бумажный вриант табеля"><span class="glyphicon glyphicon-file"></span> Бумажный табель</span>
-
                         </li>
                         <li ng-show="ts.IsFake==true" ng-repeat="ts in dep.timesheets" class="pull-right" style="padding-left: 5px;padding-right: 5px;">
                             <a ng-show="ts.IsFake==true" @*href="{{dellFakeTs(dep)}}"*@ class="btn btn-default btn-xs " style=" text-decoration: none; width: 130px;" data-toggle="tooltip" title="Добавить отмету о наличии бумажного табеля" ng-click="dellFakeTs(ts)">
@@ -71,7 +70,7 @@
         };
 
         $scope.timeSheetViewLink = function (ts) {
-            var link = '@Url.Action("TimeSheetShow", "Main", new { idTimeSheet = "replace" })';
+            var link = '@Url.Action("Show", "TsShow", new { id = "replace" })';
             return link.replace('replace', ts.IdTimeSheet);
         };
 

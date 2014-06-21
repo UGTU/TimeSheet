@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.ClassesDTO;
 using TimeSheetMvc4WebApplication.Models;
 using TimeSheetMvc4WebApplication.Models.Main;
-using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -18,10 +17,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult Index(int page=1)
         {
+            //throw new HttpException(401, "Попытка несанкционированного доступа");
             var approver = GetCurrentApprover();
             ViewBag.approver = approver;
             if (approver==null || approver.GetApproverDepartments() == null || !approver.GetApproverDepartments().Any())
-                throw new HttpException(401, "Попытка несанкционированного доступа");
+                throw new HttpException(401, "В информационной системе табельного учёта за вами не закреплено ни одного структурного подразделения");
             if (approver.GetApproverDepartments().Count() <= 1)
                 return RedirectToAction("TimeSheetList",
                     new {id = approver.GetApproverDepartments().First().IdDepartment});
@@ -49,7 +49,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public ActionResult TimeSheetEdit(int id)
         {
-            if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage;
+            if (!Client.IsAnyTimeSheetWithThisId(id)) return RedirectToNotFoundPage("Запрашиваемый табель не обнаружен. Табель №"+id);
             return View(id);
         }
 
@@ -58,7 +58,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [HttpGet]
         public ActionResult TimeSheetApprovalNew(int idTimeSheet)
         {
-            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage;
+            if (!Client.IsAnyTimeSheetWithThisId(idTimeSheet)) return RedirectToNotFoundPage("Запрашиваемый табель не обнаружен. Табель №"+idTimeSheet);
             ApproveViewBagInit(idTimeSheet);
             if (!Client.CanApprove(idTimeSheet, GetCurrentApprover())) return View();
             var approveStep = Client.GetTimeSheetApproveStep(idTimeSheet);

@@ -9,8 +9,8 @@ namespace TimeSheetMvc4WebApplication.Controllers
     [Authorize]
     public class BaseController : Controller
     {
-        protected static string ErrorPage = "~/Error";     
-        protected static string NotFoundPage = "~/NotFoundPage";
+        //protected static string ErrorPage = "~/Error";
+        //protected static string NotFoundPage = "~/NotFoundPage";
         protected static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         protected readonly TimeSheetService Client = new TimeSheetService();
         protected readonly DataProvider Provider = new DataProvider();
@@ -27,9 +27,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return System.Web.HttpContext.Current.User.Identity.Name;
         }
 
-        public RedirectResult RedirectToNotFoundPage
+        public RedirectResult RedirectToNotFoundPage(string error = "")
         {
-            get { return Redirect(NotFoundPage); }
+            if (error == string.Empty)
+                error = "Запрашиваемый ресурс не обнаружен";
+            throw new HttpException(404, error);
+            //get
+            //{
+            //    throw new HttpException(404, "Запрашиваемый ресурс не найден");
+            //    //return Redirect(NotFoundPage);
+            //}
         }
 
         public DtoApprover GetCurrentApprover()

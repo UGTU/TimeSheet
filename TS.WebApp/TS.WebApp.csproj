@@ -650,6 +650,7 @@
     <Compile Include="TimeSheetService.svc.cs">
       <DependentUpon>TimeSheetService.svc</DependentUpon>
     </Compile>
+    <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="SQL\query.sql" />
     <Content Include="Views\Main\TimeSheetList.cshtml" />
     <Content Include="Scripts\version.json" />
@@ -658,13 +659,13 @@
     <Content Include="Views\TSShow\PartialView\ApproverListPartialView.cshtml" />
     <Content Include="Views\TSShow\PartialView\PaperFooter.cshtml" />
     <Content Include="Views\TSShow\PartialView\PartialTimeSheetShow.cshtml" />
-    <Content Include="Views\TSShow\PartialView\TimeSheetApproveStatus.cshtml" />
     <Content Include="Views\TSShow\PartialView\TimeSheetEmployeePartialView.cshtml" />
     <Content Include="Views\TSShow\PartialView\TimeSheetHeader.cshtml" />
     <Content Include="Views\TSShow\PartialView\TimeSheetPaperPartialView.cshtml" />
     <Content Include="Views\TSShow\PartialView\TimeSheetPartialView.cshtml" />
     <Content Include="Views\Shared\ErrorPartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetApproveStatus.cshtml" />
+    <Content Include="Views\TSShow\PartialView\TimeSheetApproveStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />

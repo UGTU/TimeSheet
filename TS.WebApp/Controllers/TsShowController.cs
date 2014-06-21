@@ -16,16 +16,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         public PartialViewResult PartialShow(int id)
         {
-            //try
+            try
             {
                 var timeSheetModel = TimeSheetModelConstructor(id, false);
                 return PartialView("PartialView/PartialTimeSheetShow", timeSheetModel);
             }
-            //catch (System.Exception e)
-            //{
-            //    Logger.Error(e);
-            //    return PartialView("ErrorPartialView", "Во время отображения табеля возникли проблемы."+"<br/>"+e.Message);
-            //}
+            catch (System.Exception e)
+            {
+                Logger.Error(e);
+                return PartialView("ErrorPartialView", "Во время отображения табеля возникли проблемы." + "<br/><small>" + e.Message + "</small>");
+            }
         }
 
         [AllowAnonymous]
@@ -46,7 +46,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         private TimeSheetModel[] TimeSheetModelConstructor(int id, bool isForPrint)
         {
             const int firstPaperEmployeeCount = 5;
-            const int lastPaperEmployeeCount = 5;
+            const int lastPaperEmployeeCount = 6;
             const int paperEmployeeCount = 8;
             var timeSheet = GetTimeSheetOrThrowException(id);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, firstPaperEmployeeCount,

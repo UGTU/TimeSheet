@@ -17,17 +17,17 @@ namespace TimeSheetMvc4WebApplication
                 defaults: new { controller = "Admin", action = "EditLogin", id = UrlParameter.Optional }
             );
             
-            routes.MapRoute(
-                null,
-                url: "Error",
-                defaults: new { controller = "Error", action = "Error", id = UrlParameter.Optional }
-            );
+            //routes.MapRoute(
+            //    null,
+            //    url: "Error",
+            //    defaults: new { controller = "Error", action = "Error", id = UrlParameter.Optional }
+            //);
 
-            routes.MapRoute(
-                null,
-                url: "NotFoundPage",
-                defaults: new { controller = "Error", action = "NotFoundPage", id = UrlParameter.Optional }
-            );
+            //routes.MapRoute(
+            //    null,
+            //    url: "NotFoundPage",
+            //    defaults: new { controller = "Error", action = "NotFoundPage", id = UrlParameter.Optional }
+            //);
 
             //=======================================================
 

@@ -44,35 +44,74 @@ namespace TimeSheetMvc4WebApplication
             base.Dispose();
         }
 
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    var httpContext = ((MvcApplication)sender).Context;
+        //    var ex = Server.GetLastError(); 
+        //    logger.Error(ex);
+        //    const string redirectController = "Error";
+        //    var action = "Error";
+        //    if (ex is HttpException)
+        //    {
+        //        var httpEx = ex as HttpException;
+
+        //        switch (httpEx.GetHttpCode())
+        //        {
+        //            case 404:
+        //                action = "NotFoundPage";
+        //                break;
+
+        //            case 401:
+        //                action = "AccessDenied";
+        //                break;
+        //        }
+        //    }
+        //    httpContext.ClearError();
+        //    httpContext.Response.Clear();
+        //    httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
+        //    httpContext.Response.TrySkipIisCustomErrors = true;
+        //    //Response.Redirect(string.Format("~/{0}/{1}", redirectController, action));
+        //    Response.Redirect(string.Format("~/{0}", action));
+        //}
+
         protected void Application_Error(object sender, EventArgs e)
         {
-            var httpContext = ((MvcApplication)sender).Context;
-            var ex = Server.GetLastError(); 
+            var ctx = HttpContext.Current;
+            var ex = ctx.Server.GetLastError();
             logger.Error(ex);
-            const string redirectController = "Error";
-            var action = "Error";
-            if (ex is HttpException)
+            ctx.Response.Clear();
+            RequestContext rc = ((MvcHandler) ctx.CurrentHandler).RequestContext;
+            IController controller = new BaseController(); // Тут можно использовать любой контроллер, например тот что используется в качестве базового типа
+            var context = new ControllerContext(rc, (ControllerBase) controller);
+            var viewResult = new ViewResult();
+            var httpException = ex as HttpException;
+            if (httpException != null)
             {
-                var httpEx = ex as HttpException;
-
-                switch (httpEx.GetHttpCode())
+                switch (httpException.GetHttpCode())
                 {
-                    case 404:
-                        action = "NotFoundPage";
-                        break;
+                    //case 404:
+                    //    viewResult.ViewName = "Error404";
+                    //    break;
 
-                    case 401:
-                        action = "AccessDenied";
+                    //case 500:
+                    //    viewResult.ViewName = "Error500";
+                    //    break;
+
+                    default:
+                        viewResult.ViewName = "Error";
                         break;
                 }
             }
-            httpContext.ClearError();
-            httpContext.Response.Clear();
-            httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
-            httpContext.Response.TrySkipIisCustomErrors = true;
-            //Response.Redirect(string.Format("~/{0}/{1}", redirectController, action));
-            Response.Redirect(string.Format("~/{0}", action));
+            else
+            {
+                viewResult.ViewName = "Error";
+            }
+            viewResult.ViewData.Model = new HandleErrorInfo(ex, context.RouteData.GetRequiredString("controller"),context.RouteData.GetRequiredString("action"));
+            context.HttpContext.Response.ContentType = "text/html";
+            viewResult.ExecuteResult(context);
+            ctx.Server.ClearError();
         }
+        //- See more at: http://hystrix.com.ua/2011/01/23/error-handling-for-all-asp-net-mvc3-application/#sthash.Z3S2oNSA.dpuf
 
 
         protected void Application_End()

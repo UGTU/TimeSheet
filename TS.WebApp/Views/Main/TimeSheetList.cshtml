@@ -15,7 +15,6 @@
 @{
     var url = Url.Action("TimeSheetList", "Main", new { id = idDepartment, page = "pageReplace", filter = filter });
 }
-
 <div ng-app ng-controller="TimeSheetCreate">
     <div class="row">
         <div class="col-sm-6 col-md-9">
@@ -30,79 +29,91 @@
             </div>
         }
     </div>
-    @foreach (var year in years.OrderByDescending(o => o.Key))
+    @if (Model != null && Model.Any())
     {
-        <div class="row">
-            <div class="col-sm-6 col-md-12">
-                <h3>Табели за @year.Key год</h3>
-            </div>
-        </div>
-        <hr style="border-top: 2px solid #eeeeee;" />
+        foreach (var year in years.OrderByDescending(o => o.Key))
         {
-            var tss = year.OrderByDescending(o => o.DateBegin);
-            const int itemsInRow = 4;
-            var rowColl = Math.Ceiling((double)tss.Count() / (double)itemsInRow);
-            for (int i = 0; i < rowColl; i++)
+            <div class="row">
+                <div class="col-sm-6 col-md-12">
+                    <h3>Табели за @year.Key год</h3>
+                </div>
+            </div>
+            <hr style="border-top: 2px solid #eeeeee;" />
             {
-                var rowItems = tss.Skip(i * itemsInRow).Take(itemsInRow);
-                var span = Math.Floor(12 / (double)itemsInRow);
-                <div class="row">
-                    @foreach (var item in rowItems)
-                    {
-                        <div class="@string.Format(" col-sm-6 col-md-{0}", span)">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    @if (approver != null && (User.IsInRole("TabelAdmin") || approver.Allowed(idDepartment, ApproverType.Табельщик)) && item.ApproveStep == 0 && !item.IsFake)
-                                    {
-                                        <button type="button" data-toggle="tooltip" title="Удалить табель" class="close timeSheetDell" data-dismiss="modal" aria-hidden="true" data-idtimesheet="@item.IdTimeSheet" data-mounth="@item.DateBegin.ToString("MMMM")">&times;</button>
-                                    }
-                                    <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item)  @item.DateBegin.ToString("MMMM")</h3>
-                                </div>
-
-                                <div class="panel-body" style="padding: 0;">
-                                    @if (!item.IsFake)
-                                    {
-                                        <div class="centered" style="background-color: #f5f5f5">
-
-                                            <ul class="nav nav-justified">
-                                                @if (item.ApproveStep == 0)
-                                                {
+                var tss = year.OrderByDescending(o => o.DateBegin);
+                const int itemsInRow = 4;
+                var rowColl = Math.Ceiling((double)tss.Count() / (double)itemsInRow);
+                for (int i = 0; i < rowColl; i++)
+                {
+                    var rowItems = tss.Skip(i * itemsInRow).Take(itemsInRow);
+                    var span = Math.Floor(12 / (double)itemsInRow);
+                    <div class="row">
+                        @foreach (var item in rowItems)
+                        {
+                            <div class="@string.Format(" col-sm-6 col-md-{0}", span)">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        @if (approver != null && (User.IsInRole("TabelAdmin") || approver.Allowed(idDepartment, ApproverType.Табельщик)) && item.ApproveStep == 0 && !item.IsFake)
+                                        {
+                                            <button type="button" data-toggle="tooltip" title="Удалить табель" class="close timeSheetDell" data-dismiss="modal" aria-hidden="true" data-idtimesheet="@item.IdTimeSheet" data-mounth="@item.DateBegin.ToString("MMMM")">&times;</button>
+                                        }
+                                        <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item)  @item.DateBegin.ToString("MMMM")</h3>
+                                    </div>
+                                    <div class="panel-body" style="padding: 0;">
+                                        @if (!item.IsFake)
+                                        {
+                                            <div class="centered" style="background-color: #f5f5f5">
+                                                <ul class="nav nav-justified">
+                                                    @if (item.ApproveStep == 0)
+                                                    {
+                                                        <li>
+                                                            <a style="padding: 5px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("timesheetedit", "Main", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span></a>
+                                                        </li>
+                                                    }
                                                     <li>
-                                                        <a style="padding: 5px;" class="btn btn-link btn-sm" data-toggle="tooltip" title="Редактирование табеля" href="@Url.Action("timesheetedit", "Main" , new {id=item.IdTimeSheet})"><span class="glyphicon glyphicon-edit"></span></a>
+                                                        <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("Show", "TsShow", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
                                                     </li>
-                                                }
-                                                <li>
-                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Просмотр табеля" href="@Url.Action("Show", "TsShow" , new {id=item.IdTimeSheet})"><span class="glyphicon glyphicon-fullscreen"></span></a>
-                                                </li>
-                                                <li>
-                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("Pdf", "TsShow" , new {id=item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
-                                                </li>
-                                                <li>
-                                                    <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("timesheetapprovalnew", "Main" , new {idtimesheet=item.IdTimeSheet})"><span class="glyphicon glyphicon-retweet"></span></a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                        <div class="panel-body" style="padding-bottom: 5px">
-                                            <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>
-                                            <p>Человек в табеле: @item.EmployeesCount</p>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="panel-body" style="padding-bottom: 5px;">
-                                            <p>Предоставлен бумажный вариант табеля</p>
-                                        </div>
-                                    }
+                                                    <li>
+                                                        <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Печать табеля" target="_blank" href="@Url.Action("Pdf", "TsShow", new {id = item.IdTimeSheet})"><span class="glyphicon glyphicon-print"></span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a style="padding: 5px" class="btn btn-link btn-sm" data-toggle="tooltip" title="Согласование табеля" href="@Url.Action("timesheetapprovalnew", "Main", new {idtimesheet = item.IdTimeSheet})"><span class="glyphicon glyphicon-retweet"></span></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="panel-body" style="padding-bottom: 5px">
+                                                <p>Дата формирования: @item.DateComposition.ToShortDateString()</p>
+                                                <p>Человек в табеле: @item.EmployeesCount</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="panel-body" style="padding-bottom: 5px;">
+                                                <p>Предоставлен бумажный вариант табеля</p>
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+                }
             }
         }
     }
-
+    else
+    {
+        <div class="row" style="margin-top: 10%; height: 200px;">
+            @*<div class="col-sm-6 col-md-12">*@
+                <h1 class="text-center">
+                    <small>
+                        @(filter == TimeSheetFilter.All ? "Для этого структурного подразделения ещё не сформировано ни одного табеля" :
+                        "Для этого структурного подразделения отсутсвуют табеля соотвествующие выбранному фильтру")
+                    </small>
+                </h1>
+            @*</div>*@
+        </div>
+    }
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 800px;">
@@ -166,52 +177,50 @@
         </div>
     </div>
 </div>
-
 <div style="margin-bottom: 20px;">
-    @*@if (pageCount > 1 && filter == TimeSheetFilter.All)
-    {*@
-        @Helpers.Pagenator(url, currentPage, pageCount)
-        <div class="btn-group navbar-form form-inline" style="margin: 0; padding: 0">
-            @if (filter == TimeSheetFilter.Edit)
-            {
-                <a class="btn btn-default btn btn-default btn-danger active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                    <span class="glyphicon glyphicon-edit"></span>
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-default btn btn-default btn-danger" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Edit})">
-                    <span class="glyphicon glyphicon-edit"></span>
-                </a>
-            }
-            @if (filter == TimeSheetFilter.Approve)
-            {
-                <a class="btn btn-default btn-info active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                    <span class="glyphicon glyphicon-retweet"></span>
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-default btn-info" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approve})">
-                    <span class="glyphicon glyphicon-retweet"></span>
-                </a>
-            }
-            @if (filter == TimeSheetFilter.Approved)
-            {
-                <a class="btn btn-default btn-success active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
-                    <span class="glyphicon glyphicon-check"></span>
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-default btn-success" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approved})">
-                    <span class="glyphicon glyphicon-check"></span>
-                </a>
-            }
-        </div>
-    @*}*@
+    @if (pageCount > 1 & filter == TimeSheetFilter.All | filter != TimeSheetFilter.All)
+        {
+    @Helpers.Pagenator(url, currentPage, pageCount)
+    <div class="btn-group navbar-form form-inline" style="margin: 0; padding: 0">
+        @if (filter == TimeSheetFilter.Edit)
+        {
+            <a class="btn btn-default btn btn-default btn-danger active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-default btn btn-default btn-danger" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Edit})">
+                <span class="glyphicon glyphicon-edit"></span>
+            </a>
+        }
+        @if (filter == TimeSheetFilter.Approve)
+        {
+            <a class="btn btn-default btn-info active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                <span class="glyphicon glyphicon-retweet"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-default btn-info" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approve})">
+                <span class="glyphicon glyphicon-retweet"></span>
+            </a>
+        }
+        @if (filter == TimeSheetFilter.Approved)
+        {
+            <a class="btn btn-default btn-success active" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.All})">
+                <span class="glyphicon glyphicon-check"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-default btn-success" href="@Url.Action("timesheetlist", "Main", new {id = idDepartment, page = 1, filter = TimeSheetFilter.Approved})">
+                <span class="glyphicon glyphicon-check"></span>
+            </a>
+        }
+    </div>
+    }
 </div>
-
 <script>
     $('.btn').tooltip('hide');
     $('.close').tooltip('hide');
@@ -365,5 +374,3 @@
         $scope.initDates();
     }
 </script>
-
-
