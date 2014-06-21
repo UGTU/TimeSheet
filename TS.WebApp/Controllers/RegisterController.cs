@@ -19,6 +19,13 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        public ActionResult IndexNew(DateTime? date)
+        {
+            ViewBag.Date = date ?? DateTime.Now;
+            return View();
+        }
+
         //==========    Json    =============================================
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult GetData(DateTime date)
