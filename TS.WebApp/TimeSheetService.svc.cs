@@ -49,7 +49,7 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             {
                 return
-                    db.Department.Where(w => w.dateExit == null)
+                    db.Department.Where(w => w.dateExit == null | w.dateExit> DateTime.Now)
                         .Select(s => DtoClassConstructor.DtoDepartment(db, s.id))
                         .ToArray();
             }

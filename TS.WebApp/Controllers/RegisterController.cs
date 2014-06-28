@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using TimeSheetMvc4WebApplication.Models.Register;
+using WebGrease.Css.Extensions;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {
@@ -27,6 +29,25 @@ namespace TimeSheetMvc4WebApplication.Controllers
         }
 
         //==========    Json    =============================================
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        public JsonResult GetData1(int year, int mounth)
+        {
+            var date = new DateTime(year, mounth, 1);
+            var departments = GetCurrentApprover().GetApproverDepartments().Select(s=>new DepatrmentModel(s)).ToArray();
+            var timesheets = Client.GetTimeSheetListForDepartments(departments.Select(s => s.IdDepartment).ToArray(),date, 0, true);
+            foreach (var department in departments)
+            {
+                department.timesheets =
+                    timesheets.Where(w => w.Department.IdDepartment == department.IdDepartment).ToArray();
+            }
+            var dyn = new
+            {
+                deps = departments,
+                dateString = String.Format("Табеля за {0} г!", date.ToString("MMMM yyyy"))
+            };
+            return Json(dyn, JsonRequestBehavior.AllowGet);
+        }
+
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public JsonResult GetData(DateTime date)
         {

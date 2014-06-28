@@ -138,13 +138,18 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [Authorize(Roles = "ADtoKadr")]
         public JsonResult SaveEmployeeLogin(int idEmployee, string employeeLogin)
         {
-            var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
-            var result = new
+            if (employeeLogin.EndsWith("@ugtu.net") | string.IsNullOrEmpty(employeeLogin))
             {
-                result = employeeSaveResult,
-                idEmployee = idEmployee
-            };
-            return Json(result, JsonRequestBehavior.AllowGet);
+                var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+                var result = new
+                {
+                    result = employeeSaveResult,
+                    idEmployee = idEmployee
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new {result = false, message = "Логин не удовлетворяет требуемой маске."}, JsonRequestBehavior.AllowGet);
+            
         }
 
     }
