@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using TimeSheetMvc4WebApplication.Models.Register;
-using WebGrease.Css.Extensions;
 
 namespace TimeSheetMvc4WebApplication.Controllers
 {

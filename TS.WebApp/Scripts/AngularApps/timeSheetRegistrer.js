@@ -74,6 +74,7 @@ app.controller('PagesCtrl', function($rootScope, $scope, $routeParams, $route, $
         console.log(url);
         $http.get(url).success(function (data) {
             $scope.departments = data.deps;
+            $scope.dateString = data.dateString;
             //angular.forEach($scope.departments, function (dep) {
             //    var tsList = [];
             //    angular.forEach(data.ts, function (ts) {
