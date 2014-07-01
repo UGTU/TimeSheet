@@ -176,7 +176,7 @@ namespace TimeSheetMvc4WebApplication
 
 
 
-        public void CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
+        public DtoTimeSheet CreateFakeTimeSheet(int idDepartment, DateTime dateStart, DtoApprover approver)
         {
             using (var db = new KadrDataContext())
             {
@@ -195,6 +195,7 @@ namespace TimeSheetMvc4WebApplication
                 };
                 db.TimeSheet.InsertOnSubmit(ts);
                 db.SubmitChanges();
+                return DtoClassConstructor.DtoTimeSheet(db.TimeSheetView.Single(s => s.id == ts.id));
             }
         }
 

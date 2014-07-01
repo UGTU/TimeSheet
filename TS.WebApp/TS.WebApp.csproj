@@ -708,7 +708,7 @@
     <Content Include="Views\Shared\ErrorPartialView.cshtml" />
     <Content Include="Views\Main\PartialView\TimeSheetApproveStatus.cshtml" />
     <Content Include="Views\TSShow\PartialView\TimeSheetApproveStatus.cshtml" />
-    <Content Include="Views\Register\IndexNew.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
@@ -1047,7 +1047,7 @@
     <Content Include="Views\Admin\EditLogin.cshtml" />
     <Content Include="Views\Shared\TimeSheetFooter.cshtml" />
     <Content Include="Views\Shared\NoticeScript.cshtml" />
-    <Content Include="Views\Register\Index.cshtml" />
+    <None Include="Views\Register\Index.cshtml.bak" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
