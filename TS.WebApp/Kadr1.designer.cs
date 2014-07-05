@@ -105,7 +105,7 @@ namespace TimeSheetMvc4WebApplication
     #endregion
 		
 		public KadrDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrRealTestConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["HomeDbKadrConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

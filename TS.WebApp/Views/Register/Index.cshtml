@@ -50,7 +50,7 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("TabelAdmin"))
                     {
                         <li class="dropdown">
-                            <a href="#" id="approverName" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> @username <b class="caret"></b></a>
+                            <a href="" id="approverName" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> @username <b class="caret"></b></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="@Url.Action("ExceptionDay", "Admin")"><span class="glyphicon glyphicon-calendar"></span> Выходные дни и праздники</a></li>
                                 <li><a href="@Url.Action("DepartmentManagment","Admin")"><span class="glyphicon glyphicon-briefcase"></span> Структурные подразделения</a></li>
