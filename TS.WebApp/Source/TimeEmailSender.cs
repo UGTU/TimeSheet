@@ -46,15 +46,15 @@ namespace TimeSheetMvc4WebApplication.Source
             timeSheetAppLink.InnerHtml = "ИС \"Табель\"";
 
             var timeSheetShowLink = new TagBuilder("a");
-            timeSheetShowLink.Attributes.Add("href", _appDominUrl + string.Format("Main/TimeSheetShow?idTimeSheet={0}", idTimeSheet));
+            timeSheetShowLink.Attributes.Add("href", _appDominUrl + string.Format("TabelShow/{0}", idTimeSheet));
             timeSheetShowLink.InnerHtml = "просмотр табеля";
 
             var timeSheetPrintLink = new TagBuilder("a");
-            timeSheetPrintLink.Attributes.Add("href", _appDominUrl + string.Format("tabel/{0}", idTimeSheet));
+            timeSheetPrintLink.Attributes.Add("href", _appDominUrl + string.Format("TabelPdf/{0}", idTimeSheet));
             timeSheetPrintLink.InnerHtml = "печать табеля";
 
             var timeSheetApprovalLink = new TagBuilder("a");
-            timeSheetApprovalLink.Attributes.Add("href", _appDominUrl + string.Format("Main/TimeSheetApprovalNew?idTimeSheet={0}", idTimeSheet));
+            timeSheetApprovalLink.Attributes.Add("href", _appDominUrl + string.Format("Main/TimeSheetApprovalNew?idtimesheet={0}", idTimeSheet));
             timeSheetApprovalLink.InnerHtml = "согласование табеля";
 
             var stringBuilder = new StringBuilder();

@@ -10,7 +10,7 @@ namespace TimeSheetMvc4WebApplication.Source
         public static string Adapt(string username)
         {
             if (string.IsNullOrWhiteSpace(username)) return null;
-            if (username == "ALEXEY-HOME-PC\\Alexey") username = "atipunin@ugtu.net";
+            if (username == "ALEXEY_WIN_PC\\Алексей") username = "atipunin@ugtu.net";
             if (username.ToLower().StartsWith(@"ugtu\".ToLower()))
             {
                 username =
