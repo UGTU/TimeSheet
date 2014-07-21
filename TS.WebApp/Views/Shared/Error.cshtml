@@ -1,0 +1,47 @@
+﻿@*@{
+        ViewBag.Title = "Ошибка";
+        Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
+    }
+
+    <div class="alert alert-danger" style="margin-top: 100px;">
+        <h3>Произошла ошибка</h3>
+    </div>*@
+
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Ошибка, " + Model.Exception.Message;
+    var ex = Model.Exception as HttpException;
+}
+<br />
+<div @*class="alert alert-warning"*@>
+    <h3 style="color:#d9534f;">
+        <strong>
+            @(ex!=null?ex.GetHttpCode()+". " : "")
+
+            К сожалению, произошла ошибка при обработке запроса
+        </strong>
+    </h3>
+
+    <h3>@Model.Exception.Message</h3>
+
+    <div class="panel ">
+        <div class="panel-heading">
+            <h4 class="panel-title text-right">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    <span class="glyphicon glyphicon-align-justify"></span> Подробности об ошибке
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <div class="panel-body">
+                <span style="color:#d9534f; margin-left: 15px;margin-bottom: 10px;"><strong>@Model.Exception.Message</strong></span>
+                <pre style="margin: 0;padding: 0;border: none;background:inherit ;  color: #134D82; font-size: 11px;">@Model.Exception.StackTrace</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

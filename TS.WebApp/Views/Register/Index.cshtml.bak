@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "Реестр табелей";
+    DateTime currentDate = ViewBag.Date;
+}
+<div class="row" ng-app ng-controller="TimeSheetRecords">
+    <table class="table table-hover" ng-show="departments">
+        <thead>
+            <tr>
+                <th style="width: 400px;">Структурное подразделение</th>
+                <th>Табеля</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dep in departments|orderBy:'DepartmentSmallName'">
+                <td>
+                    <a href="{{departmentLink(dep)}}" style="text-decoration: none; font-weight: bold;"><span class="glyphicon glyphicon-briefcase"></span> {{dep.DepartmentSmallName}}</a>
+                </td>
+                <td>
+                    <ul style="margin-bottom: 0" class="list-inline">
+                        <li ng-if="dep.timesheets!=null" ng-repeat="ts in dep.timesheets" style="padding-left: 5px;padding-right: 5px;">
+                            <a ng-if="ts.IsFake==false" href="{{timeSheetViewLink(ts)}}" style=" text-decoration: none">
+                                <span ng-show="ts.ApproveStep==0" class="label label-danger" data-toggle="tooltip" title="Табель находится в процессе редактирования"><span class="glyphicon glyphicon-edit"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел.</span>
+                                <span ng-show="ts.ApproveStep==1" class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                                <span ng-show="ts.ApproveStep==2" class="label label-info" data-toggle="tooltip" title="Табель находиться в процессе согласования"><span class="glyphicon glyphicon-retweet"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                                <span ng-show="ts.ApproveStep==3" class="label label-success" data-toggle="tooltip" title="Табель успешно согласован"><span class="glyphicon glyphicon-check"></span> от {{jsonDateToDate(ts.DateComposition)}} на {{ts.EmployeesCount}} чел. </span>
+                            </a>
+                            <span ng-show="ts.IsFake==true" class="label label-default" data-toggle="tooltip" title="Предоставлен бумажный вриант табеля"><span class="glyphicon glyphicon-file"></span> Бумажный табель</span>
+                        </li>
+                        <li ng-show="ts.IsFake==true" ng-repeat="ts in dep.timesheets" class="pull-right" style="padding-left: 5px;padding-right: 5px;">
+                            <a ng-show="ts.IsFake==true" @*href="{{dellFakeTs(dep)}}"*@ class="btn btn-default btn-xs " style=" text-decoration: none; width: 130px;" data-toggle="tooltip" title="Добавить отмету о наличии бумажного табеля" ng-click="dellFakeTs(ts)">
+                                <span class="glyphicon glyphicon-minus"></span> Удалить отметку
+                            </a>
+                        </li>
+                        <li ng-if="dep.timesheets !== 'undefined' && dep.timesheets.length==0 " class="pull-right" style="padding-left: 5px;padding-right: 5px;">
+                            <a @*href="{{adFakeTs(dep)}}"*@ class="btn btn-default btn-xs" style=" text-decoration: none; width: 130px;" data-toggle="tooltip" title="Добавить отмету о наличии бумажного табеля" ng-click="adFakeTs(dep)">
+                                <span class="glyphicon glyphicon-plus"></span> Добавить отметку
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $.ajaxSetup({ cache: false });
+</script>
+<script>
+    function TimeSheetRecords($scope, $http) {
+        $http.defaults.headers.common['Cache-Control'] = 'no-cache';
+        
+        $scope.loadData = function () {
+            $http.get('@Url.Action("GetData", "Register", new { date = currentDate })').success(function (data) {
+                $scope.departments = data.deps;
+                angular.forEach($scope.departments, function (dep) {
+                    var tsList = [];
+                    angular.forEach(data.ts, function (ts) {
+                        if (dep.IdDepartment == ts.Department.IdDepartment)
+                            tsList.push(ts);
+                    });
+                    dep.timesheets = tsList;
+                });
+                console.log('data loaded');
+            });
+        };
+
+        $scope.jsonDateToDate = function (date) {
+            var myDate = new Date(date.match(/\d+/)[0] * 1);
+            return myDate.toString('dd.MM');
+        };
+
+        $scope.timeSheetViewLink = function (ts) {
+            var link = '@Url.Action("Show", "TsShow", new { id = "replace" })';
+            return link.replace('replace', ts.IdTimeSheet);
+        };
+
+        $scope.departmentLink = function (dep) {
+            var link = '@Url.Action("TimeSheetList", "Main", new { id = "replace" })';
+            return link.replace('replace', dep.IdDepartment);
+        };
+
+        $scope.adFakeTs = function (dep) {
+            var link = '@Html.Raw(Url.Action("AddFakeTimeSheet", "Register", new {idDep="replace", date = currentDate}))';
+            link = link.replace('replace', dep.IdDepartment);
+            $http.post(link).success(
+                function (result) {
+                    if (result.Result) {
+                        console.log('add fake ts succes');
+                        $scope.loadData();
+                    } else {
+                        console.log("Ошибка при созлании табеля");
+                    }
+                }
+            );
+        }
+
+        $scope.dellFakeTs = function (ts) {
+            var link = '@Html.Raw(Url.Action("DellFakeTimeSheet", "Register", new {id="replace"}))';
+            link = link.replace('replace', ts.IdTimeSheet);
+            console.log(link);
+            $http.post(link).success(
+                function (result) {
+                    if (result.Result) {
+                        console.log('dell fake ts succes');
+                        $scope.loadData();
+                    } else {
+                        console.log("Ошибка при удалении табеля");
+                    }
+                }
+            );
+        }
+
+        $scope.loadData();
+    }
+</script>
+<script>
+    @*$('#HeaderLiBox').append("<li id=\"111\">" +
+        "<div class=\"btn-group navbar-form form-inline\">" +
+        "<a class=\"btn btn-default active\" href=\"@Url.Action("Index","Register")\">" +
+        "<span class=\"glyphicon glyphicon-align-justify\"></span> Табеля" +
+        "</a>" +
+        "<a class=\"btn btn-default\" href=\"@Url.Action("Index","Main")\">" +
+        "<span class=\"glyphicon glyphicon-th-large\"></span> Подразделения" +
+        "</a>" +
+        "</div></li>");*@
+    $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Main")\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-th-large\"></span> Подразделения</a></li>");
+    $('#HeaderLiBox').append("<li id=\"111\" class=\"active\"><a href=\"@Url.Action("Index", "Register")\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-align-justify\"></span> Табеля</a></li>");
+    
+    $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(-1)})\" style=\"cursor:pointer;cursor:hand\" ><span class=\"glyphicon glyphicon-chevron-left\"></span></a></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><p class=\"navbar-text\">Табеля за @currentDate.ToString("MMMM yyyy").ToLower() г.</p></li>");
+    $('#HeaderLiBox').append("<li id=\"111\"><a href=\"@Url.Action("Index", "Register", new { date = currentDate.AddMonths(1)})\" style=\"cursor:pointer;cursor:hand\"><span class=\"glyphicon glyphicon-chevron-right\"></span></a></li>");
+</script>
+

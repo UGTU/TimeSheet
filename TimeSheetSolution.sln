@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6DD818
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetMvc4WebApplication", "TimeSheetMvc4WebApplication\TimeSheetMvc4WebApplication.csproj", "{65A8A19E-08E2-444E-97FF-842361841EDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS.WebApp", "TS.WebApp\TS.WebApp.csproj", "{65A8A19E-08E2-444E-97FF-842361841EDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheetMvc4WebApplication.Tests", "TimeSheetMvc4WebApplication.Tests\TimeSheetMvc4WebApplication.Tests.csproj", "{DD9D5094-34B5-4DF6-88C3-E342BBECFBC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TS.Tests", "TS.Tests\TS.Tests.csproj", "{DD9D5094-34B5-4DF6-88C3-E342BBECFBC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
