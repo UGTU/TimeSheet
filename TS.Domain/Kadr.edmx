@@ -1,0 +1,1807 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KadrModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CategorySmallName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderBy" Type="int" />
+          <Property Name="IsPPS" Type="bit" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="itab_n" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Otch" Type="varchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="BirthPlace" Type="varchar" MaxLength="200" />
+          <Property Name="SexBit" Type="bit" Nullable="false" />
+          <Property Name="idGrazd" Type="int" />
+          <Property Name="idSemPol" Type="int" />
+          <Property Name="SeverKoeff" Type="int" Nullable="false" />
+          <Property Name="RayonKoeff" Type="int" Nullable="false" />
+          <Property Name="GUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeSid" Type="varbinary" MaxLength="85" />
+          <Property Name="EmployeeLogin" Type="nvarchar" MaxLength="128" />
+          <Property Name="AllowBirthdate" Type="bit" Nullable="false" />
+          <Property Name="paspser" Type="varchar" MaxLength="255" />
+          <Property Name="paspnomer" Type="varchar" MaxLength="255" />
+          <Property Name="paspdate" Type="datetime" />
+          <Property Name="paspkem" Type="varchar" MaxLength="255" />
+          <Property Name="inn" Type="varchar" MaxLength="255" />
+          <Property Name="ssgps" Type="varchar" MaxLength="255" />
+          <Property Name="medpolis" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeName" Type="varchar" MaxLength="152" StoreGeneratedPattern="Computed" />
+          <Property Name="EmployeeSmallName" Type="varchar" MaxLength="55" StoreGeneratedPattern="Computed" />
+          <Property Name="idotpuskplanday" Type="int" />
+          <Property Name="otpostbaseday" Type="int" Nullable="false" />
+          <Property Name="otpostfndday" Type="int" Nullable="false" />
+          <Property Name="otpperiodworkdatebegin" Type="datetime" />
+          <Property Name="OtpReducedFareDateBegin" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="ManagerBit" Type="bit" Nullable="false" />
+          <Property Name="idGlobalPrikaz" Type="int" Nullable="false" />
+          <Property Name="idPKCategory" Type="int" Nullable="false" />
+          <Property Name="idCategory" Type="int" />
+          <Property Name="PostGUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="Comment" Type="varchar" MaxLength="150" />
+          <Property Name="PostCode" Type="varchar" MaxLength="20" />
+          <Property Name="idPostType" Type="int" />
+          <Property Name="PostShortName" Type="varchar" MaxLength="150" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="idCategoryVPO" Type="int" />
+          <Property Name="idCategoryZP" Type="int" />
+        </EntityType>
+        <EntityType Name="PostType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostTypeName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApperoveDepartment">
+          <Key>
+            <PropertyRef Name="idApprover" />
+            <PropertyRef Name="idDepartment" />
+          </Key>
+          <Property Name="idApprover" Type="int" Nullable="false" />
+          <Property Name="idDepartment" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Approver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateBegin" Type="datetime" Nullable="false" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="idApproverType" Type="int" Nullable="false" />
+          <Property Name="idDepartment" Type="int" Nullable="false" />
+          <Property Name="idEmployee" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApproverType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApproverTypeName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApproveNumber" Type="int" />
+        </EntityType>
+        <EntityType Name="DayStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DayStatusName" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="DayStatusFullName" Type="varchar" MaxLength="400" />
+          <Property Name="IsVisible" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeEvent">
+          <Key>
+            <PropertyRef Name="idEventSuperType" />
+          </Key>
+          <Property Name="idEventSuperType" Type="int" Nullable="false" />
+          <Property Name="idFactStaff" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventSuperType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idDayStatus" Type="int" Nullable="false" />
+          <Property Name="BeginDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="FirstEventDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Exception">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExceptionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateException" Type="date" Nullable="false" />
+          <Property Name="idDayStatus" Type="int" Nullable="false" />
+          <Property Name="idPrikaz" Type="int" Nullable="false" />
+          <Property Name="KolHourMPS" Type="real" Nullable="false" />
+          <Property Name="KolHourMNS" Type="real" Nullable="false" />
+          <Property Name="KolHourGPS" Type="real" Nullable="false" />
+          <Property Name="KolHourGNS" Type="real" Nullable="false" />
+          <Property Name="idWorkShedule" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RepeatRate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DaysRepeat" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeSheet">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idDepartment" Type="int" Nullable="false" />
+          <Property Name="idCreater" Type="int" Nullable="false" />
+          <Property Name="DateBeginPeriod" Type="date" Nullable="false" />
+          <Property Name="DateEndPeriod" Type="date" Nullable="false" />
+          <Property Name="DateComposition" Type="datetime" Nullable="false" />
+          <Property Name="idWF" Type="uniqueidentifier" />
+          <Property Name="ApproveStep" Type="int" />
+          <Property Name="IsFake" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeSheetApproval">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idApprover" Type="int" Nullable="false" />
+          <Property Name="idTimeSheet" Type="int" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime" Nullable="false" />
+          <Property Name="Result" Type="bit" Nullable="false" />
+          <Property Name="Comment" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="TimeSheetRecord">
+          <Key>
+            <PropertyRef Name="IdTimeSheetRecord" />
+          </Key>
+          <Property Name="RecordDate" Type="datetime" Nullable="false" />
+          <Property Name="JobTimeCount" Type="float" Nullable="false" />
+          <Property Name="idTimeSheet" Type="int" Nullable="false" />
+          <Property Name="idDayStatus" Type="int" Nullable="false" />
+          <Property Name="IsChecked" Type="bit" />
+          <Property Name="idFactStaffHistory" Type="int" Nullable="false" />
+          <Property Name="IdTimeSheetRecord" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkShedule">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameShedule" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.ShemaTabel.WorkSheduleEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="WorkSheduleEvent">
+          <Key>
+            <PropertyRef Name="idEventSuperType" />
+            <PropertyRef Name="KolHourMPS" />
+            <PropertyRef Name="KolHourMNS" />
+            <PropertyRef Name="KolHourGPS" />
+            <PropertyRef Name="KolHourGNS" />
+            <PropertyRef Name="idShedule" />
+            <PropertyRef Name="idRepeatRate" />
+          </Key>
+          <Property Name="idEventSuperType" Type="int" Nullable="false" />
+          <Property Name="KolHourMPS" Type="float" Nullable="false" />
+          <Property Name="KolHourMNS" Type="float" Nullable="false" />
+          <Property Name="KolHourGPS" Type="float" Nullable="false" />
+          <Property Name="KolHourGNS" Type="float" Nullable="false" />
+          <Property Name="idShedule" Type="int" Nullable="false" />
+          <Property Name="idRepeatRate" Type="int" Nullable="false" />
+          <Property Name="Data_Agr" Type="date" />
+          <Property Name="IsPPS" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.dbo.Department' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="DepartmentName" />
+            <PropertyRef Name="DepartmentSmallName" />
+            <PropertyRef Name="dateCreate" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="DepartmentGUID" />
+            <PropertyRef Name="HasTimeSheet" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DepartmentSmallName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="idDepartmentType" Type="int" />
+          <Property Name="idManagerDepartment" Type="int" />
+          <Property Name="KadrID" Type="int" />
+          <Property Name="dateCreate" Type="datetime" Nullable="false" />
+          <Property Name="dateExit" Type="datetime" />
+          <Property Name="idManagerPlanStaff" Type="int" />
+          <Property Name="idBeginPrikaz" Type="int" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="int" />
+          <Property Name="SeverKoeff" Type="int" />
+          <Property Name="RayonKoeff" Type="int" />
+          <Property Name="DepartmentGUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="idFundingCenter" Type="int" />
+          <Property Name="DepartmentIndex" Type="varchar" MaxLength="10" />
+          <Property Name="DepPhoneNumber" Type="varchar" MaxLength="20" />
+          <Property Name="HasTimeSheet" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.dbo.EmployeeView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.dbo.FactStaffCurrent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FactStaffCurrent">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+            <PropertyRef Name="idEmployee" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="idTypeWork" />
+            <PropertyRef Name="IsReplacement" />
+            <PropertyRef Name="idFactStaffHistory" />
+            <PropertyRef Name="DateBeginR" />
+            <PropertyRef Name="CalcStaffCount" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="StaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="HourCount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="HourSalary" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="idPlanStaff" Type="int" />
+          <Property Name="idEmployee" Type="int" Nullable="false" />
+          <Property Name="idBeginPrikaz" Type="int" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="int" />
+          <Property Name="idTypeWork" Type="int" Nullable="false" />
+          <Property Name="DateBegin" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="IsReplacement" Type="bit" Nullable="false" />
+          <Property Name="idFactStaffHistory" Type="int" Nullable="false" />
+          <Property Name="DateEndR" Type="datetime" />
+          <Property Name="DateBeginR" Type="datetime" Nullable="false" />
+          <Property Name="idLaborContaraktMain" Type="int" />
+          <Property Name="idLaborContraktHistory" Type="int" />
+          <Property Name="idFundingDepartment" Type="int" />
+          <Property Name="idFundingCenter" Type="int" />
+          <Property Name="idSalaryKoeff" Type="int" />
+          <Property Name="HourStaffCount" Type="numeric" Precision="6" Scale="4" />
+          <Property Name="CalcStaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.dbo.FactStaffCurrentMainData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FactStaffCurrentMainData">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="StaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="idPlanStaff" Type="int" />
+          <Property Name="idEmployee" Type="int" />
+          <Property Name="FactStaffFullName" Type="varchar" MaxLength="380" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.ShemaTabel.FactStaffWithHistory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FactStaffWithHistory">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+            <PropertyRef Name="idEmployee" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="idTypeWork" />
+            <PropertyRef Name="DateBegin" />
+            <PropertyRef Name="IsReplacement" />
+            <PropertyRef Name="idFactStaffHistory" />
+            <PropertyRef Name="CalcStaffCount" />
+            <PropertyRef Name="IdWorkShedule" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="StaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="HourCount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="HourSalary" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="idPlanStaff" Type="int" />
+          <Property Name="idEmployee" Type="int" Nullable="false" />
+          <Property Name="idBeginPrikaz" Type="int" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="int" />
+          <Property Name="idTypeWork" Type="int" Nullable="false" />
+          <Property Name="DateBegin" Type="datetime" Nullable="false" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="IsReplacement" Type="bit" Nullable="false" />
+          <Property Name="idFactStaffHistory" Type="int" Nullable="false" />
+          <Property Name="IDShedule" Type="int" />
+          <Property Name="idSalaryKoeff" Type="int" />
+          <Property Name="idlaborcontrakt" Type="int" />
+          <Property Name="idreason" Type="int" />
+          <Property Name="HourStaffCount" Type="numeric" Precision="6" Scale="4" />
+          <Property Name="CalcStaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="IdWorkShedule" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TimeSheetView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="idDepartment" />
+            <PropertyRef Name="idCreater" />
+            <PropertyRef Name="DateBeginPeriod" />
+            <PropertyRef Name="DateEndPeriod" />
+            <PropertyRef Name="DateComposition" />
+            <PropertyRef Name="IsFake" />
+            <PropertyRef Name="ApproveStep" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idDepartment" Type="int" Nullable="false" />
+          <Property Name="idCreater" Type="int" Nullable="false" />
+          <Property Name="DateBeginPeriod" Type="date" Nullable="false" />
+          <Property Name="DateEndPeriod" Type="date" Nullable="false" />
+          <Property Name="DateComposition" Type="datetime" Nullable="false" />
+          <Property Name="IsFake" Type="bit" Nullable="false" />
+          <Property Name="EmployeeCount" Type="int" />
+          <Property Name="ApproveStep" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="ApproverTypeApproverForeign">
+          <End Role="ApproverType" Type="Self.ApproverType" Multiplicity="1" />
+          <End Role="Approver" Type="Self.Approver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApproverType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Approver">
+              <PropertyRef Name="idApproverType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EmployeeEventSuperTypeEventForeign">
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="1" />
+          <End Role="EmployeeEvent" Type="Self.EmployeeEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EventSuperType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="EmployeeEvent">
+              <PropertyRef Name="idEventSuperType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EventSuperTypeDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="EventSuperType">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExceptionDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="Exception" Type="Self.Exception" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Exception">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExceptionWorkSheduleForeign">
+          <End Role="WorkShedule" Type="Self.WorkShedule" Multiplicity="1" />
+          <End Role="Exception" Type="Self.Exception" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkShedule">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Exception">
+              <PropertyRef Name="idWorkShedule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproverEmployee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approver" Type="Self.Approver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Approver">
+              <PropertyRef Name="idEmployee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_PostType">
+          <End Role="PostType" Type="Self.PostType" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idPostType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TimeSheetApproval_Approver">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="TimeSheetApproval" Type="Self.TimeSheetApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetApproval">
+              <PropertyRef Name="idApprover" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TimeSheetApproval_TimeSheet">
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="1" />
+          <End Role="TimeSheetApproval" Type="Self.TimeSheetApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeSheet">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetApproval">
+              <PropertyRef Name="idTimeSheet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TabelApproverForeign">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheet">
+              <PropertyRef Name="idCreater" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="thisApproverFK">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="ApperoveDepartment" Type="Self.ApperoveDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ApperoveDepartment">
+              <PropertyRef Name="idApprover" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TimeSheetRecordTimeSheetForeign">
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="1" />
+          <End Role="TimeSheetRecord" Type="Self.TimeSheetRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeSheet">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetRecord">
+              <PropertyRef Name="idTimeSheet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventRepeatRateForeign">
+          <End Role="RepeatRate" Type="Self.RepeatRate" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepeatRate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idRepeatRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventSheduleForeign">
+          <End Role="WorkShedule" Type="Self.WorkShedule" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkShedule">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idShedule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventSuperTypeEventForeign">
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventSuperType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idEventSuperType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ZapisTabelDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="TimeSheetRecord" Type="Self.TimeSheetRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetRecord">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddEmployeeLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ShemaTabel">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="login" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="TimeSheetRecordInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ShemaTabel">
+          <Parameter Name="ValidXMLInput" Type="xml" Mode="In" />
+        </Function>
+        <EntityContainer Name="KadrModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostType" EntityType="Self.PostType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApperoveDepartment" EntityType="Self.ApperoveDepartment" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="Approver" EntityType="Self.Approver" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="ApproverType" EntityType="Self.ApproverType" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="DayStatus" EntityType="Self.DayStatus" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="EmployeeEvent" EntityType="Self.EmployeeEvent" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="EventSuperType" EntityType="Self.EventSuperType" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="Exception" EntityType="Self.Exception" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="RepeatRate" EntityType="Self.RepeatRate" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="TimeSheet" EntityType="Self.TimeSheet" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="TimeSheetApproval" EntityType="Self.TimeSheetApproval" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="TimeSheetRecord" EntityType="Self.TimeSheetRecord" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="WorkShedule" EntityType="Self.WorkShedule" Schema="ShemaTabel" store:Type="Tables" />
+          <EntitySet Name="WorkSheduleEvent" EntityType="Self.WorkSheduleEvent" store:Type="Tables" store:Schema="ShemaTabel">
+            <DefiningQuery>SELECT 
+    [WorkSheduleEvent].[idEventSuperType] AS [idEventSuperType], 
+    [WorkSheduleEvent].[KolHourMPS] AS [KolHourMPS], 
+    [WorkSheduleEvent].[KolHourMNS] AS [KolHourMNS], 
+    [WorkSheduleEvent].[KolHourGPS] AS [KolHourGPS], 
+    [WorkSheduleEvent].[KolHourGNS] AS [KolHourGNS], 
+    [WorkSheduleEvent].[idShedule] AS [idShedule], 
+    [WorkSheduleEvent].[idRepeatRate] AS [idRepeatRate], 
+    [WorkSheduleEvent].[Data_Agr] AS [Data_Agr], 
+    [WorkSheduleEvent].[IsPPS] AS [IsPPS]
+    FROM [ShemaTabel].[WorkSheduleEvent] AS [WorkSheduleEvent]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Department" EntityType="Self.Department" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Department].[id] AS [id], 
+    [Department].[DepartmentName] AS [DepartmentName], 
+    [Department].[DepartmentSmallName] AS [DepartmentSmallName], 
+    [Department].[idDepartmentType] AS [idDepartmentType], 
+    [Department].[idManagerDepartment] AS [idManagerDepartment], 
+    [Department].[KadrID] AS [KadrID], 
+    [Department].[dateCreate] AS [dateCreate], 
+    [Department].[dateExit] AS [dateExit], 
+    [Department].[idManagerPlanStaff] AS [idManagerPlanStaff], 
+    [Department].[idBeginPrikaz] AS [idBeginPrikaz], 
+    [Department].[idEndPrikaz] AS [idEndPrikaz], 
+    [Department].[SeverKoeff] AS [SeverKoeff], 
+    [Department].[RayonKoeff] AS [RayonKoeff], 
+    [Department].[DepartmentGUID] AS [DepartmentGUID], 
+    [Department].[idFundingCenter] AS [idFundingCenter], 
+    [Department].[DepartmentIndex] AS [DepartmentIndex], 
+    [Department].[DepPhoneNumber] AS [DepPhoneNumber], 
+    [Department].[HasTimeSheet] AS [HasTimeSheet]
+    FROM [dbo].[Department] AS [Department]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FactStaffCurrent" EntityType="Self.FactStaffCurrent" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FactStaffCurrent].[id] AS [id], 
+    [FactStaffCurrent].[StaffCount] AS [StaffCount], 
+    [FactStaffCurrent].[HourCount] AS [HourCount], 
+    [FactStaffCurrent].[HourSalary] AS [HourSalary], 
+    [FactStaffCurrent].[idPlanStaff] AS [idPlanStaff], 
+    [FactStaffCurrent].[idEmployee] AS [idEmployee], 
+    [FactStaffCurrent].[idBeginPrikaz] AS [idBeginPrikaz], 
+    [FactStaffCurrent].[idEndPrikaz] AS [idEndPrikaz], 
+    [FactStaffCurrent].[idTypeWork] AS [idTypeWork], 
+    [FactStaffCurrent].[DateBegin] AS [DateBegin], 
+    [FactStaffCurrent].[DateEnd] AS [DateEnd], 
+    [FactStaffCurrent].[IsReplacement] AS [IsReplacement], 
+    [FactStaffCurrent].[idFactStaffHistory] AS [idFactStaffHistory], 
+    [FactStaffCurrent].[DateEndR] AS [DateEndR], 
+    [FactStaffCurrent].[DateBeginR] AS [DateBeginR], 
+    [FactStaffCurrent].[idLaborContaraktMain] AS [idLaborContaraktMain], 
+    [FactStaffCurrent].[idLaborContraktHistory] AS [idLaborContraktHistory], 
+    [FactStaffCurrent].[idFundingDepartment] AS [idFundingDepartment], 
+    [FactStaffCurrent].[idFundingCenter] AS [idFundingCenter], 
+    [FactStaffCurrent].[idSalaryKoeff] AS [idSalaryKoeff], 
+    [FactStaffCurrent].[HourStaffCount] AS [HourStaffCount], 
+    [FactStaffCurrent].[CalcStaffCount] AS [CalcStaffCount], 
+    [FactStaffCurrent].[PhoneNumber] AS [PhoneNumber]
+    FROM [dbo].[FactStaffCurrent] AS [FactStaffCurrent]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FactStaffCurrentMainData" EntityType="Self.FactStaffCurrentMainData" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FactStaffCurrentMainData].[id] AS [id], 
+    [FactStaffCurrentMainData].[StaffCount] AS [StaffCount], 
+    [FactStaffCurrentMainData].[idPlanStaff] AS [idPlanStaff], 
+    [FactStaffCurrentMainData].[idEmployee] AS [idEmployee], 
+    [FactStaffCurrentMainData].[FactStaffFullName] AS [FactStaffFullName]
+    FROM [dbo].[FactStaffCurrentMainData] AS [FactStaffCurrentMainData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FactStaffWithHistory" EntityType="Self.FactStaffWithHistory" store:Type="Views" store:Schema="ShemaTabel">
+            <DefiningQuery>SELECT 
+    [FactStaffWithHistory].[id] AS [id], 
+    [FactStaffWithHistory].[StaffCount] AS [StaffCount], 
+    [FactStaffWithHistory].[HourCount] AS [HourCount], 
+    [FactStaffWithHistory].[HourSalary] AS [HourSalary], 
+    [FactStaffWithHistory].[idPlanStaff] AS [idPlanStaff], 
+    [FactStaffWithHistory].[idEmployee] AS [idEmployee], 
+    [FactStaffWithHistory].[idBeginPrikaz] AS [idBeginPrikaz], 
+    [FactStaffWithHistory].[idEndPrikaz] AS [idEndPrikaz], 
+    [FactStaffWithHistory].[idTypeWork] AS [idTypeWork], 
+    [FactStaffWithHistory].[DateBegin] AS [DateBegin], 
+    [FactStaffWithHistory].[DateEnd] AS [DateEnd], 
+    [FactStaffWithHistory].[IsReplacement] AS [IsReplacement], 
+    [FactStaffWithHistory].[idFactStaffHistory] AS [idFactStaffHistory], 
+    [FactStaffWithHistory].[IDShedule] AS [IDShedule], 
+    [FactStaffWithHistory].[idSalaryKoeff] AS [idSalaryKoeff], 
+    [FactStaffWithHistory].[idlaborcontrakt] AS [idlaborcontrakt], 
+    [FactStaffWithHistory].[idreason] AS [idreason], 
+    [FactStaffWithHistory].[HourStaffCount] AS [HourStaffCount], 
+    [FactStaffWithHistory].[CalcStaffCount] AS [CalcStaffCount], 
+    [FactStaffWithHistory].[IdWorkShedule] AS [IdWorkShedule]
+    FROM [ShemaTabel].[FactStaffWithHistory] AS [FactStaffWithHistory]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TimeSheetView" EntityType="Self.TimeSheetView" store:Type="Views" store:Schema="ShemaTabel">
+            <DefiningQuery>SELECT 
+    [TimeSheetView].[id] AS [id], 
+    [TimeSheetView].[idDepartment] AS [idDepartment], 
+    [TimeSheetView].[idCreater] AS [idCreater], 
+    [TimeSheetView].[DateBeginPeriod] AS [DateBeginPeriod], 
+    [TimeSheetView].[DateEndPeriod] AS [DateEndPeriod], 
+    [TimeSheetView].[DateComposition] AS [DateComposition], 
+    [TimeSheetView].[IsFake] AS [IsFake], 
+    [TimeSheetView].[EmployeeCount] AS [EmployeeCount], 
+    [TimeSheetView].[ApproveStep] AS [ApproveStep]
+    FROM [ShemaTabel].[TimeSheetView] AS [TimeSheetView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="ApproverTypeApproverForeign" Association="Self.ApproverTypeApproverForeign">
+            <End Role="ApproverType" EntitySet="ApproverType" />
+            <End Role="Approver" EntitySet="Approver" />
+          </AssociationSet>
+          <AssociationSet Name="EmployeeEventSuperTypeEventForeign" Association="Self.EmployeeEventSuperTypeEventForeign">
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+            <End Role="EmployeeEvent" EntitySet="EmployeeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="EventSuperTypeDayStatusForeign" Association="Self.EventSuperTypeDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+          </AssociationSet>
+          <AssociationSet Name="ExceptionDayStatusForeign" Association="Self.ExceptionDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="Exception" EntitySet="Exception" />
+          </AssociationSet>
+          <AssociationSet Name="ExceptionWorkSheduleForeign" Association="Self.ExceptionWorkSheduleForeign">
+            <End Role="WorkShedule" EntitySet="WorkShedule" />
+            <End Role="Exception" EntitySet="Exception" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproverEmployee" Association="Self.FK_ApproverEmployee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Approver" EntitySet="Approver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Category" Association="Self.FK_Post_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_PostType" Association="Self.FK_Post_PostType">
+            <End Role="PostType" EntitySet="PostType" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TimeSheetApproval_Approver" Association="Self.FK_TimeSheetApproval_Approver">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="TimeSheetApproval" EntitySet="TimeSheetApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TimeSheetApproval_TimeSheet" Association="Self.FK_TimeSheetApproval_TimeSheet">
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+            <End Role="TimeSheetApproval" EntitySet="TimeSheetApproval" />
+          </AssociationSet>
+          <AssociationSet Name="TabelApproverForeign" Association="Self.TabelApproverForeign">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+          </AssociationSet>
+          <AssociationSet Name="thisApproverFK" Association="Self.thisApproverFK">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="ApperoveDepartment" EntitySet="ApperoveDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="TimeSheetRecordTimeSheetForeign" Association="Self.TimeSheetRecordTimeSheetForeign">
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+            <End Role="TimeSheetRecord" EntitySet="TimeSheetRecord" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventRepeatRateForeign" Association="Self.WorkSheduleEventRepeatRateForeign">
+            <End Role="RepeatRate" EntitySet="RepeatRate" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventSheduleForeign" Association="Self.WorkSheduleEventSheduleForeign">
+            <End Role="WorkShedule" EntitySet="WorkShedule" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventSuperTypeEventForeign" Association="Self.WorkSheduleEventSuperTypeEventForeign">
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <AssociationSet Name="ZapisTabelDayStatusForeign" Association="Self.ZapisTabelDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="TimeSheetRecord" EntitySet="TimeSheetRecord" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KadrModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CategorySmallName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderBy" Type="Int32" />
+          <Property Name="IsPPS" Type="Boolean" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Post_Category" FromRole="Category" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itab_n" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Otch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="BirthPlace" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SexBit" Type="Boolean" Nullable="false" />
+          <Property Name="idGrazd" Type="Int32" />
+          <Property Name="idSemPol" Type="Int32" />
+          <Property Name="SeverKoeff" Type="Int32" Nullable="false" />
+          <Property Name="RayonKoeff" Type="Int32" Nullable="false" />
+          <Property Name="GUID" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeSid" Type="Binary" MaxLength="85" FixedLength="false" />
+          <Property Name="EmployeeLogin" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AllowBirthdate" Type="Boolean" Nullable="false" />
+          <Property Name="paspser" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="paspnomer" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="paspdate" Type="DateTime" Precision="3" />
+          <Property Name="paspkem" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="inn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ssgps" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="medpolis" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="152" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="EmployeeSmallName" Type="String" MaxLength="55" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="idotpuskplanday" Type="Int32" />
+          <Property Name="otpostbaseday" Type="Int32" Nullable="false" />
+          <Property Name="otpostfndday" Type="Int32" Nullable="false" />
+          <Property Name="otpperiodworkdatebegin" Type="DateTime" Precision="3" />
+          <Property Name="OtpReducedFareDateBegin" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Approver" Relationship="Self.FK_ApproverEmployee" FromRole="Employee" ToRole="Approver" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ManagerBit" Type="Boolean" Nullable="false" />
+          <Property Name="idGlobalPrikaz" Type="Int32" Nullable="false" />
+          <Property Name="idPKCategory" Type="Int32" Nullable="false" />
+          <Property Name="idCategory" Type="Int32" />
+          <Property Name="PostGUID" Type="Guid" Nullable="false" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="Comment" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="idPostType" Type="Int32" />
+          <Property Name="PostShortName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="idCategoryVPO" Type="Int32" />
+          <Property Name="idCategoryZP" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Post_Category" FromRole="Post" ToRole="Category" />
+          <NavigationProperty Name="PostType" Relationship="Self.FK_Post_PostType" FromRole="Post" ToRole="PostType" />
+        </EntityType>
+        <EntityType Name="PostType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Post_PostType" FromRole="PostType" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="ApperoveDepartment">
+          <Key>
+            <PropertyRef Name="idApprover" />
+            <PropertyRef Name="idDepartment" />
+          </Key>
+          <Property Name="idApprover" Type="Int32" Nullable="false" />
+          <Property Name="idDepartment" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Approver" Relationship="Self.thisApproverFK" FromRole="ApperoveDepartment" ToRole="Approver" />
+        </EntityType>
+        <EntityType Name="Approver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="idApproverType" Type="Int32" Nullable="false" />
+          <Property Name="idDepartment" Type="Int32" Nullable="false" />
+          <Property Name="idEmployee" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_ApproverEmployee" FromRole="Approver" ToRole="Employee" />
+          <NavigationProperty Name="ApperoveDepartment" Relationship="Self.thisApproverFK" FromRole="Approver" ToRole="ApperoveDepartment" />
+          <NavigationProperty Name="ApproverType" Relationship="Self.ApproverTypeApproverForeign" FromRole="Approver" ToRole="ApproverType" />
+          <NavigationProperty Name="TimeSheetApproval" Relationship="Self.FK_TimeSheetApproval_Approver" FromRole="Approver" ToRole="TimeSheetApproval" />
+          <NavigationProperty Name="TimeSheet" Relationship="Self.TabelApproverForeign" FromRole="Approver" ToRole="TimeSheet" />
+        </EntityType>
+        <EntityType Name="ApproverType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApproverTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApproveNumber" Type="Int32" />
+          <NavigationProperty Name="Approver" Relationship="Self.ApproverTypeApproverForeign" FromRole="ApproverType" ToRole="Approver" />
+        </EntityType>
+        <EntityType Name="DayStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DayStatusName" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DayStatusFullName" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="IsVisible" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="EventSuperType" Relationship="Self.EventSuperTypeDayStatusForeign" FromRole="DayStatus" ToRole="EventSuperType" />
+          <NavigationProperty Name="Exception" Relationship="Self.ExceptionDayStatusForeign" FromRole="DayStatus" ToRole="Exception" />
+          <NavigationProperty Name="TimeSheetRecord" Relationship="Self.ZapisTabelDayStatusForeign" FromRole="DayStatus" ToRole="TimeSheetRecord" />
+        </EntityType>
+        <EntityType Name="EmployeeEvent">
+          <Key>
+            <PropertyRef Name="idEventSuperType" />
+          </Key>
+          <Property Name="idEventSuperType" Type="Int32" Nullable="false" />
+          <Property Name="idFactStaff" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EventSuperType" Relationship="Self.EmployeeEventSuperTypeEventForeign" FromRole="EmployeeEvent" ToRole="EventSuperType" />
+        </EntityType>
+        <EntityType Name="EventSuperType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idDayStatus" Type="Int32" Nullable="false" />
+          <Property Name="BeginDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="FirstEventDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DayStatus" Relationship="Self.EventSuperTypeDayStatusForeign" FromRole="EventSuperType" ToRole="DayStatus" />
+          <NavigationProperty Name="EmployeeEvent" Relationship="Self.EmployeeEventSuperTypeEventForeign" FromRole="EventSuperType" ToRole="EmployeeEvent" />
+          <NavigationProperty Name="WorkSheduleEvent" Relationship="Self.WorkSheduleEventSuperTypeEventForeign" FromRole="EventSuperType" ToRole="WorkSheduleEvent" />
+        </EntityType>
+        <EntityType Name="Exception">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateException" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="idDayStatus" Type="Int32" Nullable="false" />
+          <Property Name="idPrikaz" Type="Int32" Nullable="false" />
+          <Property Name="KolHourMPS" Type="Single" Nullable="false" />
+          <Property Name="KolHourMNS" Type="Single" Nullable="false" />
+          <Property Name="KolHourGPS" Type="Single" Nullable="false" />
+          <Property Name="KolHourGNS" Type="Single" Nullable="false" />
+          <Property Name="idWorkShedule" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DayStatus" Relationship="Self.ExceptionDayStatusForeign" FromRole="Exception" ToRole="DayStatus" />
+          <NavigationProperty Name="WorkShedule" Relationship="Self.ExceptionWorkSheduleForeign" FromRole="Exception" ToRole="WorkShedule" />
+        </EntityType>
+        <EntityType Name="RepeatRate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DaysRepeat" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WorkSheduleEvent" Relationship="Self.WorkSheduleEventRepeatRateForeign" FromRole="RepeatRate" ToRole="WorkSheduleEvent" />
+        </EntityType>
+        <EntityType Name="TimeSheet">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idDepartment" Type="Int32" Nullable="false" />
+          <Property Name="idCreater" Type="Int32" Nullable="false" />
+          <Property Name="DateBeginPeriod" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateEndPeriod" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateComposition" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idWF" Type="Guid" />
+          <Property Name="ApproveStep" Type="Int32" />
+          <Property Name="IsFake" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Approver" Relationship="Self.TabelApproverForeign" FromRole="TimeSheet" ToRole="Approver" />
+          <NavigationProperty Name="TimeSheetApproval" Relationship="Self.FK_TimeSheetApproval_TimeSheet" FromRole="TimeSheet" ToRole="TimeSheetApproval" />
+          <NavigationProperty Name="TimeSheetRecord" Relationship="Self.TimeSheetRecordTimeSheetForeign" FromRole="TimeSheet" ToRole="TimeSheetRecord" />
+        </EntityType>
+        <EntityType Name="TimeSheetApproval">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idApprover" Type="Int32" Nullable="false" />
+          <Property Name="idTimeSheet" Type="Int32" Nullable="false" />
+          <Property Name="ApprovalDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Result" Type="Boolean" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Approver" Relationship="Self.FK_TimeSheetApproval_Approver" FromRole="TimeSheetApproval" ToRole="Approver" />
+          <NavigationProperty Name="TimeSheet" Relationship="Self.FK_TimeSheetApproval_TimeSheet" FromRole="TimeSheetApproval" ToRole="TimeSheet" />
+        </EntityType>
+        <EntityType Name="TimeSheetRecord">
+          <Key>
+            <PropertyRef Name="IdTimeSheetRecord" />
+          </Key>
+          <Property Name="RecordDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="JobTimeCount" Type="Double" Nullable="false" />
+          <Property Name="idTimeSheet" Type="Int32" Nullable="false" />
+          <Property Name="idDayStatus" Type="Int32" Nullable="false" />
+          <Property Name="IsChecked" Type="Boolean" />
+          <Property Name="idFactStaffHistory" Type="Int32" Nullable="false" />
+          <Property Name="IdTimeSheetRecord" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="DayStatus" Relationship="Self.ZapisTabelDayStatusForeign" FromRole="TimeSheetRecord" ToRole="DayStatus" />
+          <NavigationProperty Name="TimeSheet" Relationship="Self.TimeSheetRecordTimeSheetForeign" FromRole="TimeSheetRecord" ToRole="TimeSheet" />
+        </EntityType>
+        <EntityType Name="WorkShedule">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameShedule" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Exception" Relationship="Self.ExceptionWorkSheduleForeign" FromRole="WorkShedule" ToRole="Exception" />
+          <NavigationProperty Name="WorkSheduleEvent" Relationship="Self.WorkSheduleEventSheduleForeign" FromRole="WorkShedule" ToRole="WorkSheduleEvent" />
+        </EntityType>
+        <EntityType Name="WorkSheduleEvent">
+          <Key>
+            <PropertyRef Name="idEventSuperType" />
+            <PropertyRef Name="KolHourMPS" />
+            <PropertyRef Name="KolHourMNS" />
+            <PropertyRef Name="KolHourGPS" />
+            <PropertyRef Name="KolHourGNS" />
+            <PropertyRef Name="idShedule" />
+            <PropertyRef Name="idRepeatRate" />
+          </Key>
+          <Property Name="idEventSuperType" Type="Int32" Nullable="false" />
+          <Property Name="KolHourMPS" Type="Double" Nullable="false" />
+          <Property Name="KolHourMNS" Type="Double" Nullable="false" />
+          <Property Name="KolHourGPS" Type="Double" Nullable="false" />
+          <Property Name="KolHourGNS" Type="Double" Nullable="false" />
+          <Property Name="idShedule" Type="Int32" Nullable="false" />
+          <Property Name="idRepeatRate" Type="Int32" Nullable="false" />
+          <Property Name="Data_Agr" Type="DateTime" Precision="0" />
+          <Property Name="IsPPS" Type="Boolean" />
+          <NavigationProperty Name="EventSuperType" Relationship="Self.WorkSheduleEventSuperTypeEventForeign" FromRole="WorkSheduleEvent" ToRole="EventSuperType" />
+          <NavigationProperty Name="RepeatRate" Relationship="Self.WorkSheduleEventRepeatRateForeign" FromRole="WorkSheduleEvent" ToRole="RepeatRate" />
+          <NavigationProperty Name="WorkShedule" Relationship="Self.WorkSheduleEventSheduleForeign" FromRole="WorkSheduleEvent" ToRole="WorkShedule" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="DepartmentName" />
+            <PropertyRef Name="DepartmentSmallName" />
+            <PropertyRef Name="dateCreate" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="DepartmentGUID" />
+            <PropertyRef Name="HasTimeSheet" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentSmallName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idDepartmentType" Type="Int32" />
+          <Property Name="idManagerDepartment" Type="Int32" />
+          <Property Name="KadrID" Type="Int32" />
+          <Property Name="dateCreate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dateExit" Type="DateTime" Precision="3" />
+          <Property Name="idManagerPlanStaff" Type="Int32" />
+          <Property Name="idBeginPrikaz" Type="Int32" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="Int32" />
+          <Property Name="SeverKoeff" Type="Int32" />
+          <Property Name="RayonKoeff" Type="Int32" />
+          <Property Name="DepartmentGUID" Type="Guid" Nullable="false" />
+          <Property Name="idFundingCenter" Type="Int32" />
+          <Property Name="DepartmentIndex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DepPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="HasTimeSheet" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactStaffCurrent">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+            <PropertyRef Name="idEmployee" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="idTypeWork" />
+            <PropertyRef Name="IsReplacement" />
+            <PropertyRef Name="idFactStaffHistory" />
+            <PropertyRef Name="DateBeginR" />
+            <PropertyRef Name="CalcStaffCount" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="StaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="HourCount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="HourSalary" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="idPlanStaff" Type="Int32" />
+          <Property Name="idEmployee" Type="Int32" Nullable="false" />
+          <Property Name="idBeginPrikaz" Type="Int32" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="Int32" />
+          <Property Name="idTypeWork" Type="Int32" Nullable="false" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="IsReplacement" Type="Boolean" Nullable="false" />
+          <Property Name="idFactStaffHistory" Type="Int32" Nullable="false" />
+          <Property Name="DateEndR" Type="DateTime" Precision="3" />
+          <Property Name="DateBeginR" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idLaborContaraktMain" Type="Int32" />
+          <Property Name="idLaborContraktHistory" Type="Int32" />
+          <Property Name="idFundingDepartment" Type="Int32" />
+          <Property Name="idFundingCenter" Type="Int32" />
+          <Property Name="idSalaryKoeff" Type="Int32" />
+          <Property Name="HourStaffCount" Type="Decimal" Precision="6" Scale="4" />
+          <Property Name="CalcStaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="FactStaffCurrentMainData">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="StaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="idPlanStaff" Type="Int32" />
+          <Property Name="idEmployee" Type="Int32" />
+          <Property Name="FactStaffFullName" Type="String" MaxLength="380" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="FactStaffWithHistory">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="StaffCount" />
+            <PropertyRef Name="idEmployee" />
+            <PropertyRef Name="idBeginPrikaz" />
+            <PropertyRef Name="idTypeWork" />
+            <PropertyRef Name="DateBegin" />
+            <PropertyRef Name="IsReplacement" />
+            <PropertyRef Name="idFactStaffHistory" />
+            <PropertyRef Name="CalcStaffCount" />
+            <PropertyRef Name="IdWorkShedule" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="StaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="HourCount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="HourSalary" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="idPlanStaff" Type="Int32" />
+          <Property Name="idEmployee" Type="Int32" Nullable="false" />
+          <Property Name="idBeginPrikaz" Type="Int32" Nullable="false" />
+          <Property Name="idEndPrikaz" Type="Int32" />
+          <Property Name="idTypeWork" Type="Int32" Nullable="false" />
+          <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="IsReplacement" Type="Boolean" Nullable="false" />
+          <Property Name="idFactStaffHistory" Type="Int32" Nullable="false" />
+          <Property Name="IDShedule" Type="Int32" />
+          <Property Name="idSalaryKoeff" Type="Int32" />
+          <Property Name="idlaborcontrakt" Type="Int32" />
+          <Property Name="idreason" Type="Int32" />
+          <Property Name="HourStaffCount" Type="Decimal" Precision="6" Scale="4" />
+          <Property Name="CalcStaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
+          <Property Name="IdWorkShedule" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeSheetView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="idDepartment" />
+            <PropertyRef Name="idCreater" />
+            <PropertyRef Name="DateBeginPeriod" />
+            <PropertyRef Name="DateEndPeriod" />
+            <PropertyRef Name="DateComposition" />
+            <PropertyRef Name="IsFake" />
+            <PropertyRef Name="ApproveStep" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idDepartment" Type="Int32" Nullable="false" />
+          <Property Name="idCreater" Type="Int32" Nullable="false" />
+          <Property Name="DateBeginPeriod" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateEndPeriod" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateComposition" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsFake" Type="Boolean" Nullable="false" />
+          <Property Name="EmployeeCount" Type="Int32" />
+          <Property Name="ApproveStep" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Post_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApproverEmployee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Approver" Type="Self.Approver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Approver">
+              <PropertyRef Name="idEmployee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_PostType">
+          <End Role="PostType" Type="Self.PostType" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idPostType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="thisApproverFK">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="ApperoveDepartment" Type="Self.ApperoveDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ApperoveDepartment">
+              <PropertyRef Name="idApprover" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApproverTypeApproverForeign">
+          <End Role="ApproverType" Type="Self.ApproverType" Multiplicity="1" />
+          <End Role="Approver" Type="Self.Approver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApproverType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Approver">
+              <PropertyRef Name="idApproverType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TimeSheetApproval_Approver">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="TimeSheetApproval" Type="Self.TimeSheetApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetApproval">
+              <PropertyRef Name="idApprover" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TabelApproverForeign">
+          <End Role="Approver" Type="Self.Approver" Multiplicity="1" />
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Approver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheet">
+              <PropertyRef Name="idCreater" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EventSuperTypeDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="EventSuperType">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExceptionDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="Exception" Type="Self.Exception" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Exception">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ZapisTabelDayStatusForeign">
+          <End Role="DayStatus" Type="Self.DayStatus" Multiplicity="1" />
+          <End Role="TimeSheetRecord" Type="Self.TimeSheetRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetRecord">
+              <PropertyRef Name="idDayStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EmployeeEventSuperTypeEventForeign">
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="1" />
+          <End Role="EmployeeEvent" Type="Self.EmployeeEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EventSuperType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="EmployeeEvent">
+              <PropertyRef Name="idEventSuperType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventSuperTypeEventForeign">
+          <End Role="EventSuperType" Type="Self.EventSuperType" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventSuperType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idEventSuperType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExceptionWorkSheduleForeign">
+          <End Role="WorkShedule" Type="Self.WorkShedule" Multiplicity="1" />
+          <End Role="Exception" Type="Self.Exception" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkShedule">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Exception">
+              <PropertyRef Name="idWorkShedule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventRepeatRateForeign">
+          <End Role="RepeatRate" Type="Self.RepeatRate" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RepeatRate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idRepeatRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TimeSheetApproval_TimeSheet">
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="1" />
+          <End Role="TimeSheetApproval" Type="Self.TimeSheetApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeSheet">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetApproval">
+              <PropertyRef Name="idTimeSheet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TimeSheetRecordTimeSheetForeign">
+          <End Role="TimeSheet" Type="Self.TimeSheet" Multiplicity="1" />
+          <End Role="TimeSheetRecord" Type="Self.TimeSheetRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeSheet">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TimeSheetRecord">
+              <PropertyRef Name="idTimeSheet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WorkSheduleEventSheduleForeign">
+          <End Role="WorkShedule" Type="Self.WorkShedule" Multiplicity="1" />
+          <End Role="WorkSheduleEvent" Type="Self.WorkSheduleEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkShedule">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WorkSheduleEvent">
+              <PropertyRef Name="idShedule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KadrEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="Post" EntityType="Self.Post" />
+          <EntitySet Name="PostType" EntityType="Self.PostType" />
+          <EntitySet Name="ApperoveDepartment" EntityType="Self.ApperoveDepartment" />
+          <EntitySet Name="Approver" EntityType="Self.Approver" />
+          <EntitySet Name="ApproverType" EntityType="Self.ApproverType" />
+          <EntitySet Name="DayStatus" EntityType="Self.DayStatus" />
+          <EntitySet Name="EmployeeEvent" EntityType="Self.EmployeeEvent" />
+          <EntitySet Name="EventSuperType" EntityType="Self.EventSuperType" />
+          <EntitySet Name="Exception" EntityType="Self.Exception" />
+          <EntitySet Name="RepeatRate" EntityType="Self.RepeatRate" />
+          <EntitySet Name="TimeSheet" EntityType="Self.TimeSheet" />
+          <EntitySet Name="TimeSheetApproval" EntityType="Self.TimeSheetApproval" />
+          <EntitySet Name="TimeSheetRecord" EntityType="Self.TimeSheetRecord" />
+          <EntitySet Name="WorkShedule" EntityType="Self.WorkShedule" />
+          <EntitySet Name="WorkSheduleEvent" EntityType="Self.WorkSheduleEvent" />
+          <EntitySet Name="Department" EntityType="Self.Department" />
+          <EntitySet Name="FactStaffCurrent" EntityType="Self.FactStaffCurrent" />
+          <EntitySet Name="FactStaffCurrentMainData" EntityType="Self.FactStaffCurrentMainData" />
+          <EntitySet Name="FactStaffWithHistory" EntityType="Self.FactStaffWithHistory" />
+          <EntitySet Name="TimeSheetView" EntityType="Self.TimeSheetView" />
+          <AssociationSet Name="FK_Post_Category" Association="Self.FK_Post_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApproverEmployee" Association="Self.FK_ApproverEmployee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Approver" EntitySet="Approver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_PostType" Association="Self.FK_Post_PostType">
+            <End Role="PostType" EntitySet="PostType" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="thisApproverFK" Association="Self.thisApproverFK">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="ApperoveDepartment" EntitySet="ApperoveDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="ApproverTypeApproverForeign" Association="Self.ApproverTypeApproverForeign">
+            <End Role="ApproverType" EntitySet="ApproverType" />
+            <End Role="Approver" EntitySet="Approver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TimeSheetApproval_Approver" Association="Self.FK_TimeSheetApproval_Approver">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="TimeSheetApproval" EntitySet="TimeSheetApproval" />
+          </AssociationSet>
+          <AssociationSet Name="TabelApproverForeign" Association="Self.TabelApproverForeign">
+            <End Role="Approver" EntitySet="Approver" />
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+          </AssociationSet>
+          <AssociationSet Name="EventSuperTypeDayStatusForeign" Association="Self.EventSuperTypeDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+          </AssociationSet>
+          <AssociationSet Name="ExceptionDayStatusForeign" Association="Self.ExceptionDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="Exception" EntitySet="Exception" />
+          </AssociationSet>
+          <AssociationSet Name="ZapisTabelDayStatusForeign" Association="Self.ZapisTabelDayStatusForeign">
+            <End Role="DayStatus" EntitySet="DayStatus" />
+            <End Role="TimeSheetRecord" EntitySet="TimeSheetRecord" />
+          </AssociationSet>
+          <AssociationSet Name="EmployeeEventSuperTypeEventForeign" Association="Self.EmployeeEventSuperTypeEventForeign">
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+            <End Role="EmployeeEvent" EntitySet="EmployeeEvent" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventSuperTypeEventForeign" Association="Self.WorkSheduleEventSuperTypeEventForeign">
+            <End Role="EventSuperType" EntitySet="EventSuperType" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <AssociationSet Name="ExceptionWorkSheduleForeign" Association="Self.ExceptionWorkSheduleForeign">
+            <End Role="WorkShedule" EntitySet="WorkShedule" />
+            <End Role="Exception" EntitySet="Exception" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventRepeatRateForeign" Association="Self.WorkSheduleEventRepeatRateForeign">
+            <End Role="RepeatRate" EntitySet="RepeatRate" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TimeSheetApproval_TimeSheet" Association="Self.FK_TimeSheetApproval_TimeSheet">
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+            <End Role="TimeSheetApproval" EntitySet="TimeSheetApproval" />
+          </AssociationSet>
+          <AssociationSet Name="TimeSheetRecordTimeSheetForeign" Association="Self.TimeSheetRecordTimeSheetForeign">
+            <End Role="TimeSheet" EntitySet="TimeSheet" />
+            <End Role="TimeSheetRecord" EntitySet="TimeSheetRecord" />
+          </AssociationSet>
+          <AssociationSet Name="WorkSheduleEventSheduleForeign" Association="Self.WorkSheduleEventSheduleForeign">
+            <End Role="WorkShedule" EntitySet="WorkShedule" />
+            <End Role="WorkSheduleEvent" EntitySet="WorkSheduleEvent" />
+          </AssociationSet>
+          <FunctionImport Name="AddEmployeeLogin">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="login" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TimeSheetRecordInsert">
+            <Parameter Name="ValidXMLInput" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KadrModelStoreContainer" CdmEntityContainer="KadrEntities">
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="KadrModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategorySmallName" ColumnName="CategorySmallName" />
+                <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
+                <ScalarProperty Name="IsPPS" ColumnName="IsPPS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="KadrModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="itab_n" ColumnName="itab_n" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Otch" ColumnName="Otch" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
+                <ScalarProperty Name="SexBit" ColumnName="SexBit" />
+                <ScalarProperty Name="idGrazd" ColumnName="idGrazd" />
+                <ScalarProperty Name="idSemPol" ColumnName="idSemPol" />
+                <ScalarProperty Name="SeverKoeff" ColumnName="SeverKoeff" />
+                <ScalarProperty Name="RayonKoeff" ColumnName="RayonKoeff" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+                <ScalarProperty Name="EmployeeSid" ColumnName="EmployeeSid" />
+                <ScalarProperty Name="EmployeeLogin" ColumnName="EmployeeLogin" />
+                <ScalarProperty Name="AllowBirthdate" ColumnName="AllowBirthdate" />
+                <ScalarProperty Name="paspser" ColumnName="paspser" />
+                <ScalarProperty Name="paspnomer" ColumnName="paspnomer" />
+                <ScalarProperty Name="paspdate" ColumnName="paspdate" />
+                <ScalarProperty Name="paspkem" ColumnName="paspkem" />
+                <ScalarProperty Name="inn" ColumnName="inn" />
+                <ScalarProperty Name="ssgps" ColumnName="ssgps" />
+                <ScalarProperty Name="medpolis" ColumnName="medpolis" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSmallName" ColumnName="EmployeeSmallName" />
+                <ScalarProperty Name="idotpuskplanday" ColumnName="idotpuskplanday" />
+                <ScalarProperty Name="otpostbaseday" ColumnName="otpostbaseday" />
+                <ScalarProperty Name="otpostfndday" ColumnName="otpostfndday" />
+                <ScalarProperty Name="otpperiodworkdatebegin" ColumnName="otpperiodworkdatebegin" />
+                <ScalarProperty Name="OtpReducedFareDateBegin" ColumnName="OtpReducedFareDateBegin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Post">
+            <EntityTypeMapping TypeName="KadrModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="ManagerBit" ColumnName="ManagerBit" />
+                <ScalarProperty Name="idGlobalPrikaz" ColumnName="idGlobalPrikaz" />
+                <ScalarProperty Name="idPKCategory" ColumnName="idPKCategory" />
+                <ScalarProperty Name="idCategory" ColumnName="idCategory" />
+                <ScalarProperty Name="PostGUID" ColumnName="PostGUID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="idPostType" ColumnName="idPostType" />
+                <ScalarProperty Name="PostShortName" ColumnName="PostShortName" />
+                <ScalarProperty Name="idCategoryVPO" ColumnName="idCategoryVPO" />
+                <ScalarProperty Name="idCategoryZP" ColumnName="idCategoryZP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostType">
+            <EntityTypeMapping TypeName="KadrModel.PostType">
+              <MappingFragment StoreEntitySet="PostType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="PostTypeName" ColumnName="PostTypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApperoveDepartment">
+            <EntityTypeMapping TypeName="KadrModel.ApperoveDepartment">
+              <MappingFragment StoreEntitySet="ApperoveDepartment">
+                <ScalarProperty Name="idApprover" ColumnName="idApprover" />
+                <ScalarProperty Name="idDepartment" ColumnName="idDepartment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Approver">
+            <EntityTypeMapping TypeName="KadrModel.Approver">
+              <MappingFragment StoreEntitySet="Approver">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="idApproverType" ColumnName="idApproverType" />
+                <ScalarProperty Name="idDepartment" ColumnName="idDepartment" />
+                <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApproverType">
+            <EntityTypeMapping TypeName="KadrModel.ApproverType">
+              <MappingFragment StoreEntitySet="ApproverType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ApproverTypeName" ColumnName="ApproverTypeName" />
+                <ScalarProperty Name="ApproveNumber" ColumnName="ApproveNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayStatus">
+            <EntityTypeMapping TypeName="KadrModel.DayStatus">
+              <MappingFragment StoreEntitySet="DayStatus">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DayStatusName" ColumnName="DayStatusName" />
+                <ScalarProperty Name="DayStatusFullName" ColumnName="DayStatusFullName" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeEvent">
+            <EntityTypeMapping TypeName="KadrModel.EmployeeEvent">
+              <MappingFragment StoreEntitySet="EmployeeEvent">
+                <ScalarProperty Name="idEventSuperType" ColumnName="idEventSuperType" />
+                <ScalarProperty Name="idFactStaff" ColumnName="idFactStaff" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventSuperType">
+            <EntityTypeMapping TypeName="KadrModel.EventSuperType">
+              <MappingFragment StoreEntitySet="EventSuperType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idDayStatus" ColumnName="idDayStatus" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="FirstEventDate" ColumnName="FirstEventDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Exception">
+            <EntityTypeMapping TypeName="KadrModel.Exception">
+              <MappingFragment StoreEntitySet="Exception">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ExceptionName" ColumnName="ExceptionName" />
+                <ScalarProperty Name="DateException" ColumnName="DateException" />
+                <ScalarProperty Name="idDayStatus" ColumnName="idDayStatus" />
+                <ScalarProperty Name="idPrikaz" ColumnName="idPrikaz" />
+                <ScalarProperty Name="KolHourMPS" ColumnName="KolHourMPS" />
+                <ScalarProperty Name="KolHourMNS" ColumnName="KolHourMNS" />
+                <ScalarProperty Name="KolHourGPS" ColumnName="KolHourGPS" />
+                <ScalarProperty Name="KolHourGNS" ColumnName="KolHourGNS" />
+                <ScalarProperty Name="idWorkShedule" ColumnName="idWorkShedule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RepeatRate">
+            <EntityTypeMapping TypeName="KadrModel.RepeatRate">
+              <MappingFragment StoreEntitySet="RepeatRate">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DaysRepeat" ColumnName="DaysRepeat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeSheet">
+            <EntityTypeMapping TypeName="KadrModel.TimeSheet">
+              <MappingFragment StoreEntitySet="TimeSheet">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idDepartment" ColumnName="idDepartment" />
+                <ScalarProperty Name="idCreater" ColumnName="idCreater" />
+                <ScalarProperty Name="DateBeginPeriod" ColumnName="DateBeginPeriod" />
+                <ScalarProperty Name="DateEndPeriod" ColumnName="DateEndPeriod" />
+                <ScalarProperty Name="DateComposition" ColumnName="DateComposition" />
+                <ScalarProperty Name="idWF" ColumnName="idWF" />
+                <ScalarProperty Name="ApproveStep" ColumnName="ApproveStep" />
+                <ScalarProperty Name="IsFake" ColumnName="IsFake" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeSheetApproval">
+            <EntityTypeMapping TypeName="KadrModel.TimeSheetApproval">
+              <MappingFragment StoreEntitySet="TimeSheetApproval">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idApprover" ColumnName="idApprover" />
+                <ScalarProperty Name="idTimeSheet" ColumnName="idTimeSheet" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeSheetRecord">
+            <EntityTypeMapping TypeName="KadrModel.TimeSheetRecord">
+              <MappingFragment StoreEntitySet="TimeSheetRecord">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="JobTimeCount" ColumnName="JobTimeCount" />
+                <ScalarProperty Name="idTimeSheet" ColumnName="idTimeSheet" />
+                <ScalarProperty Name="idDayStatus" ColumnName="idDayStatus" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+                <ScalarProperty Name="idFactStaffHistory" ColumnName="idFactStaffHistory" />
+                <ScalarProperty Name="IdTimeSheetRecord" ColumnName="IdTimeSheetRecord" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkShedule">
+            <EntityTypeMapping TypeName="KadrModel.WorkShedule">
+              <MappingFragment StoreEntitySet="WorkShedule">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="NameShedule" ColumnName="NameShedule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkSheduleEvent">
+            <EntityTypeMapping TypeName="KadrModel.WorkSheduleEvent">
+              <MappingFragment StoreEntitySet="WorkSheduleEvent">
+                <ScalarProperty Name="idEventSuperType" ColumnName="idEventSuperType" />
+                <ScalarProperty Name="KolHourMPS" ColumnName="KolHourMPS" />
+                <ScalarProperty Name="KolHourMNS" ColumnName="KolHourMNS" />
+                <ScalarProperty Name="KolHourGPS" ColumnName="KolHourGPS" />
+                <ScalarProperty Name="KolHourGNS" ColumnName="KolHourGNS" />
+                <ScalarProperty Name="idShedule" ColumnName="idShedule" />
+                <ScalarProperty Name="idRepeatRate" ColumnName="idRepeatRate" />
+                <ScalarProperty Name="Data_Agr" ColumnName="Data_Agr" />
+                <ScalarProperty Name="IsPPS" ColumnName="IsPPS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Department">
+            <EntityTypeMapping TypeName="KadrModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentSmallName" ColumnName="DepartmentSmallName" />
+                <ScalarProperty Name="idDepartmentType" ColumnName="idDepartmentType" />
+                <ScalarProperty Name="idManagerDepartment" ColumnName="idManagerDepartment" />
+                <ScalarProperty Name="KadrID" ColumnName="KadrID" />
+                <ScalarProperty Name="dateCreate" ColumnName="dateCreate" />
+                <ScalarProperty Name="dateExit" ColumnName="dateExit" />
+                <ScalarProperty Name="idManagerPlanStaff" ColumnName="idManagerPlanStaff" />
+                <ScalarProperty Name="idBeginPrikaz" ColumnName="idBeginPrikaz" />
+                <ScalarProperty Name="idEndPrikaz" ColumnName="idEndPrikaz" />
+                <ScalarProperty Name="SeverKoeff" ColumnName="SeverKoeff" />
+                <ScalarProperty Name="RayonKoeff" ColumnName="RayonKoeff" />
+                <ScalarProperty Name="DepartmentGUID" ColumnName="DepartmentGUID" />
+                <ScalarProperty Name="idFundingCenter" ColumnName="idFundingCenter" />
+                <ScalarProperty Name="DepartmentIndex" ColumnName="DepartmentIndex" />
+                <ScalarProperty Name="DepPhoneNumber" ColumnName="DepPhoneNumber" />
+                <ScalarProperty Name="HasTimeSheet" ColumnName="HasTimeSheet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactStaffCurrent">
+            <EntityTypeMapping TypeName="KadrModel.FactStaffCurrent">
+              <MappingFragment StoreEntitySet="FactStaffCurrent">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="StaffCount" ColumnName="StaffCount" />
+                <ScalarProperty Name="HourCount" ColumnName="HourCount" />
+                <ScalarProperty Name="HourSalary" ColumnName="HourSalary" />
+                <ScalarProperty Name="idPlanStaff" ColumnName="idPlanStaff" />
+                <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+                <ScalarProperty Name="idBeginPrikaz" ColumnName="idBeginPrikaz" />
+                <ScalarProperty Name="idEndPrikaz" ColumnName="idEndPrikaz" />
+                <ScalarProperty Name="idTypeWork" ColumnName="idTypeWork" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="IsReplacement" ColumnName="IsReplacement" />
+                <ScalarProperty Name="idFactStaffHistory" ColumnName="idFactStaffHistory" />
+                <ScalarProperty Name="DateEndR" ColumnName="DateEndR" />
+                <ScalarProperty Name="DateBeginR" ColumnName="DateBeginR" />
+                <ScalarProperty Name="idLaborContaraktMain" ColumnName="idLaborContaraktMain" />
+                <ScalarProperty Name="idLaborContraktHistory" ColumnName="idLaborContraktHistory" />
+                <ScalarProperty Name="idFundingDepartment" ColumnName="idFundingDepartment" />
+                <ScalarProperty Name="idFundingCenter" ColumnName="idFundingCenter" />
+                <ScalarProperty Name="idSalaryKoeff" ColumnName="idSalaryKoeff" />
+                <ScalarProperty Name="HourStaffCount" ColumnName="HourStaffCount" />
+                <ScalarProperty Name="CalcStaffCount" ColumnName="CalcStaffCount" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactStaffCurrentMainData">
+            <EntityTypeMapping TypeName="KadrModel.FactStaffCurrentMainData">
+              <MappingFragment StoreEntitySet="FactStaffCurrentMainData">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="StaffCount" ColumnName="StaffCount" />
+                <ScalarProperty Name="idPlanStaff" ColumnName="idPlanStaff" />
+                <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+                <ScalarProperty Name="FactStaffFullName" ColumnName="FactStaffFullName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactStaffWithHistory">
+            <EntityTypeMapping TypeName="KadrModel.FactStaffWithHistory">
+              <MappingFragment StoreEntitySet="FactStaffWithHistory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="StaffCount" ColumnName="StaffCount" />
+                <ScalarProperty Name="HourCount" ColumnName="HourCount" />
+                <ScalarProperty Name="HourSalary" ColumnName="HourSalary" />
+                <ScalarProperty Name="idPlanStaff" ColumnName="idPlanStaff" />
+                <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+                <ScalarProperty Name="idBeginPrikaz" ColumnName="idBeginPrikaz" />
+                <ScalarProperty Name="idEndPrikaz" ColumnName="idEndPrikaz" />
+                <ScalarProperty Name="idTypeWork" ColumnName="idTypeWork" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="IsReplacement" ColumnName="IsReplacement" />
+                <ScalarProperty Name="idFactStaffHistory" ColumnName="idFactStaffHistory" />
+                <ScalarProperty Name="IDShedule" ColumnName="IDShedule" />
+                <ScalarProperty Name="idSalaryKoeff" ColumnName="idSalaryKoeff" />
+                <ScalarProperty Name="idlaborcontrakt" ColumnName="idlaborcontrakt" />
+                <ScalarProperty Name="idreason" ColumnName="idreason" />
+                <ScalarProperty Name="HourStaffCount" ColumnName="HourStaffCount" />
+                <ScalarProperty Name="CalcStaffCount" ColumnName="CalcStaffCount" />
+                <ScalarProperty Name="IdWorkShedule" ColumnName="IdWorkShedule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeSheetView">
+            <EntityTypeMapping TypeName="KadrModel.TimeSheetView">
+              <MappingFragment StoreEntitySet="TimeSheetView">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idDepartment" ColumnName="idDepartment" />
+                <ScalarProperty Name="idCreater" ColumnName="idCreater" />
+                <ScalarProperty Name="DateBeginPeriod" ColumnName="DateBeginPeriod" />
+                <ScalarProperty Name="DateEndPeriod" ColumnName="DateEndPeriod" />
+                <ScalarProperty Name="DateComposition" ColumnName="DateComposition" />
+                <ScalarProperty Name="IsFake" ColumnName="IsFake" />
+                <ScalarProperty Name="EmployeeCount" ColumnName="EmployeeCount" />
+                <ScalarProperty Name="ApproveStep" ColumnName="ApproveStep" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddEmployeeLogin" FunctionName="KadrModel.Store.AddEmployeeLogin" />
+          <FunctionImportMapping FunctionImportName="TimeSheetRecordInsert" FunctionName="KadrModel.Store.TimeSheetRecordInsert" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

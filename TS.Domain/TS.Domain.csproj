@@ -32,8 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,9 +50,74 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApperoveDepartment.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Approver.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApproverType.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Category.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DayStatus.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Department.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employee.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeEvent.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EventSuperType.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Exception.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FactStaffCurrent.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FactStaffCurrentMainData.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FactStaffWithHistory.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kadr.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Kadr.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kadr.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kadr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Kadr.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectMapper\KadrDbObjectMapper.cs" />
+    <Compile Include="Post.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PostType.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeatRate.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Repository\ITimeSheetRepository.cs" />
+    <Compile Include="Repository\KadrDbRepository.cs" />
     <Compile Include="SubjectArea\ApproveDepartment.cs" />
     <Compile Include="SubjectArea\Approver.cs" />
     <Compile Include="SubjectArea\ApproveRecord.cs" />
@@ -60,9 +134,48 @@
     <Compile Include="SubjectArea\TimeSheetEmployee.cs" />
     <Compile Include="SubjectArea\TimeSheetRecord.cs" />
     <Compile Include="SubjectArea\WorkShedule.cs" />
+    <Compile Include="TimeSheet.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSheetApproval.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSheetRecord.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSheetView.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WorkShedule.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WorkSheduleEvent.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="Kadr.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Kadr.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Kadr.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Kadr.edmx</DependentUpon>
+      <LastGenOutput>Kadr.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Kadr.edmx.diagram">
+      <DependentUpon>Kadr.edmx</DependentUpon>
+    </None>
+    <None Include="Kadr.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Kadr.edmx</DependentUpon>
+      <LastGenOutput>Kadr.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

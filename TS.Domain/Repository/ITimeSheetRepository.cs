@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TS.Domain.SubjectArea;
 
 namespace TS.Domain.Repository
 {
     interface ITimeSheetRepository
     {
-        Approver GetCurrentApprover(string employeeLogin, bool isAdmin = false);
+        //
+        SubjectArea.Approver GetCurrentApprover(string employeeLogin, bool isAdmin = false);
         
         //
-        IEnumerable<Department> DepartmentsList();
-        bool UpdateDepartment(Department department);
+        IEnumerable<SubjectArea.Department> DepartmentsList();
+        bool UpdateDepartment(SubjectArea.Department department);
         IEnumerable<DepartmentEmployee> GetDepartmentEmployees(int idDepartment, DateTime? dateStartPeriod=null, DateTime? dateEndPeriod=null);
         
         //
@@ -25,7 +23,8 @@ namespace TS.Domain.Repository
         IEnumerable<ApproveRecord> GetTimeSheetApproveHistory(int idTimeSheet);
         
         //
-        IEnumerable<ApproveDepartment> GetDepartmentApprover(int idDepartment, ApproverType? approverType = null);
+        //IEnumerable<ApproveDepartment> GetDepartmentApprover(int idDepartment);
+        IEnumerable<ApproveDepartment> GetDepartmentApprover(int idDepartment, ApproverType approverType = null);
         bool AddApproverForDepartment(int idEmployee, int idDepartment, ApproverType approverType);
         bool DellApproverForDepartment(ApproveDepartment approver);
        
