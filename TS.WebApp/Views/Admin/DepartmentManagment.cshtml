@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8" ng-hide="DepartmentApproveHide()">
+    <div class="col-md-8" @*ng-hide="DepartmentApproveHide()"*@>
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
         <hr style="margin-top: 0;" />
         <div class="checkbox">
@@ -41,7 +41,7 @@
                 <input type="checkbox" ng-model="SelectedDepartment.HasTimeSheet"> Создавать отдельный табель
             </label>
         </div>
-        <div ng-show="SelectedDepartment.HasTimeSheet">
+        <div ng-show="SelectedDepartment.HasTimeSheet" ng-hide="DepartmentApproveHide()">
             <h4>Табельщик</h4>
             <div class="row">
                 <div class="col-lg-5">
