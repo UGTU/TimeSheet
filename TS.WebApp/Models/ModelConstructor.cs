@@ -248,7 +248,7 @@ namespace TimeSheetMvc4WebApplication.Models
         private static EmployeeModel EmployeeModelConstructor(DtoTimeSheetEmployee employee, int employeeNumber, bool isForPrint)
         {
             var records = new List<EmployeeRecordModel>();
-            for (int i = 1; i <= 32; i++)
+            for (var i = 1; i <= 32; i++)
             {
                 var currentRecord = employee.Records.FirstOrDefault(f => f.Date.Day == i);
                 records.Add(EmployeeRecordModelConstructor(i, isForPrint, currentRecord));
@@ -263,16 +263,16 @@ namespace TimeSheetMvc4WebApplication.Models
                 StaffRate = employee.FactStaffEmployee.StaffRate,
                 EmployeeNumber = employeeNumber,
                 Records = records.ToArray(),
-                FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & w.JobTimeCount > 0),
-                FirstHalfMonthHours =
-                    employee.Records.Where(w => w.Date.Day < 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
-                SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 & w.JobTimeCount > 0),
-                SecondHalfMonthHours =
-                    employee.Records.Where(w => w.Date.Day >= 16 & w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
-                Days = employee.Records.Count(w => w.JobTimeCount > 0),
-                MounthDays = mounthDay,
-                Hours = employee.Records.Where(w => w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
-                NonWorkedDays =NonWorked.Select(
+                //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & (w.JobTimeCount > 0 || (w.JobTimeCount==0 && w.DayStays.IsVisible )  )),
+                FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 && !NonWorked.Any(a=>(int)a == w.DayStays.IdDayStatus)),
+                FirstHalfMonthHours = employee.Records.Where(w => w.Date.Day < 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
+                SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)),
+                SecondHalfMonthHours = employee.Records.Where(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
+                //Days = employee.Records.Count(w => w.JobTimeCount > 0),
+                //Days = ,
+                //MounthDays = mounthDay,
+                //Hours = employee.Records.Where(w => w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
+                NonWorkedDays = NonWorked.Select(
                         s => new {DayStatus = s, Count = employee.Records.Count(w => w.DayStays.IdDayStatus == (int) s)})
                         .OrderByDescending(o => o.Count)
                         .ThenBy(o => o.DayStatus.Description())
@@ -317,7 +317,8 @@ namespace TimeSheetMvc4WebApplication.Models
             {
                 Day = -1,
                 DayStatus = dayStatus,
-                Value = days.ToString(CultureInfo.InvariantCulture)
+                Value = days.ToString(CultureInfo.InvariantCulture),
+                Count = days
             }, isForPrint);
         }
 

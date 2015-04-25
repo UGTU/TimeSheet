@@ -11,11 +11,11 @@ namespace TimeSheetMvc4WebApplication.Controllers
     {
         //protected static string ErrorPage = "~/Error";
         //protected static string NotFoundPage = "~/NotFoundPage";
-        protected static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         protected readonly TimeSheetService Client = new TimeSheetService();
         protected readonly DataProvider Provider = new DataProvider();
 
-        private string GetUsername()
+        private static string GetUsername()
         {
             //return "atipunin@ugtu.net"; //получить логин пользователя
             //return "grahimova@ugtu.net"; //получить логин пользователя

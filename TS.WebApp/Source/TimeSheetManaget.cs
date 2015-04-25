@@ -147,7 +147,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 w => deps.Contains(w.PlanStaff.idDepartment) &&
                      (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
                      w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
-                     w.idTypeWork != IdWorkTypePochesovik).ToArray();
+                     w.idTypeWork != IdWorkTypePochesovik && w.idTypeWork!= IdWorkTypeIspOb).ToArray();
             return employees;
         }
 
@@ -187,7 +187,8 @@ namespace TimeSheetMvc4WebApplication.Source
         private const int Week5Days = 1;
         private const int Week6Days = 2;
         private const int IdWorkTypeSovmeshenie = 4;
-        private const int IdWorkTypePochesovik = 16;
+        private const int IdWorkTypePochesovik = 19;
+        private const int IdWorkTypeIspOb = 20;
         private const int IdPps = 2;
         private TimeSheet _timeSheet;
 

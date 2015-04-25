@@ -49,7 +49,6 @@ namespace TS.Domain.Repository
                             {
                                 IdApproveDepartment = s.id,
                                 IdDepartment = s.idDepartment,
-                                Type = 
                                 
                             })
                         };
