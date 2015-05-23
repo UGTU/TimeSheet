@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="KadrRealTest" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Kadr" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=Kadr;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="ShemaTabel.ApproverType" Member="ApproverType">
     <Type Name="ApproverType">
@@ -185,6 +185,7 @@
       <Column Name="medpolis" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Association Name="Employee_Approver" Member="Approver" ThisKey="id" OtherKey="idEmployee" Type="Approver" />
       <Association Name="Employee_FactStaff" Member="FactStaff" ThisKey="id" OtherKey="idEmployee" Type="FactStaff" />
+      <Association Name="Employee_OK_Inkapacity" Member="OK_Inkapacities" ThisKey="id" OtherKey="idEmployee" Type="OK_Inkapacity" />
       <Association Name="FactStaffWithHistory_Employee" Member="FactStaffWithHistory" ThisKey="id" OtherKey="idEmployee" Type="FactStaffWithHistory" IsForeignKey="true" />
     </Type>
   </Table>
@@ -376,6 +377,16 @@
       <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Dep_TimeSheetView" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
       <Association Name="Approver_TimeSheetView" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OK_Inkapacity" Member="OK_Inkapacities">
+    <Type Name="OK_Inkapacity">
+      <Column Name="idInkapacity" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NInkapacity" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DateBegin" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateEnd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="idEmployee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_OK_Inkapacity" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

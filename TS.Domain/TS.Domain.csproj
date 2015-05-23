@@ -107,6 +107,9 @@
       <DependentUpon>Kadr.edmx</DependentUpon>
     </Compile>
     <Compile Include="ObjectMapper\KadrDbObjectMapper.cs" />
+    <Compile Include="OK_Inkapacity.cs">
+      <DependentUpon>Kadr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Post.cs">
       <DependentUpon>Kadr.tt</DependentUpon>
     </Compile>

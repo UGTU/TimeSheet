@@ -17,6 +17,7 @@ namespace TS.Domain
         public Category()
         {
             this.Post = new HashSet<Post>();
+            this.Post1 = new HashSet<Post>();
         }
     
         public int id { get; set; }
@@ -26,5 +27,6 @@ namespace TS.Domain
         public Nullable<bool> IsPPS { get; set; }
     
         public virtual ICollection<Post> Post { get; set; }
+        public virtual ICollection<Post> Post1 { get; set; }
     }
 }

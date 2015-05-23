@@ -28,8 +28,11 @@ namespace TS.Domain
         public string PostShortName { get; set; }
         public Nullable<int> idCategoryVPO { get; set; }
         public Nullable<int> idCategoryZP { get; set; }
+        public Nullable<int> idNewCategory { get; set; }
+        public Nullable<int> idPostGroup { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual PostType PostType { get; set; }
+        public virtual Category Category1 { get; set; }
     }
 }

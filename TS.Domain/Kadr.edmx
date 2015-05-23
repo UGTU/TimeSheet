@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KadrModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KadrModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="id" />
@@ -44,11 +44,17 @@
           <Property Name="medpolis" Type="varchar" MaxLength="50" />
           <Property Name="EmployeeName" Type="varchar" MaxLength="152" StoreGeneratedPattern="Computed" />
           <Property Name="EmployeeSmallName" Type="varchar" MaxLength="55" StoreGeneratedPattern="Computed" />
-          <Property Name="idotpuskplanday" Type="int" />
-          <Property Name="otpostbaseday" Type="int" Nullable="false" />
-          <Property Name="otpostfndday" Type="int" Nullable="false" />
-          <Property Name="otpperiodworkdatebegin" Type="datetime" />
           <Property Name="OtpReducedFareDateBegin" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OK_Inkapacity">
+          <Key>
+            <PropertyRef Name="idInkapacity" />
+          </Key>
+          <Property Name="idInkapacity" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NInkapacity" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateBegin" Type="datetime" Nullable="false" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="idEmployee" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -68,6 +74,8 @@
           <Property Name="PostShortName" Type="varchar" MaxLength="150" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="idCategoryVPO" Type="int" />
           <Property Name="idCategoryZP" Type="int" />
+          <Property Name="idNewCategory" Type="int" />
+          <Property Name="idPostGroup" Type="int" />
         </EntityType>
         <EntityType Name="PostType">
           <Key>
@@ -230,7 +238,7 @@ warning 6002: The table/view 'Kadr.dbo.Department' does not have a primary key d
             <PropertyRef Name="HasTimeSheet" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="DepartmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="DepartmentSmallName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="idDepartmentType" Type="int" />
           <Property Name="idManagerDepartment" Type="int" />
@@ -247,22 +255,21 @@ warning 6002: The table/view 'Kadr.dbo.Department' does not have a primary key d
           <Property Name="DepartmentIndex" Type="varchar" MaxLength="10" />
           <Property Name="DepPhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="HasTimeSheet" Type="bit" Nullable="false" />
+          <Property Name="idOKVED" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Kadr.dbo.EmployeeView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Kadr.dbo.FactStaffCurrent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="FactStaffCurrent">
           <Key>
             <PropertyRef Name="id" />
             <PropertyRef Name="StaffCount" />
-            <PropertyRef Name="idEmployee" />
-            <PropertyRef Name="idBeginPrikaz" />
             <PropertyRef Name="idTypeWork" />
             <PropertyRef Name="IsReplacement" />
             <PropertyRef Name="idFactStaffHistory" />
             <PropertyRef Name="DateBeginR" />
             <PropertyRef Name="CalcStaffCount" />
+            <PropertyRef Name="idEmployee" />
+            <PropertyRef Name="idBeginPrikaz" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="StaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
@@ -287,6 +294,7 @@ warning 6002: The table/view 'Kadr.dbo.FactStaffCurrent' does not have a primary
           <Property Name="HourStaffCount" Type="numeric" Precision="6" Scale="4" />
           <Property Name="CalcStaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="idOKVED" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Kadr.dbo.FactStaffCurrentMainData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -299,7 +307,8 @@ warning 6002: The table/view 'Kadr.dbo.FactStaffCurrentMainData' does not have a
           <Property Name="StaffCount" Type="numeric" Precision="6" Scale="4" Nullable="false" />
           <Property Name="idPlanStaff" Type="int" />
           <Property Name="idEmployee" Type="int" />
-          <Property Name="FactStaffFullName" Type="varchar" MaxLength="380" />
+          <Property Name="FactStaffFullName" Type="nvarchar" MaxLength="4000" />
+          <Property Name="idOKVED" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Kadr.ShemaTabel.FactStaffWithHistory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -432,6 +441,20 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OK_Inkapacity_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OK_Inkapacity" Type="Self.OK_Inkapacity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OK_Inkapacity">
+              <PropertyRef Name="idEmployee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Post_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
           <End Role="Post" Type="Self.Post" Multiplicity="*" />
@@ -441,6 +464,18 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             </Principal>
             <Dependent Role="Post">
               <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_CategoryNew">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idNewCategory" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -574,6 +609,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
         <EntityContainer Name="KadrModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OK_Inkapacity" EntityType="Self.OK_Inkapacity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostType" EntityType="Self.PostType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApperoveDepartment" EntityType="Self.ApperoveDepartment" Schema="ShemaTabel" store:Type="Tables" />
@@ -620,7 +656,8 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
     [Department].[idFundingCenter] AS [idFundingCenter], 
     [Department].[DepartmentIndex] AS [DepartmentIndex], 
     [Department].[DepPhoneNumber] AS [DepPhoneNumber], 
-    [Department].[HasTimeSheet] AS [HasTimeSheet]
+    [Department].[HasTimeSheet] AS [HasTimeSheet], 
+    [Department].[idOKVED] AS [idOKVED]
     FROM [dbo].[Department] AS [Department]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FactStaffCurrent" EntityType="Self.FactStaffCurrent" store:Type="Views" store:Schema="dbo">
@@ -647,7 +684,8 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
     [FactStaffCurrent].[idSalaryKoeff] AS [idSalaryKoeff], 
     [FactStaffCurrent].[HourStaffCount] AS [HourStaffCount], 
     [FactStaffCurrent].[CalcStaffCount] AS [CalcStaffCount], 
-    [FactStaffCurrent].[PhoneNumber] AS [PhoneNumber]
+    [FactStaffCurrent].[PhoneNumber] AS [PhoneNumber], 
+    [FactStaffCurrent].[idOKVED] AS [idOKVED]
     FROM [dbo].[FactStaffCurrent] AS [FactStaffCurrent]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FactStaffCurrentMainData" EntityType="Self.FactStaffCurrentMainData" store:Type="Views" store:Schema="dbo">
@@ -656,7 +694,8 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
     [FactStaffCurrentMainData].[StaffCount] AS [StaffCount], 
     [FactStaffCurrentMainData].[idPlanStaff] AS [idPlanStaff], 
     [FactStaffCurrentMainData].[idEmployee] AS [idEmployee], 
-    [FactStaffCurrentMainData].[FactStaffFullName] AS [FactStaffFullName]
+    [FactStaffCurrentMainData].[FactStaffFullName] AS [FactStaffFullName], 
+    [FactStaffCurrentMainData].[idOKVED] AS [idOKVED]
     FROM [dbo].[FactStaffCurrentMainData] AS [FactStaffCurrentMainData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FactStaffWithHistory" EntityType="Self.FactStaffWithHistory" store:Type="Views" store:Schema="ShemaTabel">
@@ -720,7 +759,15 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Approver" EntitySet="Approver" />
           </AssociationSet>
+          <AssociationSet Name="FK_OK_Inkapacity_Employee" Association="Self.FK_OK_Inkapacity_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="OK_Inkapacity" EntitySet="OK_Inkapacity" />
+          </AssociationSet>
           <AssociationSet Name="FK_Post_Category" Association="Self.FK_Post_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_CategoryNew" Association="Self.FK_Post_CategoryNew">
             <End Role="Category" EntitySet="Category" />
             <End Role="Post" EntitySet="Post" />
           </AssociationSet>
@@ -765,8 +812,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             <End Role="TimeSheetRecord" EntitySet="TimeSheetRecord" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KadrModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -780,6 +826,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="OrderBy" Type="Int32" />
           <Property Name="IsPPS" Type="Boolean" />
           <NavigationProperty Name="Post" Relationship="Self.FK_Post_Category" FromRole="Category" ToRole="Post" />
+          <NavigationProperty Name="Post1" Relationship="KadrModel.FK_Post_CategoryNew" FromRole="Category" ToRole="Post" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -810,12 +857,9 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="medpolis" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EmployeeName" Type="String" MaxLength="152" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="EmployeeSmallName" Type="String" MaxLength="55" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="idotpuskplanday" Type="Int32" />
-          <Property Name="otpostbaseday" Type="Int32" Nullable="false" />
-          <Property Name="otpostfndday" Type="Int32" Nullable="false" />
-          <Property Name="otpperiodworkdatebegin" Type="DateTime" Precision="3" />
           <Property Name="OtpReducedFareDateBegin" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Approver" Relationship="Self.FK_ApproverEmployee" FromRole="Employee" ToRole="Approver" />
+          <NavigationProperty Name="OK_Inkapacity" Relationship="KadrModel.FK_OK_Inkapacity_Employee" FromRole="Employee" ToRole="OK_Inkapacity" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -837,6 +881,9 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="idCategoryZP" Type="Int32" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Post_Category" FromRole="Post" ToRole="Category" />
           <NavigationProperty Name="PostType" Relationship="Self.FK_Post_PostType" FromRole="Post" ToRole="PostType" />
+          <Property Name="idNewCategory" Type="Int32" />
+          <Property Name="idPostGroup" Type="Int32" />
+          <NavigationProperty Name="Category1" Relationship="KadrModel.FK_Post_CategoryNew" FromRole="Post" ToRole="Category" />
         </EntityType>
         <EntityType Name="PostType">
           <Key>
@@ -1025,7 +1072,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             <PropertyRef Name="HasTimeSheet" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="DepartmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DepartmentSmallName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="idDepartmentType" Type="Int32" />
           <Property Name="idManagerDepartment" Type="Int32" />
@@ -1042,6 +1089,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="DepartmentIndex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DepPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="HasTimeSheet" Type="Boolean" Nullable="false" />
+          <Property Name="idOKVED" Type="Int32" />
         </EntityType>
         <EntityType Name="FactStaffCurrent">
           <Key>
@@ -1078,6 +1126,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="HourStaffCount" Type="Decimal" Precision="6" Scale="4" />
           <Property Name="CalcStaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idOKVED" Type="Int32" />
         </EntityType>
         <EntityType Name="FactStaffCurrentMainData">
           <Key>
@@ -1088,7 +1137,8 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <Property Name="StaffCount" Type="Decimal" Precision="6" Scale="4" Nullable="false" />
           <Property Name="idPlanStaff" Type="Int32" />
           <Property Name="idEmployee" Type="Int32" />
-          <Property Name="FactStaffFullName" Type="String" MaxLength="380" FixedLength="false" Unicode="false" />
+          <Property Name="FactStaffFullName" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="idOKVED" Type="Int32" />
         </EntityType>
         <EntityType Name="FactStaffWithHistory">
           <Key>
@@ -1445,9 +1495,55 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
             <Parameter Name="login" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TimeSheetRecordInsert">
-            <Parameter Name="ValidXMLInput" Mode="In" Type="String" />
+          <Parameter Name="ValidXMLInput" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="OK_Inkapacity" EntityType="KadrModel.OK_Inkapacity" />
+          <AssociationSet Name="FK_Post_CategoryNew" Association="KadrModel.FK_Post_CategoryNew">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OK_Inkapacity_Employee" Association="KadrModel.FK_OK_Inkapacity_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="OK_Inkapacity" EntitySet="OK_Inkapacity" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="OK_Inkapacity">
+          <Key>
+            <PropertyRef Name="idInkapacity" />
+          </Key>
+          <Property Name="idInkapacity" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NInkapacity" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="idEmployee" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="KadrModel.FK_OK_Inkapacity_Employee" FromRole="OK_Inkapacity" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Post_CategoryNew">
+          <End Type="KadrModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="KadrModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="idNewCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OK_Inkapacity_Employee">
+          <End Type="KadrModel.Employee" Role="Employee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="KadrModel.OK_Inkapacity" Role="OK_Inkapacity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OK_Inkapacity">
+              <PropertyRef Name="idEmployee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1493,10 +1589,6 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
                 <ScalarProperty Name="medpolis" ColumnName="medpolis" />
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="EmployeeSmallName" ColumnName="EmployeeSmallName" />
-                <ScalarProperty Name="idotpuskplanday" ColumnName="idotpuskplanday" />
-                <ScalarProperty Name="otpostbaseday" ColumnName="otpostbaseday" />
-                <ScalarProperty Name="otpostfndday" ColumnName="otpostfndday" />
-                <ScalarProperty Name="otpperiodworkdatebegin" ColumnName="otpperiodworkdatebegin" />
                 <ScalarProperty Name="OtpReducedFareDateBegin" ColumnName="OtpReducedFareDateBegin" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1504,6 +1596,8 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <EntitySetMapping Name="Post">
             <EntityTypeMapping TypeName="KadrModel.Post">
               <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="idPostGroup" ColumnName="idPostGroup" />
+                <ScalarProperty Name="idNewCategory" ColumnName="idNewCategory" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="PostName" ColumnName="PostName" />
                 <ScalarProperty Name="ManagerBit" ColumnName="ManagerBit" />
@@ -1677,6 +1771,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <EntitySetMapping Name="Department">
             <EntityTypeMapping TypeName="KadrModel.Department">
               <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="idOKVED" ColumnName="idOKVED" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
                 <ScalarProperty Name="DepartmentSmallName" ColumnName="DepartmentSmallName" />
@@ -1701,6 +1796,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <EntitySetMapping Name="FactStaffCurrent">
             <EntityTypeMapping TypeName="KadrModel.FactStaffCurrent">
               <MappingFragment StoreEntitySet="FactStaffCurrent">
+                <ScalarProperty Name="idOKVED" ColumnName="idOKVED" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="StaffCount" ColumnName="StaffCount" />
                 <ScalarProperty Name="HourCount" ColumnName="HourCount" />
@@ -1730,6 +1826,7 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           <EntitySetMapping Name="FactStaffCurrentMainData">
             <EntityTypeMapping TypeName="KadrModel.FactStaffCurrentMainData">
               <MappingFragment StoreEntitySet="FactStaffCurrentMainData">
+                <ScalarProperty Name="idOKVED" ColumnName="idOKVED" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="StaffCount" ColumnName="StaffCount" />
                 <ScalarProperty Name="idPlanStaff" ColumnName="idPlanStaff" />
@@ -1781,6 +1878,17 @@ warning 6002: The table/view 'Kadr.ShemaTabel.TimeSheetView' does not have a pri
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddEmployeeLogin" FunctionName="KadrModel.Store.AddEmployeeLogin" />
           <FunctionImportMapping FunctionImportName="TimeSheetRecordInsert" FunctionName="KadrModel.Store.TimeSheetRecordInsert" />
+          <EntitySetMapping Name="OK_Inkapacity">
+            <EntityTypeMapping TypeName="KadrModel.OK_Inkapacity">
+              <MappingFragment StoreEntitySet="OK_Inkapacity">
+                <ScalarProperty Name="idEmployee" ColumnName="idEmployee" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="NInkapacity" ColumnName="NInkapacity" />
+                <ScalarProperty Name="idInkapacity" ColumnName="idInkapacity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

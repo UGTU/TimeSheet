@@ -12,13 +12,14 @@ namespace TS.Domain
     using System;
     using System.Collections.Generic;
     
-    public partial class FactStaffCurrentMainData
+    public partial class OK_Inkapacity
     {
-        public int id { get; set; }
-        public decimal StaffCount { get; set; }
-        public Nullable<int> idPlanStaff { get; set; }
-        public Nullable<int> idEmployee { get; set; }
-        public string FactStaffFullName { get; set; }
-        public Nullable<int> idOKVED { get; set; }
+        public int idInkapacity { get; set; }
+        public string NInkapacity { get; set; }
+        public System.DateTime DateBegin { get; set; }
+        public Nullable<System.DateTime> DateEnd { get; set; }
+        public int idEmployee { get; set; }
+    
+        public virtual Employee Employee { get; set; }
     }
 }

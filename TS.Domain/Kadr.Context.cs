@@ -49,6 +49,7 @@ namespace TS.Domain
         public virtual DbSet<FactStaffCurrentMainData> FactStaffCurrentMainData { get; set; }
         public virtual DbSet<FactStaffWithHistory> FactStaffWithHistory { get; set; }
         public virtual DbSet<TimeSheetView> TimeSheetView { get; set; }
+        public virtual DbSet<OK_Inkapacity> OK_Inkapacity { get; set; }
     
         public virtual int AddEmployeeLogin(Nullable<int> id, string login)
         {

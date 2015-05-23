@@ -12,7 +12,7 @@ namespace TimeSheetMvc4WebApplication.Source
 {
     public class TimeSheetManaget
     {
-        public int? IdTimeSheet
+        private int? IdTimeSheet
         {
             get { return IsTimeSheetValid() ? _timeSheet.id : (int?)null; }
         }
@@ -121,8 +121,7 @@ namespace TimeSheetMvc4WebApplication.Source
             else
             {
                 var factStuffHistiryIdList = employees.Select(s => s.IdFactStaffHistiry).ToArray();
-                InsertEmployees(
-                    GetAllEmployees().Where(w => factStuffHistiryIdList.Contains(w.idFactStaffHistory)).ToArray());
+                InsertEmployees(GetAllEmployees().Where(w => factStuffHistiryIdList.Contains(w.idFactStaffHistory)).ToArray());
             }
             SubmitTimeSheet();
         }
@@ -152,7 +151,7 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
 
-        private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList)
+        private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList, IEnumerable<OK_Inkapacity> inkapacities)
         {
             List<TimeSheetRecord> timeSheetRecordLList;
             // Генерируем табель
@@ -169,10 +168,15 @@ namespace TimeSheetMvc4WebApplication.Source
                     //6 days week
                     : SixDayesTimeSheetGenerate(employee);
             }
+
+
+            // Добавляем информацию о отпусе 
+            timeSheetRecordLList = AddHolidaysToTimeSheetRecords(employee, timeSheetRecordLList, otpuskList);    
             // Добавляем дни исключения
             timeSheetRecordLList = AddExceptoinDaysToTimeSheetRecords(employee, timeSheetRecordLList, exeptions);
-            // Добавляем информацию о отпусе 
-            timeSheetRecordLList = AddHolidaysToTimeSheetRecords(employee, timeSheetRecordLList, otpuskList);
+            // Добавляем информацию о больничных 
+            timeSheetRecordLList = AddHospitalsToTimeSheetRecords(employee, timeSheetRecordLList, inkapacities);
+
 
             return timeSheetRecordLList;
         }
@@ -197,19 +201,17 @@ namespace TimeSheetMvc4WebApplication.Source
         {
             try
             {
-                var exeptions =
-                    _db.Exception.Where(
-                        w => w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod).ToArray();
+                var exeptions = _db.Exception.Where(w => w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod).ToArray();
                 var factStaffIds = employees.Select(s => s.id).Distinct();
-                var otpusk =
-                    _db.OK_Otpusk.Where(
-                        w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
+                var otpusk = _db.OK_Otpusk.Where(w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
                              w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                var holspitals = _db.OK_Inkapacities.Where(w => employees.Select(s => s.idEmployee).Distinct().Contains(w.idEmployee) && w.DateBegin <= _timeSheet.DateEndPeriod &&
+                             w.DateEnd >= _timeSheet.DateBeginPeriod);
                 foreach (var employee in employees)
                 {
-                    var employeeOtpusk = otpusk.Where(w => w.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod &&
-                                            w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
-                    _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk));
+                    var employeeOtpusk = otpusk.Where(w => w.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    var employeeHosp = holspitals.Where(w => w.idEmployee == employee.idEmployee && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk, employeeHosp));
                 }
             }
             catch (System.Exception ex)
@@ -452,6 +454,50 @@ namespace TimeSheetMvc4WebApplication.Source
                             record.idDayStatus = 6;
                             record.JobTimeCount = 0;
                         }
+                    }
+                }
+            }
+            return timeSheetRecordLList;
+        }
+
+        //Вносит в табель информацию о больничном и возвращает обновлённые записи табеля на работника
+        List<TimeSheetRecord> AddHospitalsToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<OK_Inkapacity> inkapacities)
+        {
+            var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
+            var okInkapacities = inkapacities as OK_Inkapacity[] ?? inkapacities.ToArray();
+            if (okInkapacities.Any())
+            {
+                foreach (var inkapacity in okInkapacities)
+                {
+                    int beginDay;
+                    if (_timeSheet.DateBeginPeriod.Year == inkapacity.DateBegin.Year &&
+                        _timeSheet.DateBeginPeriod.Month == inkapacity.DateBegin.Month)
+                    {
+                        beginDay = inkapacity.DateBegin.Day;
+                    }
+                    else
+                    {
+                        beginDay = _timeSheet.DateBeginPeriod.Day;
+                    }
+
+                    int endDay;
+                    if (inkapacity.DateEnd.HasValue && _timeSheet.DateEndPeriod.Year == inkapacity.DateEnd.Value.Year &&
+                        _timeSheet.DateEndPeriod.Month == inkapacity.DateEnd.Value.Month)
+                    {
+                        endDay = inkapacity.DateEnd.Value.Day;
+                    }
+                    else
+                    {
+                        endDay = _timeSheet.DateEndPeriod.Day;
+                    }
+
+                    for (int i = beginDay; i <= endDay; i++)
+                    {
+                        var day = new DateTime(_timeSheet.DateBeginPeriod.Year, _timeSheet.DateBeginPeriod.Month,i);
+                        var record = timeSheetRecordLList.FirstOrDefault(f => f.RecordDate.Date == day.Date && f.idFactStaffHistory == employee.idFactStaffHistory);
+                        if (record == null || record.idDayStatus == IdX) continue;
+                        record.idDayStatus = (int) Models.DayStatus.Б;
+                        record.JobTimeCount = 0;
                     }
                 }
             }

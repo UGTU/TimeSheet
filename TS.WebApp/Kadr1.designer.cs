@@ -22,7 +22,7 @@ namespace TimeSheetMvc4WebApplication
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="KadrRealTest")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Kadr")]
 	public partial class KadrDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -102,6 +102,9 @@ namespace TimeSheetMvc4WebApplication
     partial void InsertTimeSheetView(TimeSheetView instance);
     partial void UpdateTimeSheetView(TimeSheetView instance);
     partial void DeleteTimeSheetView(TimeSheetView instance);
+    partial void InsertOK_Inkapacity(OK_Inkapacity instance);
+    partial void UpdateOK_Inkapacity(OK_Inkapacity instance);
+    partial void DeleteOK_Inkapacity(OK_Inkapacity instance);
     #endregion
 		
 		public KadrDataContext() : 
@@ -323,6 +326,14 @@ namespace TimeSheetMvc4WebApplication
 			get
 			{
 				return this.GetTable<TimeSheetView>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OK_Inkapacity> OK_Inkapacities
+		{
+			get
+			{
+				return this.GetTable<OK_Inkapacity>();
 			}
 		}
 		
@@ -3812,6 +3823,8 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntitySet<FactStaff> _FactStaff;
 		
+		private EntitySet<OK_Inkapacity> _OK_Inkapacities;
+		
 		private EntityRef<FactStaffWithHistory> _FactStaffWithHistory;
 		
     #region Extensibility Method Definitions
@@ -3870,6 +3883,7 @@ namespace TimeSheetMvc4WebApplication
 		{
 			this._Approver = new EntitySet<Approver>(new Action<Approver>(this.attach_Approver), new Action<Approver>(this.detach_Approver));
 			this._FactStaff = new EntitySet<FactStaff>(new Action<FactStaff>(this.attach_FactStaff), new Action<FactStaff>(this.detach_FactStaff));
+			this._OK_Inkapacities = new EntitySet<OK_Inkapacity>(new Action<OK_Inkapacity>(this.attach_OK_Inkapacities), new Action<OK_Inkapacity>(this.detach_OK_Inkapacities));
 			this._FactStaffWithHistory = default(EntityRef<FactStaffWithHistory>);
 			OnCreated();
 		}
@@ -4364,6 +4378,19 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_OK_Inkapacity", Storage="_OK_Inkapacities", ThisKey="id", OtherKey="idEmployee")]
+		public EntitySet<OK_Inkapacity> OK_Inkapacities
+		{
+			get
+			{
+				return this._OK_Inkapacities;
+			}
+			set
+			{
+				this._OK_Inkapacities.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffWithHistory_Employee", Storage="_FactStaffWithHistory", ThisKey="id", OtherKey="idEmployee", IsForeignKey=true)]
 		public FactStaffWithHistory FactStaffWithHistory
 		{
@@ -4437,6 +4464,18 @@ namespace TimeSheetMvc4WebApplication
 		}
 		
 		private void detach_FactStaff(FactStaff entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
+		}
+		
+		private void attach_OK_Inkapacities(OK_Inkapacity entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_OK_Inkapacities(OK_Inkapacity entity)
 		{
 			this.SendPropertyChanging();
 			entity.Employee = null;
@@ -8881,6 +8920,205 @@ namespace TimeSheetMvc4WebApplication
 		{
 			this.SendPropertyChanging();
 			entity.TimeSheetView = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OK_Inkapacity")]
+	public partial class OK_Inkapacity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _idInkapacity;
+		
+		private string _NInkapacity;
+		
+		private System.DateTime _DateBegin;
+		
+		private System.Nullable<System.DateTime> _DateEnd;
+		
+		private int _idEmployee;
+		
+		private EntityRef<Employee> _Employee;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidInkapacityChanging(int value);
+    partial void OnidInkapacityChanged();
+    partial void OnNInkapacityChanging(string value);
+    partial void OnNInkapacityChanged();
+    partial void OnDateBeginChanging(System.DateTime value);
+    partial void OnDateBeginChanged();
+    partial void OnDateEndChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateEndChanged();
+    partial void OnidEmployeeChanging(int value);
+    partial void OnidEmployeeChanged();
+    #endregion
+		
+		public OK_Inkapacity()
+		{
+			this._Employee = default(EntityRef<Employee>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idInkapacity", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int idInkapacity
+		{
+			get
+			{
+				return this._idInkapacity;
+			}
+			set
+			{
+				if ((this._idInkapacity != value))
+				{
+					this.OnidInkapacityChanging(value);
+					this.SendPropertyChanging();
+					this._idInkapacity = value;
+					this.SendPropertyChanged("idInkapacity");
+					this.OnidInkapacityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NInkapacity", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string NInkapacity
+		{
+			get
+			{
+				return this._NInkapacity;
+			}
+			set
+			{
+				if ((this._NInkapacity != value))
+				{
+					this.OnNInkapacityChanging(value);
+					this.SendPropertyChanging();
+					this._NInkapacity = value;
+					this.SendPropertyChanged("NInkapacity");
+					this.OnNInkapacityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBegin", DbType="DateTime NOT NULL")]
+		public System.DateTime DateBegin
+		{
+			get
+			{
+				return this._DateBegin;
+			}
+			set
+			{
+				if ((this._DateBegin != value))
+				{
+					this.OnDateBeginChanging(value);
+					this.SendPropertyChanging();
+					this._DateBegin = value;
+					this.SendPropertyChanged("DateBegin");
+					this.OnDateBeginChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateEnd", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateEnd
+		{
+			get
+			{
+				return this._DateEnd;
+			}
+			set
+			{
+				if ((this._DateEnd != value))
+				{
+					this.OnDateEndChanging(value);
+					this.SendPropertyChanging();
+					this._DateEnd = value;
+					this.SendPropertyChanged("DateEnd");
+					this.OnDateEndChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idEmployee", DbType="Int NOT NULL")]
+		public int idEmployee
+		{
+			get
+			{
+				return this._idEmployee;
+			}
+			set
+			{
+				if ((this._idEmployee != value))
+				{
+					if (this._Employee.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnidEmployeeChanging(value);
+					this.SendPropertyChanging();
+					this._idEmployee = value;
+					this.SendPropertyChanged("idEmployee");
+					this.OnidEmployeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_OK_Inkapacity", Storage="_Employee", ThisKey="idEmployee", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Employee Employee
+		{
+			get
+			{
+				return this._Employee.Entity;
+			}
+			set
+			{
+				Employee previousValue = this._Employee.Entity;
+				if (((previousValue != value) 
+							|| (this._Employee.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Employee.Entity = null;
+						previousValue.OK_Inkapacities.Remove(this);
+					}
+					this._Employee.Entity = value;
+					if ((value != null))
+					{
+						value.OK_Inkapacities.Add(this);
+						this._idEmployee = value.id;
+					}
+					else
+					{
+						this._idEmployee = default(int);
+					}
+					this.SendPropertyChanged("Employee");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

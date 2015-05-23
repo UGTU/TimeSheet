@@ -37,5 +37,6 @@ namespace TS.Domain
         public Nullable<decimal> HourStaffCount { get; set; }
         public decimal CalcStaffCount { get; set; }
         public string PhoneNumber { get; set; }
+        public Nullable<int> idOKVED { get; set; }
     }
 }

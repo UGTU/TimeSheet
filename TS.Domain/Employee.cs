@@ -17,6 +17,7 @@ namespace TS.Domain
         public Employee()
         {
             this.Approver = new HashSet<Approver>();
+            this.OK_Inkapacity = new HashSet<OK_Inkapacity>();
         }
     
         public int id { get; set; }
@@ -44,12 +45,9 @@ namespace TS.Domain
         public string medpolis { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSmallName { get; set; }
-        public Nullable<int> idotpuskplanday { get; set; }
-        public int otpostbaseday { get; set; }
-        public int otpostfndday { get; set; }
-        public Nullable<System.DateTime> otpperiodworkdatebegin { get; set; }
         public Nullable<System.DateTime> OtpReducedFareDateBegin { get; set; }
     
         public virtual ICollection<Approver> Approver { get; set; }
+        public virtual ICollection<OK_Inkapacity> OK_Inkapacity { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1d26a199678d471184d75099e79de6f3" Name="Diagram1" ZoomLevel="65">
+      <Diagram DiagramId="1d26a199678d471184d75099e79de6f3" Name="Diagram1" ZoomLevel="111">
         <EntityTypeShape EntityType="KadrModel.Category" Width="1.5" PointX="9.75" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="KadrModel.Employee" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="KadrModel.Post" Width="1.5" PointX="12" PointY="2.5" IsExpanded="true" />
@@ -44,6 +44,9 @@
         <AssociationConnector Association="KadrModel.FK_TimeSheetApproval_TimeSheet" ManuallyRouted="false" />
         <AssociationConnector Association="KadrModel.TimeSheetRecordTimeSheetForeign" ManuallyRouted="false" />
         <AssociationConnector Association="KadrModel.WorkSheduleEventSheduleForeign" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="KadrModel.OK_Inkapacity" Width="1.5" PointX="3" PointY="10.25" />
+        <AssociationConnector Association="KadrModel.FK_Post_CategoryNew" />
+        <AssociationConnector Association="KadrModel.FK_OK_Inkapacity_Employee" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

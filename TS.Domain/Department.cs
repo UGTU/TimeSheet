@@ -32,5 +32,6 @@ namespace TS.Domain
         public string DepartmentIndex { get; set; }
         public string DepPhoneNumber { get; set; }
         public bool HasTimeSheet { get; set; }
+        public Nullable<int> idOKVED { get; set; }
     }
 }
