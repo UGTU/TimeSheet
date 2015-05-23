@@ -70,9 +70,12 @@ namespace TimeSheetMvc4WebApplication.Models
         //public int Days { get; set; }
         public int Days { get { return FirstHalfMonthDays + SecondHalfMonthDays; }}
         //public int MounthDays { get; set; }
-        public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
+        //public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
+        
         //public double Hours { get; set; }
         public double Hours { get { return FirstHalfMonthHours + SecondHalfMonthHours; } }
+
+        public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
         //public EmployeeRecordModel В { get; set; }
         //public EmployeeRecordModel Б { get; set; }
         //public EmployeeRecordModel О { get; set; }

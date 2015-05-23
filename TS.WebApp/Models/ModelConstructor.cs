@@ -77,7 +77,8 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.Р,
             DayStatus.ПР,
             DayStatus.УД,
-            DayStatus.ОВ
+            DayStatus.ОВ,
+            DayStatus.Х, 
         };
 
         public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
@@ -265,14 +266,18 @@ namespace TimeSheetMvc4WebApplication.Models
                 Records = records.ToArray(),
                 //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & (w.JobTimeCount > 0 || (w.JobTimeCount==0 && w.DayStays.IsVisible )  )),
                 FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 && !NonWorked.Any(a=>(int)a == w.DayStays.IdDayStatus)),
+                //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 && w.DayStays.IdDayStatus!=(int)DayStatus.Х),
                 FirstHalfMonthHours = employee.Records.Where(w => w.Date.Day < 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
                 SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)),
+                //SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 && w.DayStays.IdDayStatus != (int)DayStatus.Х),
                 SecondHalfMonthHours = employee.Records.Where(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
                 //Days = employee.Records.Count(w => w.JobTimeCount > 0),
                 //Days = ,
                 //MounthDays = mounthDay,
                 //Hours = employee.Records.Where(w => w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
-                NonWorkedDays = NonWorked.Select(
+
+                //DayStatus.Х - не должен попадать в "неявки по причинам"
+                NonWorkedDays = NonWorked.Where(w=>w != DayStatus.Х).Select(
                         s => new {DayStatus = s, Count = employee.Records.Count(w => w.DayStays.IdDayStatus == (int) s)})
                         .OrderByDescending(o => o.Count)
                         .ThenBy(o => o.DayStatus.Description())
