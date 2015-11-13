@@ -56,6 +56,12 @@ namespace TimeSheetMvc4WebApplication.Models
         Х = 21,
         [Description("ПП")]
         ПП = 22,
+        [Description("ОКД")]
+        ОКД = 23,
+        [Description("Г")]
+        Г = 25,
+        [Description("НВ")]
+        НВ = 26
         //[Description("Empty")]
         //Empty = 22
     }
@@ -77,7 +83,10 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.Р,
             DayStatus.ПР,
             DayStatus.УД,
-            DayStatus.ОВ
+            DayStatus.ОВ,
+            DayStatus.ОКД,
+            DayStatus.Г,
+            DayStatus.НВ
         };
 
         public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
