@@ -85,7 +85,6 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.УД,
             DayStatus.ОВ,
             DayStatus.Х, 
-            DayStatus.ОВ,
             DayStatus.ОКД,
             DayStatus.Г,
             DayStatus.НВ
