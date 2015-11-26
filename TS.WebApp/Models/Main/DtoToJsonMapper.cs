@@ -48,6 +48,7 @@ namespace TimeSheetMvc4WebApplication.Models.Main
                     Post = empl.FactStaffEmployee.Post,
                     WorkShedule = empl.FactStaffEmployee.WorkShedule,
                     StaffRate = empl.FactStaffEmployee.StaffRate,
+                    //FinSrc = empl.FactStaffEmployee.FinSrc,
                     Records = records.ToArray()
                 });
             }

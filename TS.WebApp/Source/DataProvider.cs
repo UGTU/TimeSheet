@@ -41,7 +41,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 loadOptions.LoadWith((TimeSheetRecord tsr) => tsr.FactStaffHistory);
                 loadOptions.LoadWith((FactStaffWithHistory f) => f.FactStaff);
                 loadOptions.LoadWith((FactStaff f) => f.Employee);
-                loadOptions.LoadWith((FactStaffWithHistory f) => f.PlanStaff);
+                loadOptions.LoadWith((FactStaffWithHistory f) => f.FactStaff.PlanStaff);
                 loadOptions.LoadWith((PlanStaff p) => p.Post);
                 loadOptions.LoadWith((Post p) => p.Category);
                 db.LoadOptions = loadOptions;

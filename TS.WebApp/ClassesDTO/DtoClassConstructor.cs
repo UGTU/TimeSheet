@@ -429,6 +429,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             var records =
                 db.TimeSheetRecord.Where(w => w.idTimeSheet == idTimeSheet & w.idFactStaffHistory == idFactStaffHistory).Select(
                     s => DtoTimeSheetRecord(s)).ToArray();
+
+           // records
             return new DtoTimeSheetEmployee
             {
                 FactStaffEmployee = DtoFactStaffEmployee(db, idFactStaffHistory),
@@ -492,6 +494,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Patronymic = s.FactStaff.Employee.Otch,
                 ItabN = s.FactStaff.Employee.itab_n,
                 StaffRate = s.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
+               // FinSrc = s.GetFinancingSourceByFsh().IfNotNull(f=>f.FinancingSourceName, string.Empty),
                 Post = DtoPost(s.FactStaff.PlanStaff.Post),
                 WorkShedule = DtoWorkShedule(s.FactStaff.PlanStaff.WorkShedule)
             }).FirstOrDefault();

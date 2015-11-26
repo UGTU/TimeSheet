@@ -87,7 +87,8 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.Х, 
             DayStatus.ОКД,
             DayStatus.Г,
-            DayStatus.НВ
+            DayStatus.НВ,
+            DayStatus.ПК
         };
 
         public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
@@ -271,6 +272,7 @@ namespace TimeSheetMvc4WebApplication.Models
                 Patronymic = employee.FactStaffEmployee.Patronymic,
                 Post = employee.FactStaffEmployee.Post.PostSmallName,
                 StaffRate = employee.FactStaffEmployee.StaffRate,
+                //FinSrc = employee.FactStaffEmployee.FinSrc,
                 EmployeeNumber = employeeNumber,
                 Records = records.ToArray(),
                 //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & (w.JobTimeCount > 0 || (w.JobTimeCount==0 && w.DayStays.IsVisible )  )),

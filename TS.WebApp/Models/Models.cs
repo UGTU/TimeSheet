@@ -62,6 +62,7 @@ namespace TimeSheetMvc4WebApplication.Models
         public int EmployeeNumber { get; set; }
         public string Post { get; set; }
         public decimal StaffRate { get; set; }
+
         public EmployeeRecordModel[] Records { get; set; }
         public int FirstHalfMonthDays { get; set; }
         public double FirstHalfMonthHours { get; set; }

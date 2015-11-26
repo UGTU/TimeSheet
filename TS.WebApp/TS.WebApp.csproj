@@ -31,6 +31,7 @@
     </SilverlightApplicationList>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -211,6 +212,9 @@
     </Compile>
     <Compile Include="Hubs\NoticeHub.cs" />
     <Compile Include="Hubs\Startup.cs" />
+    <Compile Include="Kadr.cs">
+      <DependentUpon>Kadr.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Kadr1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
