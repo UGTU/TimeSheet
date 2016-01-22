@@ -78,9 +78,22 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             }
             if (approver == null) return null;
             if (approverNumber == 3) idDepartment = IdKadrDepartment;
-            var factStaffs =
-                db.FactStaff.Where(w => w.idEmployee == approver.idEmployee /*& w.PlanStaff.idDepartment == idDepartment & w.DateEnd==null*/).
-                    Select(s => new DtoTimeSheetApprover
+
+            //выбрать должность согласователя
+            var fs =
+                db.FactStaff.Where(
+                    w =>
+                        w.idEmployee == approver.idEmployee & w.PlanStaff.idDepartment == idDepartment &
+                        ((w.DateEnd == null) || (w.DateEnd >= DateTime.Today)));
+            if (!fs.Any())
+            { fs =
+                    db.FactStaff.Where(
+                        w =>
+                            w.idEmployee == approver.idEmployee &
+                            ((w.DateEnd == null) || (w.DateEnd >= DateTime.Today)));}
+
+
+             var factStaffs = fs.Select(s => new DtoTimeSheetApprover
                                     {
                                         AppoverNumber = (int)approver.ApproverType.ApproveNumber,
                                         EmployeeLogin = approver.Employee.EmployeeLogin,
