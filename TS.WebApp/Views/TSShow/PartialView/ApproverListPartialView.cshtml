@@ -46,11 +46,11 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td><div align="center">(должность)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(должность)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(имя пользователя, личная подпись)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(имя пользователя, личная подпись)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(расшифровка подписи)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(расшифровка подписи)</div></td>
             <td>&nbsp;</td>
         </tr>
     }
@@ -61,24 +61,32 @@
             <td>&nbsp;</td>
             <td>Руководитель</td>
             <td>&nbsp;</td>
-            <td><div id="idPoddpis">@approve2.Post</div></td>
+            <td>
+                <div id="idPoddpis">@approve2.Post</div></td>
             <td>&nbsp;</td>
-            <td><div id="idPoddpis" style="text-align: left">@(approve2.ApproveTime.HasValue ? string.Format("{0} ", approve2.Login, approve2.ApproveTime.Value.ToString("d.M.yyyy")) : string.Empty)</div></td>
+            <td>
+                <div id="idPoddpis" style="text-align: left">@(approve2.ApproveTime.HasValue ? string.Format("{0} ", approve2.Login, approve2.ApproveTime.Value.ToString("d.M.yyyy")) : string.Empty)</div></td>
             <td>&nbsp;</td>
-            <td><div id="idPoddpis">@String.Format("{0} {1}.{2}.", approve2.Surname, approve2.Name.First(), approve2.Patronymic.First())</div></td>
+            <td>
+                <div id="idPoddpis">@String.Format("{0} {1}.{2}.", approve2.Surname, approve2.Name.First(), approve2.Patronymic.First())</div></td>
             <td>&nbsp;</td>
         </tr>
+
         <tr>
             <td>&nbsp;</td>
             <td>структурного подразделения</td>
             <td>&nbsp;</td>
-            <td><div align="center">(должность)</div></td>
+            <td style="font-size: 8pt;">
+                <div align="center">(должность)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(имя пользователя, личная подпись)</div></td>
+            <td style="font-size: 8pt;">
+                <div align="center">(имя пользователя, личная подпись)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(расшифровка подписи)</div></td>
+            <td style="font-size: 8pt;">
+                <div align="center">(расшифровка подписи)</div></td>
             <td>&nbsp;</td>
         </tr>
+        <tr height=10><td colspan="9"></tr>
     }
     @if (approve3 != null)
     {
@@ -98,11 +106,11 @@
             <td>&nbsp;</td>
             <td>кадровой службы</td>
             <td>&nbsp;</td>
-            <td><div align="center">(должность)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(должность)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(имя пользователя, личная подпись)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(имя пользователя, личная подпись)</div></td>
             <td>&nbsp;</td>
-            <td><div align="center">(расшифровка подписи)</div></td>
+            <td style="font-size: 8pt;"><div align="center">(расшифровка подписи)</div></td>
             <td>&nbsp;</td>
         </tr>
     }

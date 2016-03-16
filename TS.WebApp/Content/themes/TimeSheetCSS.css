@@ -159,6 +159,7 @@
 .XCSS {
     background-color: #FFFFCC;
     overflow: auto;
+    display: none;
     margin: 0;
 }
 
