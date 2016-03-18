@@ -272,6 +272,7 @@
       <Column Name="HourStaffCount" Type="System.Decimal" DbType="Decimal(6,4)" CanBeNull="true" />
       <Column Name="CalcStaffCount" Type="System.Decimal" DbType="Decimal(6,4) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="FactStaffHistory_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idFactStaffHistory" Type="TimeSheetRecord" />
+      <Association Name="FactStaffHistory_Event" Member="Events" ThisKey="id" OtherKey="idFactStaffHistory" Type="Event" />
       <Association Name="FactStaff_FactStaffHistory" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="FactStaffWithHistory_FactStaffHistory" Member="FactStaffWithHistory" ThisKey="id" OtherKey="idFactStaffHistory" Type="FactStaffWithHistory" IsForeignKey="true" />
     </Type>
@@ -387,6 +388,31 @@
       <Column Name="DateEnd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="idEmployee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Employee_OK_Inkapacity" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Event_BusinessTrip" Member="Event_BusinessTrips">
+    <Type Name="Event_BusinessTrip">
+      <Column Name="idEvent" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idBusinessTrip" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Event_Event_BusinessTrip" Member="Event" ThisKey="idEvent" OtherKey="id" Type="Event" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Event" Member="Events">
+    <Type Name="Event">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idPrikaz" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateBegin" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="DateEnd" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="idMainEvent" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idPrikazEnd" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idFactStaffHistory" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idEventKind" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idEventType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idContract" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Event_Event_BusinessTrip" Member="Event_BusinessTrip" ThisKey="id" OtherKey="idEvent" Type="Event_BusinessTrip" Cardinality="One" />
+      <Association Name="Event_Event" Member="Events" ThisKey="id" OtherKey="idMainEvent" Type="Event" />
+      <Association Name="FactStaffHistory_Event" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Event_Event" Member="Event1" ThisKey="idMainEvent" OtherKey="id" Type="Event" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

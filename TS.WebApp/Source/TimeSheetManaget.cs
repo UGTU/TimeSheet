@@ -151,7 +151,8 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
 
-        private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpuskList, IEnumerable<OK_Inkapacity> inkapacities)
+        private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, 
+            IEnumerable<OK_Otpusk> otpuskList, IEnumerable<OK_Inkapacity> inkapacities, IEnumerable<Event> businesstrips)
         {
             List<TimeSheetRecord> timeSheetRecordLList;
             // Генерируем табель
@@ -176,6 +177,8 @@ namespace TimeSheetMvc4WebApplication.Source
             timeSheetRecordLList = AddExceptoinDaysToTimeSheetRecords(employee, timeSheetRecordLList, exeptions);
             // Добавляем информацию о больничных 
             timeSheetRecordLList = AddHospitalsToTimeSheetRecords(employee, timeSheetRecordLList, inkapacities);
+            //Добавляем информацию о командировках
+            timeSheetRecordLList = AddBusinessTripToTimeSheetRecords(employee, timeSheetRecordLList, businesstrips);
 
 
             return timeSheetRecordLList;
@@ -194,6 +197,8 @@ namespace TimeSheetMvc4WebApplication.Source
         private const int IdWorkTypePochesovik = 19;
         private const int IdWorkTypeIspOb = 20;
         private const int IdPps = 2;
+        private const int IdBusinessTripKind = 17;
+        private const int BeginEvent = 1;
         private TimeSheet _timeSheet;
 
         //Генерация табеля для работников
@@ -205,13 +210,21 @@ namespace TimeSheetMvc4WebApplication.Source
                 var factStaffIds = employees.Select(s => s.id).Distinct();
                 var otpusk = _db.OK_Otpusk.Where(w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
                              w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
-                var holspitals = _db.OK_Inkapacities.Where(w => employees.Select(s => s.idEmployee).Distinct().Contains(w.idEmployee) && w.DateBegin <= _timeSheet.DateEndPeriod &&
-                             w.DateEnd >= _timeSheet.DateBeginPeriod);
+                var holspitals = _db.OK_Inkapacities.Where(w => employees.Select(s => s.idEmployee).Distinct().Contains(w.idEmployee) 
+                            && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod);
+                var trips = _db.Events.Where(w => employees.Select(x=>x.idFactStaffHistory).Contains(w.idFactStaffHistory)
+                            && w.DateBegin <= _timeSheet.DateEndPeriod &&
+                             w.DateEnd >= _timeSheet.DateBeginPeriod && w.idEventKind == IdBusinessTripKind && w.idEventType == BeginEvent);
+
                 foreach (var employee in employees)
                 {
-                    var employeeOtpusk = otpusk.Where(w => w.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
-                    var employeeHosp = holspitals.Where(w => w.idEmployee == employee.idEmployee && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
-                    _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk, employeeHosp));
+                    var employeeOtpusk = otpusk.Where(w => w.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod 
+                        && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    var employeeHosp = holspitals.Where(w => w.idEmployee == employee.idEmployee && w.DateBegin <= _timeSheet.DateEndPeriod 
+                        && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    var employeeTrips = trips.Where(w => w.FactStaffHistory.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod
+                        && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk, employeeHosp, employeeTrips));
                 }
             }
             catch (System.Exception ex)
@@ -502,6 +515,49 @@ namespace TimeSheetMvc4WebApplication.Source
                 }
             }
             return timeSheetRecordLList;
+        }
+
+        List<TimeSheetRecord> AddBusinessTripToTimeSheetRecords(FactStaffWithHistory employee,
+            IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<Event> businesstrips)
+        {
+            var timeSheetRecordList = new List<TimeSheetRecord>(timeSheetRecords);
+            var okBusinesstrips = businesstrips as Event[] ?? businesstrips.ToArray();
+            if (okBusinesstrips.Any())
+            {
+                foreach (var businesstrip in okBusinesstrips)
+                {
+                    int beginDay;
+                    if (_timeSheet.DateBeginPeriod.Year == businesstrip.DateBegin.Value.Year &&
+                        _timeSheet.DateBeginPeriod.Month == businesstrip.DateBegin.Value.Month)
+                    {
+                        beginDay = businesstrip.DateBegin.Value.Day;
+                    }
+                    else
+                    {
+                        beginDay = _timeSheet.DateBeginPeriod.Day;
+                    }
+                    int endDay;
+                    if (businesstrip.DateEnd.HasValue && _timeSheet.DateEndPeriod.Year == businesstrip.DateEnd.Value.Year &&
+                        _timeSheet.DateEndPeriod.Month == businesstrip.DateEnd.Value.Month)
+                    {
+                        endDay = businesstrip.DateEnd.Value.Day;
+                    }
+                    else
+                    {
+                        endDay = _timeSheet.DateEndPeriod.Day;
+                    }
+
+                    for (int i = beginDay; i <= endDay; i++)
+                    {
+                        var day = new DateTime(_timeSheet.DateBeginPeriod.Year, _timeSheet.DateBeginPeriod.Month, i);
+                        var record = timeSheetRecordList.FirstOrDefault(f => f.RecordDate.Date == day.Date && f.idFactStaffHistory == employee.idFactStaffHistory);
+                        if (record == null || record.idDayStatus == IdX) continue;
+                        record.idDayStatus = (int)Models.DayStatus.К;
+                        record.JobTimeCount = 0;
+                    }
+                }
+            }
+            return timeSheetRecordList;
         }
 
         //Генерирукет запись в табеле
