@@ -35,7 +35,7 @@ namespace TimeSheetMvc4WebApplication.Source
             using (var dbloger = new DataContextLoger("GetTimeSheetLog.sql", FileMode.OpenOrCreate, db))
             {
                 var loadOptions = new DataLoadOptions();
-                loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetRecord);
+                loadOptions.LoadWith((TimeSheet ts) => ts.TimeSheetRecords);
                 loadOptions.LoadWith((TimeSheet ts) => ts.Dep);
                 loadOptions.LoadWith((Dep d) => d.Department);
                 loadOptions.LoadWith((TimeSheetRecord tsr) => tsr.FactStaffHistory);

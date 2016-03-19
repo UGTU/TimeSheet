@@ -42,6 +42,14 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
+        [Authorize(Roles = "ADtoKadr")]
+        public ActionResult EditRegim()
+        {
+            //CheckIsAdmin();
+            return View();
+        }
+
+
         public string SendNotice(string username)
         {
             //===

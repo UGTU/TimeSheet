@@ -243,7 +243,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public string DayAweek;
         [DataMember]
         public bool IsChecked;
-
+        [DataMember]
+        public double NightTimeCount;
     }
 
     [DataContract]

@@ -271,25 +271,10 @@
       <Column Name="idSalaryKoeff" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HourStaffCount" Type="System.Decimal" DbType="Decimal(6,4)" CanBeNull="true" />
       <Column Name="CalcStaffCount" Type="System.Decimal" DbType="Decimal(6,4) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="FactStaffHistory_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idFactStaffHistory" Type="TimeSheetRecord" />
       <Association Name="FactStaffHistory_Event" Member="Events" ThisKey="id" OtherKey="idFactStaffHistory" Type="Event" />
+      <Association Name="FactStaffHistory_TimeSheetRecord" Member="TimeSheetRecords" ThisKey="id" OtherKey="idFactStaffHistory" Type="TimeSheetRecord" />
       <Association Name="FactStaff_FactStaffHistory" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="FactStaffWithHistory_FactStaffHistory" Member="FactStaffWithHistory" ThisKey="id" OtherKey="idFactStaffHistory" Type="FactStaffWithHistory" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="ShemaTabel.TimeSheetRecord" Member="TimeSheetRecord">
-    <Type Name="TimeSheetRecord">
-      <Column Name="RecordDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="JobTimeCount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="idTimeSheet" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="idDayStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IsChecked" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="idFactStaffHistory" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IdTimeSheetRecord" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Association Name="FactStaffHistory_TimeSheetRecord" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" />
-      <Association Name="DayStatus_TimeSheetRecord" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
-      <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
-      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetView" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheetView" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.DayStatus" Member="DayStatus">
@@ -301,7 +286,7 @@
       <Association Name="DayStatus_EventSuperType" Member="EventSuperType" ThisKey="id" OtherKey="idDayStatus" Type="EventSuperType" />
       <Association Name="DayStatus_Exception" Member="Exception" ThisKey="id" OtherKey="idDayStatus" Type="Exception" />
       <Association Name="DayStatus_OK_Otpuskvid" Member="OK_Otpuskvid" ThisKey="id" OtherKey="idDayStatus" Type="OK_Otpuskvid" />
-      <Association Name="DayStatus_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idDayStatus" Type="TimeSheetRecord" />
+      <Association Name="DayStatus_TimeSheetRecord" Member="TimeSheetRecords" ThisKey="id" OtherKey="idDayStatus" Type="TimeSheetRecord" />
     </Type>
   </Table>
   <Table Name="ShemaTabel.TimeSheet" Member="TimeSheet">
@@ -316,7 +301,7 @@
       <Column Name="ApproveStep" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="IsFake" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="TimeSheet_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
-      <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
+      <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheetRecords" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Approver_TimeSheet" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
       <Association Name="Dep_TimeSheet" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
     </Type>
@@ -375,7 +360,6 @@
       <Column Name="EmployeeCount" Type="System.Int32" DbType="Int" CanBeNull="false" />
       <Column Name="ApproveStep" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="TimeSheetView_TimeSheetApproval" Member="TimeSheetApproval" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetApproval" />
-      <Association Name="TimeSheetView_TimeSheetRecord" Member="TimeSheetRecord" ThisKey="id" OtherKey="idTimeSheet" Type="TimeSheetRecord" />
       <Association Name="Dep_TimeSheetView" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
       <Association Name="Approver_TimeSheetView" Member="Approver" ThisKey="idCreater" OtherKey="id" Type="Approver" IsForeignKey="true" />
     </Type>
@@ -413,6 +397,21 @@
       <Association Name="Event_Event" Member="Events" ThisKey="id" OtherKey="idMainEvent" Type="Event" />
       <Association Name="FactStaffHistory_Event" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Event_Event" Member="Event1" ThisKey="idMainEvent" OtherKey="id" Type="Event" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="ShemaTabel.TimeSheetRecord" Member="TimeSheetRecords">
+    <Type Name="TimeSheetRecord">
+      <Column Name="RecordDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="JobTimeCount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="idTimeSheet" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idDayStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsChecked" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="idFactStaffHistory" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdTimeSheetRecord" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NightTimeCount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="FactStaffHistory_TimeSheetRecord" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
+      <Association Name="DayStatus_TimeSheetRecord" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

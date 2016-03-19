@@ -238,7 +238,7 @@ namespace TimeSheetMvc4WebApplication
                     foreach (var recordForEdit in recordsForEdit)
                     {
                         var updeteItem =
-                            db.TimeSheetRecord.FirstOrDefault(
+                            db.TimeSheetRecords.FirstOrDefault(
                                 f => f.IdTimeSheetRecord == recordForEdit.IdTimeSheetRecord);
                         if (updeteItem == null) continue;
                         updeteItem.JobTimeCount = recordForEdit.JobTimeCount;

@@ -317,7 +317,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Department = DtoDepartment(db, s.idDepartment),
                 ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet),
                 IsFake = s.IsFake,
-                EmployeesCount = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+                EmployeesCount = db.TimeSheetRecords.Where(we => we.idTimeSheet == idTimeSheet)
                         .Select(ec => ec.idFactStaffHistory)
                         .Distinct()
                         .Count()
@@ -328,7 +328,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Enumerable.Range(1, 3)
                     .Select(s => DtoTimeSheetApprover(db, idTimeSheet, s, timeSheet.ApproveStep))
                     .ToArray();
-            timeSheet.Employees = db.TimeSheetRecord.Where(we => we.idTimeSheet == idTimeSheet)
+            timeSheet.Employees = db.TimeSheetRecords.Where(we => we.idTimeSheet == idTimeSheet)
                 .Select(se => se.idFactStaffHistory)
                 .Distinct()
                 .Select(se => DtoTimeSheetEmployee(db, idTimeSheet, se))
@@ -440,7 +440,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public static DtoTimeSheetEmployee DtoTimeSheetEmployee(KadrDataContext db, int idTimeSheet, int idFactStaffHistory)
         {
             var records =
-                db.TimeSheetRecord.Where(w => w.idTimeSheet == idTimeSheet & w.idFactStaffHistory == idFactStaffHistory).Select(
+                db.TimeSheetRecords.Where(w => w.idTimeSheet == idTimeSheet & w.idFactStaffHistory == idFactStaffHistory).Select(
                     s => DtoTimeSheetRecord(s)).ToArray();
 
            // records

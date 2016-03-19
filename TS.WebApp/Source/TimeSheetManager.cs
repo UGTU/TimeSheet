@@ -56,7 +56,7 @@ namespace TimeSheetMvc4WebApplication.Source
         {
             if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
             _db.TimeSheetApproval.DeleteAllOnSubmit(_db.TimeSheetApproval.Where(w => w.idTimeSheet == _timeSheet.id));
-            _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
+            _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheet.DeleteAllOnSubmit(_db.TimeSheet.Where(w => w.id == _timeSheet.id));
             _db.SubmitChanges();
             _timeSheet = null;
@@ -66,7 +66,7 @@ namespace TimeSheetMvc4WebApplication.Source
         public bool RemoveEmployee(int idFactStuffHistory)
         {
             if (!CanEditTimeSheet()) return false;
-            _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id && w.idFactStaffHistory==idFactStuffHistory));
+            _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id && w.idFactStaffHistory==idFactStuffHistory));
             _db.SubmitChanges();
             return true;
         }
@@ -547,7 +547,7 @@ namespace TimeSheetMvc4WebApplication.Source
             }
             catch (System.Exception ex)
             {
-                _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == ts.id));
+                _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == ts.id));
                 _db.TimeSheet.DeleteOnSubmit(ts);
                 _db.SubmitChanges();
                 throw;

@@ -1051,6 +1051,7 @@
     <Content Include="Views\Admin\EditLogin.cshtml" />
     <Content Include="Views\Shared\TimeSheetFooter.cshtml" />
     <Content Include="Views\Shared\NoticeScript.cshtml" />
+    <Content Include="Views\Admin\EditRegim.cshtml" />
     <None Include="Views\Register\Index.cshtml.bak" />
   </ItemGroup>
   <ItemGroup>

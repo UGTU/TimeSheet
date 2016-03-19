@@ -63,7 +63,7 @@ namespace TimeSheetMvc4WebApplication.Source
         {
             if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
             _db.TimeSheetApproval.DeleteAllOnSubmit(_db.TimeSheetApproval.Where(w => w.idTimeSheet == _timeSheet.id));
-            _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
+            _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id));
             _db.TimeSheet.DeleteAllOnSubmit(_db.TimeSheet.Where(w => w.id == _timeSheet.id));
             _db.SubmitChanges();
             _timeSheet = null;
@@ -73,7 +73,7 @@ namespace TimeSheetMvc4WebApplication.Source
         public bool RemoveEmployee(int idFactStuffHistory)
         {
             if (!CanEditTimeSheet()) return false;
-            _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id && w.idFactStaffHistory==idFactStuffHistory));
+            _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id && w.idFactStaffHistory==idFactStuffHistory));
             _db.SubmitChanges();
             return true;
         }
@@ -213,7 +213,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 var holspitals = _db.OK_Inkapacities.Where(w => employees.Select(s => s.idEmployee).Distinct().Contains(w.idEmployee) 
                             && w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod);
                 var trips = _db.Events.Where(w => employees.Select(x=>x.idFactStaffHistory).Contains(w.idFactStaffHistory)
-                            && w.DateBegin <= _timeSheet.DateEndPeriod &&
+                            && w.DateBegin <= _timeSheet.DateEndPeriod && w.idPrikazEnd == null &&
                              w.DateEnd >= _timeSheet.DateBeginPeriod && w.idEventKind == IdBusinessTripKind && w.idEventType == BeginEvent);
 
                 foreach (var employee in employees)
@@ -336,6 +336,13 @@ namespace TimeSheetMvc4WebApplication.Source
             }
             return timeSheetRecordLList;
         }
+
+        private List<TimeSheetRecord> FlexibleTimeSheetGenerate(FactStaffWithHistory employee)
+        {
+            var timeSheetRecordLList = new List<TimeSheetRecord>();
+            return timeSheetRecordLList;
+        }
+
 
         //Генерация табеля для ППС
         private List<TimeSheetRecord> PpsTimeSheetGenerate(FactStaffWithHistory employee)
@@ -622,7 +629,7 @@ namespace TimeSheetMvc4WebApplication.Source
             }
             catch (System.Exception ex)
             {
-                _db.TimeSheetRecord.DeleteAllOnSubmit(_db.TimeSheetRecord.Where(w => w.idTimeSheet == _timeSheet.id));
+                _db.TimeSheetRecords.DeleteAllOnSubmit(_db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id));
                 _db.TimeSheet.DeleteOnSubmit(_timeSheet);
                 _db.SubmitChanges();
                 throw;
