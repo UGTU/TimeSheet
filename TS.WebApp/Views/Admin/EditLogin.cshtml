@@ -78,16 +78,16 @@
             $('#deparmentsLoad').remove();
         });
 
-        $scope.SetCurrentDepartment = function (idMenagDepartnent) {
-            if ($scope.DepIdList.indexOf(idMenagDepartnent) === -1) {
-                $scope.DepIdList.push(idMenagDepartnent);
+        $scope.SetCurrentDepartment = function (idManagеDepartment) {
+            if ($scope.DepIdList.indexOf(idManagеDepartment) === -1) {
+                $scope.DepIdList.push(idManagеDepartment);
             }
             var deps = [];
             $scope.CurrentDepartment = null;
             angular.forEach($scope.Departments, function (dep) {
-                if (dep.IdManagerDepartment == idMenagDepartnent)
+                if (dep.IdManagerDepartment == idManagеDepartment)
                     deps.push(dep);
-                if (dep.IdDepartment == idMenagDepartnent) {
+                if (dep.IdDepartment == idManagеDepartment) {
                     $scope.CurrentDepartment = dep;
                 }
             });

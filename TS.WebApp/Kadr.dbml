@@ -129,7 +129,6 @@
       <Column Name="DateBeginR" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="idLaborContaraktMain" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="idLaborContraktHistory" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="FactStaffCurrent_OK_Otpusk" Member="OK_Otpusk" ThisKey="id" OtherKey="idFactStaff" Type="OK_Otpusk" />
       <Association Name="FactStaffCurrent_FactStaff" Member="FactStaff" ThisKey="id" OtherKey="id" Type="FactStaff" Cardinality="One" />
       <Association Name="FactStaffCurrent_PlanStaff" Member="PlanStaff" ThisKey="idPlanStaff" OtherKey="id" Type="PlanStaff" Cardinality="One" />
     </Type>
@@ -139,23 +138,8 @@
       <Column Name="idotpuskvid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="otpuskvidname" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="idDayStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="OK_Otpuskvid_OK_Otpusk" Member="OK_Otpusk" ThisKey="idotpuskvid" OtherKey="idOtpuskVid" Type="OK_Otpusk" />
+      <Association Name="OK_Otpuskvid_OK_Otpusk" Member="OK_Otpusks" ThisKey="idotpuskvid" OtherKey="idOtpuskVid" Type="OK_Otpusk" />
       <Association Name="DayStatus_OK_Otpuskvid" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.OK_Otpusk" Member="OK_Otpusk">
-    <Type Name="OK_Otpusk">
-      <Column Name="idOtpusk" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="idFactStaff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="idOtpuskVid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="idOtpuskPrikaz" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DateBegin" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="DateEnd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CountDay" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="OK_Otpuskvid_OK_Otpusk" Member="OK_Otpuskvid" ThisKey="idOtpuskVid" OtherKey="idotpuskvid" Type="OK_Otpuskvid" IsForeignKey="true" />
-      <Association Name="FactStaffCurrent_OK_Otpusk" Member="FactStaffCurrent" ThisKey="idFactStaff" OtherKey="id" Type="FactStaffCurrent" IsForeignKey="true" />
-      <Association Name="FactStaff_OK_Otpusk" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" />
-      <Association Name="FactStaffWithHistory_OK_Otpusk" Member="FactStaffWithHistory" ThisKey="idFactStaff" OtherKey="id" Type="FactStaffWithHistory" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Employee" Member="Employee">
@@ -204,8 +188,8 @@
       <Column Name="idFundingDepartment" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="idTimeSheetSheduleType" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="FactStaff_EmployeeEvent" Member="EmployeeEvent" ThisKey="id" OtherKey="idFactStaff" Type="EmployeeEvent" />
-      <Association Name="FactStaff_OK_Otpusk" Member="OK_Otpusk" ThisKey="id" OtherKey="idFactStaff" Type="OK_Otpusk" />
       <Association Name="FactStaff_FactStaffHistory" Member="FactStaffHistory" ThisKey="id" OtherKey="idFactStaff" Type="FactStaffHistory" />
+      <Association Name="FactStaff_OK_Otpusk" Member="OK_Otpusks" ThisKey="id" OtherKey="idFactStaff" Type="OK_Otpusk" />
       <Association Name="Employee_FactStaff" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
       <Association Name="PlanStaff_FactStaff" Member="PlanStaff" ThisKey="idPlanStaff" OtherKey="id" Type="PlanStaff" IsForeignKey="true" />
       <Association Name="FactStaffCurrent_FactStaff" Member="FactStaffCurrent" ThisKey="id" OtherKey="id" Type="FactStaffCurrent" IsForeignKey="true" />
@@ -250,7 +234,6 @@
       <Column Name="idreason" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HourStaffCount" Type="System.Decimal" DbType="Decimal(6,4)" CanBeNull="true" />
       <Column Name="CalcStaffCount" Type="System.Decimal" DbType="Decimal(6,4) NOT NULL" CanBeNull="false" />
-      <Association Name="FactStaffWithHistory_OK_Otpusk" Member="OK_Otpusk" ThisKey="id" OtherKey="idFactStaff" Type="OK_Otpusk" />
       <Association Name="FactStaffWithHistory_Employee" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" Cardinality="One" />
       <Association Name="FactStaffWithHistory_FactStaff" Member="FactStaff" ThisKey="id" OtherKey="id" Type="FactStaff" Cardinality="One" />
       <Association Name="FactStaffWithHistory_PlanStaff" Member="PlanStaff" ThisKey="idPlanStaff" OtherKey="id" Type="PlanStaff" Cardinality="One" />
@@ -395,6 +378,7 @@
       <Column Name="idContract" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Event_Event_BusinessTrip" Member="Event_BusinessTrip" ThisKey="id" OtherKey="idEvent" Type="Event_BusinessTrip" Cardinality="One" />
       <Association Name="Event_Event" Member="Events" ThisKey="id" OtherKey="idMainEvent" Type="Event" />
+      <Association Name="Event_OK_Otpusk" Member="OK_Otpusks" ThisKey="id" OtherKey="idFactStaffPrikaz" Type="OK_Otpusk" />
       <Association Name="FactStaffHistory_Event" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Event_Event" Member="Event1" ThisKey="idMainEvent" OtherKey="id" Type="Event" IsForeignKey="true" />
     </Type>
@@ -412,6 +396,24 @@
       <Association Name="FactStaffHistory_TimeSheetRecord" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="TimeSheet_TimeSheetRecord" Member="TimeSheet" ThisKey="idTimeSheet" OtherKey="id" Type="TimeSheet" IsForeignKey="true" />
       <Association Name="DayStatus_TimeSheetRecord" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OK_Otpusk" Member="OK_Otpusks">
+    <Type Name="OK_Otpusk">
+      <Column Name="idOtpusk" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idFactStaff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idOtpuskVid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idOtpuskPrikaz" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateBegin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateEnd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CountDay" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CountDayFND" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OtpPeriodWork" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="idFactStaffPrikaz" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idSocialFareTransit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="FactStaff_OK_Otpusk" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Event_OK_Otpusk" Member="Event" ThisKey="idFactStaffPrikaz" OtherKey="id" Type="Event" IsForeignKey="true" />
+      <Association Name="OK_Otpuskvid_OK_Otpusk" Member="OK_Otpuskvid" ThisKey="idOtpuskVid" OtherKey="idotpuskvid" Type="OK_Otpuskvid" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

@@ -217,13 +217,13 @@ namespace TimeSheetMvc4WebApplication.Source
                         w => w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod).ToArray();
                 var factStaffIds = employees.Select(s => s.id).Distinct();
                 var otpusk =
-                    _db.OK_Otpusk.Where(
+                    _db.OK_Otpusks.Where(
                         w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
                              w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
                 foreach (var employee in employees)
                 {
-                    var employeeOtpusk = otpusk.Where(w => w.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod &&
-                                            w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+                    var employeeOtpusk = otpusk.Where(w => w.DateBegin.HasValue && w.idFactStaff == employee.id && 
+                        w.DateBegin <= _timeSheet.DateEndPeriod && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
                     _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk));
                 }
             }
@@ -428,10 +428,10 @@ namespace TimeSheetMvc4WebApplication.Source
                 foreach (var okOtpusk in okOtpusks)
                 {
                     int beginDay;
-                    if (_timeSheet.DateBeginPeriod.Year == okOtpusk.DateBegin.Year &&
-                        _timeSheet.DateBeginPeriod.Month == okOtpusk.DateBegin.Month)
+                    if (_timeSheet.DateBeginPeriod.Year == okOtpusk.DateBegin.Value.Year &&
+                        _timeSheet.DateBeginPeriod.Month == okOtpusk.DateBegin.Value.Month)
                     {
-                        beginDay = okOtpusk.DateBegin.Day;
+                        beginDay = okOtpusk.DateBegin.Value.Day;
                     }
                     else
                     {
