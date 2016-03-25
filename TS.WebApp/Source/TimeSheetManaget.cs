@@ -657,7 +657,7 @@ namespace TimeSheetMvc4WebApplication.Source
         private void GetEmployeeByLogin(string login)
         {
             var idEmployee =
-                _db.Employee.Where(w => w.EmployeeLogin.ToLower() == login.ToLower())
+                _db.Employees.Where(w => w.EmployeeLogin.ToLower() == login.ToLower())
                     .Select(s => s.id)
                     .FirstOrDefault();
             //var idApprover = 

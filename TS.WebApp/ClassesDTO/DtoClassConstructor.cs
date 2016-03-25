@@ -170,7 +170,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             //loadOptions.LoadWith((Dep d) => d.Department);
             //db.LoadOptions = loadOptions;
 
-            var approver = db.Employee.Where(w => w.id == idEmployee).
+            var approver = db.Employees.Where(w => w.id == idEmployee).
                 Select(s => new DtoApprover
                 {
                     IdEmployee = s.id,

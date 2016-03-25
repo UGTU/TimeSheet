@@ -98,8 +98,8 @@
       <Association Name="Approver_TimeSheet" Member="TimeSheet" ThisKey="id" OtherKey="idCreater" Type="TimeSheet" />
       <Association Name="Approver_TimeSheetView" Member="TimeSheetView" ThisKey="id" OtherKey="idCreater" Type="TimeSheetView" />
       <Association Name="ApproverType_Approver" Member="ApproverType" ThisKey="idApproverType" OtherKey="id" Type="ApproverType" IsForeignKey="true" />
-      <Association Name="Employee_Approver" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
       <Association Name="Dep_Approver" Member="Dep" ThisKey="idDepartment" OtherKey="id" Type="Dep" IsForeignKey="true" />
+      <Association Name="Employee_Approver" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Category" Member="Category">
@@ -142,37 +142,6 @@
       <Association Name="DayStatus_OK_Otpuskvid" Member="DayStatus" ThisKey="idDayStatus" OtherKey="id" Type="DayStatus" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Employee" Member="Employee">
-    <Type Name="Employee">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="itab_n" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="FirstName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="LastName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Otch" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="BirthDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="BirthPlace" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
-      <Column Name="SexBit" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="idGrazd" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="idSemPol" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SeverKoeff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RayonKoeff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="EmployeeSid" Type="System.Data.Linq.Binary" DbType="VarBinary(85)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="EmployeeLogin" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
-      <Column Name="AllowBirthdate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="paspser" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="paspnomer" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="paspdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="paspkem" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="inn" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="ssgps" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="medpolis" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="Employee_Approver" Member="Approver" ThisKey="id" OtherKey="idEmployee" Type="Approver" />
-      <Association Name="Employee_FactStaff" Member="FactStaff" ThisKey="id" OtherKey="idEmployee" Type="FactStaff" />
-      <Association Name="Employee_OK_Inkapacity" Member="OK_Inkapacities" ThisKey="id" OtherKey="idEmployee" Type="OK_Inkapacity" />
-      <Association Name="FactStaffWithHistory_Employee" Member="FactStaffWithHistory" ThisKey="id" OtherKey="idEmployee" Type="FactStaffWithHistory" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.FactStaff" Member="FactStaff">
     <Type Name="FactStaff">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -190,10 +159,10 @@
       <Association Name="FactStaff_EmployeeEvent" Member="EmployeeEvent" ThisKey="id" OtherKey="idFactStaff" Type="EmployeeEvent" />
       <Association Name="FactStaff_FactStaffHistory" Member="FactStaffHistory" ThisKey="id" OtherKey="idFactStaff" Type="FactStaffHistory" />
       <Association Name="FactStaff_OK_Otpusk" Member="OK_Otpusks" ThisKey="id" OtherKey="idFactStaff" Type="OK_Otpusk" />
-      <Association Name="Employee_FactStaff" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
       <Association Name="PlanStaff_FactStaff" Member="PlanStaff" ThisKey="idPlanStaff" OtherKey="id" Type="PlanStaff" IsForeignKey="true" />
       <Association Name="FactStaffCurrent_FactStaff" Member="FactStaffCurrent" ThisKey="id" OtherKey="id" Type="FactStaffCurrent" IsForeignKey="true" />
       <Association Name="FactStaffWithHistory_FactStaff" Member="FactStaffWithHistory" ThisKey="id" OtherKey="id" Type="FactStaffWithHistory" IsForeignKey="true" />
+      <Association Name="Employee_FactStaff" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PlanStaff" Member="PlanStaff">
@@ -234,7 +203,6 @@
       <Column Name="idreason" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="HourStaffCount" Type="System.Decimal" DbType="Decimal(6,4)" CanBeNull="true" />
       <Column Name="CalcStaffCount" Type="System.Decimal" DbType="Decimal(6,4) NOT NULL" CanBeNull="false" />
-      <Association Name="FactStaffWithHistory_Employee" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" Cardinality="One" />
       <Association Name="FactStaffWithHistory_FactStaff" Member="FactStaff" ThisKey="id" OtherKey="id" Type="FactStaff" Cardinality="One" />
       <Association Name="FactStaffWithHistory_PlanStaff" Member="PlanStaff" ThisKey="idPlanStaff" OtherKey="id" Type="PlanStaff" Cardinality="One" />
       <Association Name="FactStaffWithHistory_FactStaffHistory" Member="FactStaffHistory" ThisKey="idFactStaffHistory" OtherKey="id" Type="FactStaffHistory" Cardinality="One" />
@@ -354,7 +322,7 @@
       <Column Name="DateBegin" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="DateEnd" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="idEmployee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Employee_OK_Inkapacity" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Employee_OK_Inkapacity" Member="Employee" ThisKey="idEmployee" OtherKey="id" Type="Employee" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.Event_BusinessTrip" Member="Event_BusinessTrips">
@@ -414,6 +382,55 @@
       <Association Name="FactStaff_OK_Otpusk" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Event_OK_Otpusk" Member="Event" ThisKey="idFactStaffPrikaz" OtherKey="id" Type="Event" IsForeignKey="true" />
       <Association Name="OK_Otpuskvid_OK_Otpusk" Member="OK_Otpuskvid" ThisKey="idOtpuskVid" OtherKey="idotpuskvid" Type="OK_Otpuskvid" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="itab_n" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="FirstName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Otch" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BirthDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BirthPlace" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="SexBit" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idGrazd" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idSemPol" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SeverKoeff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RayonKoeff" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeSid" Type="System.Data.Linq.Binary" DbType="VarBinary(85)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="EmployeeLogin" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="AllowBirthdate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="paspser" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="paspnomer" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="paspdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="paspkem" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="inn" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ssgps" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="medpolis" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EmployeeName" Type="System.String" DbType="VarChar(152)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="OtpReducedFareDateBegin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EmployeeSmallName" Type="System.String" DbType="VarChar(56)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="EmplHistSer" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EmplHistNumber" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="EmplHistDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="idMilitaryCategory" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idMilitaryRank" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VUSCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="idMilitaryFitness" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MilitaryCommissariat" Type="System.String" DbType="VarChar(900)" CanBeNull="true" />
+      <Column Name="idMilitaryType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RemovalMilitaryMark" Type="System.String" DbType="VarChar(900)" CanBeNull="true" />
+      <Column Name="idMilitaryStructure" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NumberMilitaryType" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="paspCodeKem" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="idPrikazFIO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateFIOUse" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Employee_Approver" Member="Approvers" ThisKey="id" OtherKey="idEmployee" Type="Approver" />
+      <Association Name="Employee_FactStaff" Member="FactStaffs" ThisKey="id" OtherKey="idEmployee" Type="FactStaff" />
+      <Association Name="Employee_OK_Inkapacity" Member="OK_Inkapacities" ThisKey="id" OtherKey="idEmployee" Type="OK_Inkapacity" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">

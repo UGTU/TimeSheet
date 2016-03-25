@@ -31,7 +31,7 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             {
                 var idEmployee =
-                    db.Employee.FirstOrDefault(w => w.EmployeeLogin.ToLower() == employeeLogin.ToLower());
+                    db.Employees.FirstOrDefault(w => w.EmployeeLogin.ToLower() == employeeLogin.ToLower());
                 return idEmployee != null ? DtoClassConstructor.DtoApprover(db, idEmployee.id, isAdmin):
                     DtoClassConstructor.DtoApproverIfNullAndAdmin(db,isAdmin);
             }
@@ -315,7 +315,7 @@ namespace TimeSheetMvc4WebApplication
             {
                 try
                 {
-                    var itabN = db.Employee.Where(w => w.id == idEmployee).Select(s => s.itab_n).FirstOrDefault();
+                    var itabN = db.Employees.Where(w => w.id == idEmployee).Select(s => s.itab_n).FirstOrDefault();
                     if (itabN != null)
                         db.add_EmplLogin(itabN, new Binary(new[] {Convert.ToByte(true)}), login);
                     return true;

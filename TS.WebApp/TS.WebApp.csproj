@@ -220,6 +220,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Kadr.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Employee.cs" />
+    <Compile Include="Models\Entities\FactStaffWithHistory.cs" />
+    <Compile Include="Models\Entities\TimeSheetView.cs" />
     <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\DtoToJsonMapper.cs" />
     <Compile Include="Models\Main\TimeSheetFilter.cs" />
