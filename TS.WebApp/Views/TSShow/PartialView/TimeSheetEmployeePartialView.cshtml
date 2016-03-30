@@ -7,7 +7,7 @@
 <tr height=18>
     <td rowspan=4 height=72 width=20>
         <div align="center">@Model.EmployeeNumber</div></td>
-    <td rowspan=4 style="width: 120px; overflow: hidden;">
+    <td rowspan=4 style="width: 100px; overflow: hidden;">
         <div class="EmployeeNameDiv">@string.Format("{0} {1} {2}", Model.Surname, Model.Name, Model.Patronymic) <br/> @Model.Post <br/> @string.Format("Ставка: {0}", Model.StaffRate.ToString("0.##"))</div></td>
     <td rowspan=2 style="width: 19px; overflow: hidden; font-size: 8pt;" class="@Model.Records[0].CSS"><div align="center">@Model.Records[0].DayStatus</div></td>
     <td rowspan=2 style="width: 19px; overflow: hidden; font-size: 8pt;" class="@Model.Records[1].CSS"><div align="center">@Model.Records[1].DayStatus</div></td>

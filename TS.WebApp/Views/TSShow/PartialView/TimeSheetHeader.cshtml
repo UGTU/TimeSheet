@@ -4,7 +4,7 @@
     <td rowspan=4>
         <div align="center">№ <br/> п/п
         </div></td>
-    <td rowspan=4 width=120>
+    <td rowspan=4 width=100>
         <div align="center">Фамилия, инициалы,<br>
             должность<br>
             (специальность, профессия)<br>
@@ -13,9 +13,9 @@
         <div align="center">Числа месяца</div></td> <!---->
     <td rowspan=2>
         <div align="center">Всего за месяц</div></td>
-    <td colspan="6" width="120">
+    <td colspan="6">
         <div align="center">Неявки по причинам</div></td>
-    <td rowspan=4 width="40">
+    <td rowspan=4>
         <div align="center">Всего дней</div></td>
 </tr>
   <tr >
@@ -34,7 +34,7 @@
     <td rowspan=3 class="@Model.First(f=>f.Day==13).CSS"><div align="center">13</div></td>
     <td rowspan=3 class="@Model.First(f=>f.Day==14).CSS" ><div align="center">14</div></td>
     <td rowspan=3 class="@Model.First(f=>f.Day==15).CSS"><div align="center">15</div></td>
-      <td >
+      <td width="30">
           <div align="center">Итого <br/> 1-ая<br /> половина</div></td>
       
       <td rowspan=3 class="@Model.First(f=>f.Day==16).CSS"><div align="center">16</div></td>
@@ -53,7 +53,7 @@
       <td rowspan=3 class="@Model.First(f => f.Day == 29).CSS"><div align="center">@Model.First(f => f.Day == 29).DayText</div></td>
       <td rowspan=3 class="@Model.First(f => f.Day == 30).CSS"><div align="center">@Model.First(f => f.Day == 30).DayText</div></td>
       <td rowspan=3 class="@Model.First(f => f.Day == 31).CSS"><div align="center">@Model.First(f => f.Day == 31).DayText</div></td>
-    <td><div align="center">Итого<br /> 2-ая<br /> половина</div></td>
+    <td width="30"><div align="center">Итого<br /> 2-ая<br /> половина</div></td>
 
     <td rowspan=3 ><div align="center">код </div></td>
     <td rowspan=3 ><div align="center">дни </div></td>
@@ -63,8 +63,8 @@
     <td rowspan=3 ><div align="center">дни </div></td>
   </tr>
   <tr >
-    <td width=60><div align="center">дни</div></td>
-    <td width=60><div align="center">дни</div></td>
+    <td width=30><div align="center">дни</div></td>
+    <td width=30><div align="center">дни</div></td>
     <td width=40><div align="center">дни</div></td>
   </tr>
   <tr >
