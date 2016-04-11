@@ -124,6 +124,17 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(approverModel, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetDepartmentFactStaffs(int id)
+        {
+            var factStaffModel = new
+            {
+                Id = id,
+                DepartmentFactStaffs = Client.GetDepartmentFactStaffs(id),
+                AllRegimes = Client.GetWorkShedules()
+            };
+            return Json(factStaffModel, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SaveApproverDepartment(int idDepartmen, int approveNumber, int idEmployee, string employeeLogin)
         {
             //todo:Сделать метод проверки и сохранять логин только если он обновлён

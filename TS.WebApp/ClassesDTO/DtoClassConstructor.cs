@@ -81,13 +81,13 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
             //выбрать должность согласователя
             var fs =
-                db.FactStaff.Where(
+                db.FactStaffs.Where(
                     w =>
                         w.idEmployee == approver.idEmployee & w.PlanStaff.idDepartment == idDepartment &
                         ((w.DateEnd == null) || (w.DateEnd >= DateTime.Today)));
             if (!fs.Any())
             { fs =
-                    db.FactStaff.Where(
+                    db.FactStaffs.Where(
                         w =>
                             w.idEmployee == approver.idEmployee &
                             ((w.DateEnd == null) || (w.DateEnd >= DateTime.Today)));}
@@ -500,7 +500,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             {
                 IdFactStaffHistiry = s.id,
                 IdFactStaff = s.FactStaff.id,
-                IdEmployee = s.FactStaff.idEmployee,
+                IdEmployee = (int) s.FactStaff.idEmployee,
                 EmployeeLogin = s.FactStaff.Employee.EmployeeLogin,
                 Surname = s.FactStaff.Employee.LastName,
                 Name = s.FactStaff.Employee.FirstName,
@@ -515,7 +515,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         public static DtoFactStaffEmployee DtoFactStaffEmployee(FactStaffHistory factStaff)
         {
-
             //return db.FactStaffHistory.Where(w => w.id == idFactStaffHistory).Select(s => new DtoFactStaffEmployee
             //{
             //    IdFactStaffHistiry = s.id,
@@ -530,20 +529,20 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             //    Post = DtoPost(s.FactStaff.PlanStaff.Post),
             //    WorkShedule = DtoWorkShedule(s.FactStaff.PlanStaff.WorkShedule)
             //}).FirstOrDefault();
-            return new DtoFactStaffEmployee
-            {
-                IdFactStaffHistiry = factStaff.id,
-                IdFactStaff = factStaff.FactStaff.id,
-                IdEmployee = factStaff.FactStaff.idEmployee,
-                EmployeeLogin = factStaff.FactStaff.Employee.EmployeeLogin,
-                Surname = factStaff.FactStaff.Employee.LastName,
-                Name = factStaff.FactStaff.Employee.FirstName,
-                Patronymic = factStaff.FactStaff.Employee.Otch,
-                ItabN = factStaff.FactStaff.Employee.itab_n,
-                StaffRate = factStaff.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
-                Post = DtoPost(factStaff.FactStaff.PlanStaff.Post),
-                WorkShedule = DtoWorkShedule(factStaff.FactStaff.PlanStaff.WorkShedule)
-            };
+                return new DtoFactStaffEmployee
+                {
+                    IdFactStaffHistiry = factStaff.id,
+                    IdFactStaff = factStaff.FactStaff.id,
+                    IdEmployee = (int) factStaff.FactStaff.idEmployee,
+                    EmployeeLogin = factStaff.FactStaff.Employee.EmployeeLogin,
+                    Surname = factStaff.FactStaff.Employee.LastName,
+                    Name = factStaff.FactStaff.Employee.FirstName,
+                    Patronymic = factStaff.FactStaff.Employee.Otch,
+                    ItabN = factStaff.FactStaff.Employee.itab_n,
+                    StaffRate = factStaff.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
+                    Post = DtoPost(factStaff.FactStaff.PlanStaff.Post),
+                    WorkShedule = DtoWorkShedule(factStaff.FactStaff.WorkShedule ?? factStaff.FactStaff.PlanStaff.WorkShedule)
+                };
         }
 
         public static DtoWorkShedule DtoWorkShedule(WorkShedule workShedule)

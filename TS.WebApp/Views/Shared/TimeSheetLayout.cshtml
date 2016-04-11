@@ -4,8 +4,8 @@
     <title>Табель@(!string.IsNullOrWhiteSpace(ViewBag.Title) ? " | " + ViewBag.Title : "")</title>
     <link rel="shortcut icon" href="../../Content/Images/logo.png" />
     @Styles.Render(new[] { "~/Content/timeSheet", "~/Content/bootstrap", "~/Content/bootstrap-datepicker" })
-    @Scripts.Render(new[] { "~/bundles/jquery", "~/bundles/jqueryui", "~/bundles/bootstrap", "~/Content/datejs", "~/Content/moment-with-langs", "~/Content/angularjs", "~/Scripts/bootstrap-datepicker" })
-
+    @Scripts.Render(new[] { "~/bundles/jquery", "~/bundles/jqueryui", "~/bundles/bootstrap", "~/Content/datejs", "~/Content/moment-with-langs", "~/Content/angularjs",
+        "~/Scripts/bootstrap-datepicker"})
 </head>
 <body class="body">
     @{ Html.RenderPartial("TimeSheetHeader"); }

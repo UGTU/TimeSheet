@@ -221,6 +221,7 @@
       <DependentUpon>Kadr.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Employee.cs" />
+    <Compile Include="Models\Entities\FactStaff.cs" />
     <Compile Include="Models\Entities\FactStaffWithHistory.cs" />
     <Compile Include="Models\Entities\TimeSheetView.cs" />
     <Compile Include="Models\HeaderLinckModel.cs" />

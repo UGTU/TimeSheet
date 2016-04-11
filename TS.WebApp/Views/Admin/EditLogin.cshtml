@@ -21,7 +21,7 @@
                 </h4>
                 <p class="list-group-item-text"> На уровень вверх</p>
             </a>
-            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
+            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
                 <span ng-hide="CanSetAsCurrentDepartment(dep.IdDepartment)" class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)"><span class="glyphicon glyphicon-chevron-right"></span></span>
                 <h4 class=" list-group-item-heading" style="font-size: 16px;">
                     {{dep.DepartmentSmallName}}
@@ -48,21 +48,21 @@
             </div>
         </div>
 
-        <hr style="margin-top: 0;" />
+        <hr style="margin-top: 0;"/>
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Логин</th>
-                    <th>ФИО</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Логин</th>
+                <th>ФИО</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="empl in sdEmployees | orderBy:['Surname']">
-                    <td><input type="text" ng-model="empl.EmployeeLogin" class="form-control input-sm"></td>
-                    <td>{{GetEmployeeName(empl)}}</td>
-                    <td><span ng-class="GetState(empl)" @*class="glyphicon glyphicon-floppy-remove"*@></span></td>
-                </tr>
+            <tr ng-repeat="empl in sdEmployees | orderBy:['Surname']">
+                <td><input type="text" ng-model="empl.EmployeeLogin" class="form-control input-sm"></td>
+                <td>{{GetEmployeeName(empl)}}</td>
+                <td><span ng-class="GetState(empl)" @*class="glyphicon glyphicon-floppy-remove"*@></span></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -133,6 +133,8 @@
                 $scope.EmployeesClone();
             });
         };
+
+
 
         $scope.EmployeesClone = function () {
             angular.forEach($scope.sdEmployees, function (sdEmployee) {
@@ -241,8 +243,6 @@
                 });
             });
         };
-
-
     };
 </script>
 

@@ -88,13 +88,36 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             {
                 return
-                    db.FactStaff.Where(w => w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).Select(
+                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).Select(
                         s => DtoClassConstructor.DtoEmployee(s.Employee)).Distinct().ToArray();
             }
         }
 
+        /// <summary>
+        /// Возвращает сотрудников структурного подразделения с их рабочими режимами
+        /// </summary>
+        [OperationContract]
+        public DtoFactStaffEmployee[] GetDepartmentFactStaffs(int idDepartment)
+        {
+            using (var db = new KadrDataContext())
+            {
+                return
+                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).Select(
+                        s => DtoClassConstructor.DtoFactStaffEmployee(s.CurrentChange)).ToArray();
+            }
+        }
 
-
+        /// <summary>
+        /// Возвращает список режимов работы
+        /// </summary>
+        [OperationContract]
+        public DtoWorkShedule[] GetWorkShedules()
+        {
+            using (var db = new KadrDataContext())
+            {
+                return db.WorkShedule.Select(s=> DtoClassConstructor.DtoWorkShedule(s)).ToArray();
+            }
+        }
 
         [OperationContract]
         public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, DtoApprover approver, DateTime dateStart, DateTime dateEnd)
