@@ -376,7 +376,7 @@ namespace TimeSheetMvc4WebApplication.Models
                                 css = "EmptyCSS";
                                 break;
                             default:
-                                css = "PrintXCSS";
+                                css = "PrintDefCSS";
                                 break;
                         }
                     }

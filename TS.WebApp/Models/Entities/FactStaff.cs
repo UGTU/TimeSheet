@@ -48,7 +48,8 @@ namespace TimeSheetMvc4WebApplication
         {
             get
             {
-                return FactStaffHistories.Where(fcStHist => fcStHist.DateBegin <= DateTime.Today.Date).OrderBy(fcStHist => fcStHist.DateBegin).LastOrDefault() ??
+                return FactStaffHistories.Where(fcStHist => fcStHist.DateBegin <= DateTime.Today.Date)
+                    .OrderBy(fcStHist => fcStHist.DateBegin).LastOrDefault() ??
                     FactStaffHistories.FirstOrDefault();
             }
         }

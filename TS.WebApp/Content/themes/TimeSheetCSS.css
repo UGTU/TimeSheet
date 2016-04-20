@@ -166,6 +166,14 @@
 .PrintXCSS {
     background-color: #EFEFEF;
     overflow: auto;
+    display: none;
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+}
+
+.PrintDefCSS {
+    background-color: #EFEFEF;
+    overflow: auto;
     margin: 0;
     -webkit-print-color-adjust: exact;
 }
