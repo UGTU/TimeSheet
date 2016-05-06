@@ -44,6 +44,7 @@ namespace TimeSheetMvc4WebApplication.Models.Main
         public int Order { get; set; }
         public Guid IdTimeSheetRecord { get; set; }
         public double JobTimeCount { get; set; }
+        public double NightTimeCount { get; set; }
         public int IdDayStatus { get; set; }
         public string Date { get; set; }
         public string DayAweek { get; set; }

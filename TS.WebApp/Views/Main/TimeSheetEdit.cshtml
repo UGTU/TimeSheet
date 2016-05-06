@@ -48,6 +48,7 @@
                         <th>День недели</th>
                         <th>Статус</th>
                         <th>Часы</th>
+                        <th ng-class="SheduleCSS()">Ночные</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,6 +62,11 @@
                         <td style="padding: 0px 0px 0 5px; width: 75px;" align="center">
                             <div class="form-group " ng-class="inputJobTimeCountValidate(record.JobTimeCount)" style="margin-bottom: 0;">
                                 <input class="form-control input-sm" ng-model="record.JobTimeCount" type="number" style="margin: 2px; padding: 0px 5px; height: 18px; width: 55px;" ng-disabled="isCanTimeSheetEditfunction()">
+                            </div>
+                        </td>
+                        <td ng-class="SheduleCSS()" style="padding: 0px 0px 0 5px; width: 75px;" align="center">
+                            <div class="form-group ">
+                                <input class="form-control input-sm" ng-model="record.NightTimeCount" type="number" style="margin: 2px; padding: 0px 5px; height: 18px; width: 55px;" ng-disabled="NotNightShedule()">
                             </div>
                         </td>
                     </tr>
@@ -82,6 +88,15 @@
             </p>
             <p>
                 <input class="form-control input-sm" type="number" ng-model="selectedDayJobTimeCount" ng-disabled="isUpdateDisabled()">
+            </p>
+
+            <p style="margin-bottom: 0px;" ng-class="SheduleCSS()">
+                <label class=" control-label">
+                    Ночные
+                </label>
+            </p>
+            <p ng-class="SheduleCSS()">
+                <input class="form-control input-sm" type="number" ng-model="selectedNightJobTimeCount" ng-disabled="isUpdateDisabled()">
             </p>
 
             <p class="text-right">
@@ -161,8 +176,7 @@
     function TimeSheetRecords($scope, $http) {
         $http.get('@Html.Raw(@Url.Action("GetTimeSheetModelJson", "Main", new { idTimeSheet = @Model }))').success(function (data) {
             $scope.dayStatList = data.DayStatusList;
-            $scope.selectedDayStatList = $scope.dayStatList[0];
-            $scope.selectedDayJobTimeCount = 0;
+            $scope.ClearFields();
             $scope.employees = data.TimeSheet.Employees;
             $scope.selectAll = false;
             $scope.TimeSheetApproveStep = data.TimeSheet.TimeSheetApproveStep;
@@ -177,6 +191,7 @@
                 });
             });
 
+
             $scope.setCurrentEmployeeRecords($scope.employees[0]);
             $('#progress').remove();
             $('.row').removeClass('hidden');
@@ -190,6 +205,12 @@
                 });
             }
         });
+
+        $scope.ClearFields = function() {
+            $scope.selectedDayStatList = $scope.dayStatList[0];
+            $scope.selectedDayJobTimeCount = 0;
+            $scope.selectedNightJobTimeCount = 0;
+        }
         
 
         $scope.setCurrentEmployeeRecords = function (employee) {
@@ -220,11 +241,13 @@
             var changes = [];
             angular.forEach(employee.Records, function (record) {
                 angular.forEach(employeesRecordsStandard, function (recordStandard) {
-                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount |
+                        record.NightTimeCount != recordStandard.NightTimeCount |
+                        record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
                         changes.push(record);
                         console.log('######################################################################');
-                        console.log(record.JobTimeCount + ' ' + record.DayStays.IdDayStatus);
-                        console.log(recordStandard.JobTimeCount + ' ' + recordStandard.DayStays.IdDayStatus);
+                        console.log(record.JobTimeCount + ' ' + record.NightTimeCount + ' ' + record.DayStays.IdDayStatus);
+                        console.log(recordStandard.JobTimeCount + ' ' + recordStandard.NightTimeCount + ' ' + recordStandard.DayStays.IdDayStatus);
                         console.log('######################################################################');
                     }
                 });
@@ -265,7 +288,9 @@
             var changes = [];
             angular.forEach($scope.currentEmployee.Records, function (record) {
                 angular.forEach($scope.employeesRecordsStandard, function (recordStandard) {
-                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+                    if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount
+                        | record.NightTimeCount != recordStandard.NightTimeCount
+                        | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
                         changes.push(record);
                     }
                 });
@@ -286,15 +311,22 @@
                     console.log('update record');
                     record.DayStays = $scope.selectedDayStatList;
                     record.JobTimeCount = $scope.selectedDayJobTimeCount;
+                    record.NightTimeCount = $scope.selectedNightJobTimeCount;
                     //record.JobTimeCount = 5;
                     record.IsCheked = false;
                 }
             });
+            $scope.ClearFields();
         };
         
         $scope.isCanTimeSheetEditfunction = function () {
             if ($scope.TimeSheetApproveStep == 0) return false;
             return true;
+        };
+
+        $scope.NotNightShedule = function () {
+            if ($scope.currentEmployee == null) return true;
+            return (!$scope.currentEmployee.WorkShedule.AllowNight);
         };
 
         $scope.isUpdateDisabled = function () {
@@ -399,7 +431,8 @@
                 angular.forEach($scope.currentEmployee.Records, function (currenUserRecord) {
                     if (record.Date == currenUserRecord.Date) {
                         if (currenUserRecord.DayStays != record.DayStays |
-                            currenUserRecord.JobTimeCount != record.JobTimeCount)
+                            currenUserRecord.JobTimeCount != record.JobTimeCount |
+                            currenUserRecord.NightTimeCount != record.NightTimeCount)
                             res = true;
                         return;
                     }
@@ -428,6 +461,7 @@
                     if (record.Date == currenUserRecord.Date) {
                         currenUserRecord.DayStays = record.DayStays;
                         currenUserRecord.JobTimeCount = record.JobTimeCount;
+                        currenUserRecord.NightTimeCount = record.NightTimeCount;
                     }
                 });
             });
@@ -442,6 +476,12 @@
             if (r > 8) return 'has-warning';
             return '';
         };
+
+        $scope.SheduleCSS = function () {
+            if ($scope.NotNightShedule()) 
+                return "invisible";
+            return "visible";
+        }
 
         $scope.RecorsState = function (record) {
             //var r = parseFloat(jobTimeCount);

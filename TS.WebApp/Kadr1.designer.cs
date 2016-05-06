@@ -22,7 +22,7 @@ namespace TimeSheetMvc4WebApplication
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Kadr")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="KadrKadr")]
 	public partial class KadrDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -45,9 +45,6 @@ namespace TimeSheetMvc4WebApplication
     partial void InsertTimeSheetApproval(TimeSheetApproval instance);
     partial void UpdateTimeSheetApproval(TimeSheetApproval instance);
     partial void DeleteTimeSheetApproval(TimeSheetApproval instance);
-    partial void InsertWorkShedule(WorkShedule instance);
-    partial void UpdateWorkShedule(WorkShedule instance);
-    partial void DeleteWorkShedule(WorkShedule instance);
     partial void InsertPost(Post instance);
     partial void UpdatePost(Post instance);
     partial void DeletePost(Post instance);
@@ -72,9 +69,6 @@ namespace TimeSheetMvc4WebApplication
     partial void InsertFactStaffWithHistory(FactStaffWithHistory instance);
     partial void UpdateFactStaffWithHistory(FactStaffWithHistory instance);
     partial void DeleteFactStaffWithHistory(FactStaffWithHistory instance);
-    partial void InsertFactStaffHistory(FactStaffHistory instance);
-    partial void UpdateFactStaffHistory(FactStaffHistory instance);
-    partial void DeleteFactStaffHistory(FactStaffHistory instance);
     partial void InsertDayStatus(DayStatus instance);
     partial void UpdateDayStatus(DayStatus instance);
     partial void DeleteDayStatus(DayStatus instance);
@@ -111,10 +105,16 @@ namespace TimeSheetMvc4WebApplication
     partial void InsertFactStaff(FactStaff instance);
     partial void UpdateFactStaff(FactStaff instance);
     partial void DeleteFactStaff(FactStaff instance);
+    partial void InsertFactStaffHistory(FactStaffHistory instance);
+    partial void UpdateFactStaffHistory(FactStaffHistory instance);
+    partial void DeleteFactStaffHistory(FactStaffHistory instance);
+    partial void InsertWorkShedule(WorkShedule instance);
+    partial void UpdateWorkShedule(WorkShedule instance);
+    partial void DeleteWorkShedule(WorkShedule instance);
     #endregion
 		
 		public KadrDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrRealTestConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -183,14 +183,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		public System.Data.Linq.Table<WorkShedule> WorkShedule
-		{
-			get
-			{
-				return this.GetTable<WorkShedule>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Post> Post
 		{
 			get
@@ -252,14 +244,6 @@ namespace TimeSheetMvc4WebApplication
 			get
 			{
 				return this.GetTable<FactStaffWithHistory>();
-			}
-		}
-		
-		public System.Data.Linq.Table<FactStaffHistory> FactStaffHistory
-		{
-			get
-			{
-				return this.GetTable<FactStaffHistory>();
 			}
 		}
 		
@@ -356,6 +340,22 @@ namespace TimeSheetMvc4WebApplication
 			get
 			{
 				return this.GetTable<FactStaff>();
+			}
+		}
+		
+		public System.Data.Linq.Table<FactStaffHistory> FactStaffHistories
+		{
+			get
+			{
+				return this.GetTable<FactStaffHistory>();
+			}
+		}
+		
+		public System.Data.Linq.Table<WorkShedule> WorkShedules
+		{
+			get
+			{
+				return this.GetTable<WorkShedule>();
 			}
 		}
 		
@@ -951,9 +951,9 @@ namespace TimeSheetMvc4WebApplication
 		
 		private System.Nullable<int> _idWorkShedule;
 		
-		private EntityRef<WorkShedule> _WorkShedule;
-		
 		private EntityRef<DayStatus> _DayStatus;
+		
+		private EntityRef<WorkShedule> _WorkShedule;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -983,8 +983,8 @@ namespace TimeSheetMvc4WebApplication
 		
 		public Exception()
 		{
-			this._WorkShedule = default(EntityRef<WorkShedule>);
 			this._DayStatus = default(EntityRef<DayStatus>);
+			this._WorkShedule = default(EntityRef<WorkShedule>);
 			OnCreated();
 		}
 		
@@ -1196,40 +1196,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_Exception", Storage="_WorkShedule", ThisKey="idWorkShedule", OtherKey="id", IsForeignKey=true)]
-		public WorkShedule WorkShedule
-		{
-			get
-			{
-				return this._WorkShedule.Entity;
-			}
-			set
-			{
-				WorkShedule previousValue = this._WorkShedule.Entity;
-				if (((previousValue != value) 
-							|| (this._WorkShedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._WorkShedule.Entity = null;
-						previousValue.Exception.Remove(this);
-					}
-					this._WorkShedule.Entity = value;
-					if ((value != null))
-					{
-						value.Exception.Add(this);
-						this._idWorkShedule = value.id;
-					}
-					else
-					{
-						this._idWorkShedule = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("WorkShedule");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="DayStatus_Exception", Storage="_DayStatus", ThisKey="idDayStatus", OtherKey="id", IsForeignKey=true)]
 		public DayStatus DayStatus
 		{
@@ -1260,6 +1226,40 @@ namespace TimeSheetMvc4WebApplication
 						this._idDayStatus = default(int);
 					}
 					this.SendPropertyChanged("DayStatus");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_Exception", Storage="_WorkShedule", ThisKey="idWorkShedule", OtherKey="id", IsForeignKey=true)]
+		public WorkShedule WorkShedule
+		{
+			get
+			{
+				return this._WorkShedule.Entity;
+			}
+			set
+			{
+				WorkShedule previousValue = this._WorkShedule.Entity;
+				if (((previousValue != value) 
+							|| (this._WorkShedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WorkShedule.Entity = null;
+						previousValue.Exceptions.Remove(this);
+					}
+					this._WorkShedule.Entity = value;
+					if ((value != null))
+					{
+						value.Exceptions.Add(this);
+						this._idWorkShedule = value.id;
+					}
+					else
+					{
+						this._idWorkShedule = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("WorkShedule");
 				}
 			}
 		}
@@ -1583,176 +1583,6 @@ namespace TimeSheetMvc4WebApplication
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="ShemaTabel.WorkShedule")]
-	public partial class WorkShedule : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private string _NameShedule;
-		
-		private EntitySet<Exception> _Exception;
-		
-		private EntitySet<PlanStaff> _PlanStaff;
-		
-		private EntitySet<FactStaff> _FactStaffs;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void OnNameSheduleChanging(string value);
-    partial void OnNameSheduleChanged();
-    #endregion
-		
-		public WorkShedule()
-		{
-			this._Exception = new EntitySet<Exception>(new Action<Exception>(this.attach_Exception), new Action<Exception>(this.detach_Exception));
-			this._PlanStaff = new EntitySet<PlanStaff>(new Action<PlanStaff>(this.attach_PlanStaff), new Action<PlanStaff>(this.detach_PlanStaff));
-			this._FactStaffs = new EntitySet<FactStaff>(new Action<FactStaff>(this.attach_FactStaffs), new Action<FactStaff>(this.detach_FactStaffs));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NameShedule", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string NameShedule
-		{
-			get
-			{
-				return this._NameShedule;
-			}
-			set
-			{
-				if ((this._NameShedule != value))
-				{
-					this.OnNameSheduleChanging(value);
-					this.SendPropertyChanging();
-					this._NameShedule = value;
-					this.SendPropertyChanged("NameShedule");
-					this.OnNameSheduleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_Exception", Storage="_Exception", ThisKey="id", OtherKey="idWorkShedule")]
-		public EntitySet<Exception> Exception
-		{
-			get
-			{
-				return this._Exception;
-			}
-			set
-			{
-				this._Exception.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_PlanStaff", Storage="_PlanStaff", ThisKey="id", OtherKey="IdWorkShedule")]
-		public EntitySet<PlanStaff> PlanStaff
-		{
-			get
-			{
-				return this._PlanStaff;
-			}
-			set
-			{
-				this._PlanStaff.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_FactStaff", Storage="_FactStaffs", ThisKey="id", OtherKey="idTimeSheetSheduleType")]
-		public EntitySet<FactStaff> FactStaffs
-		{
-			get
-			{
-				return this._FactStaffs;
-			}
-			set
-			{
-				this._FactStaffs.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Exception(Exception entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = this;
-		}
-		
-		private void detach_Exception(Exception entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = null;
-		}
-		
-		private void attach_PlanStaff(PlanStaff entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = this;
-		}
-		
-		private void detach_PlanStaff(PlanStaff entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = null;
-		}
-		
-		private void attach_FactStaffs(FactStaff entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = this;
-		}
-		
-		private void detach_FactStaffs(FactStaff entity)
-		{
-			this.SendPropertyChanging();
-			entity.WorkShedule = null;
 		}
 	}
 	
@@ -3418,13 +3248,13 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntityRef<Post> _Post;
 		
-		private EntityRef<WorkShedule> _WorkShedule;
-		
 		private EntityRef<FactStaffCurrent> _FactStaffCurrent;
 		
 		private EntityRef<FactStaffWithHistory> _FactStaffWithHistory;
 		
 		private EntityRef<Dep> _Dep;
+		
+		private EntityRef<WorkShedule> _WorkShedule;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3449,10 +3279,10 @@ namespace TimeSheetMvc4WebApplication
 			this._Dep1 = new EntitySet<Dep>(new Action<Dep>(this.attach_Dep1), new Action<Dep>(this.detach_Dep1));
 			this._FactStaffs = new EntitySet<FactStaff>(new Action<FactStaff>(this.attach_FactStaffs), new Action<FactStaff>(this.detach_FactStaffs));
 			this._Post = default(EntityRef<Post>);
-			this._WorkShedule = default(EntityRef<WorkShedule>);
 			this._FactStaffCurrent = default(EntityRef<FactStaffCurrent>);
 			this._FactStaffWithHistory = default(EntityRef<FactStaffWithHistory>);
 			this._Dep = default(EntityRef<Dep>);
+			this._WorkShedule = default(EntityRef<WorkShedule>);
 			OnCreated();
 		}
 		
@@ -3652,40 +3482,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_PlanStaff", Storage="_WorkShedule", ThisKey="IdWorkShedule", OtherKey="id", IsForeignKey=true)]
-		public WorkShedule WorkShedule
-		{
-			get
-			{
-				return this._WorkShedule.Entity;
-			}
-			set
-			{
-				WorkShedule previousValue = this._WorkShedule.Entity;
-				if (((previousValue != value) 
-							|| (this._WorkShedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._WorkShedule.Entity = null;
-						previousValue.PlanStaff.Remove(this);
-					}
-					this._WorkShedule.Entity = value;
-					if ((value != null))
-					{
-						value.PlanStaff.Add(this);
-						this._IdWorkShedule = value.id;
-					}
-					else
-					{
-						this._IdWorkShedule = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("WorkShedule");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffCurrent_PlanStaff", Storage="_FactStaffCurrent", ThisKey="id", OtherKey="idPlanStaff", IsForeignKey=true)]
 		public FactStaffCurrent FactStaffCurrent
 		{
@@ -3788,6 +3584,40 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_PlanStaff", Storage="_WorkShedule", ThisKey="IdWorkShedule", OtherKey="id", IsForeignKey=true)]
+		public WorkShedule WorkShedule
+		{
+			get
+			{
+				return this._WorkShedule.Entity;
+			}
+			set
+			{
+				WorkShedule previousValue = this._WorkShedule.Entity;
+				if (((previousValue != value) 
+							|| (this._WorkShedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._WorkShedule.Entity = null;
+						previousValue.PlanStaffs.Remove(this);
+					}
+					this._WorkShedule.Entity = value;
+					if ((value != null))
+					{
+						value.PlanStaffs.Add(this);
+						this._IdWorkShedule = value.id;
+					}
+					else
+					{
+						this._IdWorkShedule = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("WorkShedule");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3879,8 +3709,6 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntityRef<PlanStaff> _PlanStaff;
 		
-		private EntityRef<FactStaffHistory> _FactStaffHistory;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3928,7 +3756,6 @@ namespace TimeSheetMvc4WebApplication
 		public FactStaffWithHistory()
 		{
 			this._PlanStaff = default(EntityRef<PlanStaff>);
-			this._FactStaffHistory = default(EntityRef<FactStaffHistory>);
 			OnCreated();
 		}
 		
@@ -4341,35 +4168,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffWithHistory_FactStaffHistory", Storage="_FactStaffHistory", ThisKey="idFactStaffHistory", OtherKey="id", IsUnique=true, IsForeignKey=false)]
-		public FactStaffHistory FactStaffHistory
-		{
-			get
-			{
-				return this._FactStaffHistory.Entity;
-			}
-			set
-			{
-				FactStaffHistory previousValue = this._FactStaffHistory.Entity;
-				if (((previousValue != value) 
-							|| (this._FactStaffHistory.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FactStaffHistory.Entity = null;
-						previousValue.FactStaffWithHistory = null;
-					}
-					this._FactStaffHistory.Entity = value;
-					if ((value != null))
-					{
-						value.FactStaffWithHistory = this;
-					}
-					this.SendPropertyChanged("FactStaffHistory");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -4388,470 +4186,6 @@ namespace TimeSheetMvc4WebApplication
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FactStaffHistory")]
-	public partial class FactStaffHistory : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private int _idFactStaff;
-		
-		private int _idBeginPrikaz;
-		
-		private System.DateTime _DateBegin;
-		
-		private decimal _StaffCount;
-		
-		private int _idTypeWork;
-		
-		private System.Nullable<int> _idlaborcontrakt;
-		
-		private System.Nullable<decimal> _HourCount;
-		
-		private System.Nullable<decimal> _HourSalary;
-		
-		private System.Nullable<int> _idSalaryKoeff;
-		
-		private System.Nullable<decimal> _HourStaffCount;
-		
-		private decimal _CalcStaffCount;
-		
-		private EntitySet<Event> _Events;
-		
-		private EntitySet<TimeSheetRecord> _TimeSheetRecords;
-		
-		private EntityRef<FactStaffWithHistory> _FactStaffWithHistory;
-		
-		private EntityRef<FactStaff> _FactStaff;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void OnidFactStaffChanging(int value);
-    partial void OnidFactStaffChanged();
-    partial void OnidBeginPrikazChanging(int value);
-    partial void OnidBeginPrikazChanged();
-    partial void OnDateBeginChanging(System.DateTime value);
-    partial void OnDateBeginChanged();
-    partial void OnStaffCountChanging(decimal value);
-    partial void OnStaffCountChanged();
-    partial void OnidTypeWorkChanging(int value);
-    partial void OnidTypeWorkChanged();
-    partial void OnidlaborcontraktChanging(System.Nullable<int> value);
-    partial void OnidlaborcontraktChanged();
-    partial void OnHourCountChanging(System.Nullable<decimal> value);
-    partial void OnHourCountChanged();
-    partial void OnHourSalaryChanging(System.Nullable<decimal> value);
-    partial void OnHourSalaryChanged();
-    partial void OnidSalaryKoeffChanging(System.Nullable<int> value);
-    partial void OnidSalaryKoeffChanged();
-    partial void OnHourStaffCountChanging(System.Nullable<decimal> value);
-    partial void OnHourStaffCountChanged();
-    partial void OnCalcStaffCountChanging(decimal value);
-    partial void OnCalcStaffCountChanged();
-    #endregion
-		
-		public FactStaffHistory()
-		{
-			this._Events = new EntitySet<Event>(new Action<Event>(this.attach_Events), new Action<Event>(this.detach_Events));
-			this._TimeSheetRecords = new EntitySet<TimeSheetRecord>(new Action<TimeSheetRecord>(this.attach_TimeSheetRecords), new Action<TimeSheetRecord>(this.detach_TimeSheetRecords));
-			this._FactStaffWithHistory = default(EntityRef<FactStaffWithHistory>);
-			this._FactStaff = default(EntityRef<FactStaff>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					if (this._FactStaffWithHistory.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFactStaff", DbType="Int NOT NULL")]
-		public int idFactStaff
-		{
-			get
-			{
-				return this._idFactStaff;
-			}
-			set
-			{
-				if ((this._idFactStaff != value))
-				{
-					if (this._FactStaff.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnidFactStaffChanging(value);
-					this.SendPropertyChanging();
-					this._idFactStaff = value;
-					this.SendPropertyChanged("idFactStaff");
-					this.OnidFactStaffChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idBeginPrikaz", DbType="Int NOT NULL")]
-		public int idBeginPrikaz
-		{
-			get
-			{
-				return this._idBeginPrikaz;
-			}
-			set
-			{
-				if ((this._idBeginPrikaz != value))
-				{
-					this.OnidBeginPrikazChanging(value);
-					this.SendPropertyChanging();
-					this._idBeginPrikaz = value;
-					this.SendPropertyChanged("idBeginPrikaz");
-					this.OnidBeginPrikazChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBegin", DbType="DateTime NOT NULL")]
-		public System.DateTime DateBegin
-		{
-			get
-			{
-				return this._DateBegin;
-			}
-			set
-			{
-				if ((this._DateBegin != value))
-				{
-					this.OnDateBeginChanging(value);
-					this.SendPropertyChanging();
-					this._DateBegin = value;
-					this.SendPropertyChanged("DateBegin");
-					this.OnDateBeginChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StaffCount", DbType="Decimal(6,4) NOT NULL")]
-		public decimal StaffCount
-		{
-			get
-			{
-				return this._StaffCount;
-			}
-			set
-			{
-				if ((this._StaffCount != value))
-				{
-					this.OnStaffCountChanging(value);
-					this.SendPropertyChanging();
-					this._StaffCount = value;
-					this.SendPropertyChanged("StaffCount");
-					this.OnStaffCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idTypeWork", DbType="Int NOT NULL")]
-		public int idTypeWork
-		{
-			get
-			{
-				return this._idTypeWork;
-			}
-			set
-			{
-				if ((this._idTypeWork != value))
-				{
-					this.OnidTypeWorkChanging(value);
-					this.SendPropertyChanging();
-					this._idTypeWork = value;
-					this.SendPropertyChanged("idTypeWork");
-					this.OnidTypeWorkChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idlaborcontrakt", DbType="Int")]
-		public System.Nullable<int> idlaborcontrakt
-		{
-			get
-			{
-				return this._idlaborcontrakt;
-			}
-			set
-			{
-				if ((this._idlaborcontrakt != value))
-				{
-					this.OnidlaborcontraktChanging(value);
-					this.SendPropertyChanging();
-					this._idlaborcontrakt = value;
-					this.SendPropertyChanged("idlaborcontrakt");
-					this.OnidlaborcontraktChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourCount", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> HourCount
-		{
-			get
-			{
-				return this._HourCount;
-			}
-			set
-			{
-				if ((this._HourCount != value))
-				{
-					this.OnHourCountChanging(value);
-					this.SendPropertyChanging();
-					this._HourCount = value;
-					this.SendPropertyChanged("HourCount");
-					this.OnHourCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourSalary", DbType="Decimal(10,2)")]
-		public System.Nullable<decimal> HourSalary
-		{
-			get
-			{
-				return this._HourSalary;
-			}
-			set
-			{
-				if ((this._HourSalary != value))
-				{
-					this.OnHourSalaryChanging(value);
-					this.SendPropertyChanging();
-					this._HourSalary = value;
-					this.SendPropertyChanged("HourSalary");
-					this.OnHourSalaryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idSalaryKoeff", DbType="Int")]
-		public System.Nullable<int> idSalaryKoeff
-		{
-			get
-			{
-				return this._idSalaryKoeff;
-			}
-			set
-			{
-				if ((this._idSalaryKoeff != value))
-				{
-					this.OnidSalaryKoeffChanging(value);
-					this.SendPropertyChanging();
-					this._idSalaryKoeff = value;
-					this.SendPropertyChanged("idSalaryKoeff");
-					this.OnidSalaryKoeffChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourStaffCount", DbType="Decimal(6,4)")]
-		public System.Nullable<decimal> HourStaffCount
-		{
-			get
-			{
-				return this._HourStaffCount;
-			}
-			set
-			{
-				if ((this._HourStaffCount != value))
-				{
-					this.OnHourStaffCountChanging(value);
-					this.SendPropertyChanging();
-					this._HourStaffCount = value;
-					this.SendPropertyChanged("HourStaffCount");
-					this.OnHourStaffCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CalcStaffCount", AutoSync=AutoSync.Always, DbType="Decimal(6,4) NOT NULL", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
-		public decimal CalcStaffCount
-		{
-			get
-			{
-				return this._CalcStaffCount;
-			}
-			set
-			{
-				if ((this._CalcStaffCount != value))
-				{
-					this.OnCalcStaffCountChanging(value);
-					this.SendPropertyChanging();
-					this._CalcStaffCount = value;
-					this.SendPropertyChanged("CalcStaffCount");
-					this.OnCalcStaffCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_Event", Storage="_Events", ThisKey="id", OtherKey="idFactStaffHistory")]
-		public EntitySet<Event> Events
-		{
-			get
-			{
-				return this._Events;
-			}
-			set
-			{
-				this._Events.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_TimeSheetRecord", Storage="_TimeSheetRecords", ThisKey="id", OtherKey="idFactStaffHistory")]
-		public EntitySet<TimeSheetRecord> TimeSheetRecords
-		{
-			get
-			{
-				return this._TimeSheetRecords;
-			}
-			set
-			{
-				this._TimeSheetRecords.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffWithHistory_FactStaffHistory", Storage="_FactStaffWithHistory", ThisKey="id", OtherKey="idFactStaffHistory", IsForeignKey=true)]
-		public FactStaffWithHistory FactStaffWithHistory
-		{
-			get
-			{
-				return this._FactStaffWithHistory.Entity;
-			}
-			set
-			{
-				FactStaffWithHistory previousValue = this._FactStaffWithHistory.Entity;
-				if (((previousValue != value) 
-							|| (this._FactStaffWithHistory.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FactStaffWithHistory.Entity = null;
-						previousValue.FactStaffHistory = null;
-					}
-					this._FactStaffWithHistory.Entity = value;
-					if ((value != null))
-					{
-						value.FactStaffHistory = this;
-						this._id = value.idFactStaffHistory;
-					}
-					else
-					{
-						this._id = default(int);
-					}
-					this.SendPropertyChanged("FactStaffWithHistory");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaff_FactStaffHistory", Storage="_FactStaff", ThisKey="idFactStaff", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public FactStaff FactStaff
-		{
-			get
-			{
-				return this._FactStaff.Entity;
-			}
-			set
-			{
-				FactStaff previousValue = this._FactStaff.Entity;
-				if (((previousValue != value) 
-							|| (this._FactStaff.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FactStaff.Entity = null;
-						previousValue.FactStaffHistories.Remove(this);
-					}
-					this._FactStaff.Entity = value;
-					if ((value != null))
-					{
-						value.FactStaffHistories.Add(this);
-						this._idFactStaff = value.id;
-					}
-					else
-					{
-						this._idFactStaff = default(int);
-					}
-					this.SendPropertyChanged("FactStaff");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Events(Event entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaffHistory = this;
-		}
-		
-		private void detach_Events(Event entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaffHistory = null;
-		}
-		
-		private void attach_TimeSheetRecords(TimeSheetRecord entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaffHistory = this;
-		}
-		
-		private void detach_TimeSheetRecords(TimeSheetRecord entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaffHistory = null;
 		}
 	}
 	
@@ -7193,9 +6527,9 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntitySet<OK_Otpusk> _OK_Otpusks;
 		
-		private EntityRef<FactStaffHistory> _FactStaffHistory;
-		
 		private EntityRef<Event> _Event1;
+		
+		private EntityRef<FactStaffHistory> _FactStaffHistory;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7228,8 +6562,8 @@ namespace TimeSheetMvc4WebApplication
 			this._Event_BusinessTrip = default(EntityRef<Event_BusinessTrip>);
 			this._Events = new EntitySet<Event>(new Action<Event>(this.attach_Events), new Action<Event>(this.detach_Events));
 			this._OK_Otpusks = new EntitySet<OK_Otpusk>(new Action<OK_Otpusk>(this.attach_OK_Otpusks), new Action<OK_Otpusk>(this.detach_OK_Otpusks));
-			this._FactStaffHistory = default(EntityRef<FactStaffHistory>);
 			this._Event1 = default(EntityRef<Event>);
+			this._FactStaffHistory = default(EntityRef<FactStaffHistory>);
 			OnCreated();
 		}
 		
@@ -7496,40 +6830,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_Event", Storage="_FactStaffHistory", ThisKey="idFactStaffHistory", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public FactStaffHistory FactStaffHistory
-		{
-			get
-			{
-				return this._FactStaffHistory.Entity;
-			}
-			set
-			{
-				FactStaffHistory previousValue = this._FactStaffHistory.Entity;
-				if (((previousValue != value) 
-							|| (this._FactStaffHistory.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FactStaffHistory.Entity = null;
-						previousValue.Events.Remove(this);
-					}
-					this._FactStaffHistory.Entity = value;
-					if ((value != null))
-					{
-						value.Events.Add(this);
-						this._idFactStaffHistory = value.id;
-					}
-					else
-					{
-						this._idFactStaffHistory = default(int);
-					}
-					this.SendPropertyChanged("FactStaffHistory");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Event_Event", Storage="_Event1", ThisKey="idMainEvent", OtherKey="id", IsForeignKey=true)]
 		public Event Event1
 		{
@@ -7560,6 +6860,40 @@ namespace TimeSheetMvc4WebApplication
 						this._idMainEvent = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Event1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_Event", Storage="_FactStaffHistory", ThisKey="idFactStaffHistory", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FactStaffHistory FactStaffHistory
+		{
+			get
+			{
+				return this._FactStaffHistory.Entity;
+			}
+			set
+			{
+				FactStaffHistory previousValue = this._FactStaffHistory.Entity;
+				if (((previousValue != value) 
+							|| (this._FactStaffHistory.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FactStaffHistory.Entity = null;
+						previousValue.Events.Remove(this);
+					}
+					this._FactStaffHistory.Entity = value;
+					if ((value != null))
+					{
+						value.Events.Add(this);
+						this._idFactStaffHistory = value.id;
+					}
+					else
+					{
+						this._idFactStaffHistory = default(int);
+					}
+					this.SendPropertyChanged("FactStaffHistory");
 				}
 			}
 		}
@@ -7631,11 +6965,11 @@ namespace TimeSheetMvc4WebApplication
 		
 		private System.Nullable<double> _NightTimeCount;
 		
-		private EntityRef<FactStaffHistory> _FactStaffHistory;
-		
 		private EntityRef<TimeSheet> _TimeSheet;
 		
 		private EntityRef<DayStatus> _DayStatus;
+		
+		private EntityRef<FactStaffHistory> _FactStaffHistory;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7661,9 +6995,9 @@ namespace TimeSheetMvc4WebApplication
 		
 		public TimeSheetRecord()
 		{
-			this._FactStaffHistory = default(EntityRef<FactStaffHistory>);
 			this._TimeSheet = default(EntityRef<TimeSheet>);
 			this._DayStatus = default(EntityRef<DayStatus>);
+			this._FactStaffHistory = default(EntityRef<FactStaffHistory>);
 			OnCreated();
 		}
 		
@@ -7839,40 +7173,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_TimeSheetRecord", Storage="_FactStaffHistory", ThisKey="idFactStaffHistory", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public FactStaffHistory FactStaffHistory
-		{
-			get
-			{
-				return this._FactStaffHistory.Entity;
-			}
-			set
-			{
-				FactStaffHistory previousValue = this._FactStaffHistory.Entity;
-				if (((previousValue != value) 
-							|| (this._FactStaffHistory.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FactStaffHistory.Entity = null;
-						previousValue.TimeSheetRecords.Remove(this);
-					}
-					this._FactStaffHistory.Entity = value;
-					if ((value != null))
-					{
-						value.TimeSheetRecords.Add(this);
-						this._idFactStaffHistory = value.id;
-					}
-					else
-					{
-						this._idFactStaffHistory = default(int);
-					}
-					this.SendPropertyChanged("FactStaffHistory");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TimeSheet_TimeSheetRecord", Storage="_TimeSheet", ThisKey="idTimeSheet", OtherKey="id", IsForeignKey=true)]
 		public TimeSheet TimeSheet
 		{
@@ -7937,6 +7237,40 @@ namespace TimeSheetMvc4WebApplication
 						this._idDayStatus = default(int);
 					}
 					this.SendPropertyChanged("DayStatus");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_TimeSheetRecord", Storage="_FactStaffHistory", ThisKey="idFactStaffHistory", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FactStaffHistory FactStaffHistory
+		{
+			get
+			{
+				return this._FactStaffHistory.Entity;
+			}
+			set
+			{
+				FactStaffHistory previousValue = this._FactStaffHistory.Entity;
+				if (((previousValue != value) 
+							|| (this._FactStaffHistory.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FactStaffHistory.Entity = null;
+						previousValue.TimeSheetRecords.Remove(this);
+					}
+					this._FactStaffHistory.Entity = value;
+					if ((value != null))
+					{
+						value.TimeSheetRecords.Add(this);
+						this._idFactStaffHistory = value.id;
+					}
+					else
+					{
+						this._idFactStaffHistory = default(int);
+					}
+					this.SendPropertyChanged("FactStaffHistory");
 				}
 			}
 		}
@@ -9561,11 +8895,11 @@ namespace TimeSheetMvc4WebApplication
 		
 		private EntitySet<EmployeeEvent> _EmployeeEvents;
 		
-		private EntitySet<FactStaffHistory> _FactStaffHistories;
-		
 		private EntitySet<OK_Otpusk> _OK_Otpusks;
 		
 		private EntitySet<FactStaff> _FactStaffs;
+		
+		private EntitySet<FactStaffHistory> _FactStaffHistories;
 		
 		private EntityRef<Dep> _Dep;
 		
@@ -9622,9 +8956,9 @@ namespace TimeSheetMvc4WebApplication
 		public FactStaff()
 		{
 			this._EmployeeEvents = new EntitySet<EmployeeEvent>(new Action<EmployeeEvent>(this.attach_EmployeeEvents), new Action<EmployeeEvent>(this.detach_EmployeeEvents));
-			this._FactStaffHistories = new EntitySet<FactStaffHistory>(new Action<FactStaffHistory>(this.attach_FactStaffHistories), new Action<FactStaffHistory>(this.detach_FactStaffHistories));
 			this._OK_Otpusks = new EntitySet<OK_Otpusk>(new Action<OK_Otpusk>(this.attach_OK_Otpusks), new Action<OK_Otpusk>(this.detach_OK_Otpusks));
 			this._FactStaffs = new EntitySet<FactStaff>(new Action<FactStaff>(this.attach_FactStaffs), new Action<FactStaff>(this.detach_FactStaffs));
+			this._FactStaffHistories = new EntitySet<FactStaffHistory>(new Action<FactStaffHistory>(this.attach_FactStaffHistories), new Action<FactStaffHistory>(this.detach_FactStaffHistories));
 			this._Dep = default(EntityRef<Dep>);
 			this._Employee = default(EntityRef<Employee>);
 			this._FactStaff1 = default(EntityRef<FactStaff>);
@@ -10026,19 +9360,6 @@ namespace TimeSheetMvc4WebApplication
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaff_FactStaffHistory", Storage="_FactStaffHistories", ThisKey="id", OtherKey="idFactStaff")]
-		public EntitySet<FactStaffHistory> FactStaffHistories
-		{
-			get
-			{
-				return this._FactStaffHistories;
-			}
-			set
-			{
-				this._FactStaffHistories.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaff_OK_Otpusk", Storage="_OK_Otpusks", ThisKey="id", OtherKey="idFactStaff")]
 		public EntitySet<OK_Otpusk> OK_Otpusks
 		{
@@ -10062,6 +9383,19 @@ namespace TimeSheetMvc4WebApplication
 			set
 			{
 				this._FactStaffs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaff_FactStaffHistory", Storage="_FactStaffHistories", ThisKey="id", OtherKey="idFactStaff")]
+		public EntitySet<FactStaffHistory> FactStaffHistories
+		{
+			get
+			{
+				return this._FactStaffHistories;
+			}
+			set
+			{
+				this._FactStaffHistories.Assign(value);
 			}
 		}
 		
@@ -10267,18 +9601,6 @@ namespace TimeSheetMvc4WebApplication
 			entity.FactStaff = null;
 		}
 		
-		private void attach_FactStaffHistories(FactStaffHistory entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaff = this;
-		}
-		
-		private void detach_FactStaffHistories(FactStaffHistory entity)
-		{
-			this.SendPropertyChanging();
-			entity.FactStaff = null;
-		}
-		
 		private void attach_OK_Otpusks(OK_Otpusk entity)
 		{
 			this.SendPropertyChanging();
@@ -10301,6 +9623,779 @@ namespace TimeSheetMvc4WebApplication
 		{
 			this.SendPropertyChanging();
 			entity.FactStaff1 = null;
+		}
+		
+		private void attach_FactStaffHistories(FactStaffHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaff = this;
+		}
+		
+		private void detach_FactStaffHistories(FactStaffHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaff = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FactStaffHistory")]
+	public partial class FactStaffHistory : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private int _idFactStaff;
+		
+		private System.Nullable<int> _idBeginPrikaz;
+		
+		private System.DateTime _DateBegin;
+		
+		private decimal _StaffCount;
+		
+		private int _idTypeWork;
+		
+		private System.Nullable<int> _idlaborcontrakt;
+		
+		private System.Nullable<decimal> _HourCount;
+		
+		private System.Nullable<decimal> _HourSalary;
+		
+		private System.Nullable<int> _idSalaryKoeff;
+		
+		private System.Nullable<decimal> _HourStaffCount;
+		
+		private decimal _CalcStaffCount;
+		
+		private System.Nullable<decimal> _HourFullSalary;
+		
+		private System.Nullable<int> _idRegionType;
+		
+		private string _Address;
+		
+		private System.Nullable<int> _idFinancingSource;
+		
+		private System.Nullable<int> _idContract;
+		
+		private System.Nullable<double> _WorkHoursInWeek;
+		
+		private EntitySet<Event> _Events;
+		
+		private EntitySet<TimeSheetRecord> _TimeSheetRecords;
+		
+		private EntityRef<FactStaff> _FactStaff;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OnidFactStaffChanging(int value);
+    partial void OnidFactStaffChanged();
+    partial void OnidBeginPrikazChanging(System.Nullable<int> value);
+    partial void OnidBeginPrikazChanged();
+    partial void OnDateBeginChanging(System.DateTime value);
+    partial void OnDateBeginChanged();
+    partial void OnStaffCountChanging(decimal value);
+    partial void OnStaffCountChanged();
+    partial void OnidTypeWorkChanging(int value);
+    partial void OnidTypeWorkChanged();
+    partial void OnidlaborcontraktChanging(System.Nullable<int> value);
+    partial void OnidlaborcontraktChanged();
+    partial void OnHourCountChanging(System.Nullable<decimal> value);
+    partial void OnHourCountChanged();
+    partial void OnHourSalaryChanging(System.Nullable<decimal> value);
+    partial void OnHourSalaryChanged();
+    partial void OnidSalaryKoeffChanging(System.Nullable<int> value);
+    partial void OnidSalaryKoeffChanged();
+    partial void OnHourStaffCountChanging(System.Nullable<decimal> value);
+    partial void OnHourStaffCountChanged();
+    partial void OnCalcStaffCountChanging(decimal value);
+    partial void OnCalcStaffCountChanged();
+    partial void OnHourFullSalaryChanging(System.Nullable<decimal> value);
+    partial void OnHourFullSalaryChanged();
+    partial void OnidRegionTypeChanging(System.Nullable<int> value);
+    partial void OnidRegionTypeChanged();
+    partial void OnAddressChanging(string value);
+    partial void OnAddressChanged();
+    partial void OnidFinancingSourceChanging(System.Nullable<int> value);
+    partial void OnidFinancingSourceChanged();
+    partial void OnidContractChanging(System.Nullable<int> value);
+    partial void OnidContractChanged();
+    partial void OnWorkHoursInWeekChanging(System.Nullable<double> value);
+    partial void OnWorkHoursInWeekChanged();
+    #endregion
+		
+		public FactStaffHistory()
+		{
+			this._Events = new EntitySet<Event>(new Action<Event>(this.attach_Events), new Action<Event>(this.detach_Events));
+			this._TimeSheetRecords = new EntitySet<TimeSheetRecord>(new Action<TimeSheetRecord>(this.attach_TimeSheetRecords), new Action<TimeSheetRecord>(this.detach_TimeSheetRecords));
+			this._FactStaff = default(EntityRef<FactStaff>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFactStaff", DbType="Int NOT NULL")]
+		public int idFactStaff
+		{
+			get
+			{
+				return this._idFactStaff;
+			}
+			set
+			{
+				if ((this._idFactStaff != value))
+				{
+					if (this._FactStaff.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnidFactStaffChanging(value);
+					this.SendPropertyChanging();
+					this._idFactStaff = value;
+					this.SendPropertyChanged("idFactStaff");
+					this.OnidFactStaffChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idBeginPrikaz", DbType="Int")]
+		public System.Nullable<int> idBeginPrikaz
+		{
+			get
+			{
+				return this._idBeginPrikaz;
+			}
+			set
+			{
+				if ((this._idBeginPrikaz != value))
+				{
+					this.OnidBeginPrikazChanging(value);
+					this.SendPropertyChanging();
+					this._idBeginPrikaz = value;
+					this.SendPropertyChanged("idBeginPrikaz");
+					this.OnidBeginPrikazChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateBegin", DbType="DateTime NOT NULL")]
+		public System.DateTime DateBegin
+		{
+			get
+			{
+				return this._DateBegin;
+			}
+			set
+			{
+				if ((this._DateBegin != value))
+				{
+					this.OnDateBeginChanging(value);
+					this.SendPropertyChanging();
+					this._DateBegin = value;
+					this.SendPropertyChanged("DateBegin");
+					this.OnDateBeginChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StaffCount", DbType="Decimal(6,4) NOT NULL")]
+		public decimal StaffCount
+		{
+			get
+			{
+				return this._StaffCount;
+			}
+			set
+			{
+				if ((this._StaffCount != value))
+				{
+					this.OnStaffCountChanging(value);
+					this.SendPropertyChanging();
+					this._StaffCount = value;
+					this.SendPropertyChanged("StaffCount");
+					this.OnStaffCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idTypeWork", DbType="Int NOT NULL")]
+		public int idTypeWork
+		{
+			get
+			{
+				return this._idTypeWork;
+			}
+			set
+			{
+				if ((this._idTypeWork != value))
+				{
+					this.OnidTypeWorkChanging(value);
+					this.SendPropertyChanging();
+					this._idTypeWork = value;
+					this.SendPropertyChanged("idTypeWork");
+					this.OnidTypeWorkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idlaborcontrakt", DbType="Int")]
+		public System.Nullable<int> idlaborcontrakt
+		{
+			get
+			{
+				return this._idlaborcontrakt;
+			}
+			set
+			{
+				if ((this._idlaborcontrakt != value))
+				{
+					this.OnidlaborcontraktChanging(value);
+					this.SendPropertyChanging();
+					this._idlaborcontrakt = value;
+					this.SendPropertyChanged("idlaborcontrakt");
+					this.OnidlaborcontraktChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourCount", DbType="Decimal(10,2)")]
+		public System.Nullable<decimal> HourCount
+		{
+			get
+			{
+				return this._HourCount;
+			}
+			set
+			{
+				if ((this._HourCount != value))
+				{
+					this.OnHourCountChanging(value);
+					this.SendPropertyChanging();
+					this._HourCount = value;
+					this.SendPropertyChanged("HourCount");
+					this.OnHourCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourSalary", DbType="Decimal(10,2)")]
+		public System.Nullable<decimal> HourSalary
+		{
+			get
+			{
+				return this._HourSalary;
+			}
+			set
+			{
+				if ((this._HourSalary != value))
+				{
+					this.OnHourSalaryChanging(value);
+					this.SendPropertyChanging();
+					this._HourSalary = value;
+					this.SendPropertyChanged("HourSalary");
+					this.OnHourSalaryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idSalaryKoeff", DbType="Int")]
+		public System.Nullable<int> idSalaryKoeff
+		{
+			get
+			{
+				return this._idSalaryKoeff;
+			}
+			set
+			{
+				if ((this._idSalaryKoeff != value))
+				{
+					this.OnidSalaryKoeffChanging(value);
+					this.SendPropertyChanging();
+					this._idSalaryKoeff = value;
+					this.SendPropertyChanged("idSalaryKoeff");
+					this.OnidSalaryKoeffChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourStaffCount", DbType="Decimal(6,4)")]
+		public System.Nullable<decimal> HourStaffCount
+		{
+			get
+			{
+				return this._HourStaffCount;
+			}
+			set
+			{
+				if ((this._HourStaffCount != value))
+				{
+					this.OnHourStaffCountChanging(value);
+					this.SendPropertyChanging();
+					this._HourStaffCount = value;
+					this.SendPropertyChanged("HourStaffCount");
+					this.OnHourStaffCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CalcStaffCount", AutoSync=AutoSync.Always, DbType="Decimal(6,4) NOT NULL", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		public decimal CalcStaffCount
+		{
+			get
+			{
+				return this._CalcStaffCount;
+			}
+			set
+			{
+				if ((this._CalcStaffCount != value))
+				{
+					this.OnCalcStaffCountChanging(value);
+					this.SendPropertyChanging();
+					this._CalcStaffCount = value;
+					this.SendPropertyChanged("CalcStaffCount");
+					this.OnCalcStaffCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourFullSalary", DbType="Decimal(10,2)")]
+		public System.Nullable<decimal> HourFullSalary
+		{
+			get
+			{
+				return this._HourFullSalary;
+			}
+			set
+			{
+				if ((this._HourFullSalary != value))
+				{
+					this.OnHourFullSalaryChanging(value);
+					this.SendPropertyChanging();
+					this._HourFullSalary = value;
+					this.SendPropertyChanged("HourFullSalary");
+					this.OnHourFullSalaryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idRegionType", DbType="Int")]
+		public System.Nullable<int> idRegionType
+		{
+			get
+			{
+				return this._idRegionType;
+			}
+			set
+			{
+				if ((this._idRegionType != value))
+				{
+					this.OnidRegionTypeChanging(value);
+					this.SendPropertyChanging();
+					this._idRegionType = value;
+					this.SendPropertyChanged("idRegionType");
+					this.OnidRegionTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="VarChar(500)")]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this.OnAddressChanging(value);
+					this.SendPropertyChanging();
+					this._Address = value;
+					this.SendPropertyChanged("Address");
+					this.OnAddressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFinancingSource", DbType="Int")]
+		public System.Nullable<int> idFinancingSource
+		{
+			get
+			{
+				return this._idFinancingSource;
+			}
+			set
+			{
+				if ((this._idFinancingSource != value))
+				{
+					this.OnidFinancingSourceChanging(value);
+					this.SendPropertyChanging();
+					this._idFinancingSource = value;
+					this.SendPropertyChanged("idFinancingSource");
+					this.OnidFinancingSourceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idContract", DbType="Int")]
+		public System.Nullable<int> idContract
+		{
+			get
+			{
+				return this._idContract;
+			}
+			set
+			{
+				if ((this._idContract != value))
+				{
+					this.OnidContractChanging(value);
+					this.SendPropertyChanging();
+					this._idContract = value;
+					this.SendPropertyChanged("idContract");
+					this.OnidContractChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WorkHoursInWeek", DbType= "Decimal(8,2)")]
+		public System.Nullable<double> WorkHoursInWeek
+		{
+			get
+			{
+				return this._WorkHoursInWeek;
+			}
+			set
+			{
+				if ((this._WorkHoursInWeek != value))
+				{
+					this.OnWorkHoursInWeekChanging(value);
+					this.SendPropertyChanging();
+					this._WorkHoursInWeek = value;
+					this.SendPropertyChanged("WorkHoursInWeek");
+					this.OnWorkHoursInWeekChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_Event", Storage="_Events", ThisKey="id", OtherKey="idFactStaffHistory")]
+		public EntitySet<Event> Events
+		{
+			get
+			{
+				return this._Events;
+			}
+			set
+			{
+				this._Events.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaffHistory_TimeSheetRecord", Storage="_TimeSheetRecords", ThisKey="id", OtherKey="idFactStaffHistory")]
+		public EntitySet<TimeSheetRecord> TimeSheetRecords
+		{
+			get
+			{
+				return this._TimeSheetRecords;
+			}
+			set
+			{
+				this._TimeSheetRecords.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FactStaff_FactStaffHistory", Storage="_FactStaff", ThisKey="idFactStaff", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FactStaff FactStaff
+		{
+			get
+			{
+				return this._FactStaff.Entity;
+			}
+			set
+			{
+				FactStaff previousValue = this._FactStaff.Entity;
+				if (((previousValue != value) 
+							|| (this._FactStaff.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FactStaff.Entity = null;
+						previousValue.FactStaffHistories.Remove(this);
+					}
+					this._FactStaff.Entity = value;
+					if ((value != null))
+					{
+						value.FactStaffHistories.Add(this);
+						this._idFactStaff = value.id;
+					}
+					else
+					{
+						this._idFactStaff = default(int);
+					}
+					this.SendPropertyChanged("FactStaff");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Events(Event entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaffHistory = this;
+		}
+		
+		private void detach_Events(Event entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaffHistory = null;
+		}
+		
+		private void attach_TimeSheetRecords(TimeSheetRecord entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaffHistory = this;
+		}
+		
+		private void detach_TimeSheetRecords(TimeSheetRecord entity)
+		{
+			this.SendPropertyChanging();
+			entity.FactStaffHistory = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="ShemaTabel.WorkShedule")]
+	public partial class WorkShedule : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _NameShedule;
+		
+		private bool _AllowNight;
+		
+		private EntitySet<Exception> _Exceptions;
+		
+		private EntitySet<PlanStaff> _PlanStaffs;
+		
+		private EntitySet<FactStaff> _FactStaffs;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OnNameSheduleChanging(string value);
+    partial void OnNameSheduleChanged();
+    partial void OnAllowNightChanging(bool value);
+    partial void OnAllowNightChanged();
+    #endregion
+		
+		public WorkShedule()
+		{
+			this._Exceptions = new EntitySet<Exception>(new Action<Exception>(this.attach_Exceptions), new Action<Exception>(this.detach_Exceptions));
+			this._PlanStaffs = new EntitySet<PlanStaff>(new Action<PlanStaff>(this.attach_PlanStaffs), new Action<PlanStaff>(this.detach_PlanStaffs));
+			this._FactStaffs = new EntitySet<FactStaff>(new Action<FactStaff>(this.attach_FactStaffs), new Action<FactStaff>(this.detach_FactStaffs));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NameShedule", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string NameShedule
+		{
+			get
+			{
+				return this._NameShedule;
+			}
+			set
+			{
+				if ((this._NameShedule != value))
+				{
+					this.OnNameSheduleChanging(value);
+					this.SendPropertyChanging();
+					this._NameShedule = value;
+					this.SendPropertyChanged("NameShedule");
+					this.OnNameSheduleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AllowNight", DbType="Bit NOT NULL")]
+		public bool AllowNight
+		{
+			get
+			{
+				return this._AllowNight;
+			}
+			set
+			{
+				if ((this._AllowNight != value))
+				{
+					this.OnAllowNightChanging(value);
+					this.SendPropertyChanging();
+					this._AllowNight = value;
+					this.SendPropertyChanged("AllowNight");
+					this.OnAllowNightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_Exception", Storage="_Exceptions", ThisKey="id", OtherKey="idWorkShedule")]
+		public EntitySet<Exception> Exceptions
+		{
+			get
+			{
+				return this._Exceptions;
+			}
+			set
+			{
+				this._Exceptions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_PlanStaff", Storage="_PlanStaffs", ThisKey="id", OtherKey="IdWorkShedule")]
+		public EntitySet<PlanStaff> PlanStaffs
+		{
+			get
+			{
+				return this._PlanStaffs;
+			}
+			set
+			{
+				this._PlanStaffs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WorkShedule_FactStaff", Storage="_FactStaffs", ThisKey="id", OtherKey="idTimeSheetSheduleType")]
+		public EntitySet<FactStaff> FactStaffs
+		{
+			get
+			{
+				return this._FactStaffs;
+			}
+			set
+			{
+				this._FactStaffs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Exceptions(Exception entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = this;
+		}
+		
+		private void detach_Exceptions(Exception entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = null;
+		}
+		
+		private void attach_PlanStaffs(PlanStaff entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = this;
+		}
+		
+		private void detach_PlanStaffs(PlanStaff entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = null;
+		}
+		
+		private void attach_FactStaffs(FactStaff entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = this;
+		}
+		
+		private void detach_FactStaffs(FactStaff entity)
+		{
+			this.SendPropertyChanging();
+			entity.WorkShedule = null;
 		}
 	}
 }

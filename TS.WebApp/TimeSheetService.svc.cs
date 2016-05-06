@@ -115,7 +115,7 @@ namespace TimeSheetMvc4WebApplication
         {
             using (var db = new KadrDataContext())
             {
-                return db.WorkShedule.Select(s=> DtoClassConstructor.DtoWorkShedule(s)).ToArray();
+                return db.WorkShedules.Select(s=> DtoClassConstructor.DtoWorkShedule(s)).ToArray();
             }
         }
 
@@ -265,6 +265,7 @@ namespace TimeSheetMvc4WebApplication
                                 f => f.IdTimeSheetRecord == recordForEdit.IdTimeSheetRecord);
                         if (updeteItem == null) continue;
                         updeteItem.JobTimeCount = recordForEdit.JobTimeCount;
+                        updeteItem.NightTimeCount = recordForEdit.NightTimeCount;
                         updeteItem.idDayStatus = recordForEdit.DayStays.IdDayStatus;
                     }
                     db.SubmitChanges();
@@ -341,6 +342,38 @@ namespace TimeSheetMvc4WebApplication
                     var itabN = db.Employees.Where(w => w.id == idEmployee).Select(s => s.itab_n).FirstOrDefault();
                     if (itabN != null)
                         db.add_EmplLogin(itabN, new Binary(new[] {Convert.ToByte(true)}), login);
+                    return true;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Изменяет режим сотруднику
+        /// </summary>
+        /// <param name="IdFactStaff">Сотрудник на должности</param>
+        /// <param name="IdWorkShedule">Новый режим работы</param>
+        /// <param name="isPersonalRegim">true - персональный режим, false - режим должности в отделе</param> 
+        /// <returns></returns>
+
+        [OperationContract]
+        public bool EditEmployeeRegim(int IdFactStaff, int IdWorkShedule, bool isPersonalRegim, int HoursWeek)
+        {
+            using (var db = new KadrDataContext())
+            {
+                try
+                {
+                    var fs = db.FactStaffs.FirstOrDefault(f => f.id == IdFactStaff);
+                    if (isPersonalRegim) //если это персональный режим
+                        fs.idTimeSheetSheduleType = IdWorkShedule;
+                    else
+                        db.PlanStaff.FirstOrDefault(p => p.id == fs.idPlanStaff.Value).IdWorkShedule = IdWorkShedule;
+                    fs.CurrentChange.WorkHoursInWeek = HoursWeek;
+
+                    db.SubmitChanges();
                     return true;
                 }
                 catch (System.Exception)
@@ -761,7 +794,7 @@ namespace TimeSheetMvc4WebApplication
         public DtoWorkShedule[] GetWorkScheduleList()
         {
             var db = new KadrDataContext();
-            return db.WorkShedule.Select(s => DtoClassConstructor.DtoWorkShedule(s)).ToArray();
+            return db.WorkShedules.Select(s => DtoClassConstructor.DtoWorkShedule(s)).ToArray();
         }
 
         //==========        Приватные методы

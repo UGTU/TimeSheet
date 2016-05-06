@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Data.Linq;
 using System.Linq;
 using System.Web.Providers.Entities;
@@ -454,13 +455,14 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     s => DtoTimeSheetRecord(s)).ToArray();
 
            // records
-            return new DtoTimeSheetEmployee
+            var emp = new DtoTimeSheetEmployee
             {
                 FactStaffEmployee = DtoFactStaffEmployee(db, idFactStaffHistory),
                 Records = records,
                 //IsChecked = records.Any(w => w.IsChecked),
                 IdTimeSheet = idTimeSheet
             };
+            return emp;
         }
 
         //public static DtoTimeSheetEmployee DtoTimeSheetEmployee(KadrDataContext db, int idTimeSheet, int idFactStaffHistory)
@@ -486,6 +488,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                            IdTimeSheetRecord = timeSheetRecord.IdTimeSheetRecord,
                            Date = timeSheetRecord.RecordDate,
                            JobTimeCount = timeSheetRecord.JobTimeCount,
+                           NightTimeCount = timeSheetRecord.NightTimeCount ?? 0 ,
                            DayAweek = timeSheetRecord.RecordDate.ToString("ddd.", cult),
                            DayStays = DtoDayStatus(timeSheetRecord.DayStatus),
                            IsChecked = timeSheetRecord.IsChecked != null && (bool)timeSheetRecord.IsChecked
@@ -505,8 +508,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
 
         public static DtoFactStaffEmployee DtoFactStaffEmployee(KadrDataContext db, int idFactStaffHistory)
         {
-
-            return db.FactStaffHistory.Where(w => w.id == idFactStaffHistory).Select(s => new DtoFactStaffEmployee
+            var fsE = 
+            db.FactStaffHistories.Where(w => w.id == idFactStaffHistory).Select(s => new DtoFactStaffEmployee
             {
                 IdFactStaffHistiry = s.id,
                 IdFactStaff = s.FactStaff.id,
@@ -519,8 +522,10 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 StaffRate = s.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
                // FinSrc = s.GetFinancingSourceByFsh().IfNotNull(f=>f.FinancingSourceName, string.Empty),
                 Post = DtoPost(s.FactStaff.PlanStaff.Post),
-                WorkShedule = DtoWorkShedule(s.FactStaff.PlanStaff.WorkShedule)
+                WorkShedule = DtoWorkShedule(s.FactStaff.WorkShedule ?? s.FactStaff.PlanStaff.WorkShedule),
+                IsPersonalShedule = s.FactStaff.WorkShedule != null
             }).FirstOrDefault();
+            return fsE;
         }
 
         public static DtoFactStaffEmployee DtoFactStaffEmployee(FactStaffHistory factStaff)
@@ -551,7 +556,10 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     ItabN = factStaff.FactStaff.Employee.itab_n,
                     StaffRate = factStaff.StaffCount, //db.FactStaffHistory.Where(wf => wf.id == idFactStaffHistory).Select(sf => sf.StaffCount).FirstOrDefault(),
                     Post = DtoPost(factStaff.FactStaff.PlanStaff.Post),
-                    WorkShedule = DtoWorkShedule(factStaff.FactStaff.WorkShedule ?? factStaff.FactStaff.PlanStaff.WorkShedule)
+                    WorkShedule = DtoWorkShedule(factStaff.FactStaff.WorkShedule ?? factStaff.FactStaff.PlanStaff.WorkShedule),
+                    IsPersonalShedule = factStaff.FactStaff.WorkShedule != null,
+                    IdPlanStaff = factStaff.FactStaff.idPlanStaff,
+                    HoursWeek = factStaff.WorkHoursInWeek.Value
                 };
         }
 
@@ -560,8 +568,9 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
             return new DtoWorkShedule
                        {
                            IdWorkShedule = workShedule.id,
-                           WorkSheduleName = workShedule.NameShedule
-                       };
+                           WorkSheduleName = workShedule.NameShedule,
+                           AllowNight = workShedule.AllowNight
+            };
         }
 
         public static DtoPost DtoPost(Post post)

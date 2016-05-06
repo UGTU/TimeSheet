@@ -140,6 +140,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //todo:Сделать метод проверки и сохранять логин только если он обновлён
             var approveSaveResult = Client.AddApproverForDepartment(idEmployee, idDepartmen, approveNumber);
             var employeeSaveResult = Client.AddEmployeeLogin(idEmployee, employeeLogin);
+            
             var result = (approveSaveResult && employeeSaveResult) ? true : false;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -171,5 +172,19 @@ namespace TimeSheetMvc4WebApplication.Controllers
             
         }
 
-    }
-}
+        [Authorize(Roles = "ADtoKadr")]
+        public JsonResult SaveEmployeeRegime(int IdFactStaff, int IdWorkShedule, bool isPersonalRegim, int HoursWeek)
+        {
+
+                var employeeSaveResult = Client.EditEmployeeRegim(IdFactStaff, IdWorkShedule, isPersonalRegim, HoursWeek);
+                var result = new
+                {
+                    result = employeeSaveResult,
+                    idFactStaff = IdFactStaff
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+          }
+
+        }
+
+  }

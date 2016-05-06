@@ -126,7 +126,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         public JsonResult UpdateTimeSheetRecotds(JsTimeSheetRecordModel[] records)
         {
             var r = records.Select(record => new DtoTimeSheetRecord
-            {IdTimeSheetRecord = record.IdTimeSheetRecord, JobTimeCount = record.JobTimeCount, 
+            {IdTimeSheetRecord = record.IdTimeSheetRecord, JobTimeCount = record.JobTimeCount, NightTimeCount = record.NightTimeCount,
                 DayStays = new DtoDayStatus {IdDayStatus = record.IdDayStatus}}).ToList();
             var message = new DtoMessage { Result = Client.EditTimeSheetRecords(r.ToArray()) };
             if (!message.Result)

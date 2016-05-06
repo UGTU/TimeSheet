@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8" ng-hide="DepartmentApproveHide()">
+    <div class="col-md-8" ng-hide="DepartmentHide()">
         <div class="row">
             <div class="col-lg-10">
                 <h3 style="margin-top: 3px;">Сотрудники подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
@@ -51,22 +51,27 @@
         <hr style="margin-top: 0;" />
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Режим работы</th>
-                    <th>ФИО</th>
-                    <th>Должность</th>
-                </tr>
+            <tr>
+                <th>Режим работы</th>
+                <th>Персональный режим</th>
+                <th>ФИО</th>
+                <th>Должность</th>
+                <th style="width:10em">час/нед </th>
+            </tr>
             </thead>
             <tbody>
             <tr ng-repeat="empl in sdEmployees | orderBy:['Surname']">
                 <td>
-                    <select class="form-control input-sm" ng-model="empl.Regim"  ng-options="reg as reg.WorkSheduleName for reg in sdRegims | orderBy:['WorkSheduleName'] "></select>
-                </td>  
+                    <select class="form-control input-sm" ng-model="empl.Regim" ng-options="reg as reg.WorkSheduleName for reg in sdRegims | orderBy:['WorkSheduleName'] " ></select>
+                </td>
+                <td align="center"><input type="checkbox" ng-model="empl.IsPersonalShedule"></input></td>
                 <td>{{GetEmployeeName(empl)}}</td>
                 <td>{{GetEmployeePost(empl)}}</td>
+                <td><input type="text" ng-model="empl.HoursWeek" width="10px"></td>
             </tr>
             </tbody>
         </table>
+        <p>{{param}}</p>
     </div>
 </div>
 
@@ -81,6 +86,7 @@
         });
 
         $scope.SetCurrentDepartment = function (idManagеDepartment) {
+            
             if ($scope.DepIdList.indexOf(idManagеDepartment) === -1) {
                 $scope.DepIdList.push(idManagеDepartment);
             }
@@ -118,7 +124,7 @@
             department.css = "active";
             $scope.SelectedDepartment = department;
             console.log(department.IdDepartment);
-            $scope.GetApprovers(department.IdDepartment);
+            $scope.GetEmployees(department.IdDepartment);
         };
 
         $scope.ClearCss = function () {
@@ -127,48 +133,42 @@
             });
         };
 
-        $scope.GetApprovers = function (idDepartment) {
+        $scope.GetEmployees = function (idDepartment) {
             var link = '@Html.Raw(@Url.Action("GetDepartmentFactStaffs", "Admin", new { id = "replaceId" }))';
             link = link.replace("replaceId", idDepartment);
             $http.get(link).success(function (data) {
                 $scope.sdEmployees = data.DepartmentFactStaffs;
                 $scope.sdRegims = data.AllRegimes;
-                $scope.EmployeesClone();
 
-                angular.forEach($scope.sdEmployees, function (empl) {
-                    angular.forEach($scope.sdRegims, function (reg) {
-                        if (reg.IdWorkShedule == empl.WorkShedule.IdWorkShedule) {
-                            empl.Regim = reg;
-                            }
-                        });
-                    });
+                $scope.LoadRegims();
+                
+                $scope.EmployeesClone();
             });
         };
 
-
-
         $scope.EmployeesClone = function () {
-            angular.forEach($scope.sdEmployees, function (sdEmployee) {
+            /*angular.forEach($scope.sdEmployees, function (sdEmployee) {
                 if (sdEmployee.EmployeeLogin == null) {
                     sdEmployee.EmployeeLogin = '';
-                    // sdEmployee.isEdit = '0';
                 }
-            });
+            });*/
             $scope.clEmployees = angular.copy($scope.sdEmployees);
         };
 
         $scope.IsEmployeesEquals = function (sdEmployee, clEmployee) {
-            if (sdEmployee.IdEmployee == clEmployee.IdEmployee && sdEmployee.EmployeeLogin == clEmployee.EmployeeLogin)
+           
+            if (sdEmployee.IdFactStaff == clEmployee.IdFactStaff && (sdEmployee.IsPersonalShedule == clEmployee.IsPersonalShedule)
+                                                                 && (sdEmployee.HoursWeek == clEmployee.HoursWeek)
+                                                                 && angular.equals(sdEmployee.Regim, clEmployee.Regim))
                 return true;
             return false;
-            //return angular.equals(sdEmployee, clEmployee);
         };
 
         $scope.IsSaveDisable = function () {
             var result = true;
             angular.forEach($scope.sdEmployees, function (sdEmployee) {
                 angular.forEach($scope.clEmployees, function (clEmployee) {
-                    if (sdEmployee.IdEmployee == clEmployee.IdEmployee) {
+                    if (sdEmployee.IdFactStaff == clEmployee.IdFactStaff) {
                         if (!$scope.IsEmployeesEquals(sdEmployee, clEmployee)) {
                             result = false;
                         }
@@ -178,7 +178,7 @@
             return result;
         };
 
-        $scope.GetState = function (empl) {
+      /*  $scope.GetState = function (empl) {
             var r = '';
             angular.forEach($scope.clEmployees, function (clEmployee) {
                 if (empl.IdEmployee == clEmployee.IdEmployee) {
@@ -188,12 +188,12 @@
                 }
             });
             return r;
-        };
+        };*/
 
 
 
 
-        $scope.InitApprover = function (approver, employees) {
+      /*  $scope.InitApprover = function (approver, employees) {
             if (approver == null) return null;
             var empl;
             angular.forEach(employees, function (employee) {
@@ -203,9 +203,9 @@
                 }
             });
             return empl;
-        };
+        };*/
 
-        $scope.DepartmentApproveHide = function () {
+        $scope.DepartmentHide = function () {
             if ($scope.sdEmployees == null || $scope.sdEmployees.length == 0)
                 return true;
             return false;
@@ -229,18 +229,27 @@
             return result;
         };
 
-        $scope.SaveApprover = function (approver) {
-            var link = '@Html.Raw(@Url.Action("SaveEmployeeLogin", "Admin", new { idEmployee = "idEmployeeReplace", employeeLogin = "employeeLoginReplace" }))';
-            link = link.replace("idEmployeeReplace", approver.IdEmployee).replace("employeeLoginReplace", approver.EmployeeLogin);
+        $scope.SaveRegime = function (employee) {
+            var link = '@Html.Raw(@Url.Action("SaveEmployeeRegime", "Admin", new
+                   {
+                       IdFactStaff = "idFactStaffReplace",
+                       IdWorkShedule = "IdWorkSheduleReplace",
+                       isPersonalRegim = "isPersonalReplace",
+                       HoursWeek = "HoursWeekReplace"
+                   }))';
+            link = link.replace("idFactStaffReplace", employee.IdFactStaff).replace("IdWorkSheduleReplace", employee.Regim.IdWorkShedule)
+                       .replace("isPersonalReplace", employee.IsPersonalShedule).replace("HoursWeekReplace", employee.HoursWeek);
             console.log(link);
             $http.get(link).success(function (data) {
                 if (data.result) {
                     console.log('approve save success');
-                    angular.forEach($scope.clEmployees, function (sdEmployee) {
-                        if (sdEmployee.IdEmployee == approver.IdEmployee) {
-                            sdEmployee.EmployeeLogin = approver.EmployeeLogin;
+                   /* angular.forEach($scope.clEmployees, function (sdEmployee) {
+                        if (sdEmployee.IdFactStaff == employee.IdFactStaff) {
+
+                            sdEmployee.WorkShedule.IdWorkShedule = employee.Regim.IdWorkShedule;
                         }
-                    });
+                    });*/
+                    $scope.EmployeesClone();
                 }
                 else
                     alert('При сохранении возникли проблемы, изменения не сохранены');
@@ -250,14 +259,38 @@
         $scope.Save = function () {
             angular.forEach($scope.sdEmployees, function (sdEmployee) {
                 angular.forEach($scope.clEmployees, function (clEmployee) {
-                    if (sdEmployee.IdEmployee == clEmployee.IdEmployee) {
+                    if (sdEmployee.IdFactStaff == clEmployee.IdFactStaff) {
                         if (!$scope.IsEmployeesEquals(sdEmployee, clEmployee)) {
-                            $scope.SaveApprover(sdEmployee);
+                            $scope.SaveRegime(sdEmployee);
+                            if (!sdEmployee.IsPersonalShedule) {
+                                angular.forEach($scope.sdEmployees, function(sdEmplSamePost) {
+                                    if (sdEmployee.IdPlanStaff == sdEmplSamePost.IdPlanStaff) {
+                                        console.log(sdEmployee.Regim.WorkSheduleName);
+                                        console.log(sdEmplSamePost.Regim.WorkSheduleName);
+                                        sdEmplSamePost.WorkShedule = angular.copy(sdEmployee.WorkShedule);
+                                        sdEmplSamePost.Regim = sdEmployee.Regim;
+                                    }
+                                });
+                            }
                         }
                     }
                 });
             });
+           // $scope.LoadRegims();
         };
+        $scope.LoadRegims = function () {
+            angular.forEach($scope.sdEmployees, function (empl) {
+                $scope.LoadRegim(empl);
+            });
+        }
+
+        $scope.LoadRegim = function (employee) {
+            angular.forEach($scope.sdRegims, function (reg) {
+                if (reg.IdWorkShedule == employee.WorkShedule.IdWorkShedule) {
+                    employee.Regim = reg;
+                }
+            });
+        }
     };
 </script>
 

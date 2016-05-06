@@ -152,6 +152,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int IdWorkShedule { get; set; }
         [DataMember]
         public string WorkSheduleName { get; set; }
+        [DataMember]
+        public bool AllowNight { get; set; }
     }
 
     [DataContract]
@@ -216,15 +218,24 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int IdFactStaff { get; set; }
 
         [DataMember]
+        public int? IdPlanStaff { get; set; }
+
+        [DataMember]
         public int IdFactStaffHistiry { get; set; } 
         [DataMember]
         public decimal StaffRate { get; set; }
         [DataMember]
         public DtoWorkShedule WorkShedule { get; set; }
         [DataMember]
+        public bool IsPersonalShedule { get; set; }
+     
+        [DataMember]
         public DtoPost Post { get; set; }
         [DataMember]
         public bool IsCheked { get; set; }
+
+        [DataMember]
+        public double HoursWeek { get; set; }
 
     }
 
