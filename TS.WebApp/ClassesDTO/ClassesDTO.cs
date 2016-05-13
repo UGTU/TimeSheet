@@ -209,6 +209,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int ApproveStep { get; set; }
         [DataMember]
         public bool IsFake { get; set; }
+        public DtoExceptionDay[] Holidays { get; set; }
     }
 
     [DataContract]
@@ -255,7 +256,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         [DataMember]
         public bool IsChecked;
         [DataMember]
-        public double NightTimeCount;
+        public string NightTimeCount;
     }
 
     [DataContract]

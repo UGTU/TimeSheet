@@ -167,7 +167,11 @@ namespace TimeSheetMvc4WebApplication.Source
                     //5 days week
                     ? FiveDayesTimeSheetGenerate(employee)
                     //6 days week
-                    : SixDayesTimeSheetGenerate(employee);
+                    : (employee.PlanStaff.WorkShedule.id == Week6Days
+                    ? SixDayesTimeSheetGenerate(employee)
+                    //flexible week
+                    : FlexibleTimeSheetGenerate(employee)
+                    );
             }
 
 
@@ -340,6 +344,26 @@ namespace TimeSheetMvc4WebApplication.Source
         private List<TimeSheetRecord> FlexibleTimeSheetGenerate(FactStaffWithHistory employee)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>();
+            for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
+            {
+                TimeSheetRecord timeSheetRecord;
+                var date = _timeSheet.DateBeginPeriod.AddDays(i);
+                if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateBegin > date)
+                {
+                    timeSheetRecord = NewTimeSheetRecord(date, employee.idFactStaffHistory, IdX, _timeSheet.id, 0);
+                    timeSheetRecordLList.Add(timeSheetRecord);
+                    continue;
+                }
+                switch (date.DayOfWeek)
+                {
+                    default:
+                        {
+                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdVihodnoy);
+                            break;
+                        }
+                }
+                timeSheetRecordLList.Add(timeSheetRecord);
+            }
             return timeSheetRecordLList;
         }
 

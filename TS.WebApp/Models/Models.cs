@@ -23,8 +23,14 @@ namespace TimeSheetMvc4WebApplication.Models
         public PaperModel[] Papers { get; set; }
     }
 
+    public class Holiday
+    {
+        public DateTime Day;
+    }
+
     public class PaperModel
     {
+        public int id { get; set; }
         public EmployeeModel[] Employees { get; set; }
         public HeaderStyle[] HeaderStyle { get; set; }
         public bool IsFirst { get; set; }
@@ -33,6 +39,7 @@ namespace TimeSheetMvc4WebApplication.Models
         public int PaperNum { get; set; }
         public int PaperOf { get; set; }
         public int TimeSheetNum { get; set; }
+        public string DisplayWithHours { get; set; }
     }
 
     public class HeaderStyle
@@ -65,18 +72,26 @@ namespace TimeSheetMvc4WebApplication.Models
 
         public EmployeeRecordModel[] Records { get; set; }
         public int FirstHalfMonthDays { get; set; }
+        public int FirstHalfMonthNights { get; set; }
         public double FirstHalfMonthHours { get; set; }
+        public double FirstHalfMonthNightHours { get; set; }
         public int SecondHalfMonthDays { get; set; }
+        public int SecondHalfMonthNights { get; set; }
         public double SecondHalfMonthHours { get; set; }
+        public double SecondHalfMonthNightHours { get; set; }
         //public int Days { get; set; }
         public int Days { get { return FirstHalfMonthDays + SecondHalfMonthDays; }}
+        public int Nights { get { return FirstHalfMonthNights + SecondHalfMonthNights; } }
         //public int MounthDays { get; set; }
         //public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
-        
+
         //public double Hours { get; set; }
         public double Hours { get { return FirstHalfMonthHours + SecondHalfMonthHours; } }
-
+        public double NightHours { get { return FirstHalfMonthNightHours + SecondHalfMonthNightHours; } }
         public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
+        public double HolidayHours { get; set; }
+
+        public int TimeSheduleDividing => (NightHours > 0) ? 1 : 2;
         //public EmployeeRecordModel В { get; set; }
         //public EmployeeRecordModel Б { get; set; }
         //public EmployeeRecordModel О { get; set; }
@@ -98,7 +113,9 @@ namespace TimeSheetMvc4WebApplication.Models
         public int Day { get; set; }
         public string DayStatus { get; set; }
         public string Value { get; set; }
-        
+        public string Night { get; set; }
+        public string NightStatus { get; set; }
+
         //public string Value { get { return Count.ToString(CultureInfo.InvariantCulture); } }
         public int Count { get; set; } 
         public string CSS { get; set; }

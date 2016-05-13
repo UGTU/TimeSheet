@@ -36,7 +36,7 @@ namespace TimeSheetMvc4WebApplication.Models.Main
                         DayAweek = rec.Date.ToString("dddd", cult),
                         IdDayStatus = rec.DayStays.IdDayStatus,
                         JobTimeCount = rec.JobTimeCount,
-                        NightTimeCount = rec.NightTimeCount,
+                        NightTimeCount = (rec.NightTimeCount != "") ? Convert.ToDouble(rec.NightTimeCount) : 0,
                         Date = rec.Date.ToString("dd MMMM"),
                         Order = i
                     });

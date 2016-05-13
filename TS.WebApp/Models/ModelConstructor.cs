@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Net.Configuration;
 using CommonBase;
+using Microsoft.Ajax.Utilities;
 using TimeSheetMvc4WebApplication.ClassesDTO;
+using TimeSheetMvc4WebApplication.Source;
 
 namespace TimeSheetMvc4WebApplication.Models
 {
@@ -101,24 +104,61 @@ namespace TimeSheetMvc4WebApplication.Models
                                                          timeSheet.Employees.Where(
                                                              w => w.FactStaffEmployee.Post.Category.IsPPS).OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).ThenBy(
                                                                   o => o.FactStaffEmployee.Post.Category.OrderBy).ThenBy(t => t.FactStaffEmployee.Surname).ToArray(),
+                                                         timeSheet.Holidays,
                                                          timeSheet.Department.DepartmentFullName,
                                                          firsPaperPaperRecorddsColl,
                                                          lastPaperRecordsColl, paperRecordColl, isForPrint,
-                                                         timeSheet.Approvers
+                                                         timeSheet.Approvers,false
                                    ));
             }
-            if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.Post.Category.IsPPS))
+            if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.Post.Category.IsPPS)) //не ППС
             {
-                timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
-                                                         timeSheet.DateBegin, timeSheet.DateEnd,
-                                                         timeSheet.Employees.Where(
-                                                             w => !w.FactStaffEmployee.Post.Category.IsPPS).OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager).ThenBy(
-                                                                 o => o.FactStaffEmployee.Post.Category.OrderBy).ThenBy(t => t.FactStaffEmployee.Surname).ToArray(),
-                                                         timeSheet.Department.DepartmentFullName,
-                                                         firsPaperPaperRecorddsColl,
-                                                         lastPaperRecordsColl, paperRecordColl, isForPrint,
-                                                         timeSheet.Approvers
-                                   ));
+                if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.WorkShedule.AllowNight)) //5-ти и 6-ти дневный рабочий график
+                {
+                    timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
+                        timeSheet.DateBegin, timeSheet.DateEnd,
+                        timeSheet.Employees.Where(
+                            w => !w.FactStaffEmployee.Post.Category.IsPPS && !w.FactStaffEmployee.WorkShedule.AllowNight)
+                            .OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager)
+                            .ThenBy(
+                                o => o.FactStaffEmployee.Post.Category.OrderBy)
+                            .ThenBy(t => t.FactStaffEmployee.Surname)
+                            .ToArray(),
+                        timeSheet.Holidays,
+                        timeSheet.Department.DepartmentFullName,
+                        firsPaperPaperRecorddsColl,
+                        lastPaperRecordsColl, paperRecordColl, isForPrint,
+                        timeSheet.Approvers, false
+                        ));
+                }
+
+                if (timeSheet.Employees.Any(a => a.FactStaffEmployee.WorkShedule.AllowNight)) //гибкий рабочий график
+                {
+                    timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
+                        timeSheet.DateBegin, timeSheet.DateEnd,
+                        timeSheet.Employees.Where(
+                            w => !w.FactStaffEmployee.Post.Category.IsPPS && w.FactStaffEmployee.WorkShedule.AllowNight)
+                            .OrderByDescending(o => o.FactStaffEmployee.Post.IsMenager)
+                            .ThenBy(
+                                o => o.FactStaffEmployee.Post.Category.OrderBy)
+                            .ThenBy(t => t.FactStaffEmployee.Surname)
+                            .ToArray(),
+                        timeSheet.Holidays,
+                        timeSheet.Department.DepartmentFullName,
+                        firsPaperPaperRecorddsColl,
+                        lastPaperRecordsColl, paperRecordColl, isForPrint,
+                        timeSheet.Approvers, true
+                        ));
+                }
+            }
+            var idsheet = 0;
+            foreach (var sheet in timeSheets)
+            {
+                foreach (var paper in sheet.Papers)
+                {
+                    paper.id = idsheet;
+                    idsheet++;
+                }
             }
             return timeSheets.ToArray();
         }
@@ -166,15 +206,16 @@ namespace TimeSheetMvc4WebApplication.Models
         }
 
         private static TimeSheetModel TimeSheetModelConstructor(int documentNumber, DateTime dateComposition, DateTime dateBeginPeriod,
-                                                        DateTime dateEndPeriod, DtoTimeSheetEmployee[] timeSheetEmployees, string departmentName,
+                                                        DateTime dateEndPeriod, DtoTimeSheetEmployee[] timeSheetEmployees, DtoExceptionDay[] holiDays, string departmentName,
                                                         int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint,
-                                                        IEnumerable<DtoTimeSheetApprover> approvers)
+                                                        IEnumerable<DtoTimeSheetApprover> approvers, bool withHolHours)
         {
             var employees = new List<EmployeeModel>();
             for (int i = 0; i < timeSheetEmployees.Count(); i++)
             {
-                employees.Add(EmployeeModelConstructor(timeSheetEmployees[i], i + 1, isForPrint));
+                employees.Add(EmployeeModelConstructor(timeSheetEmployees[i], holiDays, i + 1, isForPrint));
             }
+
             var papers = new List<PaperModel>();
             var headerStyle = GetHeaderStyle(dateBeginPeriod, dateEndPeriod,isForPrint);
             var distributedEmployees = 0;
@@ -182,14 +223,14 @@ namespace TimeSheetMvc4WebApplication.Models
             {
                 if (distributedEmployees == 0)
                 {
-                    papers.Add(PaperModelConstructor(false, false, employees.Take(firsPaperPaperRecorddsColl).ToArray(),headerStyle));
+                    papers.Add(PaperModelConstructor(false, false, employees.Take(firsPaperPaperRecorddsColl).ToArray(), withHolHours, headerStyle));
                     distributedEmployees += firsPaperPaperRecorddsColl < employees.Count
                         ? firsPaperPaperRecorddsColl
                         : employees.Count;
                 }
                 else
                 {
-                    papers.Add(PaperModelConstructor(false, false, employees.Skip(distributedEmployees).Take(paperRecordColl).ToArray(), headerStyle));
+                    papers.Add(PaperModelConstructor(false, false, employees.Skip(distributedEmployees).Take(paperRecordColl).ToArray(), withHolHours, headerStyle));
                     distributedEmployees += paperRecordColl;
 
                 }
@@ -201,12 +242,12 @@ namespace TimeSheetMvc4WebApplication.Models
             PaperModel[] temp;
             if (papers.Last().IsFirst)
             {
-                temp = LastPaperCorrecter(papers.Last(), firsPaperPaperRecorddsColl-1,
+                temp = LastPaperCorrecter(papers.Last(), firsPaperPaperRecorddsColl-1, withHolHours,
                     headerStyle, takingEmployeys);
             }
             else
             {
-                temp = LastPaperCorrecter(papers.Last(), lastPaperRecordsColl,
+                temp = LastPaperCorrecter(papers.Last(), lastPaperRecordsColl, withHolHours,
                     headerStyle, takingEmployeys);
             }
             papers.Remove(papers.Last());
@@ -232,7 +273,7 @@ namespace TimeSheetMvc4WebApplication.Models
             };
         }
 
-        private static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, HeaderStyle[] headerStyle, int transferEmpl)
+        private static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, bool withHoldays, HeaderStyle[] headerStyle, int transferEmpl)
         {
             var papers = new List<PaperModel> {lastPaper};
             if (papers.Last().Employees.Count() >= lastPaperEmplCall)
@@ -240,23 +281,24 @@ namespace TimeSheetMvc4WebApplication.Models
                 var employeys = papers.Last().Employees;
                 papers.Last().Employees = employeys.Take(employeys.Count()-transferEmpl).ToArray();
                 var lastPageEnpl = employeys.Skip(employeys.Count() - transferEmpl).ToArray();
-                papers.Add(PaperModelConstructor(false, false, lastPageEnpl, headerStyle));
+                papers.Add(PaperModelConstructor(false, false, lastPageEnpl, withHoldays, headerStyle));
             }
             return papers.ToArray();
         }
 
-        private static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, HeaderStyle[] headerStyle)
+        private static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, bool withHoldays, HeaderStyle[] headerStyle)
         {
             return new PaperModel
             {
                 HeaderStyle = headerStyle,
                 Employees = employees,
                 IsFirst = isFirst,
-                IsLast = isLast
+                IsLast = isLast,
+                DisplayWithHours = (withHoldays ? "visible" : "hidden")
             };
         }
 
-        private static EmployeeModel EmployeeModelConstructor(DtoTimeSheetEmployee employee, int employeeNumber, bool isForPrint)
+        private static EmployeeModel EmployeeModelConstructor(DtoTimeSheetEmployee employee, DtoExceptionDay[] holiDays, int employeeNumber, bool isForPrint)
         {
             var records = new List<EmployeeRecordModel>();
             for (var i = 1; i <= 32; i++)
@@ -265,27 +307,26 @@ namespace TimeSheetMvc4WebApplication.Models
                 records.Add(EmployeeRecordModelConstructor(i, isForPrint, currentRecord));
             }
             var mounthDay = employee.Records.Count(c => c.DayStays.IdDayStatus != (int)DayStatus.Х);
-            return new EmployeeModel
+            var em = new EmployeeModel
             {
                 Surname = employee.FactStaffEmployee.Surname,
                 Name = employee.FactStaffEmployee.Name,
                 Patronymic = employee.FactStaffEmployee.Patronymic,
                 Post = employee.FactStaffEmployee.Post.PostSmallName,
                 StaffRate = employee.FactStaffEmployee.StaffRate,
-                //FinSrc = employee.FactStaffEmployee.FinSrc,
                 EmployeeNumber = employeeNumber,
                 Records = records.ToArray(),
-                //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 & (w.JobTimeCount > 0 || (w.JobTimeCount==0 && w.DayStays.IsVisible )  )),
+
                 FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 && !NonWorked.Any(a=>(int)a == w.DayStays.IdDayStatus)),
-                //FirstHalfMonthDays = employee.Records.Count(w => w.Date.Day < 16 && w.DayStays.IdDayStatus!=(int)DayStatus.Х),
+                FirstHalfMonthNights = employee.Records.Count(w => w.Date.Day < 16 && w.NightTimeCount != ""),
                 FirstHalfMonthHours = employee.Records.Where(w => w.Date.Day < 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
+                FirstHalfMonthNightHours = employee.Records.Where(w => w.Date.Day < 16 && w.NightTimeCount != "").Sum(s => Convert.ToDouble(s.NightTimeCount)),
+
                 SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)),
-                //SecondHalfMonthDays = employee.Records.Count(w => w.Date.Day >= 16 && w.DayStays.IdDayStatus != (int)DayStatus.Х),
+                SecondHalfMonthNights = employee.Records.Count(w => w.Date.Day >= 16 && w.NightTimeCount != ""),
                 SecondHalfMonthHours = employee.Records.Where(w => w.Date.Day >= 16 && !NonWorked.Any(a => (int)a == w.DayStays.IdDayStatus)).Sum(s => s.JobTimeCount),
-                //Days = employee.Records.Count(w => w.JobTimeCount > 0),
-                //Days = ,
-                //MounthDays = mounthDay,
-                //Hours = employee.Records.Where(w => w.JobTimeCount > 0).Sum(s => s.JobTimeCount),
+                SecondHalfMonthNightHours = employee.Records.Where(w => w.Date.Day >= 16 && w.NightTimeCount != "").Sum(s => Convert.ToDouble(s.NightTimeCount)),
+                HolidayHours = employee.Records.Where(w => holiDays.Select(h=>h.Date).Contains(w.Date)).Sum(s => s.JobTimeCount + Convert.ToDouble((s.NightTimeCount!="") ? s.NightTimeCount : "0")),                              
 
                 //DayStatus.Х - не должен попадать в "неявки по причинам"
                 NonWorkedDays = NonWorked.Where(w=>w != DayStatus.Х).Select(
@@ -295,6 +336,7 @@ namespace TimeSheetMvc4WebApplication.Models
                         .Select(s => EmployeeRecordModelConstructor(s.Count, s.DayStatus.Description(), isForPrint))
                         .ToArray()
             };
+            return em;
         }
 
         private static EmployeeRecordModel EmployeeRecordModelConstructor(int day, bool isForPrint,DtoTimeSheetRecord record = null)
@@ -305,7 +347,9 @@ namespace TimeSheetMvc4WebApplication.Models
                 {
                     Day = day,
                     DayStatus = DayStatus.Х.Description(),
-                    Value = DayStatus.Х.Description()
+                    Value = DayStatus.Х.Description(),
+                    Night = DayStatus.Х.Description(),
+                    NightStatus = DayStatus.Х.Description()
                 };
             else
             {
@@ -314,26 +358,32 @@ namespace TimeSheetMvc4WebApplication.Models
                     {
                         Day = day,
                         DayStatus = string.Empty,
-                        Value = string.Empty
+                        Value = string.Empty,
+                        Night = string.Empty,
+                        NightStatus = string.Empty,
                     };
                 else
                     model = new EmployeeRecordModel
                     {
                         Day = day,
                         DayStatus = record.DayStays.SmallDayStatusName,
-                        Value = record.JobTimeCount.ToString(CultureInfo.InvariantCulture)
+                        Value = record.JobTimeCount.ToString(CultureInfo.InvariantCulture),
+                        Night = record.NightTimeCount.ToString(CultureInfo.InvariantCulture),
+                        NightStatus = record.NightTimeCount != "" ? "Н" : ""
                     };
             }
             return EmployeeRecordModelCssDecorator(model, isForPrint);
         }
 
-        private static EmployeeRecordModel EmployeeRecordModelConstructor(int days, string dayStatus, bool isForPrint)
+        private static EmployeeRecordModel EmployeeRecordModelConstructor(int days, string dayStatus, bool isForPrint, int nights = 0)
         {
             return EmployeeRecordModelCssDecorator(new EmployeeRecordModel
             {
                 Day = -1,
                 DayStatus = dayStatus,
                 Value = days.ToString(CultureInfo.InvariantCulture),
+                Night = nights.ToString(CultureInfo.InvariantCulture),
+                NightStatus = nights > 0 ?  "Н" : "",
                 Count = days
             }, isForPrint);
         }

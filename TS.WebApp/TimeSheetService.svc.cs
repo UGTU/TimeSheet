@@ -265,7 +265,7 @@ namespace TimeSheetMvc4WebApplication
                                 f => f.IdTimeSheetRecord == recordForEdit.IdTimeSheetRecord);
                         if (updeteItem == null) continue;
                         updeteItem.JobTimeCount = recordForEdit.JobTimeCount;
-                        updeteItem.NightTimeCount = recordForEdit.NightTimeCount;
+                        updeteItem.NightTimeCount = (recordForEdit.NightTimeCount != "")? Convert.ToDouble(recordForEdit.NightTimeCount) : 0;
                         updeteItem.idDayStatus = recordForEdit.DayStays.IdDayStatus;
                     }
                     db.SubmitChanges();
