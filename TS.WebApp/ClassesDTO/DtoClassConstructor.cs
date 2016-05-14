@@ -395,7 +395,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     WorkShedule = DtoWorkShedule(factStaff.FactStaff.WorkShedule ?? factStaff.FactStaff.PlanStaff.WorkShedule),
                     IsPersonalShedule = factStaff.FactStaff.WorkShedule != null,
                     IdPlanStaff = factStaff.FactStaff.idPlanStaff,
-                    HoursWeek = factStaff.WorkHoursInWeek.Value
+                    HoursWeek = (double)( factStaff.WorkHoursInWeek ?? 0)
                 };
         }
 

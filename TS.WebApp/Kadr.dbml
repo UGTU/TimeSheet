@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="KadrKadr" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=KadrTest;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrRealTestConnectionString1" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Kadr" Class="KadrDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ugtudb.ugtu.net;Initial Catalog=Kadr;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="KadrConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="ShemaTabel.ApproverType" Member="ApproverType">
     <Type Name="ApproverType">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -411,6 +411,16 @@
       <Association Name="WorkShedule_FactStaff" Member="WorkShedule" ThisKey="idTimeSheetSheduleType" OtherKey="id" Type="WorkShedule" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="ShemaTabel.WorkShedule" Member="WorkShedules">
+    <Type Name="WorkShedule">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NameShedule" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AllowNight" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="WorkShedule_Exception" Member="Exceptions" ThisKey="id" OtherKey="idWorkShedule" Type="Exception" />
+      <Association Name="WorkShedule_PlanStaff" Member="PlanStaffs" ThisKey="id" OtherKey="IdWorkShedule" Type="PlanStaff" />
+      <Association Name="WorkShedule_FactStaff" Member="FactStaffs" ThisKey="id" OtherKey="idTimeSheetSheduleType" Type="FactStaff" />
+    </Type>
+  </Table>
   <Table Name="dbo.FactStaffHistory" Member="FactStaffHistories">
     <Type Name="FactStaffHistory">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -430,20 +440,11 @@
       <Column Name="Address" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
       <Column Name="idFinancingSource" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="idContract" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="WorkHoursInWeek" Type="System.Double" DbType="Int" CanBeNull="true" />
+      <Column Name="WorkHoursInWeek" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
+      <Column Name="NormHoursInWeek" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
       <Association Name="FactStaffHistory_Event" Member="Events" ThisKey="id" OtherKey="idFactStaffHistory" Type="Event" />
       <Association Name="FactStaffHistory_TimeSheetRecord" Member="TimeSheetRecords" ThisKey="id" OtherKey="idFactStaffHistory" Type="TimeSheetRecord" />
       <Association Name="FactStaff_FactStaffHistory" Member="FactStaff" ThisKey="idFactStaff" OtherKey="id" Type="FactStaff" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
-  <Table Name="ShemaTabel.WorkShedule" Member="WorkShedules">
-    <Type Name="WorkShedule">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NameShedule" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="AllowNight" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="WorkShedule_Exception" Member="Exceptions" ThisKey="id" OtherKey="idWorkShedule" Type="Exception" />
-      <Association Name="WorkShedule_PlanStaff" Member="PlanStaffs" ThisKey="id" OtherKey="IdWorkShedule" Type="PlanStaff" />
-      <Association Name="WorkShedule_FactStaff" Member="FactStaffs" ThisKey="id" OtherKey="idTimeSheetSheduleType" Type="FactStaff" />
     </Type>
   </Table>
   <Function Name="ShemaTabel.CreateTimeSheet" Method="CreateTimeSheet">
