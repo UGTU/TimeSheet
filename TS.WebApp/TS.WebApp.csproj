@@ -223,6 +223,8 @@
     <Compile Include="Models\Entities\Employee.cs" />
     <Compile Include="Models\Entities\FactStaff.cs" />
     <Compile Include="Models\Entities\FactStaffWithHistory.cs" />
+    <Compile Include="Models\Entities\OK_Otpusk.cs" />
+    <Compile Include="Models\Entities\PlanStaff.cs" />
     <Compile Include="Models\Entities\TimeSheetView.cs" />
     <Compile Include="Models\HeaderLinckModel.cs" />
     <Compile Include="Models\Main\DtoToJsonMapper.cs" />
@@ -719,6 +721,7 @@
     <Content Include="Views\TSShow\PartialView\TimeSheetApproveStatus.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Views\TSShow\PartialView\TimeSheetHeaderNight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />

@@ -142,7 +142,7 @@ namespace TimeSheetMvc4WebApplication.Source
         public FactStaffWithHistory[] GetAllEmployees()
         {
             var deps = GetInnerDepartmentsIdForTS(_db, new int[] { _timeSheet.idDepartment });
-            var employees = _db.FactStaffWithHistory.Where(
+            var employees = _db.FactStaffWithHistories.Where(
                 w => deps.Contains(w.PlanStaff.idDepartment) &&
                      (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
                      w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&
@@ -154,21 +154,26 @@ namespace TimeSheetMvc4WebApplication.Source
         private IEnumerable<TimeSheetRecord> InsertEmployee(FactStaffWithHistory employee, IEnumerable<Exception> exeptions, 
             IEnumerable<OK_Otpusk> otpuskList, IEnumerable<OK_Inkapacity> inkapacities, IEnumerable<Event> businesstrips)
         {
+            
             List<TimeSheetRecord> timeSheetRecordLList;
             // Генерируем табель
             if (employee.PlanStaff.Post.Category.id == IdPps)
             {
+                var FullEmployee = employee.WorkHoursInWeek == FullPpsHours;
                 //PPS
-                timeSheetRecordLList = PpsTimeSheetGenerate(employee);
+                timeSheetRecordLList = PpsTimeSheetGenerate(employee, FullEmployee);
             }
             else
             {
+                var fullEmployee = (employee.Employee.SexBit && employee.WorkHoursInWeek == FullManHours)||
+                                   (!employee.Employee.SexBit && employee.WorkHoursInWeek == FullWomanHours);
+
                 timeSheetRecordLList = employee.PlanStaff.WorkShedule.id == Week5Days
                     //5 days week
-                    ? FiveDayesTimeSheetGenerate(employee)
+                    ? FiveDayesTimeSheetGenerate(employee, fullEmployee)
                     //6 days week
                     : (employee.PlanStaff.WorkShedule.id == Week6Days
-                    ? SixDayesTimeSheetGenerate(employee)
+                    ? SixDayesTimeSheetGenerate(employee, fullEmployee)
                     //flexible week
                     : FlexibleTimeSheetGenerate(employee)
                     );
@@ -188,21 +193,26 @@ namespace TimeSheetMvc4WebApplication.Source
             return timeSheetRecordLList;
         }
 
-        //===========================   private Methods     ========================================================================
+ //===============================================Константы=================================================================      
 
+        public static int IdYavka = 0;
+        public static int IdVihodnoy = 17;
+        public static int IdX = 21;
+        public static int IdPp = 22;
+        public static int Week5Days = 1;
+        public static int Week6Days = 2;
+        public static int IdWorkTypeSovmeshenie = 4;
+        public static int IdWorkTypePochesovik = 19;
+        public static int IdWorkTypeIspOb = 20;
+        public static int IdPps = 2;
+        public static int IdBusinessTripKind = 17;
+        public static int BeginEvent = 1;
+        public static int FullManHours = 40;
+        public static int FullWomanHours = 36;
+        public static int FullPpsHours = 36;
+
+        //===========================   private Methods     ========================================================================
         private KadrDataContext _db;
-        private const int IdYavka = 0;
-        private const int IdVihodnoy = 17;
-        private const int IdX = 21;
-        private const int IdPp = 22;
-        private const int Week5Days = 1;
-        private const int Week6Days = 2;
-        private const int IdWorkTypeSovmeshenie = 4;
-        private const int IdWorkTypePochesovik = 19;
-        private const int IdWorkTypeIspOb = 20;
-        private const int IdPps = 2;
-        private const int IdBusinessTripKind = 17;
-        private const int BeginEvent = 1;
         private TimeSheet _timeSheet;
 
         //Генерация табеля для работников
@@ -253,12 +263,12 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Генерация табеля для пятидневной рабочей недели
-        private List<TimeSheetRecord> FiveDayesTimeSheetGenerate(FactStaffWithHistory employee)
+        private List<TimeSheetRecord> FiveDayesTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
         {
-            const double man5 = 8.0;
-            const double womanFullDay5 = 7.5;
-            const double womanNotFullDay5 = 7.2;
-            const double womanFriday5 = 6.0;
+            var employee5 = (double) (employee.WorkHoursInWeek/5);
+            const int womanFriday = 6;
+            const double womanDaily = 7.5;
+
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
             {
@@ -274,8 +284,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 {
                     case DayOfWeek.Friday:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, man5, man5, womanFriday5,
-                            womanNotFullDay5);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, employee5, fullEmployee ? womanFriday : employee5);
                         break;
                     }
                     case DayOfWeek.Saturday:
@@ -286,8 +295,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     }
                     default:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, man5, man5, womanFullDay5,
-                            womanNotFullDay5);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, employee5, fullEmployee ? womanDaily : employee5);
                         break;
                     }
                 }
@@ -297,14 +305,13 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Генерация табеля для шестидневной рабочей недели
-        private List<TimeSheetRecord> SixDayesTimeSheetGenerate(FactStaffWithHistory employee)
+        private List<TimeSheetRecord> SixDayesTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
         {
             const double man6 = 7;
-            const double manSaturday6 = 5;
-            const double manNotFullDay6 = 6.6;
-            const double womanFullDay6 = 6.25;
-            const double womanSaturday6 = 4.75;
-            const double womanNotFullDay6 = 6;
+            const double woman6 = 6.25;
+            const double manSaturday = 5;
+            const double womanSaturday = 4.75;
+            var employee6 = (double)(employee.WorkHoursInWeek / 6);
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
             {
@@ -320,8 +327,8 @@ namespace TimeSheetMvc4WebApplication.Source
                 {
                     case DayOfWeek.Saturday:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, manSaturday6, manNotFullDay6, womanSaturday6,
-                            womanNotFullDay6);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, fullEmployee ? manSaturday : employee6,     //мужчины
+                                                                                           fullEmployee ? womanSaturday : employee6); //женщины
                         break;
                     }
                     case DayOfWeek.Sunday:
@@ -331,8 +338,8 @@ namespace TimeSheetMvc4WebApplication.Source
                     }
                     default:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, man6, manNotFullDay6, womanFullDay6,
-                            womanNotFullDay6);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, fullEmployee ? man6 : employee6,
+                                                                                            fullEmployee ? woman6 : employee6);
                         break;
                     }
                 }
@@ -341,6 +348,7 @@ namespace TimeSheetMvc4WebApplication.Source
             return timeSheetRecordLList;
         }
 
+        //Генерация табеля для гибкой недели
         private List<TimeSheetRecord> FlexibleTimeSheetGenerate(FactStaffWithHistory employee)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>();
@@ -367,13 +375,13 @@ namespace TimeSheetMvc4WebApplication.Source
             return timeSheetRecordLList;
         }
 
-
         //Генерация табеля для ППС
-        private List<TimeSheetRecord> PpsTimeSheetGenerate(FactStaffWithHistory employee)
+        private List<TimeSheetRecord> PpsTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
         {
+            var employeePps = (double)(employee.WorkHoursInWeek / 6);
             const double fullPps = 6.25;
-            const double notFullPps = 6;
             const double saturdayPps = 4.75;
+
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
             {
@@ -389,8 +397,8 @@ namespace TimeSheetMvc4WebApplication.Source
                 {
                     case DayOfWeek.Saturday:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, saturdayPps, notFullPps,
-                            saturdayPps, notFullPps);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, (employee.StaffCount == 1) ? saturdayPps : employeePps,
+                                                                                           (employee.StaffCount == 1) ? saturdayPps : employeePps);
                         break;
                     }
                     case DayOfWeek.Sunday:
@@ -400,8 +408,8 @@ namespace TimeSheetMvc4WebApplication.Source
                     }
                     default:
                     {
-                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, fullPps, notFullPps,
-                            fullPps, notFullPps);
+                        timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, (employee.StaffCount == 1) ? fullPps : employeePps,
+                                                                                           (employee.StaffCount == 1) ? fullPps : employeePps);
                         break;
                     }
                 }
@@ -411,7 +419,8 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Вносит в табель дни исключения и возвращает обновлённые записи табеля на работника
-        List<TimeSheetRecord> AddExceptoinDaysToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<Exception> exeptions)
+        List<TimeSheetRecord> AddExceptoinDaysToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, 
+            IEnumerable<Exception> exeptions)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
             foreach (var exception in exeptions.Where(w=>w.idWorkShedule==employee.PlanStaff.IdWorkShedule))
@@ -591,8 +600,8 @@ namespace TimeSheetMvc4WebApplication.Source
             return timeSheetRecordList;
         }
 
-        //Генерирукет запись в табеле
-        private TimeSheetRecord GenerageTimeSheetRecord(FactStaffWithHistory employee, DateTime date, int idDayStatus,
+        //Генерирует запись в табеле
+      /*  private TimeSheetRecord GenerageTimeSheetRecord(FactStaffWithHistory employee, DateTime date, int idDayStatus,
             double manFullDay=0, double manNotFullDay=0, double womanFullDay=0, double womanNotFullDay=0)
         {
             if (employee.StaffCount == 1)
@@ -604,6 +613,15 @@ namespace TimeSheetMvc4WebApplication.Source
                 _timeSheet.id,
                 (double) employee.StaffCount*
                 (employee.Employee.SexBit ? manNotFullDay : womanNotFullDay));
+        }*/
+
+        private TimeSheetRecord GenerageTimeSheetRecord(FactStaffWithHistory employee, DateTime date, int idDayStatus,
+            double manDay = 0, double womanDay = 0)
+        {
+
+                return NewTimeSheetRecord(date, employee.idFactStaffHistory, idDayStatus,
+                    _timeSheet.id, employee.Employee.SexBit ? manDay: womanDay);
+            
         }
 
         //Создаёт запись в табеле
@@ -618,7 +636,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 idTimeSheet = idTimeSheet,
                 IsChecked = false,
                 RecordDate = recordDate,
-                JobTimeCount = jobTimeCount
+                JobTimeCount = Math.Round(jobTimeCount,2)
             };
         }
 

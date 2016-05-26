@@ -39,7 +39,7 @@ namespace TimeSheetMvc4WebApplication.Models
         public int PaperNum { get; set; }
         public int PaperOf { get; set; }
         public int TimeSheetNum { get; set; }
-        public string DisplayWithHours { get; set; }
+        public bool IsForNight { get; set; }
     }
 
     public class HeaderStyle
@@ -84,9 +84,9 @@ namespace TimeSheetMvc4WebApplication.Models
         public int Nights { get { return FirstHalfMonthNights + SecondHalfMonthNights; } }
         //public int MounthDays { get; set; }
         //public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
-
+        public double AllHours => DayHours + NightHours;
         //public double Hours { get; set; }
-        public double Hours { get { return FirstHalfMonthHours + SecondHalfMonthHours; } }
+        public double DayHours { get { return FirstHalfMonthHours + SecondHalfMonthHours; } }
         public double NightHours { get { return FirstHalfMonthNightHours + SecondHalfMonthNightHours; } }
         public int MounthDays { get { return Days + NonWorkedDays.Sum(s => s.Count); } }
         public double HolidayHours { get; set; }

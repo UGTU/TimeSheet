@@ -208,7 +208,7 @@ namespace TimeSheetMvc4WebApplication.Models
         private static TimeSheetModel TimeSheetModelConstructor(int documentNumber, DateTime dateComposition, DateTime dateBeginPeriod,
                                                         DateTime dateEndPeriod, DtoTimeSheetEmployee[] timeSheetEmployees, DtoExceptionDay[] holiDays, string departmentName,
                                                         int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint,
-                                                        IEnumerable<DtoTimeSheetApprover> approvers, bool withHolHours)
+                                                        IEnumerable<DtoTimeSheetApprover> approvers, bool withNights)
         {
             var employees = new List<EmployeeModel>();
             for (int i = 0; i < timeSheetEmployees.Count(); i++)
@@ -223,14 +223,14 @@ namespace TimeSheetMvc4WebApplication.Models
             {
                 if (distributedEmployees == 0)
                 {
-                    papers.Add(PaperModelConstructor(false, false, employees.Take(firsPaperPaperRecorddsColl).ToArray(), withHolHours, headerStyle));
+                    papers.Add(PaperModelConstructor(false, false, employees.Take(firsPaperPaperRecorddsColl).ToArray(), withNights, headerStyle));
                     distributedEmployees += firsPaperPaperRecorddsColl < employees.Count
                         ? firsPaperPaperRecorddsColl
                         : employees.Count;
                 }
                 else
                 {
-                    papers.Add(PaperModelConstructor(false, false, employees.Skip(distributedEmployees).Take(paperRecordColl).ToArray(), withHolHours, headerStyle));
+                    papers.Add(PaperModelConstructor(false, false, employees.Skip(distributedEmployees).Take(paperRecordColl).ToArray(), withNights, headerStyle));
                     distributedEmployees += paperRecordColl;
 
                 }
@@ -242,12 +242,12 @@ namespace TimeSheetMvc4WebApplication.Models
             PaperModel[] temp;
             if (papers.Last().IsFirst)
             {
-                temp = LastPaperCorrecter(papers.Last(), firsPaperPaperRecorddsColl-1, withHolHours,
+                temp = LastPaperCorrecter(papers.Last(), firsPaperPaperRecorddsColl-1, withNights,
                     headerStyle, takingEmployeys);
             }
             else
             {
-                temp = LastPaperCorrecter(papers.Last(), lastPaperRecordsColl, withHolHours,
+                temp = LastPaperCorrecter(papers.Last(), lastPaperRecordsColl, withNights,
                     headerStyle, takingEmployeys);
             }
             papers.Remove(papers.Last());
@@ -273,7 +273,7 @@ namespace TimeSheetMvc4WebApplication.Models
             };
         }
 
-        private static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, bool withHoldays, HeaderStyle[] headerStyle, int transferEmpl)
+        private static PaperModel[] LastPaperCorrecter(PaperModel lastPaper, int lastPaperEmplCall, bool withNights, HeaderStyle[] headerStyle, int transferEmpl)
         {
             var papers = new List<PaperModel> {lastPaper};
             if (papers.Last().Employees.Count() >= lastPaperEmplCall)
@@ -281,12 +281,12 @@ namespace TimeSheetMvc4WebApplication.Models
                 var employeys = papers.Last().Employees;
                 papers.Last().Employees = employeys.Take(employeys.Count()-transferEmpl).ToArray();
                 var lastPageEnpl = employeys.Skip(employeys.Count() - transferEmpl).ToArray();
-                papers.Add(PaperModelConstructor(false, false, lastPageEnpl, withHoldays, headerStyle));
+                papers.Add(PaperModelConstructor(false, false, lastPageEnpl, withNights, headerStyle));
             }
             return papers.ToArray();
         }
 
-        private static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, bool withHoldays, HeaderStyle[] headerStyle)
+        private static PaperModel PaperModelConstructor(bool isFirst, bool isLast, EmployeeModel[] employees, bool withNights, HeaderStyle[] headerStyle)
         {
             return new PaperModel
             {
@@ -294,7 +294,7 @@ namespace TimeSheetMvc4WebApplication.Models
                 Employees = employees,
                 IsFirst = isFirst,
                 IsLast = isLast,
-                DisplayWithHours = (withHoldays ? "visible" : "hidden")
+                IsForNight = withNights
             };
         }
 
@@ -360,14 +360,14 @@ namespace TimeSheetMvc4WebApplication.Models
                         DayStatus = string.Empty,
                         Value = string.Empty,
                         Night = string.Empty,
-                        NightStatus = string.Empty,
+                        NightStatus = string.Empty
                     };
                 else
                     model = new EmployeeRecordModel
                     {
                         Day = day,
                         DayStatus = record.DayStays.SmallDayStatusName,
-                        Value = record.JobTimeCount.ToString(CultureInfo.InvariantCulture),
+                        Value = Math.Round(record.JobTimeCount,2).ToString("G"),
                         Night = record.NightTimeCount.ToString(CultureInfo.InvariantCulture),
                         NightStatus = record.NightTimeCount != "" ? "Н" : ""
                     };

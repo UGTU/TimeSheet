@@ -163,7 +163,7 @@ namespace TimeSheetMvc4WebApplication.Source
         private FactStaffWithHistory[] GetAllEmployees()
         {
             var deps = GetInnerDepartmentsIdForTS(_db, new int[] { _timeSheet.idDepartment });
-            var employees = _db.FactStaffWithHistory.Where(
+            var employees = _db.FactStaffWithHistories.Where(
                 w => deps.Contains(w.PlanStaff.idDepartment) &&
                      (w.DateEnd == null || w.DateEnd >= _timeSheet.DateBeginPeriod) &&
                      w.DateBegin <= _timeSheet.DateEndPeriod && w.idTypeWork != IdWorkTypeSovmeshenie &&

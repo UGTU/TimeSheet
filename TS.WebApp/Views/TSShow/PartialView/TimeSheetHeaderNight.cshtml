@@ -1,0 +1,126 @@
+﻿@model TimeSheetMvc4WebApplication.Models.HeaderStyle[]
+
+
+<tr>
+    <td rowspan="3" width="2%"><div align="center">№ <br /> п/п</div></td>
+    <td rowspan="3" width="100"><div align="center">Фамилия, инициалы,<br>должность<br>(специальность, профессия)<br></div></td>
+    <td class="chisla"><div align="center">Числа месяца</div></td>
+    <td rowspan="3" width="4%"><div align="center">Всего за месяц (час)</div></td>
+    <td width="4%"><div align="center">Ночные</div></td>
+    <td colspan="6"><div align="center">Неявки по причинам</div></td>
+    <td rowspan="3" width="3%"><div align="center">Всего дней</div></td>
+    <td rowspan="3" class="holidays" width="4%"><div align="center">кол-во часов, отработа<br>нных при сменном режиме в празднич<br>ные дни</div></td>
+</tr>
+<tr>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 1).CSS">
+        <div align="center">1</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 2).CSS">
+        <div align="center">2</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 3).CSS">
+        <div align="center">3</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 4).CSS">
+        <div align="center">4</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 5).CSS">
+        <div align="center">5</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 6).CSS">
+        <div align="center">6</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 7).CSS">
+        <div align="center">7</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 8).CSS">
+        <div align="center">8</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 9).CSS">
+        <div align="center">9</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 10).CSS">
+        <div align="center">10</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 11).CSS">
+        <div align="center">11</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 12).CSS">
+        <div align="center">12</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 13).CSS">
+        <div align="center">13</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 14).CSS">
+        <div align="center">14</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 15).CSS">
+        <div align="center">15</div></td>
+
+    <td  rowspan="2" width="4%">
+        <div align="center">Итого<br/>1-ая<br/>полов.
+        </div>
+    </td>
+
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 16).CSS">
+        <div align="center">16</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 17).CSS">
+        <div align="center">17</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 18).CSS">
+        <div align="center">18</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 19).CSS">
+        <div align="center">19</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 20).CSS">
+        <div align="center">20</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 21).CSS">
+        <div align="center">21</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 22).CSS">
+        <div align="center">22</div></td>
+    <td  rowspan="2" width="2%" class="@Model.First(f => f.Day == 23).CSS">
+        <div align="center">23</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 24).CSS">
+        <div align="center">24</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 25).CSS">
+        <div align="center">25</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 26).CSS">
+        <div align="center">26</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 27).CSS">
+        <div align="center">27</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 28).CSS">
+        <div align="center">@Model.First(f => f.Day == 28).DayText</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 29).CSS">
+        <div align="center">@Model.First(f => f.Day == 29).DayText</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 30).CSS">
+        <div align="center">@Model.First(f => f.Day == 30).DayText</div></td>
+    <td rowspan="2" width="2%" class="@Model.First(f => f.Day == 31).CSS">
+        <div align="center">@Model.First(f => f.Day == 31).DayText</div></td>
+
+    <td rowspan="2" width="4%">
+        <div align="center">Итого<br/> 2-ая<br/>полов.
+        </div></td>
+    <td>
+        <div align="center">смены</div></td>
+
+    <td rowspan="2" width="2%">
+        <div align="center">код</div></td>
+    <td rowspan="2" width="2%">
+        <div align="center">дни</div></td>
+    <td rowspan="2" width="2%">
+        <div align="center">код</div></td>
+    <td rowspan="2" width="2%">
+        <div align="center">дни</div></td>
+    <td rowspan="2" width="2%">
+        <div align="center">код</div></td>
+    <td rowspan="2" width="2%">
+        <div align="center">дни</div></td>
+</tr>
+<tr style='border: 1px solid black; border-width: 0px 0px 2px 0px;'>
+    <td>
+        <div align="center">часы</div>
+    </td>
+</tr>
+<tr style='border: 1px solid black; border-width: 0px 0px 2px 0px;'>
+    <td><div align="center">1</div></td>
+    <td><div align="center">2</div></td>
+    <td colspan="15"><div align="center">3</div></td>
+    <td><div align="center">4</div></td>
+    <td class="number"><div align="center">5</div></td>
+    <td><div align="center">6</div></td>
+    <td><div align="center">7</div></td>
+
+    <td><div align="center">8</div></td>
+    <td><div align="center">9</div></td>
+    <td><div align="center">10</div></td>
+    <td><div align="center">11</div></td>
+    <td><div align="center">12</div></td>
+    <td><div align="center">13</div></td>
+    <td><div align="center">14</div></td>
+    <td><div align="center">15</div></td>
+    <td><div align="center">16</div></td>
+</tr>

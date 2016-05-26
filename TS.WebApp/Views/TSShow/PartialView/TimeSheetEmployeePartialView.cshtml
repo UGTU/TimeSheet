@@ -43,9 +43,12 @@
     <td rowspan=@Model.TimeSheduleDividing style="overflow: hidden; font-size: 8pt;" class="@Model.Records[30].CSS"><div align="center">@Model.Records[30].DayStatus</div></td>
     <!--<td rowspan=2 style="width: 40px; overflow: hidden;" class="@Model.Records[31].CSS"><div align="center">@Model.Records[31].DayStatus</div></td> -->
     
-    <td rowspan=@Model.TimeSheduleDividing width="30"> <div align="center">@Model.SecondHalfMonthDays</div></td> 
+    <td rowspan=@Model.TimeSheduleDividing width="30"> <div align="center">@Model.SecondHalfMonthDays</div></td>
+
+    <td class="for_days" rowspan=2 width=40><div align="center">@Model.Days</div></td> <!-- Всего дней (для 5-6 дневки) -->
     
-    <td rowspan=@Model.TimeSheduleDividing width=40><div align="center">@Model.Days</div></td>
+    <td class="for_night" rowspan="4"><div align="center">@Model.AllHours</div></td>      <!-- Всего за месяц (час) -->
+    <td class="for_night" rowspan="2"><div align="center">@Model.Nights</div></td>     <!-- всего ночных смен -->
 
     @{
         foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
@@ -57,9 +60,9 @@
         }
         takeElements += takeElementsCount;
     }
-    <td rowspan=4>
-        <div align="center">@Model.MounthDays</div></td> <!--Всего дней-->
-    <td rowspan=4 class="holidays"><div align="center">@Model.HolidayHours</div></td>
+    <td rowspan=4><div align="center">@Model.MounthDays</div></td> <!--Всего дней в месяце-->
+    
+    <td class="for_night" rowspan=4><div align="center">@Model.HolidayHours</div></td> <!--Часов в празднчные дни-->
 </tr>
 <tr height=18>
     @{
@@ -81,7 +84,7 @@
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[13].CSS"><div align="center">@Model.Records[13].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[14].CSS"><div align="center">@Model.Records[14].Value</div></td>
 
-            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.FirstHalfMonthHours</div></td>
+            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.FirstHalfMonthHours.ToString("G")</div></td>
 
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[15].CSS"><div align="center">@Model.Records[15].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[16].CSS"><div align="center">@Model.Records[16].Value</div></td>
@@ -100,8 +103,8 @@
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[29].CSS"><div align="center">@Model.Records[29].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[30].CSS"><div align="center">@Model.Records[30].Value</div></td>
 
-            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.SecondHalfMonthHours</div></td>
-            <td rowspan=@Model.TimeSheduleDividing><div align="center">@Model.Hours</div></td>
+            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.SecondHalfMonthHours.ToString("G")</div></td>
+
         }
 
         foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
@@ -152,7 +155,7 @@
             <td class="@Model.Records[30].CSS"><div align="center">@Model.Records[30].NightStatus</div></td>
 
             <td><div align="center">@Model.SecondHalfMonthNights</div></td>                         //ночей за вторую половину месяца
-            <td rowspan=@Model.TimeSheduleDividing><div align="center">@Model.Nights</div></td>     //всего ночей
+            
         }
         else
         {
@@ -172,7 +175,7 @@
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[13].CSS"><div align="center">@Model.Records[13].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[14].CSS"><div align="center">@Model.Records[14].Value</div></td>
 
-            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.FirstHalfMonthHours</div></td>
+            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.FirstHalfMonthHours.ToString("G")</div></td>
 
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[15].CSS"><div align="center">@Model.Records[15].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[16].CSS"><div align="center">@Model.Records[16].Value</div></td>
@@ -191,12 +194,14 @@
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[29].CSS"><div align="center">@Model.Records[29].Value</div></td>
             <td rowspan=@Model.TimeSheduleDividing class="@Model.Records[30].CSS"><div align="center">@Model.Records[30].Value</div></td>
 
-            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.SecondHalfMonthHours</div></td>
-            <td rowspan=@Model.TimeSheduleDividing><div align="center">@Model.Hours</div></td>
-    }
+            <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.SecondHalfMonthHours.ToString("G")</div></td>
+        }
 
-    foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
-    {
+        <td class="for_night" rowspan="2"><div align="center">@Model.NightHours</div></td>      //всего ночных часов
+        <td class="for_days" rowspan="2"><div align="center">@Model.DayHours.ToString("G")</div></td>
+
+        foreach (var nonWorkedDay in Model.NonWorkedDays.Skip(takeElements).Take(takeElementsCount))
+        {
     <td class="@nonWorkedDay.CSS">
         <div align="center">@nonWorkedDay.DayStatus</div></td>
     <td class="@nonWorkedDay.CSS">
@@ -246,7 +251,7 @@
             <td class="@Model.Records[30].CSS"><div align="center">@Model.Records[30].Night</div></td>
 
             <td><div align="center">@Model.SecondHalfMonthNightHours</div></td>  //ночей за вторую половину месяца
-            <td><div align="center">@Model.NightHours</div></td>
+            
 
         }
 
