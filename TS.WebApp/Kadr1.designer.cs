@@ -114,7 +114,7 @@ namespace TimeSheetMvc4WebApplication
     #endregion
 		
 		public KadrDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["KadrRealTestConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -8834,6 +8834,7 @@ namespace TimeSheetMvc4WebApplication
     partial void OnWorkHoursInWeekChanged();
     #endregion
 		
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int id
 		{
@@ -9500,6 +9501,7 @@ namespace TimeSheetMvc4WebApplication
     partial void OnDateFIOUseChanging(System.Nullable<System.DateTime> value);
     partial void OnDateFIOUseChanged();
     #endregion
+		
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int id

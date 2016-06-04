@@ -45,9 +45,8 @@
     
     <td rowspan=@Model.TimeSheduleDividing width="30"> <div align="center">@Model.SecondHalfMonthDays</div></td>
 
-    <td class="for_days" rowspan=2 width=40><div align="center">@Model.Days</div></td> <!-- Всего дней (для 5-6 дневки) -->
+    <td rowspan=2 width=40><div align="center">@Model.Days</div></td> <!-- Всего дней (для 5-6 дневки) -->
     
-    <td class="for_night" rowspan="4"><div align="center">@Model.AllHours</div></td>      <!-- Всего за месяц (час) -->
     <td class="for_night" rowspan="2"><div align="center">@Model.Nights</div></td>     <!-- всего ночных смен -->
 
     @{
@@ -196,7 +195,7 @@
 
             <td rowspan=@Model.TimeSheduleDividing width=74><div align="center">@Model.SecondHalfMonthHours.ToString("G")</div></td>
         }
-
+        <td class="for_night" rowspan="2"><div align="center">@Model.AllHours</div></td>      <!-- Всего за месяц (час) -->
         <td class="for_night" rowspan="2"><div align="center">@Model.NightHours</div></td>      //всего ночных часов
         <td class="for_days" rowspan="2"><div align="center">@Model.DayHours.ToString("G")</div></td>
 

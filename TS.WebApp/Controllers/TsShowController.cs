@@ -47,7 +47,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
             const int firstPaperEmployeeCount = 5;
             const int lastPaperEmployeeCount = 6;
-            const int paperEmployeeCount = 8;
+            const int paperEmployeeCount = 7;
             var timeSheet = GetTimeSheetOrThrowException(id);
             var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, firstPaperEmployeeCount,
                 lastPaperEmployeeCount,
