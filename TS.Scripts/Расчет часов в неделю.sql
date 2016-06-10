@@ -23,3 +23,5 @@ update [dbo].[FactStaffHistory] set WorkHoursInWeek =
  where idFactStaff in (select FactStaff.id
 					   from FactStaff inner join Employee on FactStaff.idEmployee = Employee.id
 					   where Employee.SexBit = 0)
+
+select * from [FactStaffHistory] where WorkHoursInWeek is null
