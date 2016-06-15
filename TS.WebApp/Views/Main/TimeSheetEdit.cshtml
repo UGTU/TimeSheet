@@ -45,10 +45,10 @@
                     <tr>
                         <th style="width: 30px;"><input type="checkbox" ng-model="selectAll" @*ng-click="checkAllRecord()"*@ ng-disabled="isCanTimeSheetEditfunction()"></th>
                         <th>Дата</th>
-                        <th>День недели</th>
+                        <th align="center">День недели</th>
                         <th>Статус</th>
-                        <th>Часы</th>
-                        <th ng-class="SheduleCSS()">Ночные</th>
+                        <th align="center">Дневные часы</th>
+                        <th ng-class="SheduleCSS()" align="center">Ночные часы</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,7 +83,7 @@
             </p>
             <p style="margin-bottom: 0px;">
                 <label class=" control-label">
-                    Часы
+                    Дневные часы
                 </label>
             </p>
             <p>
@@ -92,7 +92,7 @@
 
             <p style="margin-bottom: 0px;" ng-class="SheduleCSS()">
                 <label class=" control-label">
-                    Ночные
+                    Ночные часы
                 </label>
             </p>
             <p ng-class="SheduleCSS()">
