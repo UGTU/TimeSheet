@@ -11,6 +11,7 @@ update [dbo].[FactStaffHistory] set WorkHoursInWeek =
  where idFactStaff in (select FactStaff.id
 					   from FactStaff inner join Employee on FactStaff.idEmployee = Employee.id
 					   where Employee.SexBit = 1)
+and WorkHoursInWeek is null and idTypeWork <> 19
 
 update [dbo].[FactStaffHistory] set WorkHoursInWeek = 
 (select Category.WomanHourWork
@@ -23,5 +24,6 @@ update [dbo].[FactStaffHistory] set WorkHoursInWeek =
  where idFactStaff in (select FactStaff.id
 					   from FactStaff inner join Employee on FactStaff.idEmployee = Employee.id
 					   where Employee.SexBit = 0)
+and WorkHoursInWeek is null and idTypeWork <> 19
 
-select * from [FactStaffHistory] where WorkHoursInWeek is null
+select * from [FactStaffHistory] where WorkHoursInWeek is null and idTypeWork <> 19
