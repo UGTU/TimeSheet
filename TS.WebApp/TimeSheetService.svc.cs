@@ -321,7 +321,7 @@ namespace TimeSheetMvc4WebApplication
                 return
                     db.Approver.Where(
                         w => w.idDepartment == idDepartment & w.ApproverType.ApproveNumber == approveNumber &
-                             ((w.DateEnd == null) ||(w.DateEnd >= DateTime.Today))).
+                             ((w.DateEnd == null) ||(w.DateEnd >= DateTime.Now))).
                         Select(s => DtoClassConstructor.DtoApprover(db, s.Employee.id,isAdmin)).FirstOrDefault();
             }
         }
