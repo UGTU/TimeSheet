@@ -113,7 +113,7 @@ namespace TimeSheetMvc4WebApplication.Models
             }
             if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.Post.Category.IsPPS)) //не ППС
             {
-                if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.WorkShedule.AllowNight)) //5-ти и 6-ти дневный рабочий график
+                if (timeSheet.Employees.Any(a => !a.FactStaffEmployee.WorkShedule.AllowNight && !a.FactStaffEmployee.Post.Category.IsPPS)) //5-ти и 6-ти дневный рабочий график + и не ппс
                 {
                     timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
                         timeSheet.DateBegin, timeSheet.DateEnd,
@@ -132,7 +132,7 @@ namespace TimeSheetMvc4WebApplication.Models
                         ));
                 }
 
-                if (timeSheet.Employees.Any(a => a.FactStaffEmployee.WorkShedule.AllowNight)) //гибкий рабочий график
+                if (timeSheet.Employees.Any(a => a.FactStaffEmployee.WorkShedule.AllowNight && !a.FactStaffEmployee.Post.Category.IsPPS)) //гибкий рабочий график + и не ппс
                 {
                     timeSheets.Add(TimeSheetModelConstructor(timeSheet.IdTimeSheet, timeSheet.DateComposition,
                         timeSheet.DateBegin, timeSheet.DateEnd,
