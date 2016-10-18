@@ -118,11 +118,11 @@
                     Сохранить изменения
                 </button>
             </p>
-
+            <span class="divider"></span>
             <p class="text-right">
-                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="remakeTsAdvance()">
+                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="remakeTsAdvance()" ng-disabled="isTSmakeAdvanceDis()" data-toggle="tooltip" data-placement="bottom" title="Табель заполненный только до 15 числа">
                     <!--<span class="glyphicon glyphicon-floppy-saved"></span>-->
-                    Сделать табель аваносовым (полумесячным)
+                    Сделать табель для аванса
                 </button>
             </p>
 
@@ -175,12 +175,14 @@
         $('#dayStatList').css('max-height', maxHeight);
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $(".footer").remove();
+        $("[data-toggle='tooltip']").tooltip();
     });
 </script>
 
 <script>
+   
     function TimeSheetRecords($scope, $http) {
         $http.get('@Html.Raw(@Url.Action("GetTimeSheetModelJson", "Main", new { idTimeSheet = @Model }))').success(function (data) {
             $scope.dayStatList = data.DayStatusList;
@@ -201,7 +203,7 @@
 
 
             $scope.setCurrentEmployeeRecords($scope.employees[0]);
-            $('#progress').remove();
+            $('#progress').hide();
             $('.row').removeClass('hidden');
         });
 
@@ -244,12 +246,17 @@
         $scope.remakeTsAdvance = function () { 
             var message = 'Вы уверены что хотите сделать табель авансовым? \nЭто действие каснется для всех сотрудников в текущем табеле.';
             if (confirm(message)) {
+
                 var link = '@Url.Action("remakeTimeSheetAdvance", "Main", new { idTimeSheet = @Model})';
+                $('.row').addClass('hidden');
+                $('#progress').removeClass('hidden').show();
                 $.post(link).success(
                     function (result) {
                         if (result.Result) {
                             console.log('remakeTsAdvance ');
                         } else {
+                            $('#progress').hide();
+                            $('.row').removeClass('hidden');
                             alert(result.Message);
                         }
                         location.reload(true);
@@ -286,7 +293,8 @@
                 $http.post('@Url.Action("UpdateTimeSheetRecotds")', changes).success(
                     function (result) {
                         if (result.Result) {
-                            console.log('save records succes');                       
+                            console.log('save records succes');
+                            $scope.isTSmakeAdvanceDis = false;
                             $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
                         } else {
                             alert(result.Message);
@@ -348,7 +356,33 @@
             if ($scope.TimeSheetApproveStep == 0) return false;
             return true;
         };
+        $scope.isTSmakeAdvanceDis = function () {
+            //$scope.isUpdateDisabled and isSaveDisabled
+            var isDis = true;
+            if ($scope.isSaveDisabled) {
+                isDis = false;
+            }
+            if ($scope.isUpdateDisabled) {
+                isDis = true;
+            }
 
+            return isDis;
+            //if ($scope.currentEmployee == null) return false;
+            //var changes = [];
+            //angular.forEach($scope.currentEmployee.Records, function (record) {
+            //    angular.forEach($scope.employeesRecordsStandard, function (recordStandard) {
+            //        if (record.Date == recordStandard.Date & (record.JobTimeCount != recordStandard.JobTimeCount
+            //            | record.NightTimeCount != recordStandard.NightTimeCount
+            //            | record.DayStays.IdDayStatus != recordStandard.DayStays.IdDayStatus)) {
+            //            changes.push(record);
+            //        }
+            //    });
+            //});
+            //if (changes.length > 0) {
+            //    return true;
+            //}
+            //return false;
+        };
         $scope.NotNightShedule = function () {
             if ($scope.currentEmployee == null) return true;
             return (!$scope.currentEmployee.WorkShedule.AllowNight);
