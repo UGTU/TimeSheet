@@ -118,6 +118,14 @@
                     Сохранить изменения
                 </button>
             </p>
+
+            <p class="text-right">
+                <button type="button" class="btn btn-default btn-sm" style="width: 100%;" ng-click="remakeTsAdvance()">
+                    <!--<span class="glyphicon glyphicon-floppy-saved"></span>-->
+                    Сделать табель аваносовым (полумесячным)
+                </button>
+            </p>
+
             <br/>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -231,6 +239,23 @@
             });
             employee.css = 'active';
             $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
+        };
+
+        $scope.remakeTsAdvance = function () { 
+            var message = 'Вы уверены что хотите сделать табель авансовым? \nЭто действие каснется для всех сотрудников в текущем табеле.';
+            if (confirm(message)) {
+                var link = '@Url.Action("remakeTimeSheetAdvance", "Main", new { idTimeSheet = @Model})';
+                $.post(link).success(
+                    function (result) {
+                        if (result.Result) {
+                            console.log('remakeTsAdvance ');
+                        } else {
+                            alert(result.Message);
+                        }
+                        location.reload(true);
+                    }
+                );
+            }
         };
 
         $scope.saveChanges = function () {

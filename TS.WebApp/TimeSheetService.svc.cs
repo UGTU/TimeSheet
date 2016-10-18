@@ -771,6 +771,34 @@ namespace TimeSheetMvc4WebApplication
                 }
             }
         }
+        /// <summary>
+        /// Изменение табеля на авансовый, срезается пол табеля с 15 числа и до конца
+        /// </summary>
+        /// <param name="idTimeSheet"></param>
+        /// <returns></returns>
+        public DtoMessage remakeTimeSheetAdvance(int idTimeSheet)
+        {
+            using (var db = new KadrDataContext())
+            {
+                try
+                {
+                    var ts = new TimeSheetManaget(idTimeSheet, db);
+
+                    return new DtoMessage
+                    {
+                        Result = ts.remakeTSAdvance()
+                    };
+                }
+                catch (System.Exception e)
+                {
+                    return new DtoMessage
+                    {
+                        Message = e.Message,
+                        Result = false
+                    };
+                }
+            }
+        }
 
         //==========        Справочники
         /// <summary>

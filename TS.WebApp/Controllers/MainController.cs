@@ -168,5 +168,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
             var message = Client.RemoveTimeSheet(idTimeSheet);
             return Json(message, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Изменение табеля на авансовый
+        /// </summary>
+        /// <param name="idTimeSheet"></param>
+        /// <returns></returns>
+        public JsonResult remakeTimeSheetAdvance(int idTimeSheet)
+        {
+            var msg = Client.remakeTimeSheetAdvance(idTimeSheet);
+            return Json(msg, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -70,6 +70,23 @@ namespace TimeSheetMvc4WebApplication.Source
             return true;
         }
 
+        /// <summary>
+        /// Изменение табеля на авансовый, срезается пол табеля с 15 числа и до конца
+        /// </summary>
+        /// <param name="idTimeSheet"></param>
+        /// <returns></returns>
+        public bool remakeTSAdvance()
+        {
+            if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
+            var tsr = _db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id && w.RecordDate.Day>15).ToList();
+             foreach (var item in tsr)
+             {
+                item.idDayStatus = IdX;
+             }
+            _db.SubmitChanges();
+            return true;
+        }
+
         public bool RemoveEmployee(int idFactStuffHistory)
         {
             if (!CanEditTimeSheet()) return false;
