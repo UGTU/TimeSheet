@@ -294,7 +294,6 @@
                     function (result) {
                         if (result.Result) {
                             console.log('save records succes');
-                            $scope.isTSmakeAdvanceDis = false;
                             $scope.employeesRecordsStandard = angular.copy($scope.currentEmployee.Records);
                         } else {
                             alert(result.Message);
@@ -359,12 +358,13 @@
         $scope.isTSmakeAdvanceDis = function () {
             //$scope.isUpdateDisabled and isSaveDisabled
             var isDis = true;
-            if ($scope.isSaveDisabled) {
+            if ($scope.isSaveDisabled() && $scope.isUpdateDisabled()) {
                 isDis = false;
             }
-            if ($scope.isUpdateDisabled) {
+            if (!$scope.isSaveDisabled() || !$scope.isUpdateDisabled()) {
                 isDis = true;
             }
+
 
             return isDis;
             //if ($scope.currentEmployee == null) return false;
