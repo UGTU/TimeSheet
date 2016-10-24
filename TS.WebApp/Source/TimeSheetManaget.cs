@@ -237,6 +237,7 @@ namespace TimeSheetMvc4WebApplication.Source
         {
             try
             {
+                FactStaffWithHistory previousEmpl = null; // переменная для хранения предыдущей FactStaffWithHistory
                 var exeptions = _db.Exception.Where(w => w.DateException >= _timeSheet.DateBeginPeriod && w.DateException <= _timeSheet.DateEndPeriod).ToArray();
                 var factStaffIds = employees.Select(s => s.id).Distinct();
                 var otpusk = _db.OK_Otpusks.Where(w => factStaffIds.Contains(w.idFactStaff) && w.DateBegin <= _timeSheet.DateEndPeriod &&
@@ -255,7 +256,41 @@ namespace TimeSheetMvc4WebApplication.Source
                         && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
                     var employeeTrips = trips.Where(w => w.FactStaffHistory.idFactStaff == employee.id && w.DateBegin <= _timeSheet.DateEndPeriod
                         && w.DateEnd >= _timeSheet.DateBeginPeriod).ToArray();
+           
                     _timeSheetRecordLList.AddRange(InsertEmployee(employee, exeptions, employeeOtpusk, employeeHosp, employeeTrips));
+
+                    if (previousEmpl != null                                    //если имеются FactStaffWithHistory с одинаковыми idEmployee, StaffCount, idPlanStaff, id(idFactStaff)
+                          && previousEmpl.idEmployee == employee.idEmployee
+                          && previousEmpl.StaffCount == employee.StaffCount
+                          && previousEmpl.idPlanStaff == employee.idPlanStaff
+                          && previousEmpl.id == employee.id)
+                    {
+                        var previousItems = _timeSheetRecordLList.Where(p => p.idFactStaffHistory == previousEmpl.idFactStaffHistory && p.idTimeSheet == _timeSheet.id).ToList(); // берем записи табеля с 1ым FactStaffWithHistory
+                        var currentItems = _timeSheetRecordLList.Where(p => p.idFactStaffHistory == employee.idFactStaffHistory && p.idTimeSheet == _timeSheet.id).ToList(); // берем записи табеля с 2ым FactStaffWithHistory
+                        foreach (var deletepreviousItem in previousItems)       //удаляем первые FactStaffWithHistory из общей колекции записей _timeSheetRecordLList
+                        {
+                            _timeSheetRecordLList.Remove(deletepreviousItem);
+                        }
+                        foreach (var deletecurrentItem in currentItems)         //удаляем вторые FactStaffWithHistory из общей колекции записей _timeSheetRecordLList
+                        {
+                            _timeSheetRecordLList.Remove(deletecurrentItem);
+                        }
+                        foreach (var currentItem in currentItems)               //проходим по всем записям табеля с 2ым FactStaffWithHistory 
+                                                                                //и делаем слияние 1 и 2 FactStaffWithHistory записей табеля в общую
+                        {                                                       //также меняем idFactStaffHistory у записей табеля 1 на dFactStaffHistory записей табеля 2 
+                                                                                //"чтобы не было 2ух строк с одинаковыми человеками"(актуально при продлении трудового договора)
+                            if (currentItem.RecordDate <= previousEmpl.DateEnd) {
+                                var previousItemWithDay = previousItems.Where(m => m.RecordDate == currentItem.RecordDate).SingleOrDefault();
+                                previousItemWithDay.idFactStaffHistory = currentItem.idFactStaffHistory;
+                                _timeSheetRecordLList.Add(previousItemWithDay);
+                            }
+                            if (currentItem.RecordDate > previousEmpl.DateEnd)
+                            {
+                                _timeSheetRecordLList.Add(currentItem);
+                            }
+                        }
+                    }
+                    previousEmpl = employee; //сохраняем текущий элемент как предыдущую
                 }
             }
             catch (System.Exception ex)
