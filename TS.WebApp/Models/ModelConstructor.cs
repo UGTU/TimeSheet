@@ -49,6 +49,8 @@ namespace TimeSheetMvc4WebApplication.Models
         ПР = 16,
         [Description("В")]
         В = 17,
+        [Description("ПВ")]
+        ПВ = 27,
         [Description("НН")]
         НН = 18,
         [Description("НБ")]
@@ -91,6 +93,7 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.ОКД,
             DayStatus.Г,
             DayStatus.НВ,
+            DayStatus.ПВ,
             DayStatus.ПК
         };
 
