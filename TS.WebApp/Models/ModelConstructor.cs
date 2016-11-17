@@ -419,6 +419,7 @@ namespace TimeSheetMvc4WebApplication.Models
                         switch (status)
                         {
                             case DayStatus.В:
+                            case DayStatus.ПВ:
                                 css = "PrintVCSS";
                                 break;
                             case DayStatus.Х:
@@ -489,6 +490,7 @@ namespace TimeSheetMvc4WebApplication.Models
                             css = "PrCSS";
                             break;
                         case DayStatus.В:
+                        case DayStatus.ПВ:
                             css = "VCSS";
                             break;
                         case DayStatus.НН:
