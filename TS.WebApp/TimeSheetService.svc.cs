@@ -88,7 +88,7 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             {
                 return
-                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).Select(
+                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment && (w.DateEnd == null || w.DateEnd > DateTime.Today)).Select(
                         s => DtoClassConstructor.DtoEmployee(s.Employee)).Distinct().ToArray();
             }
         }
@@ -102,7 +102,7 @@ namespace TimeSheetMvc4WebApplication
             using (var db = new KadrDataContext())
             {
                 return
-                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment & w.DateEnd == null).Select(
+                    db.FactStaffs.Where(w => w.PlanStaff.idDepartment == idDepartment && (w.DateEnd == null || w.DateEnd > DateTime.Today)).Select(
                         s => DtoClassConstructor.DtoFactStaffEmployee(s.CurrentChange)).ToArray();
             }
         }
