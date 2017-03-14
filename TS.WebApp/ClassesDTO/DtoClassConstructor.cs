@@ -13,6 +13,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
     {
         private const int IdKadrDepartment = 154; //Отдел "Управления кадрами"
         private const int IdHoliday = 17; //праздничный день
+        private const int IdTypeWorkPrimary = 1; //основной вид работы
+
 
         public static DtoEmployee DtoEmployee(Employee employee)
         {
@@ -100,20 +102,35 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                                 ((f.DateEnd == null) || (f.DateEnd >= DateTime.Today))).Max(m => Convert.ToInt32(m.PlanStaff.Post.ManagerBit)))
                         );
             }
-
-            var factStaffs = fs.Select(s => new DtoTimeSheetApprover
-            {
-                AppoverNumber = (int)approver.ApproverType.ApproveNumber,
-                EmployeeLogin = approver.Employee.EmployeeLogin,
-                IdEmployee = s.id,
-                IdFactStaff = s.id,
-                ItabN = s.Employee.itab_n,
-                Name = s.Employee.FirstName,
-                Surname = s.Employee.LastName,
-                Patronymic = s.Employee.Otch,
-                Post = DtoPost(s.PlanStaff.Post),
-                ApproverDate = approverDate
-            }).FirstOrDefault();
+            //вытаскиваем основную должность в случае если factstaff'ов больше одного, странно что IdEmployee = id factstaff'а (зы: не исправил, мало ли так задумано)
+            var factStaffs = (fs.Count() == 1)
+                ? fs.Select(s => new DtoTimeSheetApprover
+                {
+                    AppoverNumber = (int)approver.ApproverType.ApproveNumber,
+                    EmployeeLogin = approver.Employee.EmployeeLogin,
+                    IdEmployee = s.id,
+                    IdFactStaff = s.id,
+                    ItabN = s.Employee.itab_n,
+                    Name = s.Employee.FirstName,
+                    Surname = s.Employee.LastName,
+                    Patronymic = s.Employee.Otch,
+                    Post = DtoPost(s.PlanStaff.Post),
+                    ApproverDate = approverDate
+                }).FirstOrDefault()
+                : fs.Where(w => w.FactStaffWithHistory.idTypeWork == IdTypeWorkPrimary)
+                    .Select(s => new DtoTimeSheetApprover
+                    {
+                        AppoverNumber = (int)approver.ApproverType.ApproveNumber,
+                        EmployeeLogin = approver.Employee.EmployeeLogin,
+                        IdEmployee = s.id,
+                        IdFactStaff = s.id,
+                        ItabN = s.Employee.itab_n,
+                        Name = s.Employee.FirstName,
+                        Surname = s.Employee.LastName,
+                        Patronymic = s.Employee.Otch,
+                        Post = DtoPost(s.PlanStaff.Post),
+                        ApproverDate = approverDate
+                    }).FirstOrDefault();
 
             return factStaffs;
         }
