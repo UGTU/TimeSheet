@@ -102,9 +102,11 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                                 ((f.DateEnd == null) || (f.DateEnd >= DateTime.Today))).Max(m => Convert.ToInt32(m.PlanStaff.Post.ManagerBit)))
                         );
             }
+
             //вытаскиваем основную должность в случае если factstaff'ов больше одного, странно что IdEmployee = id factstaff'а (зы: не исправил, мало ли так задумано)
             var factStaffs =
-                    fs.Where(w => w.FactStaffWithHistory.idTypeWork == IdTypeWorkPrimary)
+                    fs.Where(w => w.FactStaffWithHistory.idTypeWork == IdTypeWorkPrimary 
+                    && (w.FactStaffWithHistory.DateEnd == null || w.FactStaffWithHistory.DateEnd >= DateTime.Today))
                     .Select(s => new DtoTimeSheetApprover
                     {
                         AppoverNumber = (int)approver.ApproverType.ApproveNumber,
@@ -117,7 +119,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                         Patronymic = s.Employee.Otch,
                         Post = DtoPost(s.PlanStaff.Post),
                         ApproverDate = approverDate
-                    }).FirstOrDefault() 
+                    }).SingleOrDefault() 
                     ??
                     fs.Select(s => new DtoTimeSheetApprover
                     {
