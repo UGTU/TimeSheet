@@ -117,7 +117,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                         Patronymic = s.Employee.Otch,
                         Post = DtoPost(s.PlanStaff.Post),
                         ApproverDate = approverDate
-                    }).SingleOrDefault() 
+                    }).FirstOrDefault() 
                     ??
                     fs.Select(s => new DtoTimeSheetApprover
                     {
