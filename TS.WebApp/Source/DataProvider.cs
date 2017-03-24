@@ -23,7 +23,10 @@ namespace TimeSheetMvc4WebApplication.Source
                 return new TimeSheetsAndCount
                 {
                     Count = query.Count(),
-                    TimeSheets = query.OrderByDescending(o => o.DateBeginPeriod).Skip(skip).Take(take)
+                    TimeSheets = query.OrderByDescending(o => o.DateBeginPeriod)
+                        .ThenByDescending(t=>t.DateComposition)
+                        .Skip(skip)
+                        .Take(take)
                         .Select(s => DtoClassConstructor.DtoTimeSheet(s)).ToArray()
                 };
             }
