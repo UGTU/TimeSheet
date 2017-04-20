@@ -200,7 +200,7 @@ namespace TimeSheetMvc4WebApplication.Source
             // Добавляем информацию о отпусе 
             timeSheetRecordLList = AddHolidaysToTimeSheetRecords(employee, timeSheetRecordLList, otpuskList);    
             // Добавляем дни исключения
-            timeSheetRecordLList = AddExceptoinDaysToTimeSheetRecords(employee, timeSheetRecordLList, exeptions);
+            timeSheetRecordLList = AddExceptoinDaysToTimeSheetRecords(employee, timeSheetRecordLList, exeptions, otpuskList);
             // Добавляем информацию о больничных 
             timeSheetRecordLList = AddHospitalsToTimeSheetRecords(employee, timeSheetRecordLList, inkapacities);
             //Добавляем информацию о командировках
@@ -214,6 +214,9 @@ namespace TimeSheetMvc4WebApplication.Source
 
         public static int IdYavka = 0;
         public static int IdVihodnoy = 17;
+        public static int IdTransferVihodnoy = 27; // перенесенный выходной
+        public static int IdOtpusk = 6; // основной отпуск
+        public static int IdOtpuskFemale = 10; // отпуск женский
         public static int IdX = 21;
         public static int IdPp = 22;
         public static int Week5Days = 1;
@@ -472,13 +475,22 @@ namespace TimeSheetMvc4WebApplication.Source
 
         //Вносит в табель дни исключения и возвращает обновлённые записи табеля на работника
         List<TimeSheetRecord> AddExceptoinDaysToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, 
-            IEnumerable<Exception> exeptions)
+            IEnumerable<Exception> exeptions, IEnumerable<OK_Otpusk> otpusk)
         {
             var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
             foreach (var exception in exeptions.Where(w=>w.idWorkShedule==employee.PlanStaff.IdWorkShedule))
             {
                 var day = timeSheetRecordLList.FirstOrDefault(f => f.RecordDate.Date == exception.DateException.Date);
                 if (day == null || day.idDayStatus == IdX) continue;
+                var list = otpusk.Select(s => s.OK_Otpuskvid.idDayStatus);
+               
+                if ((list.Any(x => !x.HasValue ||x.Value == day.idDayStatus) && exception.idDayStatus == IdTransferVihodnoy)
+                    || (list.Contains(IdOtpuskFemale) && exception.idDayStatus == IdVihodnoy))
+                {       // если у человека отпуск и это перенесенный выходной (праздник) -> то оставляем отпуск
+                        // если женский отпуск и это выходной(праздник) -> то оставляем отпуск
+                    continue;
+                }
+
                 if (exception.idDayStatus == IdPp)
                 {
                     day.JobTimeCount = day.JobTimeCount > 1 ? day.JobTimeCount - 1 : 0;
@@ -489,7 +501,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     if (employee.StaffCount == 1)
                     {
                         day = NewTimeSheetRecord(exception.DateException, employee.idFactStaffHistory,
-                            exception.idDayStatus,
+                            (exception.idDayStatus == IdTransferVihodnoy) ? IdVihodnoy: exception.idDayStatus, // перенесенный выходной менякм на обычный выходной
                             _timeSheet.id, employee.Employee.SexBit && employee.PlanStaff.Post.Category.id != IdPps
                                 ? (double)exception.KolHourMPS
                                 : (double)exception.KolHourGPS);
@@ -497,7 +509,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     else
                     {
                         day = NewTimeSheetRecord(exception.DateException, employee.idFactStaffHistory,
-                            exception.idDayStatus,
+                             (exception.idDayStatus == IdTransferVihodnoy) ? IdVihodnoy : exception.idDayStatus, // перенесенный выходной менякм на обычный выходной
                             _timeSheet.id, (double)employee.StaffCount *
                                            (employee.Employee.SexBit &&
                                             employee.PlanStaff.Post.Category.id != IdPps
