@@ -42,7 +42,15 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.approver = approver;
             ViewBag.Filter = filter;
             ViewBag.CuttentPage = page;
-            ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
+            try
+            {
+                ViewBag.Department = approver.DtoApproverDepartments.First(w => w.IdDepartment == id);
+            }
+            catch (System.Exception e)
+            {
+                return RedirectToNotFoundPage("Запрашиваемый отдел не обнаружен. Отдел " + id);
+            }
+            
             var timeSheetList = r.TimeSheets.OrderBy(o=>o.DateBegin);
             return View(timeSheetList);
         }
