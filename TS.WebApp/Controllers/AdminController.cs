@@ -109,16 +109,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(Client.GetDepartmentsList(), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApproverForDepartment(int id)
+        public JsonResult GetApproverForDepartment(int id, bool LabAll = false)
         {
             const int idKadrDepartment = 154;
-            var approverModel = new
+           var approverModel = new
             {
                 Id = id,
                 Approver1 = Client.GetDepartmentApprover(id, 1),
                 Approver2 = Client.GetDepartmentApprover(id, 2),
                 Approver3 = Client.GetDepartmentApprover(id, 3),
-                DepartmetEmployees = Client.GetDepartmentEmployees(id),
+                DepartmetEmployees = LabAll  ? Client.GetAllEmployees() : Client.GetDepartmentEmployees(id),
                 KadrEmployees = Client.GetDepartmentEmployees(idKadrDepartment)
             };
             return Json(approverModel, JsonRequestBehavior.AllowGet);

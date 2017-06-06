@@ -93,6 +93,17 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        [OperationContract]
+        public DtoEmployee[] GetAllEmployees()
+        {
+            using (var db = new KadrDataContext())
+            {
+                return
+                    db.FactStaffs.Where(w => w.DateEnd == null || w.DateEnd > DateTime.Today).Select(
+                        s => DtoClassConstructor.DtoEmployee(s.Employee)).Distinct().ToArray();
+            }
+        }
+
         /// <summary>
         /// Возвращает сотрудников структурного подразделения с их рабочими режимами
         /// </summary>
