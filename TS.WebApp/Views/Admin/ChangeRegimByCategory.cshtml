@@ -1,0 +1,23 @@
+﻿@using TimeSheetMvc4WebApplication.Models
+@{
+    ViewBag.Title = "Смена режима работы";
+}
+<h2>Смена режима работы</h2>
+
+<div class="row" ng-app ng-controller="RegimByCategoty">
+    <div class="col-md-4">
+        <div id="categotyList" class="list-group">
+            <h4></h4>
+        </div>
+    </div>
+</div>
+
+<script>
+    function RegimByCategoty($scope, $http) {
+        $http.get('@Html.Raw(@Url.Action("GetAllCategoryes", "Admin"))')
+            .success(function (data) {
+                $scope.Categoryes = data;
+            })
+
+    }
+</script>

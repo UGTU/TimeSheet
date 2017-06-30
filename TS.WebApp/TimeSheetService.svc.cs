@@ -129,6 +129,18 @@ namespace TimeSheetMvc4WebApplication
                 return db.WorkShedules.Select(s=> DtoClassConstructor.DtoWorkShedule(s)).ToArray();
             }
         }
+        /// <summary>
+        /// Возвращает список категорий персонала
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        public DtoCategory[] GetCategoryes()
+        {
+            using (var db = new KadrDataContext())
+            {
+                return db.Category.Select(s=> DtoClassConstructor.DtoCategory(s)).ToArray();
+            }
+        }
 
         [OperationContract]
         public DtoFactStaffEmployee[] GetEmployeesForTimeSheet(int idDepartment, DtoApprover approver, DateTime dateStart, DateTime dateEnd)
@@ -151,6 +163,7 @@ namespace TimeSheetMvc4WebApplication
                         .ToArray();
             }
         }
+
 
         //==========    Работа с табелем
 

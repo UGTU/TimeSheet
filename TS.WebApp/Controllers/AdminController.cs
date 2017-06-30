@@ -48,7 +48,16 @@ namespace TimeSheetMvc4WebApplication.Controllers
             //CheckIsAdmin();
             return View();
         }
-
+        /// <summary>
+        /// Смена режима работы
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "ADtoKadr")]
+        public ActionResult ChangeRegimByCategory()
+        {
+            //CheckIsAdmin();
+            return View();
+        }
 
         public string SendNotice(string username)
         {
@@ -134,7 +143,23 @@ namespace TimeSheetMvc4WebApplication.Controllers
             };
             return Json(factStaffModel, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Возвращает список режимов работы (5, 6, ~)
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetAllRegimes()
+        {
+            return Json(Client.GetWorkShedules(), JsonRequestBehavior.AllowGet);
+        }
 
+        /// <summary>
+        /// Возвращает список категорий персонала
+        /// </summary>
+        /// <returns></returns
+        public JsonResult GetAllCategoryes()
+        {
+            return Json(Client.GetCategoryes(), JsonRequestBehavior.AllowGet);
+        }
         public JsonResult SaveApproverDepartment(int idDepartmen, int approveNumber, int idEmployee, string employeeLogin)
         {
             //todo:Сделать метод проверки и сохранять логин только если он обновлён
