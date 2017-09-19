@@ -407,6 +407,36 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+
+        /// <summary>
+        /// Изменяет режим всем сотрудникам
+        /// </summary>
+        /// <param name="IdCategory">Категория сотрудников</param>
+        /// <param name="IdWorkShedule">Новый режим работы</param>
+        /// <returns></returns>
+        [OperationContract]
+        public bool EditEmployeeRegimByCategory(int IdCategory, int IdWorkShedule)
+        {
+            using (var db = new KadrDataContext())
+            {
+                try
+                {
+                   //var fs = db.FactStaffs.FirstOrDefault(f => f.id == IdFactStaff);
+                   //if (isPersonalRegim) //если это персональный режим
+                   //    fs.idTimeSheetSheduleType = IdWorkShedule;
+                   //else
+                   //    db.PlanStaff.FirstOrDefault(p => p.id == fs.idPlanStaff.Value).IdWorkShedule = IdWorkShedule;
+                   //
+                   //db.SubmitChanges();
+                   return true;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Добавляет согласователя для структурного подразделения
         /// </summary>
