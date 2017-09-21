@@ -214,23 +214,9 @@ namespace TimeSheetMvc4WebApplication.Controllers
         [Authorize(Roles = "ADtoKadr")]
         public JsonResult SaveChangeSummerRegime(int IdCategory, int IdWorkShedule)
         {
-            //Client.EditEmployeeRegimByCategory(IdCategory, IdWorkShedule);
-            var deps = Client.GetDepartmentsList().Where(w=>w.HasTimeSheet == true);
-            foreach (var dep in deps)
-            {
-                var FactStaffs = Client.GetDepartmentFactStaffs(dep.IdDepartment);
-                foreach (var fs in FactStaffs.Where(w=>w.Post.Category.IdCategory == IdCategory))
-                {
-                    int? idPlanStaff = fs.IdPlanStaff;
-                }
-                
-                //Client.EditEmployeeRegim(int IdFactStaff, int IdWorkShedule, bool isPersonalRegim, int HoursWeek)
-            }
-
             var result = new
             {
-                result = IdCategory,
-                idFactStaff = IdWorkShedule
+                result = Client.EditEmployeeRegimByCategory(IdCategory, IdWorkShedule)
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }

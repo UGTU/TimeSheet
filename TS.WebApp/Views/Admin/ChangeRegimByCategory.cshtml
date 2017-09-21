@@ -5,6 +5,7 @@
 <h2>Смена режима работы</h2>
 
 <div class="row" ng-app ng-controller="RegimByCategory">
+
     <div class="col-md-4">
         <div id="categotyList" class="list-group">
             <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="cat in Categoryes| filter:query" ng-click="SelectCategory(cat)" ng-class="cat.css">
@@ -19,17 +20,23 @@
         </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-8" >
         <h3 style="margin-top: 3px;">Редактирование режима для категории {{SelectedCategory.CategorySmallName}}</h3>
         <hr style="margin-top: 0;" />
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-10" style="height:400px">
                     <div class="progress progress-striped active" id="regsLoad" style="margin: 20px 20px;">
                         <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     <select class="form-control" ng-options="regim.WorkSheduleName for regim in Regimes" ng-model="SelectedRegime" ></select>
+                        
+                    <div ng-class="LoadBar" style="z-index: 10; position:relative; top:20%; ">
+                        <div class="progress progress-striped active" id="Load" >
+                            <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        </div> <span>Пожалуйста подождите ...</span>
+                    </div>
                 </div>
-
+          
             </div>
         </div>
         <div class="row">
@@ -59,7 +66,7 @@
                 $('#regsLoad').remove();
             });
         
-
+        $scope.LoadBar = "hidden";
         $scope.SelectCategory = function (cat) {
             $scope.ClearCss();
             cat.css = "active";
@@ -79,17 +86,20 @@
         $scope.Save = function () {
             console.log($scope.SelectedCategory);
             console.log($scope.SelectedRegime);
-
+            $scope.LoadBar = "";
 
             var link = '@Html.Raw(@Url.Action("SaveChangeSummerRegime", "Admin", new { IdCategory = "IdCategoryReplace", IdWorkShedule = "IdWorkSheduleReplace" }))';
             link = link.replace("IdCategoryReplace", $scope.SelectedCategory.IdCategory).replace("IdWorkSheduleReplace", $scope.SelectedRegime.IdWorkShedule);
             console.log(link);
             $http.get(link).success(function (data) {
-                if (data) {
-                    alert('norm');
+                if (data.result) {
+                    alert('Изменения сохранены');
+                    $scope.LoadBar = "hidden";
                 }
-                else
+                else {
+                    $scope.LoadBar = "hidden";
                     alert('При сохранении возникли проблемы, изменения не сохранены');
+                }
             });
 
 

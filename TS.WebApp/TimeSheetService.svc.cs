@@ -421,14 +421,17 @@ namespace TimeSheetMvc4WebApplication
             {
                 try
                 {
-                   //var fs = db.FactStaffs.FirstOrDefault(f => f.id == IdFactStaff);
-                   //if (isPersonalRegim) //если это персональный режим
-                   //    fs.idTimeSheetSheduleType = IdWorkShedule;
-                   //else
-                   //    db.PlanStaff.FirstOrDefault(p => p.id == fs.idPlanStaff.Value).IdWorkShedule = IdWorkShedule;
-                   //
-                   //db.SubmitChanges();
-                   return true;
+                    var deps = GetDepartmentsList().Where(w=>w.HasTimeSheet == true);
+                    foreach (var dep in deps)
+                    {
+                        var FactStaffs = GetDepartmentFactStaffs(dep.IdDepartment).Where(w=>w.Post.Category.IdCategory == IdCategory);
+                        foreach (var fs in FactStaffs)
+                        {
+                            db.PlanStaff.FirstOrDefault(f => f.id == fs.IdPlanStaff.Value).IdWorkShedule = IdWorkShedule;
+                        }
+                    }
+                    //db.SubmitChanges();
+                    return true;
                 }
                 catch (System.Exception)
                 {
