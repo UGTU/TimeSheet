@@ -82,7 +82,7 @@ namespace TimeSheetMvc4WebApplication.Source
                 }
             }
             stringBuilder.AppendLine("</br>");
-            stringBuilder.AppendFormat("Вы пожете просмотреть табель перейдя по ссылке {0}, ", timeSheetShowLink);
+            stringBuilder.AppendFormat("Вы можете просмотреть табель перейдя по ссылке {0}, ", timeSheetShowLink);
             stringBuilder.AppendFormat("вывести его на печать: {0}. ", timeSheetPrintLink);
             stringBuilder.AppendFormat("или просмотреть историю согласования: {0}. ", timeSheetApprovalLink);
             stringBuilder.AppendFormat("Так же вы можете посетить {0}. ", timeSheetAppLink);

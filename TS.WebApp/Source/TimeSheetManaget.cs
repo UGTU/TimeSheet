@@ -174,27 +174,33 @@ namespace TimeSheetMvc4WebApplication.Source
             
             List<TimeSheetRecord> timeSheetRecordLList;
             // Генерируем табель
-            //if (employee.PlanStaff.Post.Category.id == IdPps)
-            if (employee.PlanStaff.Post.Category.IsPPS.Value)
+            if (employee.PlanStaff.Post.Category.id == IdPps || employee.PlanStaff.Post.Category.id == 0)
+            //if (employee.PlanStaff.Post.Category.IsPPS.Value)
             {
                 var FullEmployee = employee.WorkHoursInWeek == FullPpsHours;
                 //PPS
-                timeSheetRecordLList = PpsTimeSheetGenerate(employee, FullEmployee);
+                //timeSheetRecordLList = PpsTimeSheetGenerate(employee, FullEmployee);
+                timeSheetRecordLList = employee.PlanStaff.WorkShedule.id == Week5Days
+                                    ? FiveDayesPpsTimeSheetGenerate(employee, FullEmployee)
+                                    : PpsTimeSheetGenerate(employee, FullEmployee)
+                                    ;
             }
             else
-            {
-                var fullEmployee = (employee.Employee.SexBit && employee.WorkHoursInWeek == FullManHours)||
-                                   (!employee.Employee.SexBit && employee.WorkHoursInWeek == FullWomanHours);
+            { 
+                    var fullEmployee = (employee.Employee.SexBit && employee.WorkHoursInWeek == FullManHours)
+                                   ||
+                                   (!employee.Employee.SexBit && employee.WorkHoursInWeek == FullWomanHours)
+                                   ;
 
-                timeSheetRecordLList = employee.PlanStaff.WorkShedule.id == Week5Days
-                    //5 days week
-                    ? FiveDayesTimeSheetGenerate(employee, fullEmployee)
-                    //6 days week
-                    : (employee.PlanStaff.WorkShedule.id == Week6Days
-                    ? SixDayesTimeSheetGenerate(employee, fullEmployee)
-                    //flexible week
-                    : FlexibleTimeSheetGenerate(employee)
-                    );
+                    timeSheetRecordLList = employee.PlanStaff.WorkShedule.id == Week5Days
+                        //5 days week
+                        ? FiveDayesTimeSheetGenerate(employee, fullEmployee)
+                        //6 days week
+                        : (employee.PlanStaff.WorkShedule.id == Week6Days
+                        ? SixDayesTimeSheetGenerate(employee, fullEmployee)
+                        //flexible week
+                        : FlexibleTimeSheetGenerate(employee)
+                        );
             }
 
 
@@ -435,8 +441,8 @@ namespace TimeSheetMvc4WebApplication.Source
         private List<TimeSheetRecord> PpsTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
         {
             var employeePps = (double)(employee.WorkHoursInWeek / 6);
-            const double fullPps = 6.25;
-            const double saturdayPps = 4.75;
+            const double fullPps = 6;//6.25;
+            const double saturdayPps = 6;//4.75;
 
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
@@ -473,6 +479,44 @@ namespace TimeSheetMvc4WebApplication.Source
             }
             return timeSheetRecordLList;
         }
+
+        //Генерация табеля для ПП 5 дневки
+        private List<TimeSheetRecord> FiveDayesPpsTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
+        {
+            var employeePps = (double)(employee.WorkHoursInWeek / 5);
+            const double fullPps = 7.2;
+
+            var timeSheetRecordLList = new List<TimeSheetRecord>();
+            for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
+            {
+                TimeSheetRecord timeSheetRecord;
+                var date = _timeSheet.DateBeginPeriod.AddDays(i);
+                if ((employee.DateEnd != null && employee.DateEnd < date) || employee.DateBegin > date)
+                {
+                    timeSheetRecord = NewTimeSheetRecord(date, employee.idFactStaffHistory, IdX, _timeSheet.id, 0);
+                    timeSheetRecordLList.Add(timeSheetRecord);
+                    continue;
+                }
+                switch (date.DayOfWeek)
+                {
+                    case DayOfWeek.Saturday:
+                    case DayOfWeek.Sunday:
+                        {
+                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdVihodnoy);
+                            break;
+                        }
+                    default:
+                        {
+                            timeSheetRecord = GenerageTimeSheetRecord(employee, date, IdYavka, (employee.StaffCount == 1) ? fullPps : employeePps,
+                                                                                               (employee.StaffCount == 1) ? fullPps : employeePps);
+                            break;
+                        }
+                }
+                timeSheetRecordLList.Add(timeSheetRecord);
+            }
+            return timeSheetRecordLList;
+        }
+
 
         //Вносит в табель дни исключения и возвращает обновлённые записи табеля на работника
         List<TimeSheetRecord> AddExceptoinDaysToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, 

@@ -186,8 +186,8 @@ namespace TimeSheetMvc4WebApplication.Source
         {
             List<TimeSheetRecord> timeSheetRecordLList;
             // Генерируем табель
-            //if (employee.PlanStaff.Post.Category.id == IdPps) //если категория работника ППС
-            if (employee.PlanStaff.Post.Category.IsPPS.Value) //если категория работника ППС
+            if (employee.PlanStaff.Post.Category.id == IdPps) //если категория работника ППС
+            //if (employee.PlanStaff.Post.Category.IsPPS.Value) //если категория работника ППС
             {
                 //PPS
                 timeSheetRecordLList = PpsTimeSheetGenerate(employee);
