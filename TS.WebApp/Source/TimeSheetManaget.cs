@@ -441,8 +441,8 @@ namespace TimeSheetMvc4WebApplication.Source
         private List<TimeSheetRecord> PpsTimeSheetGenerate(FactStaffWithHistory employee, bool fullEmployee)
         {
             var employeePps = (double)(employee.WorkHoursInWeek / 6);
-            const double fullPps = 6;//6.25;
-            const double saturdayPps = 6;//4.75;
+            const double fullPps = 6.25;
+            const double saturdayPps = 4.75;
 
             var timeSheetRecordLList = new List<TimeSheetRecord>();
             for (int i = _timeSheet.DateBeginPeriod.Day - 1; i < _timeSheet.DateEndPeriod.Day; i++)
