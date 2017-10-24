@@ -72,7 +72,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         {
 
             var timeSheet = GetTimeSheetOrThrowException(576);
-            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, int.MaxValue,0,0, false);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, int.MaxValue, 0, 0, int.MaxValue, 0, 0, false);
 
             //var r = new TimeSheetToDbf(timeSheetModel);
             var r = new TimeSheetToDbf();

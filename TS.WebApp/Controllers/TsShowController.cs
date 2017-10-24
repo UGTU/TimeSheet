@@ -45,13 +45,24 @@ namespace TimeSheetMvc4WebApplication.Controllers
         //=====================================================================================================
         private TimeSheetModel[] TimeSheetModelConstructor(int id, bool isForPrint)
         {
-            const int firstPaperEmployeeCount = 5;
+            const int firstPaperEmployeeCount = 7;
             const int lastPaperEmployeeCount = 6;
-            const int paperEmployeeCount = 7;
+            const int paperEmployeeCount = 9;
+
+            const int firstNightPaperEmployeeCount = 4;
+            const int lastNightPaperEmployeeCount = 3;
+            const int NightpaperEmployeeCount = 7;
+
             var timeSheet = GetTimeSheetOrThrowException(id);
-            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(timeSheet, firstPaperEmployeeCount,
-                lastPaperEmployeeCount,
-                paperEmployeeCount, isForPrint);
+            var timeSheetModel = ModelConstructor.TimeSheetForDepartment(
+                timeSheet
+                ,firstPaperEmployeeCount
+                ,lastPaperEmployeeCount
+                ,paperEmployeeCount
+                ,firstNightPaperEmployeeCount
+                ,lastNightPaperEmployeeCount
+                ,NightpaperEmployeeCount
+                ,isForPrint);
             return timeSheetModel;
         }
     }

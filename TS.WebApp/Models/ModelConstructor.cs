@@ -97,7 +97,14 @@ namespace TimeSheetMvc4WebApplication.Models
             DayStatus.ПК
         };
 
-        public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet, int firsPaperPaperRecorddsColl, int lastPaperRecordsColl, int paperRecordColl, bool isForPrint)
+        public static TimeSheetModel[] TimeSheetForDepartment(DtoTimeSheet timeSheet
+                                        , int firsPaperPaperRecorddsColl
+                                        , int lastPaperRecordsColl
+                                        , int paperRecordColl
+                                        , int NightFirsPaperPaperRecorddsColl
+                                        , int NightLastPaperRecordsColl
+                                        , int NightPaperRecordColl
+                                        , bool isForPrint)
         {
             var timeSheets = new List<TimeSheetModel>();
             if (timeSheet.Employees.Any(a => a.FactStaffEmployee.Post.Category.IsPPS))
@@ -147,8 +154,8 @@ namespace TimeSheetMvc4WebApplication.Models
                             .ToArray(),
                         timeSheet.Holidays,
                         timeSheet.Department.DepartmentFullName,
-                        firsPaperPaperRecorddsColl,
-                        lastPaperRecordsColl, paperRecordColl, isForPrint,
+                        NightFirsPaperPaperRecorddsColl,
+                        NightLastPaperRecordsColl, NightPaperRecordColl, isForPrint,
                         timeSheet.Approvers, true
                         ));
                 }
