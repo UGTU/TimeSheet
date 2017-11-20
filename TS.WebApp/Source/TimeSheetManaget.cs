@@ -209,7 +209,7 @@ namespace TimeSheetMvc4WebApplication.Source
             // Добавляем дни исключения
             timeSheetRecordLList = AddExceptoinDaysToTimeSheetRecords(employee, timeSheetRecordLList, exeptions, otpuskList);
             // Добавляем информацию о больничных 
-            timeSheetRecordLList = AddHospitalsToTimeSheetRecords(employee, timeSheetRecordLList, inkapacities);
+            timeSheetRecordLList = AddHospitalsToTimeSheetRecords(employee, timeSheetRecordLList, inkapacities, otpuskList);
             //Добавляем информацию о командировках
             timeSheetRecordLList = AddBusinessTripToTimeSheetRecords(employee, timeSheetRecordLList, businesstrips);
 
@@ -224,6 +224,7 @@ namespace TimeSheetMvc4WebApplication.Source
         public static int IdTransferVihodnoy = 27; // перенесенный выходной
         public static int IdOtpusk = 6; // основной отпуск
         public static int IdOtpuskFemale = 10; // отпуск женский
+        public static int IdOtpusPoRodam = 9; // отпуск по родам
         public static int IdX = 21;
         public static int IdPp = 22;
         public static int Week5Days = 1;
@@ -623,14 +624,19 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         //Вносит в табель информацию о больничном и возвращает обновлённые записи табеля на работника
-        List<TimeSheetRecord> AddHospitalsToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<OK_Inkapacity> inkapacities)
+        List<TimeSheetRecord> AddHospitalsToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<OK_Inkapacity> inkapacities
+            , IEnumerable<OK_Otpusk> otpusk)
         {
+            var OtpuskPoRodam = otpusk.Where(w => w.idOtpuskVid == IdOtpusPoRodam).SingleOrDefault(); //вытаскиваем отпуск по родам
             var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
             var okInkapacities = inkapacities as OK_Inkapacity[] ?? inkapacities.ToArray();
             if (okInkapacities.Any())
             {
                 foreach (var inkapacity in okInkapacities)
                 {
+                    // если имеем отпуск по родам и даты начала и конца отпуска совпадают с больничным то это вовсе не болничный, а Отпуск по беременности и родам (9), больничный в табеле не отображаем, отображаем Отпуск.
+                    if (OtpuskPoRodam != null && OtpuskPoRodam.DateBegin == inkapacity.DateBegin && OtpuskPoRodam.DateEnd == inkapacity.DateEnd) { continue; } 
+
                     int beginDay;
                     if (_timeSheet.DateBeginPeriod.Year == inkapacity.DateBegin.Year &&
                         _timeSheet.DateBeginPeriod.Month == inkapacity.DateBegin.Month)
