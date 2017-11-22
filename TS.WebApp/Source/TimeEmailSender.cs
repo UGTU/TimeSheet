@@ -26,10 +26,12 @@ namespace TimeSheetMvc4WebApplication.Source
             {
                 try
                 {
-                    var mailMessage = new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
-                    var client = new SmtpClient(_host);
-                    client.Send(mailMessage);
-                    return true;
+                    using (var client = new SmtpClient(_host))
+                    {
+                        var mailMessage = new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
+                        client.Send(mailMessage);
+                        return true;
+                    }
                 }
                 catch (System.Exception)
                 {
