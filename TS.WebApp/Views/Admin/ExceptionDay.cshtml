@@ -44,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {WorkShedule: CurrentWorkSchedule,Year:CurrentYear}" style="max-height: 10px;">
+                <tr ng-repeat="day in ExceptionDayList | orderBy:Date | filter: {IdWorkShedule: CurrentIdWorkSchedule,  Year:CurrentYear}" style="max-height: 10px;">
                     <td>{{day.Date.toString('dd MMMM yyyy')}}</td>
                     <td>{{day.Name}}</td>
                     <td>{{day.DayAweek}}</td>
@@ -132,6 +132,7 @@
             $http.get('@Url.Action("GetExceptionDay")').success(function (data) {
                 $scope.WorkScheduleList = data.WorkScheduleList;
                 $scope.CurrentWorkSchedule = $scope.WorkScheduleList[0];
+                $scope.CurrentIdWorkSchedule = $scope.WorkScheduleList[0].IdWorkShedule;
                 $scope.ExceptionDayList = data.ExceptionDayList;
                 $scope.Years = [];
                 angular.forEach($scope.ExceptionDayList, function (day) {
@@ -141,6 +142,7 @@
                         console.log(day.Date.getYear());
                     }
                     day.Year = day.Date.getYear();
+                    day.IdWorkShedule = day.WorkShedule.IdWorkShedule;
                 });
                 $scope.CurrentYear = $scope.Years[$scope.Years.length - 1];
                 $scope.Years = $scope.Years.reverse();
@@ -158,6 +160,8 @@
                 angular.forEach($scope.ExceptionDayList, function (day) {
                     day.Date = new Date(parseInt(day.Date.substr(6)));
                     day.Year = day.Date.getYear();
+                    day.IdWorkShedule = day.WorkShedule.IdWorkShedule;
+
                 });
             });
         };
@@ -204,6 +208,7 @@
             day.AddPpDay = false;
             console.log(day.Date);
             day.Date.addDays(-1);
+            day.id = -2147483648; //min int for insert new item
             console.log(day.Date);
             angular.forEach($scope.DayStatusList, function (dayStatus) {
                 if (dayStatus.SmallDayStatusName == 'ПП') {
@@ -236,8 +241,11 @@
         };
 
         $scope.SetCurrentWorkSchedule = function (workSchedule) {
+            //console.log(workSchedule);
             $scope.CurrentWorkSchedule = workSchedule;
+            $scope.CurrentIdWorkSchedule = workSchedule.IdWorkShedule;
         };
+
 
         $scope.GetDayStatusName = function (dayStatus) {
             return dayStatus.SmallDayStatusName + ' - ' + dayStatus.FullDayStatusName;

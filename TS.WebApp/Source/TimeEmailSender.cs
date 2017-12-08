@@ -29,7 +29,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     using (var client = new SmtpClient(_host))
                     {
                         var mailMessage = new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
-                        client.Send(mailMessage);
+                        client.Send(mailMessage); // возможно необходимо 2жды вызывать это чтоб письма железобетонно доходили до пользователей
                         return true;
                     }
                 }
