@@ -39,11 +39,16 @@
                 else
                 {
                     <li><a id="approverName"><span class="glyphicon glyphicon-user"></span> @username </a></li>
+                    <li>
+                        <a id="ug" href="@Url.Action("Download","Main")" data-placement="bottom" data-toggle="tooltip" title="Просмотреть руководство пользователя" target="_blank" style="color: #777777"><span class="glyphicon glyphicon-question-sign"></span></a>
+                    </li>
                 }
             </ul>
         </div>
     </div>
 </nav>
+
+
 
 <script>
     $('#ug').tooltip('hide');

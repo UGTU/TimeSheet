@@ -11,6 +11,129 @@
     const int charCountForDepFullName = 70;
 }
 
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("TabelAdmin"))
+{
+    <div id="searchResult" class="row" ng-app ng-controller="searchDepartment">
+
+        <div class="input-group input-group-sm" ng-hide="HideSearchPanel">
+            <input type="text" ng-model="query" class="form-control " placeholder="Введите отдел" ng-change="Search()">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+            </span>
+        </div>
+
+        <div id="depList" class="list-group">
+            <a class="list-group-item" style="cursor: pointer; padding: 7px 10px; background-color: #f5f5f5;" ng-class="empl.css" ng-click="Back()" ng-hide="BackHide()">
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    {{CurrentDepartment.DepartmentSmallName}}
+                </h4>
+                <p class="list-group-item-text"> На уровень вверх</p>
+            </a>
+            <a class="list-group-item" style="cursor: pointer;padding: 7px 10px;" ng-repeat="dep in CerrentDepartments| filter:query" ng-click="SelectDepartment(dep)" ng-class="dep.css" @*ng-class="empl.css"*@>
+                
+                <span ng-hide="CanSetAsCurrentDepartment(dep.IdDepartment)" class="badge" ng-click="SetCurrentDepartment(dep.IdDepartment)" data-toggle="tooltip" title="Раскрыть" data-placement="bottom"><span class="glyphicon glyphicon-chevron-right"></span></span>
+                
+                <span class="badge" ng-click="GoToTSDepartment(dep.IdDepartment)" data-toggle="tooltip" title="Перейти к табелям" data-placement="bottom"><span class="glyphicon glyphicon-th"></span></span>
+                
+                <h4 class=" list-group-item-heading" style="font-size: 16px;">
+                    {{dep.DepartmentSmallName}}
+                </h4>
+                <p class="list-group-item-text">{{dep.DepartmentFullName}} </p>
+            </a>
+            <div class="progress progress-striped active" id="deparmentsLoad" style="margin: 20px 20px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function searchDepartment($scope, $http) {
+            $scope.HideSearchPanel = true;
+        $http.get('@Html.Raw(@Url.Action("GetDepartment", "Admin", new { idTimeSheet = @Model }))').success(function (data) {
+            $scope.Departments = data;
+            $scope.DepIdList = [];
+            $scope.SetCurrentDepartment(null);
+            $scope.CurrentDepartment = null;
+            $scope.HideSearchPanel = false;
+            $('#deparmentsLoad').remove();
+        });
+
+        $scope.SetCurrentDepartment = function (idMenagDepartnent) {
+            if ($scope.DepIdList.indexOf(idMenagDepartnent) === -1) {
+                $scope.DepIdList.push(idMenagDepartnent);
+            }
+            var deps = [];
+            $scope.CurrentDepartment = null;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idMenagDepartnent)
+                    deps.push(dep);
+                if (dep.IdDepartment == idMenagDepartnent) {
+                    $scope.CurrentDepartment = dep;
+                }
+            });
+            $scope.CerrentDepartments = deps;
+            $scope.SelectDepartment(deps[0]);
+        };
+
+        $scope.GoToTSDepartment = function (idDepartment) {
+            //$window.location.href = "";
+            //$location.path('/video')
+            var link = '@Html.Raw(@Url.Action("TimeSheetList", "Main", new { id = "idDepartmentReplace" }))';
+            link = link.replace("idDepartmentReplace", idDepartment);
+            window.location.href = link;
+            //$location.path(link);
+        };
+
+        $scope.Search = function () {
+            if ($scope.query != '') {
+                $scope.CerrentDepartments = $scope.Departments;
+            } else
+                $scope.SetCurrentDepartment(null);
+        };
+
+        $scope.Back = function () {
+            $scope.DepIdList.splice($scope.DepIdList.length - 1, 1);
+            $scope.SetCurrentDepartment($scope.DepIdList[$scope.DepIdList.length - 1]);
+        };
+
+        $scope.BackHide = function () {
+            return $scope.CurrentDepartment == null ? true : false;
+        };
+
+        $scope.SelectDepartment = function (department) {
+            $scope.ClearCss();
+            department.css = "active";
+            $scope.SelectedDepartment = department;
+            $scope.SelectedDepartmentEtalon = angular.copy($scope.SelectedDepartment);
+        };
+
+        $scope.ClearCss = function () {
+            angular.forEach($scope.Departments, function (dep) {
+                dep.css = "";
+            });
+        };
+
+
+        $scope.CanSetAsCurrentDepartment = function (idDepartment) {
+            var result = true;
+            angular.forEach($scope.Departments, function (dep) {
+                if (dep.IdManagerDepartment == idDepartment)
+                    result = false;
+            });
+            return result;
+        };
+
+
+    };
+    </script>
+
+}
+
+
 @if (Model.GetApproverDepartments() != null && Model.GetApproverDepartments().Any())
 {   
     const int itemsInRow = 4;
