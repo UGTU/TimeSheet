@@ -32,6 +32,7 @@
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -722,6 +723,7 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\TSShow\PartialView\TimeSheetHeaderNight.cshtml" />
+    <Content Include="Views\TSShow\PartialView\TimeSheetHeaderFlexitime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />

@@ -162,3 +162,7 @@ TS.WebApp/Content/logs/
 *.psess
 *.etl
 *.vspx
+/.vs/TimeSheetSolution/v15/Server/sqlite3
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json

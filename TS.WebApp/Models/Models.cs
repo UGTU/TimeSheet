@@ -40,6 +40,7 @@ namespace TimeSheetMvc4WebApplication.Models
         public int PaperOf { get; set; }
         public int TimeSheetNum { get; set; }
         public bool IsForNight { get; set; }
+        public bool IsForFlexitime { get; set; }//это для скользящего графика работы 
     }
 
     public class HeaderStyle

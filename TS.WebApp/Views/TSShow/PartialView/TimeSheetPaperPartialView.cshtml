@@ -2,12 +2,21 @@
 
 <table id=@Html.Raw(Json.Encode(@Model.id)) border="2" bordercolor="black" cellpadding="0" cellspacing="0" style="border-collapse: collapse; table-layout: auto; font-size: 8.5pt;">
 
-    @if(Model.IsForNight) 
-        {@Html.Partial("PartialView\\TimeSheetHeaderNight", Model.HeaderStyle)}
+    @if (Model.IsForFlexitime)
+    {
+        @Html.Partial("PartialView\\TimeSheetHeaderFlexitime", Model.HeaderStyle)
+    }
     else
     {
-        {@Html.Partial("PartialView\\TimeSheetHeader", Model.HeaderStyle)}
+        if (Model.IsForNight)
+        {@Html.Partial("PartialView\\TimeSheetHeaderNight", Model.HeaderStyle)}
+        else
+        {
+            {@Html.Partial("PartialView\\TimeSheetHeader", Model.HeaderStyle)}
+        }
     }
+
+
     
     @foreach (var employee in Model.Employees)
     {
@@ -28,17 +37,26 @@
 
     var night_el = document.getElementById(@Html.Raw(Json.Encode(@Model.id))).getElementsByClassName('for_night');
     var day_el = document.getElementById(@Html.Raw(Json.Encode(@Model.id))).getElementsByClassName('for_days');
+    var flexitime_el = document.getElementById(@Html.Raw(Json.Encode(@Model.id))).getElementsByClassName('for_flexitime');
 
     var vis_night = (@Html.Raw(Json.Encode(@Model.IsForNight))) ? "table-cell" : "none";
     var vis_day = (@Html.Raw(Json.Encode(@Model.IsForNight))) ? "none" : "table-cell";
+    
 
     for (var i = 0; i < day_el.length; i++) {
-            day_el[i].style.display = vis_day;}
-
+        day_el[i].style.display = vis_day;
+    }
 
     for (var i = 0; i < night_el.length; i++) {
         night_el[i].style.display = vis_night;
+    }
+
+    //делаем видимыми элементы при "скользящем графике"
+    if (@Html.Raw(Json.Encode(@Model.IsForFlexitime))){
+        for (var i = 0; i < flexitime_el.length; i++) {
+            flexitime_el[i].style.display = "table-cell";
         }
+    }
 
 </script> 
 <div class="paperNum">
