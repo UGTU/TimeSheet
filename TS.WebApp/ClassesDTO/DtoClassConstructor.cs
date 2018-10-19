@@ -151,7 +151,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     Patronymic = s.Otch,
                     ItabN = s.itab_n,
                     SexBit = s.SexBit,
-                    DtoApproverDepartments = db.Approver.Where(w => w.idEmployee == idEmployee && w.DateEnd == null).
+                    DtoApproverDepartments = db.Approver.Where(w => w.idEmployee == idEmployee && (w.DateEnd == null || w.DateEnd > DateTime.Now)).
                         Select(sa => DtoApproverDepartment(sa)).ToArray()
                 }).FirstOrDefault();
             if (approver != null)
@@ -162,7 +162,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                     {
                         var idApprover =
                             db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
-                        approver.DtoApproverDepartments = db.Approver.Where(w => w.DateEnd == null && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
+                        approver.DtoApproverDepartments = db.Approver.Where(w => (w.DateEnd == null || w.DateEnd > DateTime.Now) && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
                                 .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
 
                         foreach (var department in approver.DtoApproverDepartments)
