@@ -3896,6 +3896,8 @@ namespace TimeSheetMvc4WebApplication
 
         private bool _IsFake;
 
+        private System.Nullable<bool> _IsAdvance;
+
         private EntitySet<TimeSheetApproval> _TimeSheetApproval;
 
         private EntitySet<TimeSheetRecord> _TimeSheetRecords;
@@ -3926,6 +3928,8 @@ namespace TimeSheetMvc4WebApplication
         partial void OnApproveStepChanged();
         partial void OnIsFakeChanging(bool value);
         partial void OnIsFakeChanged();
+        partial void OnIsAdvanceChanging(System.Nullable<bool> value);
+        partial void OnIsAdvanceChanged();
         #endregion
 
         public TimeSheet()
@@ -4121,6 +4125,26 @@ namespace TimeSheetMvc4WebApplication
                     this._IsFake = value;
                     this.SendPropertyChanged("IsFake");
                     this.OnIsFakeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IsAdvance", DbType = "Bit")]
+        public System.Nullable<bool> IsAdvance
+        {
+            get
+            {
+                return this._IsAdvance;
+            }
+            set
+            {
+                if ((this._IsAdvance != value))
+                {
+                    this.OnIsAdvanceChanging(value);
+                    this.SendPropertyChanging();
+                    this._IsAdvance = value;
+                    this.SendPropertyChanged("IsAdvance");
+                    this.OnIsAdvanceChanged();
                 }
             }
         }
@@ -5262,6 +5286,8 @@ namespace TimeSheetMvc4WebApplication
 
         private bool _IsFake;
 
+        private System.Nullable<bool> _IsAdvance;
+
         private int _EmployeeCount;
 
         private int _ApproveStep;
@@ -5290,6 +5316,8 @@ namespace TimeSheetMvc4WebApplication
         partial void OnDateCompositionChanged();
         partial void OnIsFakeChanging(bool value);
         partial void OnIsFakeChanged();
+        partial void OnIsAdvanceChanging(System.Nullable<bool> value);
+        partial void OnIsAdvanceChanged();
         partial void OnEmployeeCountChanging(int value);
         partial void OnEmployeeCountChanged();
         partial void OnApproveStepChanging(int value);
@@ -5448,6 +5476,26 @@ namespace TimeSheetMvc4WebApplication
                     this._IsFake = value;
                     this.SendPropertyChanged("IsFake");
                     this.OnIsFakeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IsAdvance", DbType = "Bit")]
+        public System.Nullable<bool> IsAdvance
+        {
+            get
+            {
+                return this._IsAdvance;
+            }
+            set
+            {
+                if ((this._IsAdvance != value))
+                {
+                    this.OnIsAdvanceChanging(value);
+                    this.SendPropertyChanging();
+                    this._IsAdvance = value;
+                    this.SendPropertyChanged("IsAdvance");
+                    this.OnIsAdvanceChanged();
                 }
             }
         }
