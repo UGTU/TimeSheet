@@ -78,11 +78,12 @@ namespace TimeSheetMvc4WebApplication.Source
         public bool remakeTSAdvance()
         {
             if (!CanEditTimeSheet()) throw new System.Exception("Редактирование табеля невозможно в связи с тем, что табель согласован, либо находится в процессе согласования.");
-            var tsr = _db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id && w.RecordDate.Day>15).ToList();
-             foreach (var item in tsr)
-             {
+            _timeSheet.IsAdvance = true;
+            var tsr = _db.TimeSheetRecords.Where(w => w.idTimeSheet == _timeSheet.id && w.RecordDate.Day > 15).ToList();
+            foreach (var item in tsr)
+            {
                 item.idDayStatus = IdX;
-             }
+            }
             _db.SubmitChanges();
             return true;
         }

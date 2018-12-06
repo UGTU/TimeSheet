@@ -3896,7 +3896,7 @@ namespace TimeSheetMvc4WebApplication
 
         private bool _IsFake;
 
-        private System.Nullable<bool> _IsAdvance;
+        private bool _IsAdvance;
 
         private EntitySet<TimeSheetApproval> _TimeSheetApproval;
 
@@ -3928,7 +3928,7 @@ namespace TimeSheetMvc4WebApplication
         partial void OnApproveStepChanged();
         partial void OnIsFakeChanging(bool value);
         partial void OnIsFakeChanged();
-        partial void OnIsAdvanceChanging(System.Nullable<bool> value);
+        partial void OnIsAdvanceChanging(bool value);
         partial void OnIsAdvanceChanged();
         #endregion
 
@@ -4130,7 +4130,7 @@ namespace TimeSheetMvc4WebApplication
         }
 
         [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IsAdvance", DbType = "Bit")]
-        public System.Nullable<bool> IsAdvance
+        public bool IsAdvance
         {
             get
             {
@@ -5286,7 +5286,7 @@ namespace TimeSheetMvc4WebApplication
 
         private bool _IsFake;
 
-        private System.Nullable<bool> _IsAdvance;
+        private bool _IsAdvance;
 
         private int _EmployeeCount;
 
@@ -5316,7 +5316,7 @@ namespace TimeSheetMvc4WebApplication
         partial void OnDateCompositionChanged();
         partial void OnIsFakeChanging(bool value);
         partial void OnIsFakeChanged();
-        partial void OnIsAdvanceChanging(System.Nullable<bool> value);
+        partial void OnIsAdvanceChanging(bool value);
         partial void OnIsAdvanceChanged();
         partial void OnEmployeeCountChanging(int value);
         partial void OnEmployeeCountChanged();
@@ -5481,7 +5481,7 @@ namespace TimeSheetMvc4WebApplication
         }
 
         [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IsAdvance", DbType = "Bit")]
-        public System.Nullable<bool> IsAdvance
+        public bool IsAdvance
         {
             get
             {
