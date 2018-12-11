@@ -655,7 +655,7 @@ namespace TimeSheetMvc4WebApplication
                     db.TimeSheetApproval.InsertOnSubmit(timeSheetApproval);
                     db.SubmitChanges();
                     Task.Run(
-                        () => EmailSending(employeeLogin.EmployeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, appDominUrl ));
+                        () => EmailSending(employeeLogin.EmployeeLogin, idTimeSheet, result, comments, approvalStep, departmentName, appDominUrl, timeSheet.IsAdvance));
                     return true;
                 }
                 catch (System.Exception e)
@@ -887,15 +887,16 @@ namespace TimeSheetMvc4WebApplication
         //==========        Рассылка писем
 
         private async void EmailSending(string userName, int idTimeSheet, bool result, string comments, int approvalStep,
-            string departmentName,string appDominUrl)
+            string departmentName,string appDominUrl, bool isAdvance)
         {
             await Task.Run(() =>
             {
                 var approverList = new List<DtoApprover>();
+                int maxApproveCount = isAdvance ? 2 : 3;
                 if (result)
                 {
                     approvalStep++;
-                    if (approvalStep < 3)
+                    if (approvalStep < maxApproveCount)
                     {
                         approverList.Add(GetApproverForTimeSheet(idTimeSheet, approvalStep + 1));
                     }
@@ -924,7 +925,7 @@ namespace TimeSheetMvc4WebApplication
                     var emailSender = new TimeEmailSender("mail.ugtu.net",
                         appDominUrl);
                     await emailSender.TimeSheetApproveEmailSending(userName, approverList, idTimeSheet, result, comments,
-                        approvalStep, departmentName, approvalStep >= 3);
+                        approvalStep, departmentName, isAdvance ? approvalStep >= 2 : approvalStep >= 3, isAdvance);
                 }
                 catch (System.Exception e)
                 {

@@ -160,17 +160,17 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 {
                     if (isAdmin)
                     {
-                        var idApprover =
-                            db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
-                        approver.DtoApproverDepartments = db.Approver.Where(w => (w.DateEnd == null || w.DateEnd > DateTime.Now) && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
-                                .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
+                        //var idApprover =
+                        //    db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
+                        //approver.DtoApproverDepartments = db.Approver.Where(w => (w.DateEnd == null || w.DateEnd > DateTime.Now) && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
+                        //        .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
 
-                        foreach (var department in approver.DtoApproverDepartments)
-                        {
-                            department.ApproveNumber = 10;
-                            department.ApproveTypeName = "Администратор";
-                            department.IdApprover = idApprover;
-                        }
+                        //foreach (var department in approver.DtoApproverDepartments)
+                        //{
+                        //    department.ApproveNumber = 10;
+                        //    department.ApproveTypeName = "Администратор";
+                        //    department.IdApprover = idApprover;
+                        //}
                     }
                     return approver;
                 }
@@ -263,6 +263,7 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Department = DtoDepartment(db, s.idDepartment),
                 ApproveStep = service.GetTimeSheetApproveStep(idTimeSheet),
                 IsFake = s.IsFake,
+                IsAdvance = s.IsAdvance,
                 Holidays = db.Exception.Where(e=>(e.DateException >= s.DateBeginPeriod) && (e.DateException <= s.DateEndPeriod)
                             && (e.WorkShedule.AllowNight)
                             && (e.idDayStatus == IdHoliday)).Select(t=> DtoExceptionDay(t)).ToArray(),
@@ -299,7 +300,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Department = DtoDepartment(ts.Dep.Department),
                 ApproveStep = ts.ApproveStep,
                 IsFake = ts.IsFake,
-                EmployeesCount = ts.EmployeeCount
+                EmployeesCount = ts.EmployeeCount,
+                IsAdvance = ts.IsAdvance
             };
             if (isEmpty) return timeSheet;
             var rec = ts.TimeSheetRecord.ToArray();
@@ -320,7 +322,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 Department = DtoDepartment(ts.Dep.Department),
                 IsFake = ts.IsFake,
                 EmployeesCount = ts.EmployeeCount,
-                ApproveStep = ts.ApproveStep
+                ApproveStep = ts.ApproveStep,
+                IsAdvance = ts.IsAdvance
             };
             return timeSheet;
         }

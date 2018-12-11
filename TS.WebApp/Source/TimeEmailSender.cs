@@ -41,7 +41,7 @@ namespace TimeSheetMvc4WebApplication.Source
         }
 
         private string GenerateMailBody(DtoApprover approver, int idTimeSheet, bool approveResult, string comment,
-            string departmentName, bool isApproveFinished = false)
+            string departmentName, bool isApproveFinished = false, bool isAdvance = false)
         {
             var timeSheetAppLink = new TagBuilder("a");
             timeSheetAppLink.Attributes.Add("href", _appDominUrl);
@@ -65,22 +65,27 @@ namespace TimeSheetMvc4WebApplication.Source
 
             if (isApproveFinished)
             {
-                stringBuilder.AppendFormat("Табель для структурного подразделения {0} успешно согласован.", departmentName);
+                if(isAdvance)
+                    stringBuilder.AppendFormat("Авансовый табель для структурного подразделения {0} успешно согласован.", departmentName);
+                else
+                    stringBuilder.AppendFormat("Табель для структурного подразделения {0} успешно согласован.", departmentName);
             }
             else
             {
                 if (approveResult)
                 {
                     stringBuilder.AppendFormat(
-                        "Вам на согласование был направлен табель рабочего времени структурного подразделения {0}.",
-                        departmentName);
+                        "Вам на согласование был направлен {1}табель рабочего времени структурного подразделения {0}."
+                        , departmentName
+                        , isAdvance ? "авансовый " : "");
                     stringBuilder.AppendFormat(
-                        "Для того, что бы приступить к согласованию тебеля перейдите по ссылке: {0}. ",
-                        timeSheetApprovalLink);
+                        "Для того, что бы приступить к согласованию {1}табеля перейдите по ссылке: {0}. "
+                        , timeSheetApprovalLink
+                        , isAdvance ? "авансового " : "");
                 }
                 else
                 {
-                    stringBuilder.AppendFormat("Согласование табеля для структурного подоразделения {0} было отклонено по причине: {1}", departmentName, comment);
+                    stringBuilder.AppendFormat("Согласование {3}табеля для структурного подоразделения {0} было отклонено по причине: {1}", departmentName, comment, isAdvance ? "авансового " : "");
                 }
             }
             stringBuilder.AppendLine("</br>");
@@ -91,7 +96,8 @@ namespace TimeSheetMvc4WebApplication.Source
             return stringBuilder.ToString();
         }
 
-        public async Task<bool> TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result, string comments, int approvalStep, string departmentName, bool isApproveFinished)
+        public async Task<bool> TimeSheetApproveEmailSending(string userName, IEnumerable<DtoApprover> approversToSend, int idTimeSheet, bool result
+            , string comments, int approvalStep, string departmentName, bool isApproveFinished, bool isAdvance = false)
         {
             return await Task.Run(async () =>
             {
@@ -101,7 +107,7 @@ namespace TimeSheetMvc4WebApplication.Source
                     var sendingResulLIst = new List<bool>();
                     foreach (var approver in approversToSend)
                     {
-                        var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+                        var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished, isAdvance);
                         sendingResulLIst.Add(await SendMail("tabel-no-reply@ugtu.net", approver.EmployeeLogin,
                             "ИС Табель рабочего времени для " + departmentName, mailBody, true));
                     }
@@ -118,7 +124,7 @@ namespace TimeSheetMvc4WebApplication.Source
                         //Отправка оповещения всем пользователям
                         foreach (var approver in approversToSend)
                         {
-                            var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished);
+                            var mailBody = GenerateMailBody(approver, idTimeSheet, result, comments, departmentName, isApproveFinished, isAdvance);
                             await noticeHub.Notice(MessageType.Info, "Согласование", mailBody, approver.EmployeeLogin);
                         }
                     }

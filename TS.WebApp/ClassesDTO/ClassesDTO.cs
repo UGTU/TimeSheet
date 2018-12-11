@@ -209,6 +209,8 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
         public int ApproveStep { get; set; }
         [DataMember]
         public bool IsFake { get; set; }
+        [DataMember]
+        public bool IsAdvance { get; set; }
         public DtoExceptionDay[] Holidays { get; set; }
     }
 
