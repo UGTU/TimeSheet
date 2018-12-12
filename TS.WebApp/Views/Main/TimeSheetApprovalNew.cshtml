@@ -7,10 +7,26 @@
     var approverHiatory = ViewBag.ApproveHistiry as DtoTimeSheetApproveHistiry[];
     var currentApprover = ViewBag.CurrentApprover as DtoApprover;
     int idTimeSheet = ViewBag.IdTimeSheet;
+    bool isAdvance = ViewBag.IsAdvance;
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading"> <span class="glyphicon glyphicon-retweet"></span>  Согласование табеля</div>
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-retweet"></span>
+        @{
+            string titleApprovalString;
+
+            if (isAdvance)
+            {
+                titleApprovalString = "Согласование авансового табеля";
+            }
+            else
+            {
+                titleApprovalString = "Согласование табеля";
+            }
+        }
+            @titleApprovalString
+    </div>
     <div class="panel-body">
             @if (approverHiatory != null && approverHiatory.Any())
             {
@@ -84,8 +100,18 @@
                 }
                 else
                 {
+                    string successApprovalString;
+
+                    if (isAdvance)
+                    {
+                        successApprovalString = "Согласование авансового табеля успешно завершено";
+                    }
+                    else
+                    {
+                        successApprovalString = "Согласование табеля успешно завершено";
+                    }
                     <div class="alert alert-success">
-                        <h4 style="margin: 0;">Согласование табеля успешно завершено</h4>
+                        <h4 style="margin: 0;">@successApprovalString</h4>
                     </div>
                 }
             }

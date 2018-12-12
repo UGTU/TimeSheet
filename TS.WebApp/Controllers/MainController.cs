@@ -110,6 +110,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             ViewBag.IdTimeSheet = idTimeSheet;
             ViewBag.ApproveHistiry = Client.GetTimeSheetApproveHistory(idTimeSheet);
             ViewBag.CurrentApprover = Client.GetNextApproverForTimeSheet(idTimeSheet);
+            ViewBag.IsAdvance = Client.IsAdvanceTimesheet(idTimeSheet);
         }
 
         //=======================================================================================================

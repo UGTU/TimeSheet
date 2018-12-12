@@ -696,7 +696,7 @@ namespace TimeSheetMvc4WebApplication
             {
                 var timeSheet = db.TimeSheet.FirstOrDefault(f => f.id == idTimeSheet);
                 var approverNum = GetTimeSheetApproveStep(idTimeSheet);
-                if (timeSheet == null || approverNum >= 3) return null;
+                if (timeSheet == null || approverNum >= 3 || timeSheet.IsAdvance && approverNum >= 2) return null;
                 var idDepatrment = timeSheet.idDepartment;
                 var approver =
                     db.Approver.FirstOrDefault(
@@ -707,6 +707,19 @@ namespace TimeSheetMvc4WebApplication
             }
         }
 
+        /// <summary>
+        /// Проверка является ли табель авансовым
+        /// </summary>
+        /// <param name="idTimeSheet">id проверяемого табеля</param>
+        /// <returns>Если авансовый - true,</returns>
+        public bool IsAdvanceTimesheet(int idTimeSheet)
+        {
+            using (var db = new KadrDataContext())
+            {
+                var timeSheet = db.TimeSheet.FirstOrDefault(f => f.id == idTimeSheet);
+                return timeSheet?.IsAdvance ?? false;
+            }
+        }
 
         /// <summary>
         /// Определяет доступен ли для согласования табельщиком табель
@@ -743,8 +756,13 @@ namespace TimeSheetMvc4WebApplication
                 var approveDepartment =
                     approver.GetDepartmentApproverNumbers(timeSheet.idDepartment)
                         .FirstOrDefault(f => f.ApproveNumber == timeSheetApprovalStep);
-                return approveDepartment != null &&
-                       approveDepartment.ApproveNumber == timeSheetApprovalStep;
+                //return approveDepartment != null
+                //    && approveDepartment.ApproveNumber == timeSheetApprovalStep
+
+                return !(approveDepartment == null
+                    || approveDepartment.ApproveNumber != timeSheetApprovalStep
+                    || (timeSheet.IsAdvance && timeSheetApprovalStep > 2)); //если табель авансовый и текущий шаг согласования выше чем начальник подразделения
+
             }
         }
 
