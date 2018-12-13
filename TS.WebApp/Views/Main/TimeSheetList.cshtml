@@ -57,7 +57,21 @@
                                         {
                                             <button type="button" data-toggle="tooltip" title="Удалить табель" class="close timeSheetDell" data-dismiss="modal" aria-hidden="true" data-idtimesheet="@item.IdTimeSheet" data-mounth="@item.DateBegin.ToString("MMMM")">&times;</button>
                                         }
-                                        <h3 style="margin: 0;">@Html.Partial("PartialView\\TimeSheetApproveStatus", item)  @item.DateBegin.ToString("MMMM")</h3>
+                                        <h3 style="margin: 0;">
+                                            <span>
+                                                @Html.Partial("PartialView\\TimeSheetApproveStatus", item)
+                                            </span>
+                                            <span style="font-size:20px">
+                                                @item.DateBegin.ToString("MMMM")
+                                            </span>
+
+                                            @if (item.IsAdvance)
+                                            {
+                                                <span style="font-size:20px" class="text-muted">
+                                                    / Аванс
+                                                </span>
+                                            }
+                                        </h3>
                                     </div>
                                     <div class="panel-body" style="padding: 0;">
                                         @if (!item.IsFake)
