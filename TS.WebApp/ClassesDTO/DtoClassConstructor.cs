@@ -160,17 +160,17 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                 {
                     if (isAdmin)
                     {
-                        //var idApprover =
-                        //    db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
-                        //approver.DtoApproverDepartments = db.Approver.Where(w => (w.DateEnd == null || w.DateEnd > DateTime.Now) && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
-                        //        .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
+                        var idApprover =
+                            db.Approver.Where(w => w.idEmployee == approver.IdEmployee).Select(s => s.id).FirstOrDefault();
+                        approver.DtoApproverDepartments = db.Approver.Where(w => (w.DateEnd == null || w.DateEnd > DateTime.Now) && w.Dep.HasTimeSheet).DistinctBy(d => d.idDepartment)
+                                .Select(DtoApproverDepartment).OrderBy(o => o.DepartmentSmallName).ToArray();
 
-                        //foreach (var department in approver.DtoApproverDepartments)
-                        //{
-                        //    department.ApproveNumber = 10;
-                        //    department.ApproveTypeName = "Администратор";
-                        //    department.IdApprover = idApprover;
-                        //}
+                        foreach (var department in approver.DtoApproverDepartments)
+                        {
+                            department.ApproveNumber = 10;
+                            department.ApproveTypeName = "Администратор";
+                            department.IdApprover = idApprover;
+                        }
                     }
                     return approver;
                 }
