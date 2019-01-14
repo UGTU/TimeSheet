@@ -92,15 +92,12 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                        );
 
             if (!fs.Any()) //если согласователь не из текущего департамента, то грузим из другого
-            { fs =
-                    db.FactStaffs.Where(
-                        w =>
-                            w.idEmployee == approver.idEmployee &
-                            ((w.DateEnd == null) || (w.DateEnd >= DateTime.Today))
-                            & (Convert.ToInt32(w.PlanStaff.Post.ManagerBit) == db.FactStaffs
-                                .Where(f => f.idEmployee == approver.idEmployee &
-                                ((f.DateEnd == null) || (f.DateEnd >= DateTime.Today))).Max(m => Convert.ToInt32(m.PlanStaff.Post.ManagerBit)))
-                        );
+           {
+                fs = db.FactStaffs.Where( w => w.idEmployee == approver.idEmployee 
+                                                && ((w.DateEnd == null) || (w.DateEnd > DateTime.Today))
+                                                && (Convert.ToInt32(w.PlanStaff.Post.ManagerBit) == db.FactStaffs.Where(f => f.idEmployee == approver.idEmployee 
+                                                                                                                                && ((f.DateEnd == null) || (f.DateEnd > DateTime.Today)))
+                                                                                                                 .Max(m => Convert.ToInt32(m.PlanStaff.Post.ManagerBit))));
             }
 
             //вытаскиваем основную должность в случае если factstaff'ов больше одного, странно что IdEmployee = id factstaff'а (зы: не исправил, мало ли так задумано)
@@ -134,7 +131,6 @@ namespace TimeSheetMvc4WebApplication.ClassesDTO
                         Post = DtoPost(s.PlanStaff.Post),
                         ApproverDate = approverDate
                     }).FirstOrDefault();
-             
 
             return factStaffs;
         }
