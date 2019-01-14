@@ -201,7 +201,7 @@
     border-bottom-width: 1px;
     text-align: center;
     vertical-align: bottom;
-    height: 20px;
+    height: auto;
 }
 
 .EmployeeNameDiv {
@@ -209,6 +209,9 @@
     margin-left: 3px;
 }
 
+.row-bottom {
+    vertical-align:bottom;
+}
 
 
 
