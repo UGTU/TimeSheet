@@ -28,21 +28,22 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
-        [Authorize(Roles = "TabelDepartmentAdmin")]
+        //[Authorize(Roles = "TabelDepartmentAdmin")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult DepartmentManagment()
         {
             //CheckIsAdmin();
             return View();
         }
 
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult EditLogin()
         {
             //CheckIsAdmin();
             return View();
         }
 
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult EditRegim()
         {
             //CheckIsAdmin();
@@ -52,7 +53,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
         /// Смена режима работы
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult ChangeRegimByCategory()
         {
             //CheckIsAdmin();
@@ -180,7 +181,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveEmployeeLogin(int idEmployee, string employeeLogin)
         {
             if (employeeLogin.EndsWith("@ugtu.net") | string.IsNullOrEmpty(employeeLogin))
@@ -197,7 +198,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
             
         }
 
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveEmployeeRegime(int IdFactStaff, int IdWorkShedule, bool isPersonalRegim, int HoursWeek)
         {
 
@@ -211,7 +212,7 @@ namespace TimeSheetMvc4WebApplication.Controllers
          }
 
 
-        [Authorize(Roles = "ADtoKadr")]
+        [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveChangeSummerRegime(int IdCategory, int IdWorkShedule)
         {
             var result = new

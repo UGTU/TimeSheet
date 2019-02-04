@@ -1,29 +1,26 @@
 ﻿/*Я	Часы работы (дневные, вечерние)*/
-.ICSS { 
+.ICSS {
     background-color: #ffffff;
     overflow: auto;
     margin: 0;
 }
 
 /*Н	Ночные часы работы*/
-.NCSS
-{
+.NCSS {
     background-color: #CCCC66;
     overflow: auto;
     margin: 0;
 }
 
 /*РВ	Часы работы в выходные, праздничные дни*/
-.RvCSS
-{
+.RvCSS {
     background-color: #CCFF66;
     overflow: auto;
     margin: 0;
 }
 
 /*С	Сверхурочные часы работы*/
-.SCSS
-{
+.SCSS {
     background-color: #66FF99;
     overflow: auto;
     margin: 0;
@@ -190,13 +187,11 @@
     margin: 0;
 }
 
-.paperNum
-{
+.paperNum {
     page-break-after: always;
 }
 
-#idPoddpis
-{
+#idPoddpis {
     border-bottom-style: solid;
     border-bottom-width: 1px;
     text-align: center;
@@ -210,11 +205,130 @@
 }
 
 .row-bottom {
-    vertical-align:bottom;
+    vertical-align: bottom;
 }
 
 
+.my-dropdown ul li {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+}
+
+.my-dropdown ul li:hover {
+    background: #aaa;
+    color: white;
+}
+
+.my-dropdown {
+    position: relative;
+}
+
+.my-dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding:0;
+    margin-top: 5px;
+    z-index: 1;
+
+    list-style: none;
+    overflow-y: scroll;
+
+    min-height: 100px;
+}
 
 
+/*========================================*/
+.c-toggle-btn {
+    font-family: "Segoe UI";
+    line-height: 32px;
+    border: 1px solid #adadad;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.117647), 0px 1px 4px rgba(0, 0, 0, 0.117647);
+    border-radius: 34px;
+    box-sizing: border-box;
+    font-size: .8em;
+    height: 32px;
+    overflow: hidden;
+    position: relative !important;
+    width: 82px !important;
+}
 
+.c-toggle-btn.disabled {
+    opacity: .4;
+}
+.c-toggle-btn > input{
+    margin: 0 !important;
+}
+.c-toggle-btn > input[type=checkbox] {
+    cursor: pointer;
+    opacity: 0 !important;
+    position: absolute !important;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+}
 
+.c-toggle-btn > input[type=checkbox]:checked + div {
+    left: -20%;
+}
+
+.c-toggle-btn > input[type=checkbox]:disabled {
+    cursor: not-allowed;
+}
+
+.c-toggle-btn > div {
+    align-items: center;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex !important;
+    justify-content: center;
+    left: -80%;
+    position: absolute !important;
+    text-align: center;
+    top: 0;
+    transition: left 0.35s ease-out;
+    width: 200%;
+}
+
+.c-toggle-btn > div > label {
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex !important;
+    height: 100%;
+    justify-content: center;
+    margin: 0 !important;
+    max-width: 50%;
+    position: absolute !important;
+    text-align: center;
+    top: 0;
+    white-space: nowrap;
+    width: 50%;
+}
+
+.c-toggle-btn > div > label.on {
+    background: #5b5;
+    color: #fff;
+    right: 50%;
+}
+
+.c-toggle-btn > div > label.off {
+    background: #555;
+    color: #ccc;
+    left: 50%;
+}
+
+.c-toggle-btn > div > span {
+    background: #f4f3f3;
+    border: 1px solid #adadad;
+    box-sizing: border-box;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block !important;
+    height: 107%;
+    line-height: normal;
+    position: relative !important;
+    width: 20%;
+}

@@ -743,8 +743,8 @@
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\Images\Без имени-1.psd" />
     <Content Include="Content\Manual\Руководство пользователя ИС Табель.pdf" />
-    <None Include="Properties\PublishProfiles\testtabel.ugtu.net.pubxml" />
-    <None Include="Properties\PublishProfiles\tfs-1.ugtu.net.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <None Include="Properties\PublishProfiles\ProductionTabel.pubxml" />
     <Content Include="NuGet.exe" />
     <Content Include="Rotativa\libeay32.dll" />
     <Content Include="Rotativa\libgcc_s_dw2-1.dll" />

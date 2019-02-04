@@ -1,5 +1,7 @@
 ﻿@using TimeSheetMvc4WebApplication.Models
 @{
+    /**/
+
     ViewBag.Title = "Структурные подразделения";
     //Layout = "~/Views/Shared/TimeSheetLayout.cshtml";
 }
@@ -33,6 +35,7 @@
             </div>
         </div>
     </div>
+
     <div class="col-md-8" @*ng-hide="DepartmentApproveHide()"*@>
         <h3 style="margin-top: 3px;">Согласователи для подразделения {{SelectedDepartment.DepartmentSmallName}}</h3>
         <hr style="margin-top: 0;" />
@@ -40,11 +43,19 @@
             <label>
                 <input type="checkbox" ng-model="SelectedDepartment.HasTimeSheet"> Создавать отдельный табель
             </label>
-        </div>
 
-        <button class="btn btn-default" ng-show="SelectedDepartment.HasTimeSheet" ng-click="GetAllApprovers()">
-                    Нет нужных людей?
-        </button>
+        </div>
+        <div class="row">
+            <label for="toggle-btn" class="col-sm-4">Отображать всех сотрудников</label>
+            <div class="c-toggle-btn  col-sm-8">
+                <input id="toggle-btn" type="checkbox" ng-show="SelectedDepartment.HasTimeSheet" ng-click="GetAllApprovers()">
+                <div>
+                    <label class="on">ВКЛ</label>
+                    <label class="off">ВЫКЛ</label>
+                    <span class="c-toggle-thumb"></span>
+                </div>
+            </div>
+        </div>
 
         <div ng-show="SelectedDepartment.HasTimeSheet" ng-hide="DepartmentApproveHide()">
             <h4>Табельщик</h4>
@@ -53,7 +64,12 @@
                     <input type="text" ng-model="sdApprover1.EmployeeLogin" class="form-control">
                 </div>
                 <div class="col-lg-7">
-                    <select class="form-control" ng-model="sdApprover1" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname'] "></select>
+                    <div class="my-dropdown">
+                        <input id="approver1" class="form-control" ng-model="sdApprover1.fullName" placeholder="Иванов Иван Иванович">
+                        <ul id="approver1-list" class="form-control emloyee-list">
+                            <li ng-click="chooseApprover(item, 1)" ng-repeat="item in searchEmployees(sdApprover1) | orderBy:['Surname', 'Name', 'Patronymic'] ">{{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <h4>Начальник структурного подразделения</h4>
@@ -62,7 +78,12 @@
                     <input type="text" ng-model="sdApprover2.EmployeeLogin" class="form-control">
                 </div>
                 <div class="col-lg-7">
-                    <select class="form-control" ng-model="sdApprover2" ng-options="empl as GetEmployeeName(empl) for empl in sdEmployees | orderBy:['Surname']"></select>
+                    <div class="my-dropdown">
+                        <input id="approver2" class="form-control" ng-model="sdApprover2.fullName" placeholder="Иванов Иван Иванович">
+                        <ul id="approver2-list" class="form-control emloyee-list">
+                            <li ng-click="chooseApprover(item, 2)" ng-repeat="item in searchEmployees(sdApprover2) | orderBy:['Surname', 'Name', 'Patronymic'] ">{{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <h4>Работник отдела кадров</h4>
@@ -71,7 +92,14 @@
                     <input type="text" ng-model="sdApprover3.EmployeeLogin" class="form-control">
                 </div>
                 <div class="col-lg-7">
-                    <select class="form-control" ng-model="sdApprover3" ng-options="empl as GetEmployeeName(empl) for empl in sdKadrEmployees | orderBy:['Surname']"></select>
+                    <div class="my-dropdown">
+                        <input id="approver3" class="form-control" ng-model="sdApprover3.fullName" placeholder="Иванов Иван Иванович">
+                        <ul id="approver3-list" class="form-control emloyee-list">
+                            <li ng-click="chooseApprover(item, 3)" ng-repeat="item in searchEmployees(sdApprover3, 3) | orderBy:['Surname', 'Name', 'Patronymic']">
+                                {{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,13 +116,34 @@
 </div>
 
 <script>
+    $("document").ready(() => {
+        $(".emloyee-list").hide();
+
+        for (let i of [1, 2, 3]) {
+            $("#approver" + i).focusin(() => {
+                $(`#approver${i}-list`).height(200);
+                $(`#approver${i}-list`).show();
+            });
+        }
+
+        $(document).click(event => {
+            let target = event.target;
+
+            for (let i of [1, 2, 3]) {
+                if (target.id[target.id.length - 1] != i) {
+                    $(`#approver${i}-list`).hide();
+                }
+            }
+        });
+    });
+
     function Department($scope, $http) {
         $http.get('@Html.Raw(@Url.Action("GetDepartment", "Admin", new { idTimeSheet = @Model }))').success(function (data) {
             $scope.Departments = data;
             $scope.DepIdList = [];
             $scope.SetCurrentDepartment(null);
             $scope.CurrentDepartment = null;
-            $('#deparmentsLoad').remove();
+            $("#deparmentsLoad").remove();
         });
 
         $scope.SetCurrentDepartment = function (idMenagDepartnent) {
@@ -152,8 +201,16 @@
 
             $http.get(link).success(function (data) {
                 $scope.d = data;
-                $scope.sdEmployees = data.DepartmetEmployees;
-                $scope.sdKadrEmployees = data.KadrEmployees;
+                $scope.sdEmployees = data.DepartmetEmployees.map(x => {
+                    x.fullName = `${x.Surname} ${x.Name} ${x.Patronymic}`;
+                    return x;
+                });
+
+                $scope.sdKadrEmployees = data.KadrEmployees.map(x => {
+                    x.fullName = `${x.Surname} ${x.Name} ${x.Patronymic}`;
+                    return x;
+                });
+
                 $scope.sdApprover1 = $scope.InitApprover(data.Approver1, $scope.sdEmployees);
                 $scope.sdApprover2 = $scope.InitApprover(data.Approver2, $scope.sdEmployees);
                 $scope.sdApprover3 = $scope.InitApprover(data.Approver3, $scope.sdKadrEmployees);
@@ -162,7 +219,12 @@
         };
 
         $scope.GetAllApprovers = function () {
-            $scope.GetApprovers($scope.SelectedDepartment.IdDepartment, true);
+            if ($("#toggle-btn").prop("checked")) {
+                $scope.GetApprovers($scope.SelectedDepartment.IdDepartment, true);
+            }
+            else {
+                $scope.GetApprovers($scope.SelectedDepartment.IdDepartment, false);
+            }
         };
 
         $scope.ApproversClone = function () {
@@ -223,7 +285,7 @@
         $scope.SaveApprover = function (approver, clapprover, appoveStep) {
             var link = '@Html.Raw(@Url.Action("SaveApproverDepartment", "Admin", new { idDepartmen = "idDepartmenReplace", approveNumber = "approveNumberReplace", idEmployee = "idEmployeeReplace", employeeLogin = "employeeLoginReplace" }))';
             link = link.replace("idDepartmenReplace", $scope.SelectedDepartment.IdDepartment).replace("approveNumberReplace", appoveStep).replace("idEmployeeReplace", approver.IdEmployee).replace("employeeLoginReplace", approver.EmployeeLogin);
-            console.log(link);
+
             $http.get(link).success(function (data) {
                 if (data) {
                     console.log('approve save success');
@@ -239,7 +301,7 @@
                             break;
                         default:
                             console.log('Какая то wtf произошла');
-                    }   
+                    }
                 }
                 else
                     alert('При сохранении возникли проблемы, изменения не сохранены');
@@ -248,7 +310,7 @@
 
         $scope.SaveDepartmet = function () {
             var link = '@Html.Raw(@Url.Action("SaveDepartment", "Admin"))';
-            console.log(link);
+
             $http.post(link, $scope.SelectedDepartment).success(function (data) {
                 if (data) {
                     console.log('approve save success');
@@ -270,7 +332,46 @@
                 $scope.SaveDepartmet($scope.SelectedDepartment);
         };
 
+        $scope.chooseApprover = (employee, typeApprover) => {
+            if (!employee) return;
 
+            employee.fullName = `${employee.Surname} ${employee.Name} ${employee.Patronymic}`;
+            switch (typeApprover) {
+                case 1:
+                    $scope.sdApprover1 = employee
+                    break;
+                case 2:
+                    $scope.sdApprover2 = employee
+                    break;
+                case 3:
+                    $scope.sdApprover3 = employee
+                    break;
+                default:
+            }
+            $("#approver-list1").hide();
+        }
+
+        $scope.searchEmployees = (employee, typeApprover) => {
+            if (!employee) return;
+
+            let value = employee.fullName.toLowerCase();
+            if (typeApprover == 3) {
+                return $scope.sdKadrEmployees == undefined
+                    ? ""
+                    : $scope.sdKadrEmployees.filter(x => x.FullName.toLowerCase().indexOf(value) >= 0);
+            }
+            return $scope.sdEmployees == undefined
+                ? ""
+                : $scope.sdEmployees.filter(x => x.FullName.toLowerCase().indexOf(value) >= 0);
+        }
+
+        $(document).click(() => {
+            if ($scope.sdApprover1) {
+                $(`#approver1`).val($scope.sdApprover1.FullName);
+                $(`#approver2`).val($scope.sdApprover2.FullName);
+                $(`#approver3`).val($scope.sdApprover3.FullName);
+            }
+        });
     };
 </script>
 <script>
