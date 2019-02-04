@@ -632,6 +632,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <None Include="Content\Manual\Руководство пользователя ИС Табель.pdf" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -742,7 +743,7 @@
     </Content>
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Content\Images\Без имени-1.psd" />
-    <Content Include="Content\Manual\Руководство пользователя ИС Табель.pdf" />
+    <None Include="Content\Manual\Руководство пользователя ИС Табель.pdf.old" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Properties\PublishProfiles\ProductionTabel.pubxml" />
     <Content Include="NuGet.exe" />
