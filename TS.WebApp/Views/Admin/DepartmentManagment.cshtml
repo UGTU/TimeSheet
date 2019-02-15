@@ -352,7 +352,7 @@
         }
 
         $scope.searchEmployees = (employee, typeApprover) => {
-            if (!employee) return;
+            if (!employee) $scope.sdEmployees;
 
             let value = employee.fullName.toLowerCase();
             if (typeApprover == 3) {
@@ -366,11 +366,9 @@
         }
 
         $(document).click(() => {
-            if ($scope.sdApprover1) {
-                $(`#approver1`).val($scope.sdApprover1.FullName);
-                $(`#approver2`).val($scope.sdApprover2.FullName);
-                $(`#approver3`).val($scope.sdApprover3.FullName);
-            }
+            if ($scope.sdApprover1 && $scope.sdApprover1.FullName) $(`#approver1`).val($scope.sdApprover1.FullName);
+            if ($scope.sdApprover2 && $scope.sdApprover2.FullName) $(`#approver2`).val($scope.sdApprover2.FullName);
+            if ($scope.sdApprover3 && $scope.sdApprover3.FullName) $(`#approver3`).val($scope.sdApprover3.FullName);            
         });
     };
 </script>
