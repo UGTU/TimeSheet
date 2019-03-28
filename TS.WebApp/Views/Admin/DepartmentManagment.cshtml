@@ -263,9 +263,7 @@
         };
 
         $scope.DepartmentApproveHide = function () {
-            if ($scope.sdEmployees == null || $scope.sdEmployees.length == 0)
-                return true;
-            return false;
+            return ($scope.sdEmployees == null || $scope.sdEmployees.length == 0)
         };
 
         $scope.GetEmployeeName = function (employee) {
