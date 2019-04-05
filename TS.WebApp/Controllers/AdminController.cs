@@ -30,7 +30,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
 
         //[Authorize(Roles = "TabelDepartmentAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
-        [Authorize(Roles = "TabelAdmin")]
         public ActionResult DepartmentManagment()
         {
             
@@ -38,7 +37,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult EditLogin()
         {
@@ -46,7 +44,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return View();
         }
 
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult EditRegim()
         {
@@ -57,7 +54,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
         /// Смена режима работы
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public ActionResult ChangeRegimByCategory()
         {
@@ -186,7 +182,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveEmployeeLogin(int idEmployee, string employeeLogin)
         {
@@ -204,7 +199,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
             
         }
 
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveEmployeeRegime(int IdFactStaff, int IdWorkShedule, bool isPersonalRegim, int HoursWeek)
         {
@@ -219,7 +213,6 @@ namespace TimeSheetMvc4WebApplication.Controllers
          }
 
 
-        [Authorize(Roles = "TabelAdmin")]
         [Authorize(Roles = "Сотрудник кадров")]
         public JsonResult SaveChangeSummerRegime(int IdCategory, int IdWorkShedule)
         {

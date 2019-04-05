@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="my-dropdown">
-                        <input id="approver1" class="form-control" ng-model="sdApprover1.fullName" placeholder="Иванов Иван Иванович">
+                        <input id="approver1" class="form-control" ng-model="sdApprover1.fullName">
                         <ul id="approver1-list" class="form-control emloyee-list">
                             <li ng-click="chooseApprover(item, 1)" ng-repeat="item in searchEmployees(sdApprover1) | orderBy:['Surname', 'Name', 'Patronymic'] ">{{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}</li>
                         </ul>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="my-dropdown">
-                        <input id="approver2" class="form-control" ng-model="sdApprover2.fullName" placeholder="Иванов Иван Иванович">
+                        <input id="approver2" class="form-control" ng-model="sdApprover2.fullName">
                         <ul id="approver2-list" class="form-control emloyee-list">
                             <li ng-click="chooseApprover(item, 2)" ng-repeat="item in searchEmployees(sdApprover2) | orderBy:['Surname', 'Name', 'Patronymic'] ">{{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}</li>
                         </ul>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="my-dropdown">
-                        <input id="approver3" class="form-control" ng-model="sdApprover3.fullName" placeholder="Иванов Иван Иванович">
+                        <input id="approver3" class="form-control" ng-model="sdApprover3.fullName">
                         <ul id="approver3-list" class="form-control emloyee-list">
                             <li ng-click="chooseApprover(item, 3)" ng-repeat="item in searchEmployees(sdApprover3, 3) | orderBy:['Surname', 'Name', 'Patronymic']">
                                 {{item.Surname + ' ' + item.Name + ' ' + item.Patronymic}}
