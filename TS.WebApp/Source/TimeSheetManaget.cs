@@ -627,15 +627,17 @@ namespace TimeSheetMvc4WebApplication.Source
         List<TimeSheetRecord> AddHospitalsToTimeSheetRecords(FactStaffWithHistory employee, IEnumerable<TimeSheetRecord> timeSheetRecords, IEnumerable<OK_Inkapacity> inkapacities
             , IEnumerable<OK_Otpusk> otpusk)
         {
-            var OtpuskPoRodam = otpusk.Where(w => w.idOtpuskVid == IdOtpusPoRodam).SingleOrDefault(); //вытаскиваем отпуск по родам
+            var OtpuskPoRodams = otpusk.Where(w => w.idOtpuskVid == IdOtpusPoRodam).ToList(); //вытаскиваем отпуск по родам. Опуск может быть взят частями и подряд
             var timeSheetRecordLList = new List<TimeSheetRecord>(timeSheetRecords);
             var okInkapacities = inkapacities as OK_Inkapacity[] ?? inkapacities.ToArray();
             if (okInkapacities.Any())
             {
+                //если имеем отпуск по родам и даты начала и конца отпуска совпадают с больничным то это вовсе не болничный, а Отпуск по беременности и родам (9), больничный в табеле не отображаем, отображаем Отпуск.
+                okInkapacities = okInkapacities.Where(x => !OtpuskPoRodams.Any(y => y.DateBegin == x.DateBegin && y.DateEnd == x.DateEnd)).ToArray();
+
                 foreach (var inkapacity in okInkapacities)
                 {
-                    // если имеем отпуск по родам и даты начала и конца отпуска совпадают с больничным то это вовсе не болничный, а Отпуск по беременности и родам (9), больничный в табеле не отображаем, отображаем Отпуск.
-                    if (OtpuskPoRodam != null && OtpuskPoRodam.DateBegin == inkapacity.DateBegin && OtpuskPoRodam.DateEnd == inkapacity.DateEnd) { continue; } 
+                    
 
                     int beginDay;
                     if (_timeSheet.DateBeginPeriod.Year == inkapacity.DateBegin.Year &&
